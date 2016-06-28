@@ -1,0 +1,18 @@
+logging:
+  level:
+     org:
+       springframework:
+         security: DEBUG
+
+
+ldap:
+   url: ldap://jci.com:3268/DC=jci,DC=com
+   host: jci.com
+   port: 3268
+   basedn: DC= jci,DC=com
+   INITIAL_CONTEXT_FACTORY: com.sun.jndi.ldap.LdapCtxFactory
+   SECURITY_AUTHENTICATION: simple   
+   user-search-base:
+   user-dn-patterns: "uid={0}, ou=people"
+   group-search-base: "ou=groups"
+   group-search-filter: "(uniqueMember={0})"

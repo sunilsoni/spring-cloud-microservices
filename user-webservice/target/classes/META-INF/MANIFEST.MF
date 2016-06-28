@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: user-webservice
+Implementation-Version: 1.0.0
+Built-By: csonisk
+Implementation-Vendor-Id: com.jci-user
+Build-Jdk: 1.8.0_73
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
