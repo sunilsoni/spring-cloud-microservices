@@ -33,7 +33,22 @@ repositories {
 	jcenter()
 }
 
+mainClassName  = 'com.jci.auth.Application'
 
+version = '1.0'
+
+task uberjar(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from {configurations.compile.collect {zipTree(it)}} {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+}
+
+manifest {
+    attributes 'Main-Class': 'com.jci.auth.Application'
+    }
+}
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-web'
 	compile 'org.springframework.boot:spring-boot-starter-actuator'
@@ -60,11 +75,11 @@ group = 'jci'
 mainClassName = 'com.jci.auth.Application'
 
 bootRun {
-    jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4100,suspend=n','-Dspring.profiles.active=dev']
+    jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4100,suspend=n','-Dspring.profiles.active=development']
 }
 
 run {
-    jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4100,suspend=n','-Dspring.profiles.active=dev']
+    jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4100,suspend=n','-Dspring.profiles.active=development']
 }
 
 task createWrapper(type: Wrapper) {

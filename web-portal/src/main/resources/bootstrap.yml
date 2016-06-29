@@ -3,7 +3,8 @@ spring:
     name: web-portal
   cloud:
     config:
-      uri: http://localhost:8888
+      uri: http://sc-config-server.azurewebsites.net
+#http://localhost:8888
       
 #---
 

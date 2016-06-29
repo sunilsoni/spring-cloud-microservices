@@ -1,5 +1,9 @@
 spring:
   application:
     name: config-server
-#  profiles:
- #   active: development
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+  file: po.log

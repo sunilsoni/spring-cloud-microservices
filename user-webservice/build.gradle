@@ -57,11 +57,11 @@ group = 'jci'
 mainClassName = 'com.jci.user.Application'
 
 bootRun {
-    jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4200,suspend=n','-Dspring.profiles.active=dev']
+    jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4200,suspend=n','-Dspring.profiles.active=development']
 }
 
 run {
-    jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4200,suspend=n','-Dspring.profiles.active=dev']
+    jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4200,suspend=n','-Dspring.profiles.active=development']
 }
 
 task createWrapper(type: Wrapper) {

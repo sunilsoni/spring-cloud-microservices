@@ -59,7 +59,7 @@ mainClassName = 'com.jci.portal.Application'
 
 
 bootRun {
-	jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4010,suspend=n','-Dspring.profiles.active=dev']
+	jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4010,suspend=n','-Dspring.profiles.active=development']
 }
 
 

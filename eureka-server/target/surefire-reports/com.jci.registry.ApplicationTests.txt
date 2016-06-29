@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.jci.registry.ApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.559 sec - in com.jci.registry.ApplicationTests

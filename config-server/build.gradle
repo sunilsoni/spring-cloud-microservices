@@ -34,12 +34,24 @@ repositories {
 	jcenter()
 }
 
+mainClassName  = 'com.jci.config.Application'
+
+version = '1.0'
+
+task uberjar(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from {configurations.compile.collect {zipTree(it)}} {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+}
+
+manifest {
+    attributes 'Main-Class': 'com.jci.config.Application'
+    }
+}
 
 dependencies {
-   // compile("org.springframework.boot:spring-boot-starter-web:${project.springBootVersion }")    
-    //compile("org.springframework.boot:spring-boot-starter-actuator:${project.springBootVersion }")
-	//compile("org.springframework.cloud:spring-cloud-config-server:1.0.0.RELEASE")
-
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.cloud:spring-cloud-starter-config'

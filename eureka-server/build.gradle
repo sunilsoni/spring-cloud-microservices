@@ -36,6 +36,22 @@ repositories {
     maven { url "https://repo.spring.io/milestone" }
 }
 
+mainClassName  = 'com.jci.registry.Application'
+
+version = '1.0'
+
+task uberjar(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from {configurations.compile.collect {zipTree(it)}} {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+}
+
+manifest {
+    attributes 'Main-Class': 'com.jci.registry.Application'
+    }
+}
 
 dependencies {
 

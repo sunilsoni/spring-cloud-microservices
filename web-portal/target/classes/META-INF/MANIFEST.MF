@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Implementation-Title: web-portal
-Implementation-Version: 1.0.0
+Implementation-Version: 0.1.0-SNAPSHOT
 Built-By: csonisk
 Implementation-Vendor-Id: com.jci-web
 Build-Jdk: 1.8.0_73

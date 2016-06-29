@@ -45,8 +45,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected AuthorizationCodeServices authorizationCodeServices() {
 		return new JdbcAuthorizationCodeServices(dataSource);
 	}
-
-	
 	
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {					
