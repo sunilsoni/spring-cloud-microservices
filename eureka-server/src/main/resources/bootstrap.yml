@@ -3,5 +3,13 @@ spring:
     name: eureka-server
   cloud:
     config:
-      uri: http://sc-config-server.azurewebsites.net
+      uri: http://localhost:8888
+#http://sc-config-server.azurewebsites.net
 #http://localhost:8888
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+  file: C:/Apigee/micro-services/Work/Azure/pologs/eureka-server.log
+#${HOME}/site/wwwroot/pologs/eureka-server.log

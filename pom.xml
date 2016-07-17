@@ -9,14 +9,14 @@
     <packaging>pom</packaging>
 
     <modules>
+		<module>config-server</module>
+		<module>eureka-server</module>
         <module>api-gateway</module>
         <module>auth-server</module>
-        <module>comments-webservice</module>
-        <module>config-server</module>
-        <module>task-webservice</module>
-        <module>user-webservice</module>
-        <module>web-portal</module>
-        <module>eureka-server</module>
+		<module>web-portal</module>		
+        <module>po-service</module>        
+        <module>asn-service</module>
+        <module>item-service</module>  
     </modules>
 
 	 <parent>

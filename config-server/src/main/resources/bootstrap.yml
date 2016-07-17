@@ -6,4 +6,5 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
-  file: po.log
+  file: C:/Apigee/micro-services/Work/Azure/pologs/config-server.log
+#${HOME}/site/wwwroot/pologs/config-server.log
