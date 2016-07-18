@@ -12,7 +12,6 @@
 		<module>config-server</module>
 		<module>eureka-server</module>
         <module>api-gateway</module>
-        <module>auth-server</module>
 		<module>web-portal</module>		
         <module>po-service</module>        
         <module>asn-service</module>

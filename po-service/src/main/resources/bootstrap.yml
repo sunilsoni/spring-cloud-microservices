@@ -9,28 +9,4 @@ spring:
 # Define the URL from where this service would pick up it's external configuration. Note that it is
 # pointing to the config-server aplication         
       uri: http://localhost:8888
----
-datasource:
-  postgresql:
-    url: jdbc:postgresql://localhost:5432/e2open
-    username: postgres
-    password: root
-    driver-class-name: org.postgresql.Driver
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    validation-query: select 1
-  openedge:
-    url: jdbc:datadirect:openedge://c217u083.cg.na.jci.com:50963;DatabaseName=symix;
-    username: E2Open
-    password: nepO2E01
-    driver-class-name: com.ddtek.jdbc.openedge.OpenEdgeDriver
-    validation-query: select 1
-    max-active: 1
-#max-idle: 0
-#max-wait: -1
 
-#database-platform:  org.hibernate.dialect.ProgressDialect  
-
-
-spring:
-   jpa:
-    database-platform: org.hibernate.dialect.ProgressDialect

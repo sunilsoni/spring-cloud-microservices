@@ -20,11 +20,6 @@
     </license>
   </licenses>
   <dependencies>
-  	  <dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.4.1208.jre7</version>
-		</dependency>
 	       <dependency>
 	          <groupId>com.jci</groupId>
 	          <artifactId>OpenEdge</artifactId>
@@ -79,7 +74,7 @@
         	<groupId>org.springframework.cloud</groupId>
 	        <artifactId>spring-cloud-starter-hystrix</artifactId>
 	    </dependency>
-	      <dependency>
+	     <!--  <dependency>
         	<groupId>org.springframework.cloud</groupId>
 	        <artifactId>spring-cloud-starter-oauth2</artifactId>
 	    </dependency>
@@ -87,13 +82,25 @@
 	      <dependency>
         	<groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-security</artifactId>
-	    </dependency>
+	    </dependency> -->
 	    
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.7</version>
+        </dependency>
+        
+        <dependency>
+	      <groupId>com.microsoft.azure</groupId>
+	      <artifactId>azure-storage</artifactId>
+	      <version>4.2.0</version>
+	    </dependency>
+        
   </dependencies>
   
    <build>
@@ -117,6 +124,8 @@
 		          <profiles>
 		            <profile>development</profile>
 		            <profile>cloud</profile>
+		             <source>1.8</source>
+            		 <target>1.8</target>
 		          </profiles>
 		        </configuration>
 		      </plugin>

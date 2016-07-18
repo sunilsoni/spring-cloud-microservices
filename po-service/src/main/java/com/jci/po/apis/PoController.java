@@ -1,9 +1,6 @@
 package com.jci.po.apis;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,39 +16,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jci.po.dtos.PoDTO;
-
+import com.jci.po.utils.Constants;
 
 @RestController
 @RequestMapping("/po")
 public class PoController {
-
-	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-	public static final String SIMUX_QUERY ="SELECT * FROM \"po\" \"poAlias\" INNER JOIN \"poitem\" \"poitemAlias\"  ON  \"poAlias\".\"po-num\" = \"poitemAlias\".\"po-num\"  INNER JOIN \"vendor\" \"vAlias\"  ON  \"poAlias\".\"vend-num\" = \"vAlias\".\"vend-num\"  INNER JOIN \"item\" \"iAlias\"  ON  \"poitemAlias\".\"item\" = \"iAlias\".\"item\"   INNER JOIN \"shipto\" \"sAlias\"  ON  \"poitemAlias\".\"drop-ship-no\" = \"sAlias\".\"drop-ship-no\" and \"poAlias\".\"drop-ship-no\" = \"sAlias\".\"drop-ship-no\" INNER JOIN \"po-div\" \"podAlias\"  ON  \"podAlias\".\"po-num\" = \"poAlias\".\"po-num\" INNER JOIN \"vendor-div\" \"vdAlias\"  ON  \"vdAlias\".\"vend-num\" = \"vAlias\".\"vend-num\"  INNER JOIN \"item-div\" \"idAlias\"  ON  \"idAlias\".\"item\" = \"iAlias\".\"item\" INNER JOIN \"vendaddr\" \"vaAlias\"  ON  \"vaAlias\".\"vend-num\" = \"vAlias\".\"vend-num\"   WHERE \"poAlias\".\"order-date\" >=  ? ";
+	
+	@Scheduled(fixedRate = 100000)
+	@RequestMapping(value = "/pullData", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public  void getPoData(){
+		
+    	
+    }
 	
 	private List<PoDTO> pos = null;
 	
     @Autowired
-    @Qualifier("jdbcPostgresqlTemplate")
-    private JdbcTemplate jdbcPostgresqlTemplate;
-    
-    @Autowired
     @Qualifier("jdbcOpenedgeTemplate")
     private JdbcTemplate jdbcOpenedgeTemplate;
     
-
-	/**
-	 * Public constructor to initialize the pos and handle the
-	 * ParseException
-	 * 
-	 * @throws ParseException
-	 */
-	public PoController() throws ParseException {
-		this.pos = Arrays.asList(new PoDTO("task11", "comment on task11", formatter.parse("2015-04-23")),
-				new PoDTO("task12", "comment on task12", formatter.parse("2015-05-12")),
-				new PoDTO("task11", "new comment on task11", formatter.parse("2015-04-27")),
-				new PoDTO("task21", "comment on task21", formatter.parse("2015-01-15")),
-				new PoDTO("task22", "comment on task22", formatter.parse("2015-03-05")));
-	}
 
 	/**
 	 * Get pos for specific taskid that is passed in the path.
@@ -71,12 +54,6 @@ public class PoController {
 		return commentListToReturn;
 	}
 	
-	@Scheduled(fixedRate = 100000)
-	@RequestMapping(value = "/pullPoData", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public  void getPoData(){
-    	getAndSaveSymixData("2013-05-03");  	
-    	
-    }
 	
 	private int getAndSaveSymixData(String dateStr){
 	  	System.out.println("### Starting  MultiDatasource.getAndSaveSymixData ###");
@@ -89,7 +66,7 @@ public class PoController {
         	
         	System.out.println("=======Latest query--->"+parameters.toString());
         	
-        	System.out.println("SIMUX_QUERY--->"+SIMUX_QUERY);
+        	System.out.println("SIMUX_QUERY--->"+Constants.SYMIX_QUERY);
         	
         	rows =    jdbcOpenedgeTemplate.queryForList("select * from \"po\"");
         	
