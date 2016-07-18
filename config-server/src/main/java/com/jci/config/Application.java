@@ -33,6 +33,8 @@ public class Application {
 	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
+		System.out.println("### Starting config.Application.main ####");
 		SpringApplication.run(Application.class, args);
+		System.out.println("### Ending config.Application.main ####");
 	}
 }
