@@ -7,7 +7,7 @@
   <version>0.1.0-SNAPSHOT</version>
   <inceptionYear>2016</inceptionYear>
   
-    <parent>
+  <parent>
   	<groupId>com.jci</groupId>
   	<version>0.1.0-SNAPSHOT</version>
   	<artifactId>sc-parent</artifactId>
