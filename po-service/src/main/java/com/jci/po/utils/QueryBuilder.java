@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jci.po.azure.data.AzureRequest;
+import com.jci.po.azure.data.DataHelper;
 import com.jci.po.repository.TableStorageRepositoryImpl;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
@@ -16,9 +16,10 @@ public class QueryBuilder {
 	private static final String PARTITION_KEY = "PartitionKey";
 	private static final String STATUS_KEY = "Status";
 	private static final String TIMESTAMP = "Timestamp";
+	//private static final String ROWKEY = "RowKey";
 	
 	
-	public static String poQuery(AzureRequest request){
+	public static String poQuery(DataHelper request){
 		LOG.info("#### Starting QueryBuilder.poQuery ###" + request);
 		
 		 // Create filters to limit the data
@@ -72,33 +73,10 @@ public class QueryBuilder {
 		return whereCondition;
 	}
 	
-	
-	/*
-	public PoEntity getPoItemsByPoNo(PoEntity member){
-		
-		CloudStorageAccount storageAccount;
-		
-		try {
-			
-			storageAccount =  CloudStorageAccount.parse(storageConnectionString);
-			
-			CloudTableClient tableClient = storageAccount.createCloudTableClient();
-			
-			String partitionFilter = TableQuery.generateFilterCondition(TableConstants.ROW_KEY,QueryComparisons.EQUAL,member.getRowKey());
-			TableQuery<PoEntity> partitionQuery = TableQuery.from(PoEntity.class).where(partitionFilter);
-			
-			for (PoEntity entity : tableClient.execute(partitionQuery)) {
-				System.out.println(entity.getRowKey());
-			    return entity;
-			}
-		} catch (InvalidKeyException e) {
-			 
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			 
-			e.printStackTrace();
-		}
-		return null;
-	}*/
+	public static String errorDataQuery(String partitionKey){
+		 String partitionFilter = TableQuery.generateFilterCondition(PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
+	     String statusFilter = TableQuery.generateFilterCondition(STATUS_KEY,QueryComparisons.EQUAL, Constants.STATUS_ERROR);
+	     return  TableQuery.combineFilters(partitionFilter, Operators.AND, statusFilter);
+	}
 	
 }

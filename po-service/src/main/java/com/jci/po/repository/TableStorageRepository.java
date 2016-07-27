@@ -4,9 +4,11 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.List;
 
-import com.jci.po.azure.data.AzureRequest;
+import com.jci.po.azure.data.DataHelper;
+import com.jci.po.azure.data.ResultSet;
 import com.jci.po.azure.query.ScrollingParam;
-import com.jci.po.dto.response.ResultSet;
+import com.jci.po.dto.request.BatchInsertRequest;
+import com.jci.po.dto.response.BatchInsertResponse;
 import com.jci.po.entity.PoEntity;
 import com.microsoft.azure.storage.StorageException;
 
@@ -23,6 +25,6 @@ public interface TableStorageRepository {
 	
 	List<PoEntity> getPoItemsByPoNo(String orderNumber) throws InvalidKeyException, URISyntaxException, StorageException;
 
-	ResultSet getSegmentedResultSet(ScrollingParam param, AzureRequest request) throws InvalidKeyException, URISyntaxException, StorageException;
-
+	ResultSet getSegmentedResultSet(ScrollingParam param, DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException;
+	BatchInsertResponse batchInsert(BatchInsertRequest request);
 }

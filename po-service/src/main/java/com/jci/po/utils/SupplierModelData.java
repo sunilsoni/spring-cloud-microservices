@@ -8,7 +8,7 @@ public class SupplierModelData {
 		
 		String partitionKey = AzureUtils.getPartitionKey(Constants.ERP_SYMIX);
 		entity.setPartitionKey(partitionKey);
-		entity.setRowKey("123");
+		entity.setRowKey("123");//vend-num
 		
 		entity.setEnterpriseCode("JCI-BE");
 		entity.setSupplierId("SH-DOYEN");

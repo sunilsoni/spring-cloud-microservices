@@ -1,0 +1,33 @@
+.cell-title {
+      font-weight: bold;
+    }
+    .cell-effort-driven {
+      text-align: center;
+    }
+    .cell-selection {
+      border-right-color: silver;
+      border-right-style: solid;
+      background: #f5f5f5;
+      color: gray;
+      text-align: right;
+      font-size: 10px;
+    }
+    .slick-row.selected .cell-selection {
+      background-color: transparent; /* show default selected row background */
+    }
+
+    .slick-header-column.ui-state-default{
+      height: 20px!important;
+    }
+
+    .blue{
+      background-color: #d9edf7;
+    }
+
+    .green{
+      background-color: #dff0d8;
+    }
+
+    .red{
+      background-color: #f2dede;
+    }
