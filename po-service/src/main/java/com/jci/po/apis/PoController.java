@@ -37,30 +37,8 @@ public class PoController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(PoController.class);
 	
-	/*@Value("${scheduler.time.in.milliseconds}")//
-	private String time;//900000-15minutes
-*/	
-	
 	@Autowired
-	private PoService  poService;
-	
-	@RequestMapping(value = "/getPoDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public  PoDetailsResponse pullPoData(@RequestBody final PoDetailsRequest request){
-		LOG.info("### Starting PoController.getPoDetails ###"+request );
-		
-		PoDetailsResponse response = new PoDetailsResponse();
-		try {
-			response = poService.getPos(request);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			response.setError(true);
-			e.printStackTrace();
-		}
-		
-		
-		LOG.info("### Ending PoController.getPoDetails ###" +response);
-		return response;
-	}
-	
+	private PoService  poService;	
 	
 	@RequestMapping(value = "/getSegmentedSupplierDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailResponse getSegmentedSupplierDetails(@RequestBody SegmentedDetailRequest request){
@@ -131,12 +109,12 @@ public class PoController {
 		LOG.info("### Starting PoController.processPoDetails ###" +request);
 		PoDetailsResponse response = new PoDetailsResponse();
 		
-		try {
+		/*try {
 			response = poService.getPos(request);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			response.setError(true);
 			e.printStackTrace();
-		}
+		}*/
 		LOG.info("### Ending PoController.processPoDetails ###" );
 		return null;
 	}
@@ -157,12 +135,12 @@ public class PoController {
 		
 		poEntity.setSourceErpName(1);;
 		poEntity.setStatus(1);
-		try {
+		/*try {
 			poService.addPo(poEntity);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.warn(" ### Exception PoController.pullData ###");
 			e.printStackTrace();
-		}
+		}*/
 		
 		//Gett All Po details
 		List<PoEntity> poEntityList =  null;
@@ -184,11 +162,7 @@ public class PoController {
 			LOG.warn(" ### Exception PoController.pullData ###");
 			e.printStackTrace();
 		}
-		
-		
 		LOG.info("lastPo--->"+lastPo);
-		
-		
 		LOG.info(" ### Ending PoController.pullData ###");
     }
 	

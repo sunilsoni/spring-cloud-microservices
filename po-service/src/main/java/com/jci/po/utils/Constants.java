@@ -17,6 +17,9 @@ public class Constants {
 	public static final String ERP_SAP ="SAP";
 //	public static final String ERP_MAPICS ="MAPICS";
 	
+	public static final int ERP_INT_SYMIX =1;
+	public static final int ERP_INT_SAP =2;
+	
 //	public static final String JSON_TEMPLATE = "{ \"returning\" : \"%s\" }";
 	public static final String JSON_OK = "OK";
 //	public static final String JSON_NG = "NG";//String.format(JSON_TEMPLATE, returning)));

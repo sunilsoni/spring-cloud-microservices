@@ -3,11 +3,9 @@ package com.jci.po.service;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +17,8 @@ import com.jci.po.azure.data.ResultSet;
 import com.jci.po.azure.query.PaginationParam;
 import com.jci.po.azure.query.ScrollingParam;
 import com.jci.po.dto.request.BatchInsertRequest;
-import com.jci.po.dto.request.PoDetailsRequest;
 import com.jci.po.dto.request.SegmentedDetailRequest;
 import com.jci.po.dto.response.BatchInsertResponse;
-import com.jci.po.dto.response.PoDetails;
-import com.jci.po.dto.response.PoDetailsResponse;
 import com.jci.po.dto.response.SegmentedDetailResponse;
 import com.jci.po.entity.ItemEntity;
 import com.jci.po.entity.PoEntity;
@@ -46,95 +41,17 @@ public class PoServiceImpl implements PoService{
 	@Autowired
 	private TableStorageRepository repo;
 	
-	 
-	@Override
-	public void addPo(PoEntity poEntity) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting PoServiceImpl.addPo ### " + poEntity);
-		
-		repo.insertPo(poEntity);
-		
-		LOG.info("### Ending PoServiceImpl.addPo ### " + poEntity);
-	}
-
-	@Override
-	public PoDetailsResponse getPos(PoDetailsRequest request) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting Entity PoServiceImpl.getPos ### "+request );
-		
-		List<PoEntity> pos = repo.selectPos();
-		
-		/*List<String> pos = repo.selectPos().stream()
-		        .sorted(Comparator.comparing(PoEntity::getTimestamp).reversed())
-		        .limit(20).map(PoEntity::getOrderNumber).collect(Collectors.toList());
-		
-		LOG.info("pos-->"+pos);*/
-		
-		PoDetailsResponse response = new PoDetailsResponse();
-		
-		if(true){
-			return response;
-		}
-		
-		List<PoDetails> list = new ArrayList<PoDetails>();
-		
-		for (PoEntity po : pos) {
-			PoDetails details = new PoDetails();  
-			details.setDescription(po.getDescription());
-			details.setKey(po.getPartitionKey());
-			details.setPoNo(po.getOrderNumber());
-			details.setSourceErp(po.getSourceErpName()+"");
-			details.setStatus(po.getStatus());
-			list.add(details);
-		}
-		response.setPoDetails(list);
-		LOG.info("### Ending Entity PoServiceImpl.getPos ### "+request );
-		return response;
-	}
-
-	@Override
-	public int getPoSize() throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting PoServiceImpl.getPoSize ### " );
-
-		
-		LOG.info("### Ending PoServiceImpl.getPoSize ### " );
-		return 0;
-	}
 
 	 @Override
 	 public String getLastPo() throws InvalidKeyException, URISyntaxException, StorageException {
-		 LOG.info("### Starting Ending PoServiceImpl.getLastPo ### " );
+		 /*LOG.info("### Starting Ending PoServiceImpl.getLastPo ### " );
 		 
 		 return repo.selectPos().stream()
         .sorted(Comparator.comparing(PoEntity::getTimestamp).reversed())
-        .map(PoEntity::getOrderNumber).findFirst().orElseThrow(() -> new NullPointerException("No Data"));
+        .map(PoEntity::getOrderNumber).findFirst().orElseThrow(() -> new NullPointerException("No Data"));*/
+		 return null;
 	 }
 
-	@Override
-	public List<PoEntity> getPos(int size) throws InvalidKeyException, URISyntaxException, StorageException {
-		List<PoEntity> pos = repo.selectPos().stream()
-			        .sorted(Comparator.comparing(PoEntity::getTimestamp).reversed())
-			        .limit(20)
-			        .collect(Collectors.toList());
-		
-			    /*if (pos.size() < size) {
-			      int supplementSize = size - pos.size();
-			      List<Integer> pos1 = IntStream.range(0, supplementSize)
-			          .boxed()
-			          .map(i -> 0)
-			          .collect(Collectors.toList());
-			      pos1.addAll(pos);
-			      return pos1;
-			    }
-			    return pos;*/
-		return pos;
-	}
-
-	@Override
-	public PoEntity getPoDetailsByPoNo(String partitionKey, String rowKey)
-			throws InvalidKeyException, URISyntaxException, StorageException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	
 	@Override
 	public SegmentedDetailResponse getSegmentedResultSet(SegmentedDetailRequest request) throws InvalidKeyException, URISyntaxException, StorageException  {
@@ -195,9 +112,7 @@ public class PoServiceImpl implements PoService{
 			poEntity.setDescription("(GE45RC375060)3/8x3/8x6  OAL: RH .060");
 			poEntity.setOrderCreationDate(new Date());
 			poEntity.setOrderNumber(i+"");
-			
-			//tableList1.setSourceErpName(1);
-			
+			poEntity.setSourceErpName(Constants.ERP_INT_SYMIX);
 			
 			if(i%2==0){
 				poEntity.setStatus(Constants.STATUS_IN_TRANSIT);
@@ -260,8 +175,6 @@ public class PoServiceImpl implements PoService{
 			poItemsEntity = PoModelData.getDummyData(poItemsEntity)	;
 			
 			poItemsEntity.setOrderNumber(i+"");
-
-			
 			
 			//need to save above data
 			poEntity = new PoEntity(partitionKey, i+"");
@@ -269,8 +182,7 @@ public class PoServiceImpl implements PoService{
 			poEntity.setOrderCreationDate(new Date());
 			poEntity.setOrderNumber(i+"");
 			
-			//tableList1.setSourceErpName(1);
-			
+			poEntity.setSourceErpName(Constants.ERP_INT_SAP);
 			
 			if(i%2==0){
 				poEntity.setStatus(Constants.STATUS_IN_TRANSIT);
