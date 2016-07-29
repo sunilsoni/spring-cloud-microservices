@@ -5,6 +5,17 @@ file purpose: set of functions for processing PO's with status "Error In Process
 server calls: none
 */
 
+		var isFirstSearch='';
+    	var lastPartition='';
+    	var lastRow='';
+    	var nextPartition='';
+    	var nextRow='';
+    	var startRowKey='';
+    	var tableName='';
+    	var endRowKey='';
+    	var partition='';
+    	var size='';
+    	var obj2={};
 /*
 * Functions encapsulated in IIFE referenced by variable e2OpenProcessError
 * @param {Object} jQuery 
@@ -40,14 +51,41 @@ var e2OpenDashboard = (function($){
      * To make the call to the service layer with the data for processind PO
      */
     function pullPoData() {
+    	
+    	var obj = JSON.parse('{"isFirstSearch":true,"size":1000,"erpName":"SYMIX"}');
+    	JSON.stringify(obj);
+    	var obj2 = JSON.parse('{"paginationParam":{"lastPartition":null,"lastRow":null,"nextPartition":"","nextRow":""}}');
+    	JSON.stringify(obj2);
+    	var finalObj = $.extend(obj, obj2);
+    	var reqObj = JSON.stringify(finalObj);
+    	
+    	 
+    	
+//    	console.log('obj2',obj2);
+    			
         // sending the data to the service layer for getting the pull po data (using the serviceObj)
         //the call returns a promise object which executes the .then method which has the server response
-        serviceObj.pullPoData('{"isFirstSearch":true}').then(function( data, textStatus, jqXHR ) {
-            // remove the loading screen
+//        serviceObj.pullPoData('{"isFirstSearch":true,"paginationParam":{"lastPartition":null,"lastRow":null,"nextPartition":"","nextRow":""},"startRowKey": "","tableName":"" ,"endRowKey":"" ,"partition": "SYMIX_PO","size":100}').then(function( data, textStatus, jqXHR ) {
+        
+        	serviceObj.pullPoData(reqObj).then(function( data, textStatus, jqXHR ) {
+        	// remove the loading screen
             commonUtil.removeLoader();
             
             // assign the gridData property of the grid, to the poDetails
-            mainGrid.gridData = data.poDetails;
+            console.log('data-----',data);
+            mainGrid.gridData = data.resultSet.series;
+            
+            var graphDataObject={};
+            graphDataObject = data.resultSet.graphData;
+            console.log("graphDataObject====",graphDataObject);
+            
+            var errObj = data.resultSet.errorData;
+            var errCount = Object.keys(errObj).length;
+            console.log(errCount);
+            
+            
+//            var graphObj = data.resultSet.graphData;
+//            console.log(graphObj.SYMIX);
             
             // prepare the data accordingly (format it)
             mainGrid.prepareData();
@@ -62,7 +100,21 @@ var e2OpenDashboard = (function($){
             commonUtil.updateErrorCount(mainGrid.errorCount);
             
             // prepare the graph data based on the status
-            var plotData = commonUtil.prepareGraphData(mainGrid.processedCount, mainGrid.inTransitCount, mainGrid.errorCount);
+			
+			 var graphObj={};
+			 graphObj.processedCount1= mainGrid.processedCount;
+			 graphObj.processedCount2=1;
+			 
+			 graphObj.inTransitCount1=mainGrid.inTransitCount;
+			 graphObj.inTransitCount2=2;
+			 
+			 graphObj.errorCount1=mainGrid.errorCount;
+			 graphObj.errorCount2=3;
+			 
+            var plotData = commonUtil.prepareGraphData(graphObj);
+
+//          var plotData = commonUtil.createGraphData(graphDataObject);
+
             
             // plot the graph
             commonUtil.plotGraph(plotData);
@@ -173,6 +225,12 @@ var e2OpenDashboard = (function($){
         mainGridErr.createGrid();
     });
 
+   
+    
+    
+    
+    
+    
     //code to be on load
     $(document).ready(function(){
         init();

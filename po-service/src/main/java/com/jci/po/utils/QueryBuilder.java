@@ -12,7 +12,7 @@ import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
 
 public class QueryBuilder {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(TableStorageRepositoryImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(QueryBuilder.class);
 	private static final String PARTITION_KEY = "PartitionKey";
 	private static final String STATUS_KEY = "Status";
 	private static final String TIMESTAMP = "Timestamp";

@@ -15,7 +15,7 @@
 		<module>web-portal</module>		
         <module>po-service</module>        
         <module>asn-service</module>
-        <module>item-service</module>  
+        <module>po-job</module>  
     </modules>
 
 	 <parent>

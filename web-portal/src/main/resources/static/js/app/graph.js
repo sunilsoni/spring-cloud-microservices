@@ -23,8 +23,8 @@ var graphObj = (function($){
             $('#'+id).empty();
         }
         
-        if(!plotData){
-            plotData = [{
+       if(!plotData){
+    	   plotData = [{
                     name: 'Processed',
                     data: [0, 0, 0, 0],
                     color: "#90ed7d"
@@ -53,10 +53,9 @@ var graphObj = (function($){
             xAxis: {
                 categories: [
                     'Symix',
-                    'SAP',
-                    'Oracle',
-                    'Mapics',
+                    'SAP'
                 ],
+            	categories: [],
                 crosshair: true
             },
             yAxis: {
@@ -86,6 +85,18 @@ var graphObj = (function($){
             },
             series: plotData
         };
+        
+        /*var graphCategoriesData = plotData;
+        if( typeof graphCategoriesData !='undefined'){
+        	options.xAxis.categories = graphCategoriesData.SYMIX;
+        	options.series[0] = graphCategoriesData.SYMIX[0];
+        	options.series[1] = graphCategoriesData.SYMIX[1];
+        	options.series[2] = graphCategoriesData.SYMIX[2];
+        	
+        }*/
+        
+        
+        
         chart = new Highcharts.Chart(options);
          //$(id).highcharts();
     }

@@ -1,4 +1,4 @@
-function BuildGrid(gridId, gridData, columnDefinition,gridOptions, paginationId){
+function BuildGrid(gridId, gridData, columnDefinition,gridOptions, paginationId,graphData){
     this.gridId = gridId;
     this.gridData = gridData;
     this.gridOptions = gridOptions;
@@ -6,6 +6,7 @@ function BuildGrid(gridId, gridData, columnDefinition,gridOptions, paginationId)
     this.paginationId = paginationId;
     this.grid;
     this.dataView;
+	this.graphData=graphData;
 }
 
 BuildGrid.prototype.createGrid = function(){
@@ -141,34 +142,37 @@ BuildGrid.prototype.createGrid = function(){
 BuildGrid.prototype.prepareData = function(){
     
     var gridData = this.gridData;
+    console.log("gridData val is====="+gridData);
+    
     var errorCount = 0,inTransitCount = 0, processedCount = 0;
+	
     for(var i = 0; i< gridData.length; i++){
           gridData[i]["id"] = i;
-          var statusCode = gridData[i]['status'], dataSourceCode = gridData[i]['dataSource']
-          if(statusCode === 1){
-              gridData[i]['statusVal'] = "In-transit";
+          var statusCode = gridData[i]['Status'], dataSourceCode = gridData[i]['SourceErpName']
+          if(statusCode === "1"){
+              gridData[i]['Status'] = "In-transit";
               gridData[i]['statusColor'] = 'blue';
               inTransitCount++;
           }
-          else if(statusCode === 2){
-              gridData[i]['statusVal'] = "Transaction Completed";
+          else if(statusCode === "2"){
+              gridData[i]['Status'] = "Transaction Completed";
               gridData[i]['statusColor'] = 'green';
               processedCount++;
           }
-          else if(statusCode === 3){
-              gridData[i]['statusVal'] = "Error in Process";
+          else if(statusCode === "3"){
+              gridData[i]['Status'] = "Error in Process";
               gridData[i]['statusColor'] = 'red';
               errorCount++;
           }
         
           if(dataSourceCode === "1"){
-              gridData[i]['dataSource'] = "Symix";
+              gridData[i]['SourceErpName'] = "Symix";
           }
           else if(dataSourceCode === 2){
-              gridData[i]['dataSource'] = "SAP";
+              gridData[i]['SourceErpName'] = "SAP";
           }
           else if(dataSourceCode === 3){
-              gridData[i]['dataSource'] = "Oracle";
+              gridData[i]['SourceErpName'] = "Oracle";
           }
     }
     
@@ -253,11 +257,11 @@ function removeRowHighlight(key) {
 /* cell formatters */
 function checkBoxFormatter(row, cell, value, columnDef, dataContext) {
   //debugger;
-    var value = dataContext["poId"];
-    var poNumber = dataContext["poNum"]
-    if (dataContext["status"] === 1) {
+    var value = dataContext["poId"];//initially it was:-  var value = dataContext["poId"];
+    var poNumber = dataContext["OrderNumber"]
+    if (dataContext["Status"] === "In-transit") {
         return "<input type='checkbox' class='checkbox-button' record-id='" + dataContext["id"] + "'/>";
-    }else if(dataContext["status"] === 2 || dataContext["status"] === 3){
+    }else if(dataContext["Status"] === "Transaction Completed" || dataContext["Status"] === "Error in Process"){
         return "<input type='checkbox' class='checkbox-button' record-id='" + dataContext["id"] + "' disabled/>";
     }
 };

@@ -51,31 +51,31 @@ var commonUtil = (function($){
         return [{
             id: "poId",
             name: "Select",
-            field: "poId",
+            field: "poId",////initially it was poId
             formatter: checkBoxFormatter,
             width: 200
         }, {
             id: "poNum",
             name: "PO Number",
-            field: "poNum",
+            field: "OrderNumber", //initially it was poNum
             sortable : true,
             width: 150
         }, {
             id: "poDesc",
             name: "PO Description",
-            field: "poDesc",
+            field: "Description",//initially it was poDesc
             sortable : true,
             width: 300
         }, {
             id: "dataSource",
             name: "Data Source",
-            field: "dataSource",
+            field: "SourceErpName",//initially it was dataSource
             sortable : true,
             width: 200
         }, {
             id: "statusVal",
             name: "Status",
-            field: "statusVal",
+            field: "Status",//initially it was statusVal
             sortable : true,
             width: 250
         }];
@@ -125,13 +125,13 @@ var commonUtil = (function($){
      * @return {Object} options object
      */
     function getDashboardGridOptions(){
-       return {
+      return {
             enableCellNavigation: true,
             enableColumnReorder: false
         };
     }
     
-    /*
+    /* 
      * To get the options for the process error grid
      * @return {Object} options object
      */
@@ -172,7 +172,7 @@ var commonUtil = (function($){
         return(JSON.stringify({
             poNums: dataToProcess,
             poNumToIdMap : idToPoNumMap,
-            poDesc : descGlobalText
+            Description : descGlobalText
         }));
     }
     
@@ -191,21 +191,30 @@ var commonUtil = (function($){
      * @param {Number} errorCount
      * @return {Array} graph data
      */
-    function prepareGraphData(processedCount, inTransitCount, errorCount){
+	 
+	 //Sunil:Pass dynamically-step1
+	
+   function prepareGraphData(data){
         return [{
                 name: 'Processed',
-                data: [processedCount, 3, 2, 1],
+                data: [data.processedCount1,data.processedCount2],
                 color: "#90ed7d"
             }, {
                 name: 'In-Transit',
-                data: [inTransitCount, 4, 4, 1],
+                data: [data.inTransitCount1,data.inTransitCount2],
                 color: "#7cb5ec"
 
             }, {
                 name: 'Errored',
-                data: [errorCount, 6, 9, 2],
+                data: [data.errorCount1,data.errorCount2],
                 color: "#AA4643"
             }];
+        
+    }
+    
+    
+    function createGraphData(graphDataObject){
+        return graphDataObject;
         
     }
     
@@ -250,6 +259,8 @@ var commonUtil = (function($){
     }
     
     
+    
+    
     return{
         addLoader : addLoader,
         removeLoader : removeLoader,
@@ -264,7 +275,8 @@ var commonUtil = (function($){
         prepareGraphData : prepareGraphData,
         getStatusText : getStatusText,
         getGraphContainer : getGraphContainer,
-        plotGraph : plotGraph
+        plotGraph : plotGraph,
+//        createGraphData : createGraphData
     }
 
 })(jQuery);

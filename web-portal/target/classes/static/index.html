@@ -94,17 +94,17 @@
 			<div id="dashboardGridContainer">
                 <div class="row" >
                     <div class="col-sm-2 col-xs-6">
-                        <button type="button"  class="btn btn-success" id="pullPoDataBtn" ng-click="pullPoData()">Pull PO Data</button>
+                        <!-- <button type="button"  class="btn btn-success" id="pullPoDataBtn" ng-click="pullPoData()">Pull PO Data</button> -->
                     </div>
                     <div class="col-sm-2 col-xs-6">
-                        <button type="button" class="btn btn-info" id="processPoDataBtn" ng-click="processPoData()">Process PO Data</button>
+                        <!-- <button type="button" class="btn btn-info" id="processPoDataBtn" ng-click="processPoData()">Process PO Data</button> -->
                     </div>
                     <div class="col-sm-4 col-sm-offset-4 col-xs-offset-4 col-xs-6" >
                    
                             <div class="errorActionContainer">
                                 <span>Action Required:</span>
                        
-                                <button type="button" id="errorBtn" class="btn btn-danger">
+                                <button type="button" id="errorBtn" class="btn btn-danger" click="errorinProcess()">
                                     Error in Process - <span id="errorCount">0</span>
                                 </button>
                             </div>
@@ -117,10 +117,10 @@
                 <div class="clearfix"></div>
 				<ul class="nav nav-tabs" id="tabUl">
 					<li class="active"><a data-toggle="tab" href="#home">Symix</a></li>
-					<li><a data-toggle="tab" href="#menu1">SAP</a></li>
-					<li><a data-toggle="tab" href="#menu2">Oracle</a></li>
+					<!-- <li><a data-toggle="tab" href="#menu1">SAP</a></li>
+					<li><a data-toggle="tab" href="#menu2">Oracle</a></li> -->
 				</ul>
-                
+				
 				<!-- <div class="tab-content">
 					<div id="home" class="tab-pane fade in active">
 						<div class="row">

@@ -45,7 +45,8 @@ var serviceObj = (function($){
     }*/
     
     function pullPoData(data){
-        var promise = callToSever('api/po/getPoDetails', data, 'POST');
+        var promise = callToSever('api/po/getSegmentedPoDetails', data, 'POST');
+		// var promise = callToSever('../local.json', data, 'POST');
         return promise;
     }
     
@@ -72,6 +73,7 @@ var serviceObj = (function($){
         settings['url'] = url;
         settings['data'] = data;
         settings['method'] = method;
+		settings['type'] = 'json';//Sunil:remove
         
         return $.when( $.ajax(settings));
     }
