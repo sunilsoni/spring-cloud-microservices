@@ -9,7 +9,8 @@ public class DataHelper {
     private int  status;
     private String tableName;
     private String erpName;
-
+    private boolean isErrorDataRequired;
+    
     public String getPartitionValue() {
         return this.partitionValue;
     }
@@ -51,11 +52,22 @@ public class DataHelper {
 		this.status = status;
 	}
 
+	public boolean isErrorDataRequired() {
+		return isErrorDataRequired;
+	}
+
+	public void setErrorDataRequired(boolean isErrorDataRequired) {
+		this.isErrorDataRequired = isErrorDataRequired;
+	}
+
 	@Override
 	public String toString() {
 		return "DataHelper [partitionValue=" + partitionValue + ", timestamp=" + timestamp + ", status=" + status
-				+ ", tableName=" + tableName + ", erpName=" + erpName + "]";
+				+ ", tableName=" + tableName + ", erpName=" + erpName + ", isErrorDataRequired=" + isErrorDataRequired
+				+ "]";
 	}
+
+
 
 
 }

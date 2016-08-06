@@ -59,14 +59,14 @@ body {
     background-color: #fff;
 }
 
-#tabUl > li > a {
+.tabUl > li > a {
     background-color: #009CDE;
     color: #fff;
     font-weight: bold;
 }
 
-    #tabUl > li > a:hover,
-    #tabUl > li > a:focus {
+    .tabUl > li > a:hover,
+    .tabUl > li > a:focus {
         background-color: #0b3690;
         color: #fff;
         font-weight: bold;

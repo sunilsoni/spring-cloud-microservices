@@ -65,13 +65,13 @@
       var $nav = $("<span class='slick-pager-nav' />").appendTo($container);
       var $settings = $("<span class='slick-pager-settings' />").appendTo($container);
       $status = $("<span class='slick-pager-status' />").appendTo($container);
-
+     
+      var gridTemp = $container.attr('id').split('-');
+      var gridName = gridTemp[0]+'-'+gridTemp[1]+'-'+'grid';
       $settings
-          .append("<span class='slick-pager-settings-expanded' style='display:none'>Show: <a data=0>All</a><a data='-1'>Auto</a><a data=100>100</a><a data=500>500</a><a data=1000>1000</a>...<a data=1000 id='autopager'>Load more</a></span>");
+          .append("<span class='slick-pager-settings-expanded' style='display:none'>Show: <a data=0>All</a><a data='-1'>Auto</a><a data=100>100</a><a data=500>500</a><a data=1000>1000</a>...</span><span class='autopager' grid='"+gridName+"'><a>Load more</a></span>");
 
-      $('#autopager').on('click', function() {
-    	  e2OpenDashboard.pullPoData();          
-      });
+      
       
       $settings.find("a[data]").click(function (e) {
         var pagesize = $(e.target).attr("data");

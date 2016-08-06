@@ -5,10 +5,6 @@ import com.jci.po.entity.ItemEntity;
 public class ItemModelData {
 
 	public static ItemEntity getDummyData(ItemEntity entity){
-	
-		String partitionKey = AzureUtils.getPartitionKey(Constants.ERP_SYMIX);
-		entity.setPartitionKey(partitionKey);
-		entity.setRowKey("123");
 		
 		entity.setEnterpriseCode("JCI-BE");
 		entity.setSiteName("5061");

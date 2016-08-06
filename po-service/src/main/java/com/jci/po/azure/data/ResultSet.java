@@ -1,6 +1,5 @@
 package com.jci.po.azure.data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,19 +8,15 @@ import com.jci.po.azure.query.PaginationParam;
 public class ResultSet {
 	
 	List<HashMap<String, Object>> series ;
-	List<HashMap<String, String>> errorData ;
+	//List<HashMap<String, String>> errorData = new ArrayList<HashMap<String, String>>() ;
 	PaginationParam pagination ;
-	HashMap<String, ArrayList<Integer>> graphData ; 
-	
 	public ResultSet() {
 		
 	}
 	
-	public ResultSet(List<HashMap<String, Object>> series,List<HashMap<String, String>> errorData,HashMap<String, ArrayList<Integer>> graphData , PaginationParam pagination) {
-		this.series = series ;
-		this.pagination = pagination ;
-		this.errorData = errorData ;
-		this.graphData = graphData ;
+	public ResultSet(List<HashMap<String, Object>> series1, PaginationParam pagination1) {
+		this.series = series1 ;
+		this.pagination = pagination1 ;
 	}
 	
 	public List<HashMap<String, Object>> getSeries() {
@@ -40,26 +35,12 @@ public class ResultSet {
 		this.pagination = pagination;
 	}
 
-	public HashMap<String, ArrayList<Integer>> getGraphData() {
-		return graphData;
-	}
-
-	public void setGraphData(HashMap<String, ArrayList<Integer>> graphData) {
-		this.graphData = graphData;
-	}
-
-	public List<HashMap<String, String>> getErrorData() {
-		return errorData;
-	}
-
-	public void setErrorData(List<HashMap<String, String>> errorData) {
-		this.errorData = errorData;
-	}
-
 	@Override
 	public String toString() {
-		return "ResultSet [series=" + series + ", errorData=" + errorData + ", pagination=" + pagination
-				+ ", graphData=" + graphData + "]";
+		return "ResultSet [series=" + series + ", pagination=" + pagination + "]";
 	}
 
+
+
+	
 }

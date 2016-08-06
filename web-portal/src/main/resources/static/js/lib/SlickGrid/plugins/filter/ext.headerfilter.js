@@ -18,10 +18,10 @@
         var self = this;
         var handler = new Slick.EventHandler();
         var defaults = {
-            buttonImage: "../img/down.png",
-            filterImage: "../img/filter.png",
-            sortAscImage: "../img/sort-asc.png",
-            sortDescImage: "../img/sort-desc.png"
+            buttonImage: "../images/down.png",
+            filterImage: "../images/filter.png",
+            sortAscImage: "../images/sort-asc.png",
+            sortDescImage: "../images/sort-desc.png"
         };
         var $menu;
 
@@ -128,7 +128,6 @@
         }
 
         function showFilter(e) {
-            e.stopPropagation();
             var $menuButton = $(this);
             var columnDef = $menuButton.data("column");
 
@@ -154,8 +153,8 @@
 
             $menu.empty();
 
-            //addMenuItem($menu, columnDef, 'Sort Ascending', 'sort-asc', options.sortAscImage);
-            //addMenuItem($menu, columnDef, 'Sort Descending', 'sort-desc', options.sortDescImage);
+            addMenuItem($menu, columnDef, 'Sort Ascending', 'sort-asc', options.sortAscImage);
+            addMenuItem($menu, columnDef, 'Sort Descending', 'sort-desc', options.sortDescImage);
             addMenuInput($menu, columnDef);
 
             var filterOptions = "<label><input type='checkbox' value='-1' />(Select All)</label>";
@@ -176,6 +175,7 @@
                 .appendTo($menu)
                 .bind('click', function (ev) {
                     columnDef.filterValues = workingFilters.splice(0);
+					console.log(grid.getColumns());
                     setButtonImage($menuButton, columnDef.filterValues.length > 0);
                     handleApply(ev, columnDef);
                 });
@@ -184,6 +184,7 @@
                 .appendTo($menu)
                 .bind('click', function (ev) {
                     columnDef.filterValues.length = 0;
+					
                     setButtonImage($menuButton, false);
                     handleApply(ev, columnDef);
                 });
@@ -257,14 +258,11 @@
         }
 
         function getFilterValues(dataView, column) {
-            var seen = [], items = [];
-            //for (var i = 0; i < dataView.getLength() ; i++) {
-            items = dataView.getItems();
-            for (var i = 0; i < items.length ; i++) {
-                //var value = dataView.getItem(i)[column.field];
-                 var value = dataView.getItemById(items[i].id)[column.field];
-                
-                if (value && !_.contains(seen, value)) {
+            var seen = [];
+            for (var i = 0; i < dataView.getLength() ; i++) {
+                var value = dataView.getItem(i)[column.field];
+
+                if (!_.contains(seen, value)) {
                     seen.push(value);
                 }
             }

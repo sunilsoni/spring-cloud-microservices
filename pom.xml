@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jci</groupId>
-    <artifactId>sc-parent</artifactId>
+    <artifactId>supplier-collaboration</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -13,7 +13,9 @@
 		<module>eureka-server</module>
         <module>api-gateway</module>
 		<module>web-portal</module>		
-        <module>po-service</module>        
+        <module>po-service</module> 
+		<module>item-service</module> 
+		<module>supplier-service</module> 		
         <module>asn-service</module>
         <module>po-job</module>  
     </modules>

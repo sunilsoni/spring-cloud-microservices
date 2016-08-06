@@ -2331,6 +2331,107 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.dataSource = dataSource;
 	}
 
+	@Override
+	public String toString() {
+		return "PoItemsEntity [id=" + id + ", dataSource=" + dataSource + ", orderNumber=" + orderNumber
+				+ ", orderCreationDate=" + orderCreationDate + ", orderStatus=" + orderStatus + ", orderPriority="
+				+ orderPriority + ", customerId=" + customerId + ", CustomerDescription=" + CustomerDescription
+				+ ", customerDUNS=" + customerDUNS + ", customerDUNS4=" + customerDUNS4 + ", customerTaxNumber="
+				+ customerTaxNumber + ", customerAddressDescriptor=" + customerAddressDescriptor + ", customerAddress1="
+				+ customerAddress1 + ", customerAddress2=" + customerAddress2 + ", customerAddress3=" + customerAddress3
+				+ ", customerAddress4=" + customerAddress4 + ", customerAddress5=" + customerAddress5
+				+ ", customerCity=" + customerCity + ", customerConty=" + customerConty + ", customerState="
+				+ customerState + ", customerContry=" + customerContry + ", customerZip=" + customerZip
+				+ ", supplierId=" + supplierId + ", supplierDicription=" + supplierDicription + ", supplierDUNS="
+				+ supplierDUNS + ", supplierDUNS4=" + supplierDUNS4 + ", supplierAddressDescriptor="
+				+ supplierAddressDescriptor + ", supplierAddress1=" + supplierAddress1 + ", supplierAddress2="
+				+ supplierAddress2 + ", supplierAddress3=" + supplierAddress3 + ", supplierAddress4=" + supplierAddress4
+				+ ", supplierAddress5=" + supplierAddress5 + ", supplierCity=" + supplierCity + ", supplierCounty="
+				+ supplierCounty + ", supplierState=" + supplierState + ", supplierCountry=" + supplierCountry
+				+ ", supplierZip=" + supplierZip + ", BuyerCode=" + BuyerCode + ", buyerContact=" + buyerContact
+				+ ", buyerName=" + buyerName + ", buyerEmail=" + buyerEmail + ", supplierEmail=" + supplierEmail
+				+ ", DeliveryTerm=" + DeliveryTerm + ", paymentTerms=" + paymentTerms + ", totalOrderAmount="
+				+ totalOrderAmount + ", inCoTerms=" + inCoTerms + ", customerOrderNotes=" + customerOrderNotes
+				+ ", suplierOrderNotes=" + suplierOrderNotes + ", billTo=" + billTo + ", billToAddressDescriptor="
+				+ billToAddressDescriptor + ", billToAddress1=" + billToAddress1 + ", billToAddress2=" + billToAddress2
+				+ ", billToAddress3=" + billToAddress3 + ", billToAddress4=" + billToAddress4 + ", billToAddress5="
+				+ billToAddress5 + ", billToCity=" + billToCity + ", billToCounty=" + billToCounty + ", billToState="
+				+ billToState + ", billToCountry=" + billToCountry + ", billToZip=" + billToZip
+				+ ", RemitToAddressDescriptor=" + RemitToAddressDescriptor + ", remitToAddress1=" + remitToAddress1
+				+ ", remitToAddress2=" + remitToAddress2 + ", remitToAddress3=" + remitToAddress3 + ", remitToAddress4="
+				+ remitToAddress4 + ", remitToAddress5=" + remitToAddress5 + ", remitToCity=" + remitToCity
+				+ ", remitToCounty=" + remitToCounty + ", remitToState=" + remitToState + ", remitToCountry="
+				+ remitToCountry + ", remitToZip=" + remitToZip + ", buyerContactPhone=" + buyerContactPhone
+				+ ", buyerContactFax=" + buyerContactFax + ", orderType=" + orderType + ", FlexStringPOHeader4="
+				+ FlexStringPOHeader4 + ", FlexStringPOHeader5=" + FlexStringPOHeader5 + ", FlexStringPOHeader6="
+				+ FlexStringPOHeader6 + ", FlexStringPOHeader7=" + FlexStringPOHeader7 + ", FlexStringPOHeader8="
+				+ FlexStringPOHeader8 + ", FlexStringPOHeader9=" + FlexStringPOHeader9 + ", flexIntPOHeader1="
+				+ flexIntPOHeader1 + ", flexIntPOHeader2=" + flexIntPOHeader2 + ", flexIntPOHeader3=" + flexIntPOHeader3
+				+ ", flexIntPOHeader4=" + flexIntPOHeader4 + ", flexIntPOHeader5=" + flexIntPOHeader5
+				+ ", flexFloatPOHeader1=" + flexFloatPOHeader1 + ", flexFloatPOHeader2=" + flexFloatPOHeader2
+				+ ", flexFloatPOHeader3=" + flexFloatPOHeader3 + ", flexFloatPOHeader4=" + flexFloatPOHeader4
+				+ ", flexFloatPOHeader5=" + flexFloatPOHeader5 + ", flexDatePOHeader1=" + flexDatePOHeader1
+				+ ", flexDatePOHeader2=" + flexDatePOHeader2 + ", flexDatePOHeader3=" + flexDatePOHeader3
+				+ ", flexDatePOHeader4=" + flexDatePOHeader4 + ", flexDatePOHeader5=" + flexDatePOHeader5 + ", lineId="
+				+ lineId + ", lineStatus=" + lineStatus + ", customerItemId=" + customerItemId
+				+ ", customerItemDescription=" + customerItemDescription + ", supplierItemId=" + supplierItemId
+				+ ", supplierItemDescription=" + supplierItemDescription + ", unitPrice=" + unitPrice + ", priceBasis="
+				+ priceBasis + ", paymentCurrency=" + paymentCurrency + ", totalLineAmount=" + totalLineAmount
+				+ ", UOM=" + UOM + ", customerOrderLineNotes=" + customerOrderLineNotes + ", suoplierOrderLineNotes="
+				+ suoplierOrderLineNotes + ", drawingVersion=" + drawingVersion + ", drawingNumber=" + drawingNumber
+				+ ", itemCategory=" + itemCategory + ", shipToLocation=" + shipToLocation + ", flexStringPOLine5="
+				+ flexStringPOLine5 + ", flexStringPOLine6=" + flexStringPOLine6 + ", flexStringPOLine7="
+				+ flexStringPOLine7 + ", flexStringPOLine8=" + flexStringPOLine8 + ", flexStringPOLine9="
+				+ flexStringPOLine9 + ", freeItemFlag=" + freeItemFlag + ", flexIntPOLine2=" + flexIntPOLine2
+				+ ", flexIntPOLine3=" + flexIntPOLine3 + ", flexIntPOLine4=" + flexIntPOLine4 + ", flexIntPOLine5="
+				+ flexIntPOLine5 + ", flexFloatPOLine1=" + flexFloatPOLine1 + ", flexFloatPOLine2=" + flexFloatPOLine2
+				+ ", flexFloatPOLine3=" + flexFloatPOLine3 + ", flexFloatPOLine4=" + flexFloatPOLine4
+				+ ", flexFloatPOLine5=" + flexFloatPOLine5 + ", flexDatePOLine1=" + flexDatePOLine1
+				+ ", flexDatePOLine2=" + flexDatePOLine2 + ", flexDatePOLine3=" + flexDatePOLine3 + ", flexDatePOLine4="
+				+ flexDatePOLine4 + ", flexDatePOLine5=" + flexDatePOLine5 + ", requestNumber=" + requestNumber
+				+ ", requestStatus=" + requestStatus + ", action=" + action + ", requestQty=" + requestQty
+				+ ", requestDate=" + requestDate + ", requestedShipDate=" + requestedShipDate + ", carrier=" + carrier
+				+ ", customerSite=" + customerSite + ", shipToAddressDescriptor=" + shipToAddressDescriptor
+				+ ", shipToAddress1=" + shipToAddress1 + ", shipToAddress2=" + shipToAddress2 + ", shipToAddress3="
+				+ shipToAddress3 + ", shipToAddress4=" + shipToAddress4 + ", shipToAddress5=" + shipToAddress5
+				+ ", shipToCity=" + shipToCity + ", shipToCounty=" + shipToCounty + ", shipToState=" + shipToState
+				+ ", shipToCountry=" + shipToCountry + ", shipToZip=" + shipToZip + ", refOrderType=" + refOrderType
+				+ ", refOrderId=" + refOrderId + ", refOrderLineId=" + refOrderLineId + ", refOrderRequestId="
+				+ refOrderRequestId + ", refCustomerId=" + refCustomerId + ", refSupplierId=" + refSupplierId
+				+ ", flexStringPORequest1=" + flexStringPORequest1 + ", flexStringPORequest2=" + flexStringPORequest2
+				+ ", flexStringPORequest3=" + flexStringPORequest3 + ", flexStringPORequest4=" + flexStringPORequest4
+				+ ", flexStringPORequest5=" + flexStringPORequest5 + ", flexStringPORequest6=" + flexStringPORequest6
+				+ ", flexStringPORequest7=" + flexStringPORequest7 + ", flexStringPORequest8=" + flexStringPORequest8
+				+ ", flexStringPORequest9=" + flexStringPORequest9 + ", flexPORequest1=" + flexPORequest1
+				+ ", flexPORequest2=" + flexPORequest2 + ", flexPORequest3=" + flexPORequest3 + ", flexPORequest4="
+				+ flexPORequest4 + ", flexPORequest5=" + flexPORequest5 + ", flexFloatPORequest1=" + flexFloatPORequest1
+				+ ", flexFloatPORequest2=" + flexFloatPORequest2 + ", flexFloatPORequest3=" + flexFloatPORequest3
+				+ ", flexFloatPORequest4=" + flexFloatPORequest4 + ", flexFloatPORequest5=" + flexFloatPORequest5
+				+ ", flexDatePORequest1=" + flexDatePORequest1 + ", flexDatePORequest2=" + flexDatePORequest2
+				+ ", flexDatePORequest3=" + flexDatePORequest3 + ", flexDatePORequest4=" + flexDatePORequest4
+				+ ", flexDatePORequest5=" + flexDatePORequest5 + ", promiseId=" + promiseId + ", promiseQty="
+				+ promiseQty + ", promiseDate=" + promiseDate + ", promiseShipDate=" + promiseShipDate
+				+ ", supplierSite=" + supplierSite + ", shipFromAddressDescriptor=" + shipFromAddressDescriptor
+				+ ", shipFromAddress1=" + shipFromAddress1 + ", shipFromAddress2=" + shipFromAddress2
+				+ ", shipFromAddress3=" + shipFromAddress3 + ", shipFromAddress4=" + shipFromAddress4
+				+ ", shipFromAddress5=" + shipFromAddress5 + ", shipFromCity=" + shipFromCity + ", shipFromCounty="
+				+ shipFromCounty + ", shipFromState=" + shipFromState + ", shipFromCountry=" + shipFromCountry
+				+ ", shipFromZip=" + shipFromZip + ", flexStringPOPromise1=" + flexStringPOPromise1
+				+ ", flexStringPOPromise2=" + flexStringPOPromise2 + ", flexStringPOPromise3=" + flexStringPOPromise3
+				+ ", flexStringPOPromise4=" + flexStringPOPromise4 + ", flexStringPOPromise5=" + flexStringPOPromise5
+				+ ", flexStringPOPromise6=" + flexStringPOPromise6 + ", flexStringPOPromise7=" + flexStringPOPromise7
+				+ ", flexStringPOPromise8=" + flexStringPOPromise8 + ", flexStringPOPromise9=" + flexStringPOPromise9
+				+ ", flexIntPOPromise1=" + flexIntPOPromise1 + ", flexIntPOPromise2=" + flexIntPOPromise2
+				+ ", flexIntPOPromise3=" + flexIntPOPromise3 + ", flexIntPOPromise4=" + flexIntPOPromise4
+				+ ", flexIntPOPromise5=" + flexIntPOPromise5 + ", flexFloatPOPromise1=" + flexFloatPOPromise1
+				+ ", flexFloatPOPromise2=" + flexFloatPOPromise2 + ", flexFloatPOPromise3=" + flexFloatPOPromise3
+				+ ", flexFloatPOPromise4=" + flexFloatPOPromise4 + ", flexFloatPOPromise5=" + flexFloatPOPromise5
+				+ ", flexDatePOPromise1=" + flexDatePOPromise1 + ", flexDatePOPromise2=" + flexDatePOPromise2
+				+ ", flexDatePOPromise3=" + flexDatePOPromise3 + ", flexDatePOPromise4=" + flexDatePOPromise4
+				+ ", flexDatePOPromise5=" + flexDatePOPromise5 + ", revNo=" + revNo + ", shipToCustomerId="
+				+ shipToCustomerId + "]";
+	}
+
 	
 
 

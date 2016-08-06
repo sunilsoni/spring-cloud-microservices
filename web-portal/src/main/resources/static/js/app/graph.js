@@ -18,7 +18,7 @@ var graphObj = (function($){
      * @param {String} id
      * @param {Array} plotData 
      */
-    function createChart(id, plotData){
+    function createChart(id, plotData,categoryArr){
         if(id && id != null && id != undefined){
             $('#'+id).empty();
         }
@@ -51,20 +51,16 @@ var graphObj = (function($){
                 text: 'Source Collaboration Dashboard'
             },
             xAxis: {
-                categories: [
-                    'Symix',
-                    'SAP'
-                ],
-            	categories: [],
+                categories: categoryArr,
                 crosshair: true
             },
             yAxis: {
                 min: 0,
                 tickInterval:1,
-                allowDecimals:false
-                /*title: {
-                    text: 'Rainfall (mm)'
-                }*/
+                allowDecimals:false,
+                title: {
+                    text: 'Count'
+                }
             },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',

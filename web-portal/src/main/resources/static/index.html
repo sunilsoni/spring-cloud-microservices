@@ -53,18 +53,22 @@
 <body>
 	
 	<div id="loadingindicator"></div>
-    
-	
-	
 	<div class="container jci-color" id="mainContent">
-		<header>
+		<header style="padding-bottom:0px;">
 			<div class="row ">
-				<div class="col-sm-4">
+				<div class="col-sm-2">
 					<a href="index.html"><img src="img/Johnson_Controls.png"
 						 id="logo-img"/></a>
 
 				</div>
-				<div class="col-sm-6">
+				<div class="col-sm-10" style="margin-top:28px;padding-left:0px;">
+					<ul class="nav nav-tabs nav-justified" id="main-tabs">
+						<li><a data-toggle="tab" href="#home" data-tab="home">Home</a></li>
+						<li><a data-toggle="tab" href="#supplier" data-tab="supplier">Supplier</a></li>
+						<li><a data-toggle="tab" href="#item" data-tab="item">Item</a></li>
+					</ul>
+				</div>
+				<!--<div class="col-sm-6">
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group headerDiv">
@@ -83,122 +87,85 @@
 					<div class="pull-right">
 						<a class="btn btn-danger" id="logOff">Log Off</a>
 					</div>
-				</div>
+				</div>-->
 
 				
 			</div>
+			<!--<div class="row">
+				<div class="col-sm-12 col-xs-12">
+					<ul class="nav nav-tabs tabUl">
+						<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+						<li><a data-toggle="tab" href="#supplier">Supplier</a></li>
+						<li><a data-toggle="tab" href="#item">Item</a></li>
+					</ul>
+				</div>
+			</div>-->
 	
 		</header>
 		<!--Sunil: Dashboard-->
-        <section id="main1">
-			<div id="dashboardGridContainer">
+        <section id="main1" data-item-type="home" class="active">
+			<!--<div id="dashboardGridContainer">
                 <div class="row" >
                     <div class="col-sm-2 col-xs-6">
-                        <!-- <button type="button"  class="btn btn-success" id="pullPoDataBtn" ng-click="pullPoData()">Pull PO Data</button> -->
+                        
                     </div>
                     <div class="col-sm-2 col-xs-6">
-                        <!-- <button type="button" class="btn btn-info" id="processPoDataBtn" ng-click="processPoData()">Process PO Data</button> -->
+                        
                     </div>
-                    <div class="col-sm-4 col-sm-offset-4 col-xs-offset-4 col-xs-6" >
-                   
-                            <div class="errorActionContainer">
-                                <span>Action Required:</span>
-                       
-                                <button type="button" id="errorBtn" class="btn btn-danger" click="errorinProcess()">
-                                    Error in Process - <span id="errorCount">0</span>
-                                </button>
-                            </div>
-                            
-                     
-                    </div>
+                    
                     
                 </div>
                 
                 <div class="clearfix"></div>
-				<ul class="nav nav-tabs" id="tabUl">
-					<li class="active"><a data-toggle="tab" href="#home">Symix</a></li>
-					<!-- <li><a data-toggle="tab" href="#menu1">SAP</a></li>
-					<li><a data-toggle="tab" href="#menu2">Oracle</a></li> -->
-				</ul>
 				
-				<!-- <div class="tab-content">
-					<div id="home" class="tab-pane fade in active">
-						<div class="row">
-							
-							<div class="col-sm-12">
-
-								<div id="myGrid" style="width: 100%; height: 282px;"></div>
-								<div id="pager" style="width:100%;height:20px;"></div>
-                               
-
-							</div>
+				<div id="dashboard-tabs">
+					<div class="row">	
+						<div class="col-sm-8 col-xs-6">
+							<ul class="nav nav-tabs tabUl" id="dashboard-ul-tabs">
+								
+							</ul>
+						</div>
+						<div class="col-sm-4 col-xs-6" >
+					   
+								<div class="errorActionContainer">
+									<span>Action Required:</span>
+						   
+									<button type="button" id="errorBtn" class="btn btn-danger" click="errorinProcess()">
+										Error in Process - <span id="errorCount">0</span>
+									</button>
+								</div>
+								
+						 
 						</div>
 					</div>
-					<div id="menu1" class="tab-pane fade">
-						<h3>SAP</h3>
-
+					<div id="dashboard-tab-content" class="tab-content">
 					</div>
-					<div id="menu2" class="tab-pane fade">
-						<h3>Oracle</h3>
-
-					</div>
-
-				</div> -->
-                
-                <div class="gridContainer">
-						<div class="row">
-							<div class="col-sm-12">
-								<div id="myGrid" class="grid-style"></div>
-								<div id="pager" class="pager-style"></div>
-							</div>
-						</div>
 				</div>
 			</div>
             <hr />
             <div class="row">
 				<div class="col-sm-12">
 					<div class="margin-top-10">
-					    <!--<p class="errorTable">Note : Real time data for Symix. Rest is static.</p>-->
+					    
 						<div id="highchartContainer"></div>
 					</div>
 				</div>
-
-				<!--<div class="col-sm-5 errorText">
-					<table class="table table-bordered" id="actionRequiredTable">
-						<tbody style="background-color: #fff">
-							<tr>
-								<td>Action Required</td>
-							</tr>
-							<tr>
-								<td id="error"><a id="errorBtn"><p
-											style="color: red">•&nbsp;&nbsp;&nbsp;Error in Process - <span id="errorCount">0</span></p></a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>-->
-			</div>
+			</div>-->
 		</section>
 		
 		<!-- Sunil: Error-->
-		<section id="main2">
+		<section id="main2" data-item-type="error" class=""> 
 
             <div class="margin-all-10">
 				<button type="button" id="goBack" class="btn btn-info">Go Back</button>
-                <ul class="nav nav-tabs" id="tabUl">
-                    <li class="active"><a data-toggle="tab" href="#home">Symix</a></li>
+                <ul class="nav nav-tabs tabUl" id="error-ul-tabs">
+                    <!--<li class="active"><a data-toggle="tab" href="#home">Symix</a></li>
                     <li><a data-toggle="tab" href="#menu1">SAP</a></li>
-                    <li><a data-toggle="tab" href="#menu2">Oracle</a></li>
+                    <li><a data-toggle="tab" href="#menu2">Oracle</a></li>-->
                 </ul>
 
-                <div class="tab-content">
-                    <div id="home" class="tab-pane fade in active">
-                        <!--<div class="row">
-                            <div class="col-sm-12">
-								<div id="myGridErr" style="width: 100%; height: 282px;"></div>
-								<div id="pagerErr" style="width:100%;height:20px;"></div>
-                            </div>
-                        </div>-->
+                <div id="error-tab-content" class="tab-content">
+                    <!--<div id="home" class="tab-pane fade in active">
 						<div class="gridContainer">
                         <div class="row">
                             <div class="col-sm-12">
@@ -215,7 +182,7 @@
                     <div id="menu2" class="tab-pane fade">
                         <h3>Oracle</h3>
 
-                    </div>
+                    </div>-->
 
                 </div>
 				
@@ -227,7 +194,6 @@
                 <p class="details">PO Details: </p>
                 <div class="row" id="form">
                     <div>
-                        
                         <div class="col-sm-6 form-horizontal">
                             <div class="form-group">
                                 <label for="txtBURegion" class="listview-label control-label col-sm-4 ">

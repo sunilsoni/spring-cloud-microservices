@@ -7,6 +7,8 @@ function BuildGrid(gridId, gridData, columnDefinition,gridOptions, paginationId,
     this.grid;
     this.dataView;
 	this.graphData=graphData;
+	
+	//mvn spring-boot:run
 }
 
 BuildGrid.prototype.createGrid = function(){
@@ -16,8 +18,8 @@ BuildGrid.prototype.createGrid = function(){
     this.dataView = new Slick.Data.DataView();
     this.grid = new Slick.Grid(gridId, this.dataView, columnDefinition, gridOptions);
 	 grid = this.grid, dataView = this.dataView;
-    var pager = new Slick.Controls.Pager(dataView, grid, $(paginationId));
-    var columnpicker = new Slick.Controls.ColumnPicker(columnDefinition, grid, gridOptions);
+	var pager = new Slick.Controls.Pager(dataView, grid, $(paginationId));
+	var columnpicker = new Slick.Controls.ColumnPicker(columnDefinition, grid, gridOptions);
     
     var sortcol = "";
     var sortdir = 1;
@@ -27,7 +29,7 @@ BuildGrid.prototype.createGrid = function(){
       return (x == y ? 0 : (x > y ? 1 : -1));
     }
 
-
+	
 	  
 	  grid.onKeyDown.subscribe(function (e) {
 		// select all rows on ctrl-a
@@ -93,7 +95,11 @@ BuildGrid.prototype.createGrid = function(){
       var filterPlugin = new Ext.Plugins.HeaderFilter({});
 
             // This event is fired when a filter is selected
-            filterPlugin.onFilterApplied.subscribe(function () {
+            filterPlugin.onFilterApplied.subscribe(function (a,b,c) {
+				console.log(a);
+				console.log(b);
+				console.log(c);
+				
                 dataView.refresh();
                 grid.resetActiveCell();
 
@@ -119,6 +125,7 @@ BuildGrid.prototype.createGrid = function(){
 
             // Filter the data (using userscore's _.contains)
             function filter(item) {
+				console.log(item);
                 var columns = grid.getColumns();
 
                 var value = true;
@@ -136,8 +143,6 @@ BuildGrid.prototype.createGrid = function(){
 	  
     
 }
-
-
 
 BuildGrid.prototype.prepareData = function(){
     

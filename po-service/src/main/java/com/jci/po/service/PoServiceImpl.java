@@ -16,15 +16,15 @@ import com.jci.po.azure.data.DataHelper;
 import com.jci.po.azure.data.ResultSet;
 import com.jci.po.azure.query.PaginationParam;
 import com.jci.po.azure.query.ScrollingParam;
-import com.jci.po.dto.request.BatchInsertRequest;
-import com.jci.po.dto.request.SegmentedDetailRequest;
-import com.jci.po.dto.response.BatchInsertResponse;
-import com.jci.po.dto.response.SegmentedDetailResponse;
+import com.jci.po.dto.req.BatchInsertReq;
+import com.jci.po.dto.req.SegmentedDetailReq;
+import com.jci.po.dto.res.BatchInsertResp;
+import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.entity.ItemEntity;
 import com.jci.po.entity.PoEntity;
 import com.jci.po.entity.PoItemsEntity;
 import com.jci.po.entity.SupplierEntity;
-import com.jci.po.repository.TableStorageRepository;
+import com.jci.po.repo.PoRepo;
 import com.jci.po.utils.AzureUtils;
 import com.jci.po.utils.Constants;
 import com.jci.po.utils.ItemModelData;
@@ -39,7 +39,7 @@ public class PoServiceImpl implements PoService{
 	private static final Logger LOG = LoggerFactory.getLogger(PoServiceImpl.class);
 	
 	@Autowired
-	private TableStorageRepository repo;
+	private PoRepo repo;
 	
 
 	 @Override
@@ -54,7 +54,7 @@ public class PoServiceImpl implements PoService{
 
 	
 	@Override
-	public SegmentedDetailResponse getSegmentedResultSet(SegmentedDetailRequest request) throws InvalidKeyException, URISyntaxException, StorageException  {
+	public SegmentedDetailRes getSegmentedResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException  {
 		LOG.info("### Starting Ending PoServiceImpl.getSegmentedResultSet ### " );
 		PaginationParam paginationParam = request.getPaginationParam();
 		
@@ -66,19 +66,59 @@ public class PoServiceImpl implements PoService{
 		}
 		
 		//For where condition
-		param.setStartRowKey(request.getStartRowKey());
-		param.setEndRowKey(request.getEndRowKey());
 		param.setSize(request.getSize());
 		
-		DataHelper azureRequest = new DataHelper();
-		azureRequest.setErpName(request.getErpName());
-		azureRequest.setPartitionValue(request.getPartition());
-		azureRequest.setTableName(request.getTableName());
-		//azureRequest.setTimestamp(timestamp);
-		ResultSet resultSet = repo.getSegmentedResultSet(param, azureRequest);
+		DataHelper azureRequest = null;
+		ResultSet resultSet = null;
 		
-		SegmentedDetailResponse response = new SegmentedDetailResponse(); 
-		response.setResultSet(resultSet);
+		SegmentedDetailRes response = new SegmentedDetailRes(); 
+		HashMap<String, ResultSet>  resultSetMap = new HashMap<String, ResultSet>();
+		HashMap<String, ResultSet>  supplierMap = new HashMap<String, ResultSet>();
+		HashMap<String, ResultSet>  itemMap = new HashMap<String, ResultSet>();
+		HashMap<String, ResultSet>  errorMap = new HashMap<String, ResultSet>();
+		
+		if(request.isFirstRequest()){
+			String[] erpArr  = Constants.ALL_ERP_NAMES.split(",");			
+			for (int i=0;i<erpArr.length;i++){				
+				azureRequest = new DataHelper();
+				azureRequest.setErrorDataRequired(false);
+				azureRequest.setErpName(erpArr[i]);
+				azureRequest.setPartitionValue(AzureUtils.getPartitionKey(erpArr[i]));
+				azureRequest.setTableName(Constants.TABLE_PO_DETAILS);
+				
+				resultSet = repo.getSegmentedResultSet(param, azureRequest);
+				resultSetMap.put(erpArr[i], resultSet);
+				
+				azureRequest.setErrorDataRequired(false);
+				azureRequest.setTableName(Constants.TABLE_SUPPLIER);
+				resultSet = repo.getSegmentedResultSet(param, azureRequest);
+				supplierMap.put(erpArr[i], resultSet);
+				
+				azureRequest.setTableName(Constants.TABLE_ITEM);
+				resultSet = repo.getSegmentedResultSet(param, azureRequest);
+				itemMap.put(erpArr[i], resultSet);
+				
+				azureRequest.setTableName(Constants.TABLE_PO_DETAILS); 
+				azureRequest.setErrorDataRequired(true);
+				resultSet = repo.getSegmentedResultSet(param, azureRequest);
+				errorMap.put(erpArr[i], resultSet);
+				
+			}
+			response.setGraphData(repo.getGraphData());
+			response.setResultSet(resultSetMap);
+			response.setErrorData(supplierMap);
+			
+			response.setSupplierData(supplierMap);
+			response.setItemData(itemMap);			
+		}else{
+			azureRequest = new DataHelper();
+			azureRequest.setErpName(request.getErpName());
+			azureRequest.setPartitionValue(request.getPartition());
+			azureRequest.setTableName(request.getTableName());
+			resultSet = repo.getSegmentedResultSet(param, azureRequest);
+			resultSetMap.put(request.getErpName(), resultSet);			
+			response.setResultSet(resultSetMap);
+		}
 		response.setMessage(Constants.JSON_OK);
 		
 		LOG.info("### Ending Ending PoServiceImpl.getSegmentedResultSet ### " );
@@ -86,9 +126,48 @@ public class PoServiceImpl implements PoService{
 		return response;
 	}
 	
+
+	@Override
+	public SegmentedDetailRes getErrorResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException {
+		LOG.info("### Starting Ending PoServiceImpl.getErrorResultSet ### " );
+		PaginationParam paginationParam = request.getPaginationParam();
+		
+		ScrollingParam param  = new ScrollingParam();
+		
+		if(paginationParam!=null){
+			param.setPartition(paginationParam.getNextPartition());
+			param.setRow(paginationParam.getNextRow());
+		}
+		
+		//For where condition
+		param.setSize(request.getSize());
+		
+		DataHelper azureRequest = null;
+		ResultSet resultSet = null;
+		
+		SegmentedDetailRes response = new SegmentedDetailRes(); 
+		HashMap<String, ResultSet>  resultSetMap = new HashMap<String, ResultSet>();
+		
+		azureRequest = new DataHelper();
+		azureRequest.setErrorDataRequired(true);
+		azureRequest.setErpName(request.getErpName());
+		azureRequest.setPartitionValue(request.getPartition());
+		azureRequest.setTableName(request.getTableName());
+		resultSet = repo.getSegmentedResultSet(param, azureRequest);
+		
+		resultSetMap.put(request.getErpName(), resultSet);			
+		response.setErrorData(resultSetMap);
+		response.setMessage(Constants.JSON_OK);
+		
+		LOG.info("### Ending Ending PoServiceImpl.getErrorResultSet ### " );
+		
+		return response;
+	}
+
+	
 	public void insertSymixDummyData() throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("### Starting PoServiceImpl.insertSymixDummyData ###" );
-		BatchInsertRequest request  = new BatchInsertRequest();
+		BatchInsertReq request  = new BatchInsertReq();
 
 	    String partitionKey = AzureUtils.getPartitionKey(Constants.ERP_SYMIX);
 		
@@ -99,7 +178,7 @@ public class PoServiceImpl implements PoService{
 	    List<TableEntity> tableList2 = new ArrayList<TableEntity>();
 	   
 	    
-		for (int i=3713511;i<3714013;i++){
+		for (int i=3713511;i<3715011;i++){
 			PoItemsEntity  poItemsEntity = new PoItemsEntity(partitionKey, i+"");
 			poItemsEntity = PoModelData.getDummyData(poItemsEntity)	;
 			
@@ -112,7 +191,7 @@ public class PoServiceImpl implements PoService{
 			poEntity.setDescription("(GE45RC375060)3/8x3/8x6  OAL: RH .060");
 			poEntity.setOrderCreationDate(new Date());
 			poEntity.setOrderNumber(i+"");
-			poEntity.setSourceErpName(Constants.ERP_INT_SYMIX);
+			//poEntity.setSourceErpName(Constants.ERP_SYMIX);
 			
 			if(i%2==0){
 				poEntity.setStatus(Constants.STATUS_IN_TRANSIT);
@@ -132,7 +211,7 @@ public class PoServiceImpl implements PoService{
 		
 		 List<TableEntity> tableList3 = new ArrayList<TableEntity>();
 		 List<TableEntity> tableList4 = new ArrayList<TableEntity>();
-		for (int i=433001;i<433503;i++){
+		for (int i=433001;i<435003;i++){
 			ItemEntity entity1 = new ItemEntity();
 			entity1 = ItemModelData.getDummyData(entity1);
 			entity1.setRowKey(i+"");
@@ -152,25 +231,25 @@ public class PoServiceImpl implements PoService{
 		request.setTableNameToEntityMap(tableNameToEntityMap);
 		request.setErpName(Constants.ERP_SYMIX);
 		
-		BatchInsertResponse response = repo.batchInsert(request);
+		BatchInsertResp response = repo.batchInsert(request);
 		
 		LOG.info("### Ending PoServiceImpl.insertSymixDummyData ###"  +response.getErrorMap());
 	}
 
 	public void insertSapDummyData() throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("### Starting PoServiceImpl.insertSapDummyData ###" );
-		BatchInsertRequest request  = new BatchInsertRequest();
+		BatchInsertReq request  = new BatchInsertReq();
 
 	    String partitionKey = AzureUtils.getPartitionKey(Constants.ERP_SAP);
-		
-		//Inserting dummy data
+
+	    //Inserting dummy data
 	    PoEntity poEntity = null;
 	    HashMap<String, List<TableEntity>> tableNameToEntityMap = new HashMap<String, List<TableEntity>>();
 	    List<TableEntity> tableList1 = new ArrayList<TableEntity>();
 	    List<TableEntity> tableList2 = new ArrayList<TableEntity>();
 	   
 	    
-		for (int i=4712510;i<4714510;i++){
+		for (int i=4714011;i<4714511;i++){
 			PoItemsEntity  poItemsEntity = new PoItemsEntity(partitionKey, i+"");
 			poItemsEntity = PoModelData.getDummyData(poItemsEntity)	;
 			
@@ -182,7 +261,7 @@ public class PoServiceImpl implements PoService{
 			poEntity.setOrderCreationDate(new Date());
 			poEntity.setOrderNumber(i+"");
 			
-			poEntity.setSourceErpName(Constants.ERP_INT_SAP);
+			//poEntity.setSourceErpName(Constants.ERP_SAP);
 			
 			if(i%2==0){
 				poEntity.setStatus(Constants.STATUS_IN_TRANSIT);
@@ -201,7 +280,7 @@ public class PoServiceImpl implements PoService{
 		
 		 List<TableEntity> tableList3 = new ArrayList<TableEntity>();
 		 List<TableEntity> tableList4 = new ArrayList<TableEntity>();
-		for (int i=530000;i<534000;i++){
+		for (int i=533201;i<533701;i++){
 			ItemEntity entity1 = new ItemEntity(partitionKey, i+"");
 			entity1 = ItemModelData.getDummyData(entity1);
 			entity1.setRowKey(i+"");
@@ -213,26 +292,28 @@ public class PoServiceImpl implements PoService{
 		    entity2.setRowKey(i+"");
 		    entity1.setSupplierId(i+"");
 		    tableList4.add(entity2);
+		    
+		    //LOG.info("getPartitionKey-->"+entity1.getPartitionKey());
 		}
-		
 		tableNameToEntityMap.put(Constants.TABLE_ITEM, tableList3);
 		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, tableList4);
 		
 		request.setTableNameToEntityMap(tableNameToEntityMap);
 		request.setErpName(Constants.ERP_SAP);
 		
-		BatchInsertResponse response = repo.batchInsert(request);
+		BatchInsertResp response = repo.batchInsert(request);
 		
-		LOG.info("### Ending PoServiceImpl.insertSapDummyData ###" +response.getErrorMap());
+		LOG.info("### Ending PoServiceImpl.insertSapDummyData ###" +response);
 	}
 
 	@Override
 	public void insertDummyData() throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("### Starting PoServiceImpl.insertDummyData ###" );
-		insertSymixDummyData();
+		//insertSymixDummyData();
 		insertSapDummyData();
 		LOG.info("### Ending PoServiceImpl.insertDummyData ###" );
 	}
+
 
 
 

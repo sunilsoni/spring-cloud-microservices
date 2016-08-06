@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jci.po.azure.data.DataHelper;
-import com.jci.po.repository.TableStorageRepositoryImpl;
+import com.jci.po.repo.PoRepoImpl;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
 import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
@@ -47,6 +47,10 @@ public class QueryBuilder {
 	
 	public static String leWhereCondition(String partitionKey,String endRowKey){
 		return String.format("(PartitionKey eq '%s') and  (RowKey le '%s') ",partitionKey,endRowKey);
+	}
+	
+	public static String multiplePartitionWhereCondition(String partitionKey1,String partitionKey2){
+		return String.format("(PartitionKey eq '%s') or  (PartitionKey eq '%s') ",partitionKey1,partitionKey2);
 	}
 	
 	

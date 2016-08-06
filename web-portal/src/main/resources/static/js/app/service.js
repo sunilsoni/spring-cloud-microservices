@@ -45,8 +45,9 @@ var serviceObj = (function($){
     }*/
     
     function pullPoData(data){
-        var promise = callToSever('api/po/getSegmentedPoDetails', data, 'POST');
-		// var promise = callToSever('../local.json', data, 'POST');
+		console.log(JSON.stringify(data));
+        //var promise = callToSever('api/po/getSegmentedPoDetails', data, 'POST');
+		var promise = callToSever('../local.json', data, 'GET');
         return promise;
     }
     
@@ -73,7 +74,7 @@ var serviceObj = (function($){
         settings['url'] = url;
         settings['data'] = data;
         settings['method'] = method;
-		settings['type'] = 'json';//Sunil:remove
+		//settings['type'] = 'json';//Sunil:remove
         
         return $.when( $.ajax(settings));
     }

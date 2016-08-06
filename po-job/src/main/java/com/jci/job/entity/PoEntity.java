@@ -17,7 +17,7 @@ public class PoEntity extends TableServiceEntity {
 	/**
 	 * #*Order Number Sequence No: 0
 	 */
-	private String orderNumber;
+	//private String orderNumber;
 
 	/**
 	 * *Order Creation Date Sequence No: 1
@@ -26,17 +26,9 @@ public class PoEntity extends TableServiceEntity {
 
    	private int status;
    
-   	private int sourceErpName;
+   	private String sourceErpName;
    
    	private String description;
-	
-	public String getOrderNumber() {
-		return orderNumber;
-	}
-	
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
-	}
 	
 	public Date getOrderCreationDate() {
 		return orderCreationDate;
@@ -54,11 +46,11 @@ public class PoEntity extends TableServiceEntity {
 		this.status = status;
 	}
 	
-	public int getSourceErpName() {
+	public String getSourceErpName() {
 		return sourceErpName;
 	}
 	
-	public void setSourceErpName(int sourceErpName) {
+	public void setSourceErpName(String sourceErpName) {
 		this.sourceErpName = sourceErpName;
 	}
 	
@@ -69,7 +61,14 @@ public class PoEntity extends TableServiceEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	   
+
+	@Override
+	public String toString() {
+		return "PoEntity [ orderCreationDate=" + orderCreationDate + ", status="
+				+ status + ", sourceErpName=" + sourceErpName + ", description=" + description + "]";
+	}
+	
+	
 	   
 
 }

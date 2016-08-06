@@ -10,7 +10,7 @@
     <parent>
   	<groupId>com.jci</groupId>
   	<version>0.1.0-SNAPSHOT</version>
-  	<artifactId>sc-parent</artifactId>
+  	<artifactId>supplier-collaboration</artifactId>
   </parent>
   
   <licenses>
@@ -34,16 +34,16 @@
 		<version>3.4</version>
 		</dependency>
 		
-		 <dependency>
-			<!-- Setup Spring Data JPA Repository support -->
+		<!--  <dependency>
+			Setup Spring Data JPA Repository support
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		  <dependency>
-			<!-- Setup Spring Data common components -->
+			Setup Spring Data common components
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
-		</dependency>
+		</dependency> -->
 		
 		 <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -70,13 +70,31 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-        
+             <dependency>
+        	<groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+	    </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.7</version>
         </dependency>
         
+        <dependency>
+        	<groupId>org.springframework.cloud</groupId>
+        	<artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+		<dependency>
+		    <groupId>com.netflix.feign</groupId>
+		    <artifactId>feign-httpclient</artifactId>
+		</dependency>
+        
+	     <!-- https://mvnrepository.com/artifact/com.github.jmnarloch/feign-encoding-spring-cloud-starter -->
+	<dependency>
+	    <groupId>com.github.jmnarloch</groupId>
+	    <artifactId>feign-encoding-spring-cloud-starter</artifactId>
+	    <version>1.1.1</version>
+	</dependency>  
+
   </dependencies>
   <build>
         <plugins>

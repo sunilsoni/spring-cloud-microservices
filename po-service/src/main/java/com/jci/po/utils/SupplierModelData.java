@@ -5,11 +5,6 @@ import com.jci.po.entity.SupplierEntity;
 public class SupplierModelData {
 
 	public static SupplierEntity getDummyData(SupplierEntity entity){
-		
-		String partitionKey = AzureUtils.getPartitionKey(Constants.ERP_SYMIX);
-		entity.setPartitionKey(partitionKey);
-		entity.setRowKey("123");//vend-num
-		
 		entity.setEnterpriseCode("JCI-BE");
 		entity.setSupplierId("SH-DOYEN");
 		entity.setSupplierDescription("上海大洋机电设备工程有限公司");// Shanghai Ocean

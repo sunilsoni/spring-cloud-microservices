@@ -3,7 +3,8 @@ spring:
     config:
       server:
         git:
-          uri: file://C:/Apigee/micro-services/Work/supplier-collaboration-config
+          uri: file://C:/Apigee/micro-services/Work/supplier-collaboration-config-dev
+#D:/home/site/wwwroot/supplier-collaboration-config
 #https://github.com/sunilsoni/supplier-collaboration-config
 #file://C:/Apigee/micro-services/Work/supplier-collaboration-config
 #https://github.com/sunilsoni/sample-config

@@ -3,3 +3,6 @@ logging:
      org:
        springframework:
          security: DEBUG
+     project:
+       user:
+         UserClient: DEBUG

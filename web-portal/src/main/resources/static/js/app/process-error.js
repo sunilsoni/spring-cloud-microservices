@@ -89,7 +89,7 @@ var e2OpenProcessError = (function($){
         commonUtil.handleHideShow('dashboardScreen');
         
         // Using the commonUtil API to get the reference to the dashboard grid; Since this grid is modified while it is in hidden state, it needs to be resized using the resizeCanvas method provided by SlichGrid API.
-        commonUtil.getDashboardGridReference().grid.resizeCanvas();
+        //commonUtil.getDashboardGridReference().grid.resizeCanvas();
         
         // Using the commonUtil API to adjust the graph container size
         graphObj.adjustGraphDimention();

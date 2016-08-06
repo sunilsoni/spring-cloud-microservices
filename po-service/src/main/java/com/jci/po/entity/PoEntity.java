@@ -26,8 +26,6 @@ public class PoEntity extends TableServiceEntity {
 
    	private int status;
    
-   	private int sourceErpName;
-   
    	private String description;
 	
 	public String getOrderNumber() {
@@ -54,14 +52,6 @@ public class PoEntity extends TableServiceEntity {
 		this.status = status;
 	}
 	
-	public int getSourceErpName() {
-		return sourceErpName;
-	}
-	
-	public void setSourceErpName(int sourceErpName) {
-		this.sourceErpName = sourceErpName;
-	}
-	
 	public String getDescription() {
 		return description;
 	}
@@ -69,7 +59,13 @@ public class PoEntity extends TableServiceEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	   
-	   
+
+	@Override
+	public String toString() {
+		return "PoEntity [orderNumber=" + orderNumber + ", orderCreationDate=" + orderCreationDate + ", status="
+				+ status + ", description=" + description + "]";
+	}
+
+	
 
 }
