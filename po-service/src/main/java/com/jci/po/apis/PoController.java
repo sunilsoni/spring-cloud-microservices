@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.SegmentedDetailReq;
+import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.dto.res.PoDetailsRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.service.PoService;
@@ -27,14 +28,14 @@ import com.microsoft.azure.storage.StorageException;
  * <p>
  *
  * @author csonisk
- */
+ */      
 
 @RestController 
 public class PoController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(PoController.class);
 	
-	@Autowired
+	@Autowired  
 	private PoService  poService;
 	
 	
@@ -54,7 +55,7 @@ public class PoController {
 			e.printStackTrace();
 		}
 		
-		LOG.info("### Ending PoController.getSegmentedPoDetails ###" +response);
+		LOG.info("### Ending PoController.getSegmentedPoDetails ###" );
 		return response;
 	}
 	
@@ -74,12 +75,12 @@ public class PoController {
 			e.printStackTrace();
 		}
 		
-		LOG.info("### Ending PoController.getSegmentedErrorDetails ###" +response);
+		LOG.info("### Ending PoController.getSegmentedErrorDetails ###" );
 		return response;
 	}
 	
 	
-	@RequestMapping(value = "/processPoData", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/processPos", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  PoDetailsRes processPoData(@RequestBody final PoDetailsReq request){
 		
 		LOG.info("### Starting PoController.processPoDetails ###" +request);
@@ -90,24 +91,24 @@ public class PoController {
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			response.setError(true);
 			e.printStackTrace();
-		}*/
+		}*/  
 		LOG.info("### Ending PoController.processPoDetails ###" );
 		return null;
 	}
 	
-	@RequestMapping(value = "/processErrorData", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public  PoDetailsRes processErrorData(@RequestBody final PoDetailsReq request){
+	@RequestMapping(value = "/processErrorPos", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public  BatchUpdateRes processErrorPos(@RequestBody final PoDetailsReq request){
 		
-		LOG.info("### Starting PoController.processPoDetails ###" +request);
-		PoDetailsRes response = new PoDetailsRes();
+		LOG.info("### Starting PoController.processErrorPos ###" +request);
+		BatchUpdateRes response = new BatchUpdateRes();
 		
-		/*try {
-			response = poService.getPos(request);
+		try {
+			response = poService.processErrorPos(request);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			response.setError(true);
 			e.printStackTrace();
-		}*/
-		LOG.info("### Ending PoController.processPoDetails ###"+response );
+		}
+		LOG.info("### Ending PoController.processErrorPos ###"+response );
 		return response;
 	}
 	

@@ -84,6 +84,7 @@ public class ItemRepoImpl implements ItemRepo {
 			HashMap<String, EntityProperty> map = row.getProperties();
 
 			hashmap = new HashMap<String, Object>();
+			hashmap.put("id", row.getRowKey());
 			for (String key : map.keySet()) {
 				ep = map.get(key);
 				hashmap.put(key, ep.getValueAsString());

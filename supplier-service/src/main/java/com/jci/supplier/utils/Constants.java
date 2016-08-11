@@ -36,6 +36,7 @@ public class Constants {
 	
 	public static final String ERROR_MSG ="The application has encountered an error!";
 	
-	public static final String ALL_ERP_NAMES ="SYMIX,SAP";
+	//public static final String ALL_ERP_NAMES ="SYMIX,SAP";
+	public static final String ALL_ERP_NAMES ="SYMIX";
 	
 }

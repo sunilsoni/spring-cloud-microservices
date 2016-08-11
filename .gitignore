@@ -13,7 +13,9 @@ hs_err_pid*
 
 build
 bin
+target
 .settings
 .gradle
 .DS_Store
 .classpath
+$tf

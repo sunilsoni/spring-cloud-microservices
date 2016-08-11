@@ -23,12 +23,15 @@ public class PoEntity extends TableServiceEntity {
 	 * *Order Creation Date Sequence No: 1
 	 */
 	private Date orderCreationDate;
-
    	private int status;
-   
    	private String sourceErpName;
-   
    	private String description;
+	private String userName;
+	private String globalId;
+	
+	private String comment;
+	private boolean e2openProcessed;
+	private boolean ediProcessed;
 	
 	public Date getOrderCreationDate() {
 		return orderCreationDate;
@@ -62,13 +65,54 @@ public class PoEntity extends TableServiceEntity {
 		this.description = description;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getGlobalId() {
+		return globalId;
+	}
+
+	public void setGlobalId(String globalId) {
+		this.globalId = globalId;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public boolean getE2openProcessed() {
+		return e2openProcessed;
+	}
+
+	public void setE2openProcessed(boolean e2openProcessed) {
+		this.e2openProcessed = e2openProcessed;
+	}
+
+	public boolean getEdiProcessed() {
+		return ediProcessed;
+	}
+
+	public void setEdiProcessed(boolean ediProcessed) {
+		this.ediProcessed = ediProcessed;
+	}
+
 	@Override
 	public String toString() {
-		return "PoEntity [ orderCreationDate=" + orderCreationDate + ", status="
-				+ status + ", sourceErpName=" + sourceErpName + ", description=" + description + "]";
+		return "PoEntity [orderCreationDate=" + orderCreationDate + ", status=" + status + ", sourceErpName="
+				+ sourceErpName + ", description=" + description + ", userName=" + userName + ", globalId=" + globalId
+				+ ", comment=" + comment + ", e2openProcessed=" + e2openProcessed + ", ediProcessed=" + ediProcessed
+				+ "]";
 	}
-	
-	
-	   
+
+
 
 }

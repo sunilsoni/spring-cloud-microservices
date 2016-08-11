@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,13 @@ import com.jci.po.azure.data.ResultSet;
 import com.jci.po.azure.query.PaginationParam;
 import com.jci.po.azure.query.ScrollingParam;
 import com.jci.po.dto.req.BatchInsertReq;
+import com.jci.po.dto.req.BatchUpdateReq;
+import com.jci.po.dto.req.FlatFileReq;
+import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.SegmentedDetailReq;
 import com.jci.po.dto.res.BatchInsertResp;
+import com.jci.po.dto.res.BatchUpdateRes;
+import com.jci.po.dto.res.FlatFileRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.entity.ItemEntity;
 import com.jci.po.entity.PoEntity;
@@ -41,7 +47,9 @@ public class PoServiceImpl implements PoService{
 	@Autowired
 	private PoRepo repo;
 	
-
+	@Autowired
+	private ApiClientService apiService;
+	
 	 @Override
 	 public String getLastPo() throws InvalidKeyException, URISyntaxException, StorageException {
 		 /*LOG.info("### Starting Ending PoServiceImpl.getLastPo ### " );
@@ -106,7 +114,7 @@ public class PoServiceImpl implements PoService{
 			}
 			response.setGraphData(repo.getGraphData());
 			response.setResultSet(resultSetMap);
-			response.setErrorData(supplierMap);
+			response.setErrorData(errorMap);
 			
 			response.setSupplierData(supplierMap);
 			response.setItemData(itemMap);			
@@ -164,6 +172,71 @@ public class PoServiceImpl implements PoService{
 		return response;
 	}
 
+	@Override
+	public BatchUpdateRes processErrorPos(PoDetailsReq request)  throws InvalidKeyException, URISyntaxException, StorageException {
+		LOG.info("### Starting PoServiceImpl.processErrorPos ###" +request);
+		
+		BatchUpdateRes res = new BatchUpdateRes();
+		String partitionKey = AzureUtils.getPartitionKey(request.getErpName());
+		
+		if(StringUtils.isBlank(partitionKey)){
+			res.setError(true);
+			res.setMessage("Invalid request parameters !");
+			return res;
+		}
+		
+		List<String> poList = request.getPoNo();
+		if(poList==null || poList.size()<1){
+			res.setError(true);
+			res.setMessage("Invalid request parameters !");
+			return res;
+		}
+		
+		List<PoItemsEntity>  itemList = repo.getErrorPos(partitionKey,poList);
+		LOG.info(" itemList--->"+ itemList);
+		
+		List<PoEntity>  poEntity = repo.getPoDetails(partitionKey,poList);
+		
+		HashMap<String,List<PoEntity>> tableNameToEntityMap = new HashMap<String,List<PoEntity>>();
+		tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, poEntity);
+		
+		/**
+		 * Code to process e2open flat files:
+		 */
+		
+		/*FlatFileReq flatFileReq = new FlatFileReq();
+		FlatFileRes flatFileRes  = apiService.processFlatFile(flatFileReq);
+		LOG.info("flatFileRes--->"+flatFileRes);*/
+		
+		BatchUpdateReq req = new  BatchUpdateReq ();
+		
+		//if data processing is success than update status success in db
+		req.setSuccess(true);
+		
+		//if data processing is not successful than update status error in db
+		//req.setSuccess(false);
+		
+		//Need to make it dynamic based on mapping file
+		req.setDestination(Constants.DESTINATION_E2OPEN);
+		
+		
+		req.setErpName(request.getErpName().toUpperCase());
+		req.setTableNameToEntityMap(tableNameToEntityMap);
+		req.setGlobalId(request.getGlobalId());
+		req.setUserName(request.getUserName());
+		
+		req.setComment(request.getComment());
+				
+		BatchUpdateRes response =  repo.batchUpdate(req);
+		response.setGraphData(repo.getGraphData());
+		
+		
+		LOG.info("### Ending PoServiceImpl.processErrorPos ###"+response );
+		return response;
+	}
+
+
+	
 	
 	public void insertSymixDummyData() throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("### Starting PoServiceImpl.insertSymixDummyData ###" );
@@ -190,7 +263,7 @@ public class PoServiceImpl implements PoService{
 			poEntity = new PoEntity(partitionKey, i+"");
 			poEntity.setDescription("(GE45RC375060)3/8x3/8x6  OAL: RH .060");
 			poEntity.setOrderCreationDate(new Date());
-			poEntity.setOrderNumber(i+"");
+			//poEntity.setOrderNumber(i+"");
 			//poEntity.setSourceErpName(Constants.ERP_SYMIX);
 			
 			if(i%2==0){
@@ -215,13 +288,13 @@ public class PoServiceImpl implements PoService{
 			ItemEntity entity1 = new ItemEntity();
 			entity1 = ItemModelData.getDummyData(entity1);
 			entity1.setRowKey(i+"");
-			entity1.setSupplierId(i+"");
+			//entity1.setSupplierId(i+"");
 			tableList3.add(entity1);
 		   
 		    SupplierEntity entity2 = new SupplierEntity();
 		    entity2 = SupplierModelData.getDummyData(entity2);
 		    entity2.setRowKey(i+"");
-		    entity1.setSupplierId(i+"");
+		   // entity1.setSupplierId(i+"");
 		    tableList4.add(entity2);
 		}
 		
@@ -259,7 +332,7 @@ public class PoServiceImpl implements PoService{
 			poEntity = new PoEntity(partitionKey, i+"");
 			poEntity.setDescription("(GE45RC375060)3/8x3/8x6  OAL: RH .060");
 			poEntity.setOrderCreationDate(new Date());
-			poEntity.setOrderNumber(i+"");
+			//poEntity.setOrderNumber(i+"");
 			
 			//poEntity.setSourceErpName(Constants.ERP_SAP);
 			
@@ -284,13 +357,13 @@ public class PoServiceImpl implements PoService{
 			ItemEntity entity1 = new ItemEntity(partitionKey, i+"");
 			entity1 = ItemModelData.getDummyData(entity1);
 			entity1.setRowKey(i+"");
-			entity1.setSupplierId(i+"");
+			//entity1.setSupplierId(i+"");
 			tableList3.add(entity1);
 		   
 		    SupplierEntity entity2 = new SupplierEntity(partitionKey, i+"");
 		    entity2 = SupplierModelData.getDummyData(entity2);
 		    entity2.setRowKey(i+"");
-		    entity1.setSupplierId(i+"");
+		    //entity1.setSupplierId(i+"");
 		    tableList4.add(entity2);
 		    
 		    //LOG.info("getPartitionKey-->"+entity1.getPartitionKey());
@@ -313,6 +386,7 @@ public class PoServiceImpl implements PoService{
 		insertSapDummyData();
 		LOG.info("### Ending PoServiceImpl.insertDummyData ###" );
 	}
+
 
 
 

@@ -8,7 +8,7 @@ public class PoModelData {
 
 		public static PoItemsEntity getDummyData(PoItemsEntity entity){
 			
-		entity.setId(115);
+		/*entity.setId(115);
 		entity.setBuyerName("Fernando Magdaleno");
 		entity.setCustomerAddress1("5757 N. Green Bay Avenue");
 		entity.setCustomerAddress2("P.O. Box 591");
@@ -26,14 +26,14 @@ public class PoModelData {
 		entity.setCustomerItemId("LBL48-4000");
 		entity.setCustomerZip("53201");
 		entity.setDataSource("Symix");
-		entity.setDeliveryTerm("DEF");
+		entity.setDeliveryTerm("DEF");*/
 		entity.setOrderCreationDate(new Date());// 6/7/2013 0:00
 		entity.setOrderNumber("3714153");
 		entity.setOrderStatus("A");
 		entity.setPaymentTerms("100");
 		entity.setRequestDate(new Date());// 6/7/2013 0:00
 		entity.setRequestedShipDate(new Date());// 7/5/2013 0:00
-		entity.setSupplierId("SH-DOYEN");
+		//entity.setSupplierId("SH-DOYEN");
 		entity.setSupplierAddressDescriptor("SH-DOYEN Office");
 	
 		entity.setShipToState("6880");
@@ -61,7 +61,7 @@ public class PoModelData {
 		entity.setBillToState("Wisconsin");
 		entity.setBillToCountry("United States");
 		entity.setBillToZip("5757");
-		entity.setLineId(1);
+		/*entity.setLineId(1);
 		entity.setCustomerItemId("YVAA-MAT1");
 		entity.setSupplierItemId("YVAA-MAT1");
 		entity.setAction("InsertOrUpdate");
@@ -71,7 +71,7 @@ public class PoModelData {
 		entity.setPromiseQty(218);
 		entity.setPromiseDate(new Date());
 		entity.setPromiseShipDate(new Date());
-		entity.setInCoTerm("InCoTerm");
+		entity.setInCoTerm("InCoTerm");*/
 		return entity;
 		
 	}

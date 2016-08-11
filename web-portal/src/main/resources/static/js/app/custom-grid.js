@@ -13,22 +13,67 @@ function BuildGrid(gridId, gridData, columnDefinition,gridOptions, paginationId,
 
 BuildGrid.prototype.createGrid = function(){
     
-    var grid, dataView, gridOptions = this.gridOptions, gridId = this.gridId, paginationId = this.paginationId, gridData = this.gridData, columnDefinition = this.columnDefinition;
-    
+    var grid , dataView , gridOptions = this.gridOptions, gridId = this.gridId, paginationId = this.paginationId, gridData = this.gridData, columnDefinition = this.columnDefinition;
+    var columns = [];
+	var checkboxSelector ;
+	if(gridId.indexOf('error') != -1){
+		checkboxSelector = new Slick.CheckboxSelectColumn({
+		  cssClass: "slick-cell-checkboxsel"
+		});
+
+		columns.push(checkboxSelector.getColumnDefinition());
+		columns[0].width = 50;
+		columns[0].headerCssClass = "hide-arrow-btn"
+		for(var i = 0 ; i < columnDefinition.length ; i++)
+			columns.push(columnDefinition[i]);
+	}
+	else
+		columns = columnDefinition;
+			
     this.dataView = new Slick.Data.DataView();
-    this.grid = new Slick.Grid(gridId, this.dataView, columnDefinition, gridOptions);
+    this.grid = new Slick.Grid(gridId, this.dataView, columns, gridOptions);
 	 grid = this.grid, dataView = this.dataView;
 	var pager = new Slick.Controls.Pager(dataView, grid, $(paginationId));
-	var columnpicker = new Slick.Controls.ColumnPicker(columnDefinition, grid, gridOptions);
+	var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, gridOptions);
     
     var sortcol = "";
     var sortdir = 1;
+	
+	var pageSize = 10;
+	
+	if(gridId.indexOf('supplier') != -1 || gridId.indexOf('item') != -1)
+		pageSize = 100;
     
     function comparer(a, b) {
       var x = a[sortcol], y = b[sortcol];
       return (x == y ? 0 : (x > y ? 1 : -1));
     }
+	
+	if(checkboxSelector){
+		grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
+		grid.registerPlugin(checkboxSelector);
+		grid.onSelectedRowsChanged.subscribe(function (evt, args) {
+			var d = new Date();
+				
+			var date = (d.toString()).split('GMT')[0];
 
+			var val = date+" : Processing error purchase orders."
+
+			$('#txtDescErr').val(val);
+		
+			var flg = false;	
+			
+			$('#main2 input[type="checkbox"]').each(function(){
+				if($(this).is(':checked')){
+					flg = true;	
+				}					
+			});	
+			if(!flg)
+				$('#txtDescErr').val("");	
+			
+		});	
+	}
+		
 	
 	  
 	  grid.onKeyDown.subscribe(function (e) {
@@ -69,6 +114,7 @@ BuildGrid.prototype.createGrid = function(){
 		if (options.enableAddRow != enableAddRow) {
 		  grid.setOptions({enableAddRow: enableAddRow});
 		}
+		grid.resizeCanvas();
 	  });
 
       if(gridData && gridData.length > 0){
@@ -89,59 +135,58 @@ BuildGrid.prototype.createGrid = function(){
 	  dataView.beginUpdate()
 	  dataView.setItems(gridData);
       dataView.setFilter(filter);
-	  dataView.setPagingOptions({pageSize: 10}); 
+     
+	  dataView.setPagingOptions({pageSize:pageSize}); 
 	  dataView.endUpdate();
-    
-      var filterPlugin = new Ext.Plugins.HeaderFilter({});
-
-            // This event is fired when a filter is selected
-            filterPlugin.onFilterApplied.subscribe(function (a,b,c) {
-				console.log(a);
-				console.log(b);
-				console.log(c);
-				
-                dataView.refresh();
-                grid.resetActiveCell();
-
-                // Excel like status bar at the bottom
-                var status;
-
-                if (dataView.getLength() === dataView.getItems().length) {
-                    status = "";
-                } else {
-                    status = dataView.getLength() + ' OF ' + dataView.getItems().length + ' RECORDS FOUND';
-                }
-                $('#status-label').text(status);
-            });
-
-            // Event fired when a menu option is selected
-            filterPlugin.onCommand.subscribe(function (e, args) {
-                dataView.fastSort(args.column.field, args.command === "sort-asc");
-            });
-
-            grid.registerPlugin(filterPlugin);
-
-            grid.init();
-
-            // Filter the data (using userscore's _.contains)
-            function filter(item) {
-				console.log(item);
-                var columns = grid.getColumns();
-
-                var value = true;
-
-                for (var i = 0; i < columns.length; i++) {
-                    var col = columns[i];
-                    var filterValues = col.filterValues;
-
-                    if (filterValues && filterValues.length > 0) {
-                        value = value & _.contains(filterValues, item[col.field]);
-                    }
-                }
-                return value;
-            }
 	  
-    
+	  
+	  /*var filterPlugin = new Ext.Plugins.HeaderFilter({});
+
+		// This event is fired when a filter is selected
+		filterPlugin.onFilterApplied.subscribe(function () {
+			dataView.refresh();
+			grid.resetActiveCell();
+
+			// Excel like status bar at the bottom
+			var status;
+
+			if (dataView.getLength() === dataView.getItems().length) {
+				status = "";
+			} else {
+				status = dataView.getLength() + ' OF ' + dataView.getItems().length + ' RECORDS FOUND';
+			}
+			$('#status-label').text(status);
+		});
+
+		// Event fired when a menu option is selected
+		filterPlugin.onCommand.subscribe(function (e, args) {
+			dataView.fastSort(args.column.field, args.command === "sort-asc");
+		});
+
+		grid.registerPlugin(filterPlugin);
+
+		grid.init();*/
+	
+  
+
+		// Filter the data (using userscore's _.contains)
+		function filter(item) {
+			var columns = grid.getColumns();
+			console.log(columns);
+			var value = true;
+
+			for (var i = 0; i < columns.length; i++) {
+				var col = columns[i];
+				var filterValues = col.filterValues;
+
+				if (filterValues && filterValues.length > 0) {
+					value = value & _.contains(filterValues, item[col.field]);
+				}
+			}
+			return value;
+		}
+	  
+		
 }
 
 BuildGrid.prototype.prepareData = function(){
@@ -215,6 +260,34 @@ BuildGrid.prototype.updateRecords = function(obj){
     this.inTransitCount = inTransitCount;
     
 };
+
+BuildGrid.prototype.updateItems = function(successArray){
+	var dataView = this.dataView, dataItems = dataView.getItems();
+	for(var j = 0 ; j < successArray.length ; j++){
+		for(var i = 0 ; i < dataItems.length ; i++){
+			var dataItem = dataItems[i];
+			
+			if(dataItem.OrderNumber == successArray[j]){
+				dataItem["Status"] = commonUtil.getStatusText(2);
+				dataView.updateItem(dataItem.id,dataItem);
+			}
+				
+		}
+	}
+}
+BuildGrid.prototype.deleteItems = function(successArray){
+	var dataView = this.dataView, dataItems = dataView.getItems();
+	
+	for(var j = 0 ; j < successArray.length ; j++){
+		for(var i = 0 ; i < dataItems.length ; i++){
+			var dataItem = dataItems[i];
+			
+			if(dataItem.OrderNumber == successArray[j])
+				dataView.deleteItem(dataItem.id);
+		}
+	}
+	
+} 
 
 BuildGrid.prototype.deleteRecords = function(obj){
     var dataView = this.dataView, dataItems = dataView.getItems();

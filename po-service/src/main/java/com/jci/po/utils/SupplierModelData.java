@@ -6,7 +6,7 @@ public class SupplierModelData {
 
 	public static SupplierEntity getDummyData(SupplierEntity entity){
 		entity.setEnterpriseCode("JCI-BE");
-		entity.setSupplierId("SH-DOYEN");
+		/*entity.setSupplierId("SH-DOYEN");*/
 		entity.setSupplierDescription("上海大洋机电设备工程有限公司");// Shanghai Ocean
 														// Electrical and
 														// Mechanical Equipment

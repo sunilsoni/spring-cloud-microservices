@@ -6,10 +6,8 @@ public class Constants {
 	//Azure Table names 
 	public static final String TABLE_PO_DETAILS ="PODETAILS";
 	public static final String TABLE_PO_ITEM_DETAILS ="POITEMDETAILS";
-	
-	public static final String TABLE_ITEM ="ITEM";
+	public static final String TABLE_ITEM ="TITEM";
 	public static final String TABLE_SUPPLIER ="SUPPLIER";
-	
 	public static final String TABLE_MISC ="MISCDATA";
 	
 	public static final String ERP_SYMIX ="SYMIX";

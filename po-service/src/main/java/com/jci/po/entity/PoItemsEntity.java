@@ -2,7 +2,9 @@ package com.jci.po.entity;
 
 import java.util.Date;
 
+
 import com.microsoft.azure.storage.table.TableServiceEntity;
+
 
 public class PoItemsEntity extends TableServiceEntity {
 
@@ -13,80 +15,99 @@ public class PoItemsEntity extends TableServiceEntity {
 
 	public PoItemsEntity() {
 	}
+	// 1: Order Number String
+	private String OrderNumber;
 
-	private int id;
+	// 2: Status String
+	private String status;
 	
-	private String dataSource ;
+	// 3: Message String
+	private String message;
 
-	/**
-	 * #*Order Number Sequence No: 0
-	 */
-	private String orderNumber;
-
-	/**
-	 * *Order Creation Date Sequence No: 1
-	 */
-	private Date orderCreationDate;
+	// 4: Date Date
+	private Date date;
+	 
+	// 1: Order Creation Date Date
+	private Date OrderCreationDate;
+	
 	/**
 	 * *Order Status Sequence No: 2
 	 */
 	private String orderStatus;
+	
 	/**
 	 * *Order Priority Sequence No: 3
 	 */
 	private String orderPriority;
+	
 	/**
 	 * **Customer ID Sequence No: 4
 	 */
-	private String customerId;
+	private String CustomerID;
+	
 	/**
 	 * *Customer Description Sequence No: 5
 	 */
-	private String CustomerDescription;
+	private String customerDescription;
+	
 	/**
 	 * *Customer DUNS Sequence No: 6
 	 */
 	private String customerDUNS;
+	
 	/**
 	 * *Customer DUNS+4 Sequence No: 7
 	 */
 	private String customerDUNS4;
+	
 	/**
 	 * *Customer Tax Number Sequence No: 8
 	 */
 	private String customerTaxNumber;
+	
 	/**
 	 * *Customer Address - Descriptor Sequence No: 9
 	 */
 	private String customerAddressDescriptor;
+	
 	/**
 	 * *Customer Address 1 Sequence No: 10
 	 */
 	private String customerAddress1;
+	
+	
 	/**
 	 * *Customer Address 2 Sequence No: 11
 	 */
 	private String customerAddress2;
+	
+	
 	/**
 	 * *Customer Address 3 Sequence No: 12
 	 */
 	private String customerAddress3;
+	
+	
 	/**
 	 * *Customer Address 4 Sequence No: 13
 	 */
 	private String customerAddress4;
+	
 	/**
 	 * *Customer Address 5 Sequence No: 14
 	 */
 	private String customerAddress5;
+	
 	/**
 	 * *Customer City Sequence No: 15
 	 */
 	private String customerCity;
+	
 	/**
-	 * *Customer County Sequence No: 16
-	 */
-	private String customerConty;
+	 * Customer County Sequence No: 16	 */
+	 
+	private String customerCounty;
+	
 	/**
 	 * *Customer State Sequence No: 17
 	 */
@@ -95,472 +116,815 @@ public class PoItemsEntity extends TableServiceEntity {
 	/**
 	 * *Customer Country Sequence No: 18
 	 */
-	private String customerContry;
+	private String customerCountry;
+	
 	/**
 	 * *Customer Zip Sequence No: 19
 	 */
 	private String customerZip;
+	
 	/**
 	 * **Supplier ID Sequence No: 20
 	 */
-	private String supplierId;
+	private String SupplierID;
+	
 	/**
 	 * *Supplier Description Sequence No: 21
 	 */
-	private String supplierDicription;
+	private String supplierDescription;
+	
 	/**
 	 * *Supplier DUNS Sequence No: 22
 	 */
 	private String supplierDUNS;
+	
 	/**
 	 * *Supplier DUNS+4 Sequence No: 23
 	 */
 	private String supplierDUNS4;
+	
 	/**
 	 * *Supplier Address - Descriptor Sequence No: 24
 	 */
 	private String supplierAddressDescriptor;
+	
 	/**
 	 * *Supplier Address 1 Sequence No: 25
 	 */
 	private String supplierAddress1;
+	
 	/**
 	 * *Supplier Address 2 Sequence No: 26
 	 */
 	private String supplierAddress2;
+	
 	/**
 	 * *Supplier Address 3 Sequence No: 27
 	 */
 	private String supplierAddress3;
+	
 	/**
 	 * *Supplier Address 4 Sequence No: 28
 	 */
 	private String supplierAddress4;
+	
 	/**
 	 * *Supplier Address 5 Sequence No: 29
 	 */
 	private String supplierAddress5;
+	
 	/**
 	 * *Supplier City Sequence No: 30
 	 */
 	private String supplierCity;
+	
 	/**
 	 * *Supplier County Sequence No: 31
 	 */
 	private String supplierCounty;
+	
 	/**
 	 * *Supplier State Sequence No: 32
 	 */
 	private String supplierState;
+	
 	/**
 	 * *Supplier Country Sequence No: 33
 	 */
 	private String supplierCountry;
+	
 	/**
 	 * *Supplier Zip Sequence No: 34
 	 */
 	private String supplierZip;
+	
 	/**
 	 * *Buyer Code Sequence No: 35
 	 */
-	private String BuyerCode;
+	private String buyerCode;
+	
 	/**
 	 * *Buyer Contact Sequence No: 36
 	 */
 	private String buyerContact;
+	
 	/**
 	 * *Buyer Name Sequence No: 37
 	 */
 	private String buyerName;
+	
 	/**
 	 * *Buyer Email Sequence No: 38
 	 */
 	private String buyerEmail;
+	
 	/**
 	 * *Supplier Email Sequence No: 39
 	 */
 	private String supplierEmail;
+	
 	/**
 	 * *Delivery Term Sequence No: 40
 	 */
-	private String DeliveryTerm;
+	private String deliveryTerm;
+	
 	/**
 	 * *Payment Terms Sequence No: 41
 	 */
 	private String paymentTerms;
+	
 	/**
 	 * *Total Order Amount Sequence No: 42
 	 */
 	private double totalOrderAmount;
+	
 	/**
 	 * *InCO Terms Sequence No: 43
 	 */
-	private String inCoTerms;
+	private String incoTerms;
+	
 	/**
 	 * *Customer Order Notes Sequence No: 44
 	 */
 	private String customerOrderNotes;
+	
 	/**
 	 * *Supplier Order Notes Sequence No: 45
 	 */
-	private String suplierOrderNotes;
+	private String supplierOrderNotes;
+	
 	/**
 	 * *Bill To Sequence No: 46
 	 */
 	private String billTo;
+	
 	/**
 	 * *Bill To Address - Descriptor Sequence No: 47
 	 */
 	private String billToAddressDescriptor;
+	
 	/**
 	 * *Bill To Address 1 Sequence No: 48
 	 */
 	private String billToAddress1;
+	
 	/**
 	 * *Bill To Address 2 Sequence No: 49
 	 */
-
 	private String billToAddress2;
+	
 	/**
 	 * *Bill To Address 3 Sequence No: 50
 	 */
-
 	private String billToAddress3;
+	
 	/**
 	 * *Bill To Address 4 Sequence No: 51
 	 */
 	private String billToAddress4;
+	
 	/**
 	 * *Bill To Address 5 Sequence No: 52
 	 */
 	private String billToAddress5;
+	
 	/**
 	 * *Bill To City Sequence No: 53
 	 */
 	private String billToCity;
+	
 	/**
 	 * *Bill To County Sequence No: 54
 	 */
 	private String billToCounty;
+	
 	/**
 	 * *Bill To State Sequence No: 55
 	 */
 	private String billToState;
+	
 	/**
 	 * *Bill To Country Sequence No: 56
 	 */
 	private String billToCountry;
+	
 	/**
 	 * *Bill To Zip Sequence No: 57
 	 */
 	private String billToZip;
+	
 	/**
 	 * *Bill To Remit To Address- Descriptor Sequence No: 58
 	 */
-	private String RemitToAddressDescriptor;
+	private String remitToAddressDescriptor;
+	
 	/**
 	 * *Remit To Address 1 Sequence No: 59
 	 */
 	private String remitToAddress1;
+	
 	/**
 	 * *Remit To Address 2 Sequence No: 60
 	 */
 	private String remitToAddress2;
+	
 	/**
 	 * *Remit To Address 3 Sequence No: 61
 	 */
 	private String remitToAddress3;
+	
 	/**
 	 * *Remit To Address 4 Sequence No: 62
 	 */
 	private String remitToAddress4;
+	
 	/**
 	 * *Remit To Address 5 Sequence No: 63
 	 */
 	private String remitToAddress5;
+	
 	/**
 	 * *Remit To City Sequence No: 64
 	 */
 	private String remitToCity;
+	
 	/**
 	 * *Remit To County Sequence No: 65
 	 */
 	private String remitToCounty;
+	
 	/**
 	 * *Remit To State Sequence No: 66
 	 */
 	private String remitToState;
+	
 	/**
 	 * *Remit To Country Sequence No: 67
 	 */
 	private String remitToCountry;
+	
 	/**
 	 * *Remit To Zip Sequence No: 68
 	 */
 	private String remitToZip;
+	
 	/**
 	 * *Buyer Contact Phone Sequence No: 69
 	 */
 	private String buyerContactPhone;
+	
 	/**
 	 * *Remit To Buyer Contact Fax Sequence No: 70
 	 */
 	private String buyerContactFax;
+	
 	/**
 	 * *Order Type Sequence No: 71
 	 */
 	private String orderType;
+	
 	/**
 	 * *Flex String PO Header 4 Sequence No: 72
 	 */
-	private String FlexStringPOHeader4;
+	private String flexStringPOHeader4;
+	
 	/**
 	 * *Flex String PO Header 5 Sequence No: 73
 	 */
-	private String FlexStringPOHeader5;
+	private String flexStringPOHeader5;
+	
 	/**
 	 * *Flex String PO Header 6 Sequence No: 74
 	 */
-	private String FlexStringPOHeader6;
+	private String flexStringPOHeader6;
+	
 	/**
 	 * *Flex String PO Header 7 Sequence No: 75
 	 */
-	private String FlexStringPOHeader7;
+	private String flexStringPOHeader7;
+	
 	/**
 	 * *Flex String PO Header 8 Sequence No: 76
 	 */
-	private String FlexStringPOHeader8;
+	private String flexStringPOHeader8;
+	
 	/**
 	 * *Flex String PO Header 9 Sequence No: 77
 	 */
-	private String FlexStringPOHeader9;
+	private String flexStringPOHeader9;
+	
 	/**
 	 * *Flex Int PO Header 1 Sequence No: 78
 	 */
 	private int flexIntPOHeader1;
+	
 	/**
 	 * *Flex Int PO Header 2 Sequence No: 79
 	 */
 	private int flexIntPOHeader2;
+	
 	/**
 	 * *Flex Int PO Header 3 Sequence No: 80
 	 */
 	private int flexIntPOHeader3;
+	
 	/**
 	 * *Flex Int PO Header 4 Sequence No: 81
 	 */
 	private int flexIntPOHeader4;
+	
 	/**
 	 * *Flex Int PO Header 5 Sequence No: 82
 	 */
 	private int flexIntPOHeader5;
+	
 	/**
 	 * *Flex float PO Header 1 Sequence No: 83
 	 */
 	private double flexFloatPOHeader1;
+	
 	/**
 	 * *Flex float PO Header 2 Sequence No: 84
 	 */
 	private double flexFloatPOHeader2;
+	
 	/**
 	 * *Flex float PO Header 3 Sequence No: 85
 	 */
 	private double flexFloatPOHeader3;
+	
 	/**
 	 * *Flex float PO Header 4 Sequence No: 86
 	 */
 	private double flexFloatPOHeader4;
+	
 	/**
 	 * *Flex float PO Header 5 Sequence No: 87
 	 */
 	private double flexFloatPOHeader5;
+	
 	/**
 	 * *Flex Date PO Header 1 Sequence No: 88
 	 */
 	private Date flexDatePOHeader1;
+	
 	/**
 	 * *Flex Date PO Header 2 Sequence No: 89
 	 */
 	private Date flexDatePOHeader2;
+	
 	/**
 	 * *Flex Date PO Header 3 Sequence No: 90
 	 */
 	private Date flexDatePOHeader3;
+	
 	/**
 	 * *Flex Date PO Header 4 Sequence No: 91
 	 */
 	private Date flexDatePOHeader4;
+	
 	/**
 	 * *Flex Date PO Header 5 Sequence No: 92
 	 */
 	private Date flexDatePOHeader5;
+	
 	/**
 	 * Line Id Sequence No: 93
 	 */
-	private int lineId;
+	private int LineID;//po-line
+	
 	/**
 	 * Line Status Sequence No: 94
 	 */
 	private String lineStatus;
+	
 	/**
 	 * *Customer Item Id Sequence No: 95
 	 */
-	private String customerItemId;
+	private String CustomerItemID;
+	
 	/**
 	 * *Customer Item Description Sequence No: 96
 	 */
 	private String customerItemDescription;
+	
 	/**
 	 * *Supplier Item Id Sequence No: 97
 	 */
-	private String supplierItemId;
+	private String supplierItemID;
+	
 	/**
 	 * *Supplier Item Description Sequence No: 98
 	 */
 	private String supplierItemDescription;
+	
 	/**
 	 * *Unit Price Sequence No: 99
 	 */
-	private double unitPrice;
+	private double UnitPrice;
+	
 	/**
 	 * *Price Basis Sequence No: 100
 	 */
 	private String priceBasis;
+	
 	private String paymentCurrency;
+
+	// 102: Total Line Amount double
 	private double totalLineAmount;
-	private String UOM;
+
+	// 103: UOM VARCHAR(64)
+	private String uOM;
+	
+	// 104: Customer Order Line Notes VARCHAR(4000)
 	private String customerOrderLineNotes;
-	private String suoplierOrderLineNotes;
+
+	// 105: Supplier Order Line Notes VARCHAR(4000)
+	private String supplierOrderLineNotes;
+
+	// 106: Drawing Version VARCHAR(255)
 	private String drawingVersion;
+
+	// 107: Drawing Number VARCHAR(255)
 	private String drawingNumber;
+
+	// 108: Item Category VARCHAR(255)
 	private String itemCategory;
+
+	// 109: Ship To Location VARCHAR(128)
 	private String shipToLocation;
+
+	// 110: Flex String PO Line 5 VARCHAR(128)
 	private String flexStringPOLine5;
+
+	// 111: Flex String PO Line 6 VARCHAR(128)
 	private String flexStringPOLine6;
+
+	// 112: Flex String PO Line 7 VARCHAR(64)
 	private String flexStringPOLine7;
+
+	// 113: Flex String PO Line 8 VARCHAR(64)
 	private String flexStringPOLine8;
+
+	// 114: Flex String PO Line 9 VARCHAR(64)
 	private String flexStringPOLine9;
+
+	// 115: Free Item Flag NUMBER
 	private int freeItemFlag;
+
+	// 116: Flex Int PO Line 2 NUMBER
 	private int flexIntPOLine2;
+
+	// 117: Flex Int PO Line 3 NUMBER
 	private int flexIntPOLine3;
+
+	// 118: Flex Int PO Line 4 NUMBER
 	private int flexIntPOLine4;
+
+	// 119: Flex Int PO Line 5 NUMBER
 	private int flexIntPOLine5;
+
+	// 120: Flex double PO Line 1 double
 	private double flexFloatPOLine1;
+
+	// 121: Flex double PO Line 2 double
 	private double flexFloatPOLine2;
+
+	// 122: Flex double PO Line 3 double
 	private double flexFloatPOLine3;
+
+	// 123: Flex double PO Line 4 double
 	private double flexFloatPOLine4;
+
+	// 124: Flex double PO Line 5 double
 	private double flexFloatPOLine5;
+
+	// 125: Flex Date PO Line 1 Date
 	private Date flexDatePOLine1;
+
+	// 126: Flex Date PO Line 2 Date
 	private Date flexDatePOLine2;
+
+	// 127: Flex Date PO Line 3 Date
 	private Date flexDatePOLine3;
+
+	// 128: Flex Date PO Line 4 Date
 	private Date flexDatePOLine4;
+
+	// 129: Flex Date PO Line 5 Date
 	private Date flexDatePOLine5;
-	private int requestNumber;
+
+	// 130: Request ID NUMBER
+	private int RequestID;
+
+	// 131: Request Status VARCHAR(64)
 	private String requestStatus;
-	private String action;
-	private double requestQty;
-	private Date requestDate;
+
+	// 132: Action VARCHAR(64)
+	private String Action;
+
+	// 133: Request Qty double
+	private double RequestQty;
+
+	// 134: Request Date Date
+	private Date RequestDate;
+
+	// 135: Requested Ship Date Date
 	private Date requestedShipDate;
+
+	// 136: Carrier VARCHAR(64)
 	private String carrier;
-	private String customerSite;
+
+	// 137: Customer Site VARCHAR(64)
+	private String CustomerSite;
+
+	// 138: Ship To Address - Descriptor VARCHAR(64)
 	private String shipToAddressDescriptor;
+
+	// 139: Ship To Address 1 VARCHAR(256)
 	private String shipToAddress1;
+
+	// 140: Ship To Address 2 VARCHAR(256)
 	private String shipToAddress2;
+
+	// 141: Ship To Address 3 VARCHAR(256)
 	private String shipToAddress3;
+
+	// 142: Ship To Address 4 VARCHAR(256)
 	private String shipToAddress4;
+
+	// 143: Ship To Address 5 VARCHAR(256)
 	private String shipToAddress5;
+
+	// 144: Ship To City VARCHAR(64)
 	private String shipToCity;
+
+	// 145: Ship To County VARCHAR(64)
 	private String shipToCounty;
+
+	// 146: Ship To State VARCHAR(64)
 	private String shipToState;
+
+	// 147: Ship To Country VARCHAR(64)
 	private String shipToCountry;
+
+	// 148: Ship To Zip VARCHAR(64)
 	private String shipToZip;
+
+	// 149: Ref Order Type VARCHAR(64)
 	private String refOrderType;
-	private String refOrderId;
-	private String refOrderLineId;
-	private String refOrderRequestId;
-	private String refCustomerId;
-	private String refSupplierId;
+
+	// 150: Ref Order ID VARCHAR(64)
+	private String refOrderID;
+
+	// 151: Ref Order Line ID VARCHAR(64)
+	private String refOrderLineID;
+
+	// 152: Ref Order Request ID VARCHAR(64)
+	private String refOrderRequestID;
+
+	// 153: Ref Customer ID VARCHAR(64)
+	private String refCustomerID;
+
+	// 154: Ref Supplier ID VARCHAR(64)
+	private String refSupplierID;
+
+	// 155: Flex String PO Request 1 VARCHAR(255)
 	private String flexStringPORequest1;
+
+	// 156: Flex String PO Request 2 VARCHAR(255)
 	private String flexStringPORequest2;
+
+	// 157: Flex String PO Request 3 VARCHAR(255)
 	private String flexStringPORequest3;
+
+	// 158: Flex String PO Request 4 VARCHAR(128)
 	private String flexStringPORequest4;
+
+	// 159: Flex String PO Request 5 VARCHAR(128)
 	private String flexStringPORequest5;
+
+	// 160: Flex String PO Request 6 VARCHAR(128)
 	private String flexStringPORequest6;
+
+	// 161: Flex String PO Request 7 VARCHAR(64)
 	private String flexStringPORequest7;
+
+	// 162: Flex String PO Request 8 VARCHAR(64)
 	private String flexStringPORequest8;
+
+	// 163: Flex String PO Request 9 VARCHAR(64)
 	private String flexStringPORequest9;
-	private int flexPORequest1;
-	private int flexPORequest2;
-	private int flexPORequest3;
-	private int flexPORequest4;
-	private int flexPORequest5;
+
+	// 164: Flex Int PO Request 1 NUMBER
+	private int flexIntPORequest1;
+
+	// 165: Flex Int PO Request 2 NUMBER
+	private int flexIntPORequest2;
+
+	// 166: Flex Int PO Request 3 NUMBER
+	private int flexIntPORequest3;
+
+	// 167: Flex Int PO Request 4 NUMBER
+	private int flexIntPORequest4;
+
+	// 168: Flex Int PO Request 5 NUMBER
+	private int flexIntPORequest5;
+
+	// 169: Flex double PO Request 1 double
 	private double flexFloatPORequest1;
+
+	// 170: Flex double PO Request 2 double
 	private double flexFloatPORequest2;
+
+	// 171: Flex double PO Request 3 double
 	private double flexFloatPORequest3;
+
+	// 172: Flex double PO Request 4 double
 	private double flexFloatPORequest4;
+
+	// 173: Flex double PO Request 5 double
 	private double flexFloatPORequest5;
+
+	// 174: Flex Date PO Request 1 Date
 	private Date flexDatePORequest1;
+
+	// 175: Flex Date PO Request 2 Date
 	private Date flexDatePORequest2;
+
+	// 176: Flex Date PO Request 3 Date
 	private Date flexDatePORequest3;
+
+	// 177: Flex Date PO Request 4 Date
 	private Date flexDatePORequest4;
+
+	// 178: Flex Date PO Request 5 Date
 	private Date flexDatePORequest5;
-	private int promiseId;
+
+	// 179: Promise ID NUMBER
+	private int promiseID;
+
+	// 180: Promise Qty double
 	private double promiseQty;
+
+	// 181: Promise Date Date
 	private Date promiseDate;
-	private Date promiseShipDate;
+
+	// 182: Promised Ship Date Date
+	private Date promisedShipDate;
+
+	// 183: Supplier Site VARCHAR(64)
 	private String supplierSite;
+
+	// 184: Ship From Address - Descriptor VARCHAR(64)
 	private String shipFromAddressDescriptor;
+
+	// 185: Ship From Address 1 VARCHAR(256)
 	private String shipFromAddress1;
+
+	// 186: Ship From Address 2 VARCHAR(256)
 	private String shipFromAddress2;
+
+	// 187: Ship From Address 3 VARCHAR(256)
 	private String shipFromAddress3;
+
+	// 188: Ship From Address 4 VARCHAR(256)
 	private String shipFromAddress4;
+
+	// 189: Ship From Address 5 VARCHAR(256)
 	private String shipFromAddress5;
+
+	// 190: Ship From City VARCHAR(64)
 	private String shipFromCity;
+
+	// 191: Ship From County VARCHAR(64)
 	private String shipFromCounty;
+
+	// 192: Ship From State VARCHAR(64)
 	private String shipFromState;
+
+	// 193: Ship From Country VARCHAR(64)
 	private String shipFromCountry;
+
+	// 194: Ship From Zip VARCHAR(64)
 	private String shipFromZip;
+
+	// 195: Flex String PO Promise 1 VARCHAR(255)
 	private String flexStringPOPromise1;
+
+	// 196: Flex String PO Promise 2 VARCHAR(255)
 	private String flexStringPOPromise2;
+
+	// 197: Flex String PO Promise 3 VARCHAR(255)
 	private String flexStringPOPromise3;
+
+	// 198: Flex String PO Promise 4 VARCHAR(128)
 	private String flexStringPOPromise4;
+
+	// 199: Flex String PO Promise 5 VARCHAR(128)
 	private String flexStringPOPromise5;
+
+	// 200: Flex String PO Promise 6 VARCHAR(128)
 	private String flexStringPOPromise6;
+
+	// 201: Flex String PO Promise 7 VARCHAR(64)
 	private String flexStringPOPromise7;
+
+	// 202: Flex String PO Promise 8 VARCHAR(64)
 	private String flexStringPOPromise8;
+
+	// 203: Flex String PO Promise 9 VARCHAR(64)
 	private String flexStringPOPromise9;
-	private int flexIntPOPromise1;
-	private int flexIntPOPromise2;
+
+	// 204: Flex Int PO Promise 1 NUMBER
+	private int FlexIntPOPromise1;
+
+	// 205: Flex Int PO Promise 2 NUMBER
+	private int FlexIntPOPromise2;
+
+	// 206: Flex Int PO Promise 3 NUMBER
 	private int flexIntPOPromise3;
+
+	// 207: Flex Int PO Promise 4 NUMBER
 	private int flexIntPOPromise4;
+
+	// 208: Flex Int PO Promise 5 NUMBER
 	private int flexIntPOPromise5;
-	private double flexFloatPOPromise1;
+
+	// 209: Flex double PO Promise 1 double
+	private double flex_Float_PO_Promise1;
+
+	// 210: Flex double PO Promise 2 double
 	private double flexFloatPOPromise2;
+
+	// 211: Flex double PO Promise 3 double
 	private double flexFloatPOPromise3;
+
+	// 212: Flex double PO Promise 4 double
 	private double flexFloatPOPromise4;
+
+	// 213: Flex double PO Promise 5 double
 	private double flexFloatPOPromise5;
+
+	// 214: Flex Date PO Promise 1 Date
 	private Date flexDatePOPromise1;
+
+	// 215: Flex Date PO Promise 2 Date
 	private Date flexDatePOPromise2;
+
+	// 216: Flex Date PO Promise 3 Date
 	private Date flexDatePOPromise3;
+
+	// 217: Flex Date PO Promise 4 Date
 	private Date flexDatePOPromise4;
+
+	// 218: Flex Date PO Promise 5 Date
 	private Date flexDatePOPromise5;
-	private String revNo;
-	private String shipToCustomerId;
+	
+	// 219: Rev # VARCHAR(64)
+	private String rev;
+
+	// 220: Ship To Customer ID VARCHAR(64)
+	private String shipToCustomerID;
 
 	public String getOrderNumber() {
-		return orderNumber;
+		return OrderNumber;
 	}
 
 	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
+		OrderNumber = orderNumber;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public Date getOrderCreationDate() {
-		return orderCreationDate;
+		return OrderCreationDate;
 	}
 
 	public void setOrderCreationDate(Date orderCreationDate) {
-		this.orderCreationDate = orderCreationDate;
+		OrderCreationDate = orderCreationDate;
 	}
 
 	public String getOrderStatus() {
@@ -579,20 +943,20 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.orderPriority = orderPriority;
 	}
 
-	public String getCustomerId() {
-		return customerId;
+	public String getCustomerID() {
+		return CustomerID;
 	}
 
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
+	public void setCustomerID(String customerID) {
+		CustomerID = customerID;
 	}
 
 	public String getCustomerDescription() {
-		return CustomerDescription;
+		return customerDescription;
 	}
 
-	public void setCustomerDescription(String CustomerDescription) {
-		this.CustomerDescription = CustomerDescription;
+	public void setCustomerDescription(String customerDescription) {
+		this.customerDescription = customerDescription;
 	}
 
 	public String getCustomerDUNS() {
@@ -619,11 +983,11 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.customerTaxNumber = customerTaxNumber;
 	}
 
-	public String getcustomerAddressDescriptor() {
+	public String getCustomerAddressDescriptor() {
 		return customerAddressDescriptor;
 	}
 
-	public void setcustomerAddressDescriptor(String customerAddressDescriptor) {
+	public void setCustomerAddressDescriptor(String customerAddressDescriptor) {
 		this.customerAddressDescriptor = customerAddressDescriptor;
 	}
 
@@ -675,20 +1039,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.customerCity = customerCity;
 	}
 
-	public String getCustomerConty() {
-		return customerConty;
+	public String getCustomerCounty() {
+		return customerCounty;
 	}
 
-	public void setCustomerConty(String customerConty) {
-		this.customerConty = customerConty;
-	}
-
-	public String getCustomerContry() {
-		return customerContry;
-	}
-
-	public void setCustomerContry(String customerContry) {
-		this.customerContry = customerContry;
+	public void setCustomerCounty(String customerCounty) {
+		this.customerCounty = customerCounty;
 	}
 
 	public String getCustomerState() {
@@ -699,6 +1055,14 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.customerState = customerState;
 	}
 
+	public String getCustomerCountry() {
+		return customerCountry;
+	}
+
+	public void setCustomerCountry(String customerCountry) {
+		this.customerCountry = customerCountry;
+	}
+
 	public String getCustomerZip() {
 		return customerZip;
 	}
@@ -707,20 +1071,20 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.customerZip = customerZip;
 	}
 
-	public String getSupplierId() {
-		return supplierId;
+	public String getSupplierID() {
+		return SupplierID;
 	}
 
-	public void setSupplierId(String supplierId) {
-		this.supplierId = supplierId;
+	public void setSupplierID(String supplierID) {
+		SupplierID = supplierID;
 	}
 
-	public String getSupplierDicription() {
-		return supplierDicription;
+	public String getSupplierDescription() {
+		return supplierDescription;
 	}
 
-	public void setSupplierDicription(String supplierDicription) {
-		this.supplierDicription = supplierDicription;
+	public void setSupplierDescription(String supplierDescription) {
+		this.supplierDescription = supplierDescription;
 	}
 
 	public String getSupplierDUNS() {
@@ -828,11 +1192,11 @@ public class PoItemsEntity extends TableServiceEntity {
 	}
 
 	public String getBuyerCode() {
-		return BuyerCode;
+		return buyerCode;
 	}
 
 	public void setBuyerCode(String buyerCode) {
-		BuyerCode = buyerCode;
+		this.buyerCode = buyerCode;
 	}
 
 	public String getBuyerContact() {
@@ -868,11 +1232,11 @@ public class PoItemsEntity extends TableServiceEntity {
 	}
 
 	public String getDeliveryTerm() {
-		return DeliveryTerm;
+		return deliveryTerm;
 	}
 
 	public void setDeliveryTerm(String deliveryTerm) {
-		DeliveryTerm = deliveryTerm;
+		this.deliveryTerm = deliveryTerm;
 	}
 
 	public String getPaymentTerms() {
@@ -891,12 +1255,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.totalOrderAmount = totalOrderAmount;
 	}
 
-	public String getInCoTerm() {
-		return inCoTerms;
+	public String getIncoTerms() {
+		return incoTerms;
 	}
 
-	public void setInCoTerm(String inCoTerms) {
-		this.inCoTerms = inCoTerms;
+	public void setIncoTerms(String incoTerms) {
+		this.incoTerms = incoTerms;
 	}
 
 	public String getCustomerOrderNotes() {
@@ -907,12 +1271,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.customerOrderNotes = customerOrderNotes;
 	}
 
-	public String getSuplierOrderNotes() {
-		return suplierOrderNotes;
+	public String getSupplierOrderNotes() {
+		return supplierOrderNotes;
 	}
 
-	public void setSuplierOrderNotes(String suplierOrderNotes) {
-		this.suplierOrderNotes = suplierOrderNotes;
+	public void setSupplierOrderNotes(String supplierOrderNotes) {
+		this.supplierOrderNotes = supplierOrderNotes;
 	}
 
 	public String getBillTo() {
@@ -1012,11 +1376,11 @@ public class PoItemsEntity extends TableServiceEntity {
 	}
 
 	public String getRemitToAddressDescriptor() {
-		return RemitToAddressDescriptor;
+		return remitToAddressDescriptor;
 	}
 
 	public void setRemitToAddressDescriptor(String remitToAddressDescriptor) {
-		RemitToAddressDescriptor = remitToAddressDescriptor;
+		this.remitToAddressDescriptor = remitToAddressDescriptor;
 	}
 
 	public String getRemitToAddress1() {
@@ -1124,51 +1488,51 @@ public class PoItemsEntity extends TableServiceEntity {
 	}
 
 	public String getFlexStringPOHeader4() {
-		return FlexStringPOHeader4;
+		return flexStringPOHeader4;
 	}
 
 	public void setFlexStringPOHeader4(String flexStringPOHeader4) {
-		FlexStringPOHeader4 = flexStringPOHeader4;
+		this.flexStringPOHeader4 = flexStringPOHeader4;
 	}
 
 	public String getFlexStringPOHeader5() {
-		return FlexStringPOHeader5;
+		return flexStringPOHeader5;
 	}
 
 	public void setFlexStringPOHeader5(String flexStringPOHeader5) {
-		FlexStringPOHeader5 = flexStringPOHeader5;
+		this.flexStringPOHeader5 = flexStringPOHeader5;
 	}
 
 	public String getFlexStringPOHeader6() {
-		return FlexStringPOHeader6;
+		return flexStringPOHeader6;
 	}
 
 	public void setFlexStringPOHeader6(String flexStringPOHeader6) {
-		FlexStringPOHeader6 = flexStringPOHeader6;
+		this.flexStringPOHeader6 = flexStringPOHeader6;
 	}
 
 	public String getFlexStringPOHeader7() {
-		return FlexStringPOHeader7;
+		return flexStringPOHeader7;
 	}
 
 	public void setFlexStringPOHeader7(String flexStringPOHeader7) {
-		FlexStringPOHeader7 = flexStringPOHeader7;
+		this.flexStringPOHeader7 = flexStringPOHeader7;
 	}
 
 	public String getFlexStringPOHeader8() {
-		return FlexStringPOHeader8;
+		return flexStringPOHeader8;
 	}
 
 	public void setFlexStringPOHeader8(String flexStringPOHeader8) {
-		FlexStringPOHeader8 = flexStringPOHeader8;
+		this.flexStringPOHeader8 = flexStringPOHeader8;
 	}
 
 	public String getFlexStringPOHeader9() {
-		return FlexStringPOHeader9;
+		return flexStringPOHeader9;
 	}
 
 	public void setFlexStringPOHeader9(String flexStringPOHeader9) {
-		FlexStringPOHeader9 = flexStringPOHeader9;
+		this.flexStringPOHeader9 = flexStringPOHeader9;
 	}
 
 	public int getFlexIntPOHeader1() {
@@ -1291,12 +1655,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.flexDatePOHeader5 = flexDatePOHeader5;
 	}
 
-	public int getLineId() {
-		return lineId;
+	public int getLineID() {
+		return LineID;
 	}
 
-	public void setLineId(int lineId) {
-		this.lineId = lineId;
+	public void setLineID(int lineID) {
+		LineID = lineID;
 	}
 
 	public String getLineStatus() {
@@ -1307,12 +1671,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.lineStatus = lineStatus;
 	}
 
-	public String getCustomerItemId() {
-		return customerItemId;
+	public String getCustomerItemID() {
+		return CustomerItemID;
 	}
 
-	public void setCustomerItemId(String customerItemId) {
-		this.customerItemId = customerItemId;
+	public void setCustomerItemID(String customerItemID) {
+		CustomerItemID = customerItemID;
 	}
 
 	public String getCustomerItemDescription() {
@@ -1323,12 +1687,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.customerItemDescription = customerItemDescription;
 	}
 
-	public String getSupplierItemId() {
-		return supplierItemId;
+	public String getSupplierItemID() {
+		return supplierItemID;
 	}
 
-	public void setSupplierItemId(String supplierItemId) {
-		this.supplierItemId = supplierItemId;
+	public void setSupplierItemID(String supplierItemID) {
+		this.supplierItemID = supplierItemID;
 	}
 
 	public String getSupplierItemDescription() {
@@ -1340,11 +1704,11 @@ public class PoItemsEntity extends TableServiceEntity {
 	}
 
 	public double getUnitPrice() {
-		return unitPrice;
+		return UnitPrice;
 	}
 
 	public void setUnitPrice(double unitPrice) {
-		this.unitPrice = unitPrice;
+		UnitPrice = unitPrice;
 	}
 
 	public String getPriceBasis() {
@@ -1371,12 +1735,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.totalLineAmount = totalLineAmount;
 	}
 
-	public String getUOM() {
-		return UOM;
+	public String getuOM() {
+		return uOM;
 	}
 
-	public void setUOM(String uOM) {
-		UOM = uOM;
+	public void setuOM(String uOM) {
+		this.uOM = uOM;
 	}
 
 	public String getCustomerOrderLineNotes() {
@@ -1387,12 +1751,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.customerOrderLineNotes = customerOrderLineNotes;
 	}
 
-	public String getSuoplierOrderLineNotes() {
-		return suoplierOrderLineNotes;
+	public String getSupplierOrderLineNotes() {
+		return supplierOrderLineNotes;
 	}
 
-	public void setSuoplierOrderLineNotes(String suoplierOrderLineNotes) {
-		this.suoplierOrderLineNotes = suoplierOrderLineNotes;
+	public void setSupplierOrderLineNotes(String supplierOrderLineNotes) {
+		this.supplierOrderLineNotes = supplierOrderLineNotes;
 	}
 
 	public String getDrawingVersion() {
@@ -1587,12 +1951,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.flexDatePOLine5 = flexDatePOLine5;
 	}
 
-	public int getRequestNumber() {
-		return requestNumber;
+	public int getRequestID() {
+		return RequestID;
 	}
 
-	public void setRequestNumber(int requestNumber) {
-		this.requestNumber = requestNumber;
+	public void setRequestID(int requestID) {
+		RequestID = requestID;
 	}
 
 	public String getRequestStatus() {
@@ -1604,27 +1968,27 @@ public class PoItemsEntity extends TableServiceEntity {
 	}
 
 	public String getAction() {
-		return action;
+		return Action;
 	}
 
 	public void setAction(String action) {
-		this.action = action;
+		Action = action;
 	}
 
 	public double getRequestQty() {
-		return requestQty;
+		return RequestQty;
 	}
 
 	public void setRequestQty(double requestQty) {
-		this.requestQty = requestQty;
+		RequestQty = requestQty;
 	}
 
 	public Date getRequestDate() {
-		return requestDate;
+		return RequestDate;
 	}
 
 	public void setRequestDate(Date requestDate) {
-		this.requestDate = requestDate;
+		RequestDate = requestDate;
 	}
 
 	public Date getRequestedShipDate() {
@@ -1644,11 +2008,11 @@ public class PoItemsEntity extends TableServiceEntity {
 	}
 
 	public String getCustomerSite() {
-		return customerSite;
+		return CustomerSite;
 	}
 
 	public void setCustomerSite(String customerSite) {
-		this.customerSite = customerSite;
+		CustomerSite = customerSite;
 	}
 
 	public String getShipToAddressDescriptor() {
@@ -1747,44 +2111,44 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.refOrderType = refOrderType;
 	}
 
-	public String getRefOrderId() {
-		return refOrderId;
+	public String getRefOrderID() {
+		return refOrderID;
 	}
 
-	public void setRefOrderId(String refOrderId) {
-		this.refOrderId = refOrderId;
+	public void setRefOrderID(String refOrderID) {
+		this.refOrderID = refOrderID;
 	}
 
-	public String getRefOrderLineId() {
-		return refOrderLineId;
+	public String getRefOrderLineID() {
+		return refOrderLineID;
 	}
 
-	public void setRefOrderLineId(String refOrderLineId) {
-		this.refOrderLineId = refOrderLineId;
+	public void setRefOrderLineID(String refOrderLineID) {
+		this.refOrderLineID = refOrderLineID;
 	}
 
-	public String getRefOrderRequestId() {
-		return refOrderRequestId;
+	public String getRefOrderRequestID() {
+		return refOrderRequestID;
 	}
 
-	public void setRefOrderRequestId(String refOrderRequestId) {
-		this.refOrderRequestId = refOrderRequestId;
+	public void setRefOrderRequestID(String refOrderRequestID) {
+		this.refOrderRequestID = refOrderRequestID;
 	}
 
-	public String getRefCustomerId() {
-		return refCustomerId;
+	public String getRefCustomerID() {
+		return refCustomerID;
 	}
 
-	public void setRefCustomerId(String refCustomerId) {
-		this.refCustomerId = refCustomerId;
+	public void setRefCustomerID(String refCustomerID) {
+		this.refCustomerID = refCustomerID;
 	}
 
-	public String getRefSupplierId() {
-		return refSupplierId;
+	public String getRefSupplierID() {
+		return refSupplierID;
 	}
 
-	public void setRefSupplierId(String refSupplierId) {
-		this.refSupplierId = refSupplierId;
+	public void setRefSupplierID(String refSupplierID) {
+		this.refSupplierID = refSupplierID;
 	}
 
 	public String getFlexStringPORequest1() {
@@ -1859,44 +2223,44 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.flexStringPORequest9 = flexStringPORequest9;
 	}
 
-	public int getFlexPORequest1() {
-		return flexPORequest1;
+	public int getFlexIntPORequest1() {
+		return flexIntPORequest1;
 	}
 
-	public void setFlexPORequest1(int flexPORequest1) {
-		this.flexPORequest1 = flexPORequest1;
+	public void setFlexIntPORequest1(int flexIntPORequest1) {
+		this.flexIntPORequest1 = flexIntPORequest1;
 	}
 
-	public int getFlexPORequest2() {
-		return flexPORequest2;
+	public int getFlexIntPORequest2() {
+		return flexIntPORequest2;
 	}
 
-	public void setFlexPORequest2(int flexPORequest2) {
-		this.flexPORequest2 = flexPORequest2;
+	public void setFlexIntPORequest2(int flexIntPORequest2) {
+		this.flexIntPORequest2 = flexIntPORequest2;
 	}
 
-	public int getFlexPORequest3() {
-		return flexPORequest3;
+	public int getFlexIntPORequest3() {
+		return flexIntPORequest3;
 	}
 
-	public void setFlexPORequest3(int flexPORequest3) {
-		this.flexPORequest3 = flexPORequest3;
+	public void setFlexIntPORequest3(int flexIntPORequest3) {
+		this.flexIntPORequest3 = flexIntPORequest3;
 	}
 
-	public int getFlexPORequest4() {
-		return flexPORequest4;
+	public int getFlexIntPORequest4() {
+		return flexIntPORequest4;
 	}
 
-	public void setFlexPORequest4(int flexPORequest4) {
-		this.flexPORequest4 = flexPORequest4;
+	public void setFlexIntPORequest4(int flexIntPORequest4) {
+		this.flexIntPORequest4 = flexIntPORequest4;
 	}
 
-	public int getFlexPORequest5() {
-		return flexPORequest5;
+	public int getFlexIntPORequest5() {
+		return flexIntPORequest5;
 	}
 
-	public void setFlexPORequest5(int flexPORequest5) {
-		this.flexPORequest5 = flexPORequest5;
+	public void setFlexIntPORequest5(int flexIntPORequest5) {
+		this.flexIntPORequest5 = flexIntPORequest5;
 	}
 
 	public double getFlexFloatPORequest1() {
@@ -1979,12 +2343,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.flexDatePORequest5 = flexDatePORequest5;
 	}
 
-	public int getPromiseId() {
-		return promiseId;
+	public int getPromiseID() {
+		return promiseID;
 	}
 
-	public void setPromiseId(int promiseId) {
-		this.promiseId = promiseId;
+	public void setPromiseID(int promiseID) {
+		this.promiseID = promiseID;
 	}
 
 	public double getPromiseQty() {
@@ -2003,12 +2367,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.promiseDate = promiseDate;
 	}
 
-	public Date getPromiseShipDate() {
-		return promiseShipDate;
+	public Date getPromisedShipDate() {
+		return promisedShipDate;
 	}
 
-	public void setPromiseShipDate(Date promiseShipDate) {
-		this.promiseShipDate = promiseShipDate;
+	public void setPromisedShipDate(Date promisedShipDate) {
+		this.promisedShipDate = promisedShipDate;
 	}
 
 	public String getSupplierSite() {
@@ -2180,19 +2544,19 @@ public class PoItemsEntity extends TableServiceEntity {
 	}
 
 	public int getFlexIntPOPromise1() {
-		return flexIntPOPromise1;
+		return FlexIntPOPromise1;
 	}
 
 	public void setFlexIntPOPromise1(int flexIntPOPromise1) {
-		this.flexIntPOPromise1 = flexIntPOPromise1;
+		FlexIntPOPromise1 = flexIntPOPromise1;
 	}
 
 	public int getFlexIntPOPromise2() {
-		return flexIntPOPromise2;
+		return FlexIntPOPromise2;
 	}
 
 	public void setFlexIntPOPromise2(int flexIntPOPromise2) {
-		this.flexIntPOPromise2 = flexIntPOPromise2;
+		FlexIntPOPromise2 = flexIntPOPromise2;
 	}
 
 	public int getFlexIntPOPromise3() {
@@ -2219,12 +2583,12 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.flexIntPOPromise5 = flexIntPOPromise5;
 	}
 
-	public double getFlexFloatPOPromise1() {
-		return flexFloatPOPromise1;
+	public double getFlex_Float_PO_Promise1() {
+		return flex_Float_PO_Promise1;
 	}
 
-	public void setFlexFloatPOPromise1(double flexFloatPOPromise1) {
-		this.flexFloatPOPromise1 = flexFloatPOPromise1;
+	public void setFlex_Float_PO_Promise1(double flex_Float_PO_Promise1) {
+		this.flex_Float_PO_Promise1 = flex_Float_PO_Promise1;
 	}
 
 	public double getFlexFloatPOPromise2() {
@@ -2299,86 +2663,71 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.flexDatePOPromise5 = flexDatePOPromise5;
 	}
 
-	public String getRevNo() {
-		return revNo;
+	public String getRev() {
+		return rev;
 	}
 
-	public void setRevNo(String revNo) {
-		this.revNo = revNo;
+	public void setRev(String rev) {
+		this.rev = rev;
 	}
 
-	public String getShipToCustomerId() {
-		return shipToCustomerId;
+	public String getShipToCustomerID() {
+		return shipToCustomerID;
 	}
 
-	public void setShipToCustomerId(String shipToCustomerId) {
-		this.shipToCustomerId = shipToCustomerId;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getDataSource() {
-		return dataSource;
-	}
-
-	public void setDataSource(String dataSource) {
-		this.dataSource = dataSource;
+	public void setShipToCustomerID(String shipToCustomerID) {
+		this.shipToCustomerID = shipToCustomerID;
 	}
 
 	@Override
 	public String toString() {
-		return "PoItemsEntity [id=" + id + ", dataSource=" + dataSource + ", orderNumber=" + orderNumber
-				+ ", orderCreationDate=" + orderCreationDate + ", orderStatus=" + orderStatus + ", orderPriority="
-				+ orderPriority + ", customerId=" + customerId + ", CustomerDescription=" + CustomerDescription
-				+ ", customerDUNS=" + customerDUNS + ", customerDUNS4=" + customerDUNS4 + ", customerTaxNumber="
-				+ customerTaxNumber + ", customerAddressDescriptor=" + customerAddressDescriptor + ", customerAddress1="
-				+ customerAddress1 + ", customerAddress2=" + customerAddress2 + ", customerAddress3=" + customerAddress3
-				+ ", customerAddress4=" + customerAddress4 + ", customerAddress5=" + customerAddress5
-				+ ", customerCity=" + customerCity + ", customerConty=" + customerConty + ", customerState="
-				+ customerState + ", customerContry=" + customerContry + ", customerZip=" + customerZip
-				+ ", supplierId=" + supplierId + ", supplierDicription=" + supplierDicription + ", supplierDUNS="
-				+ supplierDUNS + ", supplierDUNS4=" + supplierDUNS4 + ", supplierAddressDescriptor="
-				+ supplierAddressDescriptor + ", supplierAddress1=" + supplierAddress1 + ", supplierAddress2="
-				+ supplierAddress2 + ", supplierAddress3=" + supplierAddress3 + ", supplierAddress4=" + supplierAddress4
-				+ ", supplierAddress5=" + supplierAddress5 + ", supplierCity=" + supplierCity + ", supplierCounty="
-				+ supplierCounty + ", supplierState=" + supplierState + ", supplierCountry=" + supplierCountry
-				+ ", supplierZip=" + supplierZip + ", BuyerCode=" + BuyerCode + ", buyerContact=" + buyerContact
-				+ ", buyerName=" + buyerName + ", buyerEmail=" + buyerEmail + ", supplierEmail=" + supplierEmail
-				+ ", DeliveryTerm=" + DeliveryTerm + ", paymentTerms=" + paymentTerms + ", totalOrderAmount="
-				+ totalOrderAmount + ", inCoTerms=" + inCoTerms + ", customerOrderNotes=" + customerOrderNotes
-				+ ", suplierOrderNotes=" + suplierOrderNotes + ", billTo=" + billTo + ", billToAddressDescriptor="
-				+ billToAddressDescriptor + ", billToAddress1=" + billToAddress1 + ", billToAddress2=" + billToAddress2
-				+ ", billToAddress3=" + billToAddress3 + ", billToAddress4=" + billToAddress4 + ", billToAddress5="
-				+ billToAddress5 + ", billToCity=" + billToCity + ", billToCounty=" + billToCounty + ", billToState="
-				+ billToState + ", billToCountry=" + billToCountry + ", billToZip=" + billToZip
-				+ ", RemitToAddressDescriptor=" + RemitToAddressDescriptor + ", remitToAddress1=" + remitToAddress1
-				+ ", remitToAddress2=" + remitToAddress2 + ", remitToAddress3=" + remitToAddress3 + ", remitToAddress4="
-				+ remitToAddress4 + ", remitToAddress5=" + remitToAddress5 + ", remitToCity=" + remitToCity
-				+ ", remitToCounty=" + remitToCounty + ", remitToState=" + remitToState + ", remitToCountry="
-				+ remitToCountry + ", remitToZip=" + remitToZip + ", buyerContactPhone=" + buyerContactPhone
-				+ ", buyerContactFax=" + buyerContactFax + ", orderType=" + orderType + ", FlexStringPOHeader4="
-				+ FlexStringPOHeader4 + ", FlexStringPOHeader5=" + FlexStringPOHeader5 + ", FlexStringPOHeader6="
-				+ FlexStringPOHeader6 + ", FlexStringPOHeader7=" + FlexStringPOHeader7 + ", FlexStringPOHeader8="
-				+ FlexStringPOHeader8 + ", FlexStringPOHeader9=" + FlexStringPOHeader9 + ", flexIntPOHeader1="
-				+ flexIntPOHeader1 + ", flexIntPOHeader2=" + flexIntPOHeader2 + ", flexIntPOHeader3=" + flexIntPOHeader3
+		return "PoItemsEntity [OrderNumber=" + OrderNumber + ", status=" + status + ", message=" + message + ", date="
+				+ date + ", OrderCreationDate=" + OrderCreationDate + ", orderStatus=" + orderStatus
+				+ ", orderPriority=" + orderPriority + ", CustomerID=" + CustomerID + ", customerDescription="
+				+ customerDescription + ", customerDUNS=" + customerDUNS + ", customerDUNS4=" + customerDUNS4
+				+ ", customerTaxNumber=" + customerTaxNumber + ", customerAddressDescriptor="
+				+ customerAddressDescriptor + ", customerAddress1=" + customerAddress1 + ", customerAddress2="
+				+ customerAddress2 + ", customerAddress3=" + customerAddress3 + ", customerAddress4=" + customerAddress4
+				+ ", customerAddress5=" + customerAddress5 + ", customerCity=" + customerCity + ", customerCounty="
+				+ customerCounty + ", customerState=" + customerState + ", customerCountry=" + customerCountry
+				+ ", customerZip=" + customerZip + ", SupplierID=" + SupplierID + ", supplierDescription="
+				+ supplierDescription + ", supplierDUNS=" + supplierDUNS + ", supplierDUNS4=" + supplierDUNS4
+				+ ", supplierAddressDescriptor=" + supplierAddressDescriptor + ", supplierAddress1=" + supplierAddress1
+				+ ", supplierAddress2=" + supplierAddress2 + ", supplierAddress3=" + supplierAddress3
+				+ ", supplierAddress4=" + supplierAddress4 + ", supplierAddress5=" + supplierAddress5
+				+ ", supplierCity=" + supplierCity + ", supplierCounty=" + supplierCounty + ", supplierState="
+				+ supplierState + ", supplierCountry=" + supplierCountry + ", supplierZip=" + supplierZip
+				+ ", buyerCode=" + buyerCode + ", buyerContact=" + buyerContact + ", buyerName=" + buyerName
+				+ ", buyerEmail=" + buyerEmail + ", supplierEmail=" + supplierEmail + ", deliveryTerm=" + deliveryTerm
+				+ ", paymentTerms=" + paymentTerms + ", totalOrderAmount=" + totalOrderAmount + ", incoTerms="
+				+ incoTerms + ", customerOrderNotes=" + customerOrderNotes + ", supplierOrderNotes="
+				+ supplierOrderNotes + ", billTo=" + billTo + ", billToAddressDescriptor=" + billToAddressDescriptor
+				+ ", billToAddress1=" + billToAddress1 + ", billToAddress2=" + billToAddress2 + ", billToAddress3="
+				+ billToAddress3 + ", billToAddress4=" + billToAddress4 + ", billToAddress5=" + billToAddress5
+				+ ", billToCity=" + billToCity + ", billToCounty=" + billToCounty + ", billToState=" + billToState
+				+ ", billToCountry=" + billToCountry + ", billToZip=" + billToZip + ", remitToAddressDescriptor="
+				+ remitToAddressDescriptor + ", remitToAddress1=" + remitToAddress1 + ", remitToAddress2="
+				+ remitToAddress2 + ", remitToAddress3=" + remitToAddress3 + ", remitToAddress4=" + remitToAddress4
+				+ ", remitToAddress5=" + remitToAddress5 + ", remitToCity=" + remitToCity + ", remitToCounty="
+				+ remitToCounty + ", remitToState=" + remitToState + ", remitToCountry=" + remitToCountry
+				+ ", remitToZip=" + remitToZip + ", buyerContactPhone=" + buyerContactPhone + ", buyerContactFax="
+				+ buyerContactFax + ", orderType=" + orderType + ", flexStringPOHeader4=" + flexStringPOHeader4
+				+ ", flexStringPOHeader5=" + flexStringPOHeader5 + ", flexStringPOHeader6=" + flexStringPOHeader6
+				+ ", flexStringPOHeader7=" + flexStringPOHeader7 + ", flexStringPOHeader8=" + flexStringPOHeader8
+				+ ", flexStringPOHeader9=" + flexStringPOHeader9 + ", flexIntPOHeader1=" + flexIntPOHeader1
+				+ ", flexIntPOHeader2=" + flexIntPOHeader2 + ", flexIntPOHeader3=" + flexIntPOHeader3
 				+ ", flexIntPOHeader4=" + flexIntPOHeader4 + ", flexIntPOHeader5=" + flexIntPOHeader5
 				+ ", flexFloatPOHeader1=" + flexFloatPOHeader1 + ", flexFloatPOHeader2=" + flexFloatPOHeader2
 				+ ", flexFloatPOHeader3=" + flexFloatPOHeader3 + ", flexFloatPOHeader4=" + flexFloatPOHeader4
 				+ ", flexFloatPOHeader5=" + flexFloatPOHeader5 + ", flexDatePOHeader1=" + flexDatePOHeader1
 				+ ", flexDatePOHeader2=" + flexDatePOHeader2 + ", flexDatePOHeader3=" + flexDatePOHeader3
-				+ ", flexDatePOHeader4=" + flexDatePOHeader4 + ", flexDatePOHeader5=" + flexDatePOHeader5 + ", lineId="
-				+ lineId + ", lineStatus=" + lineStatus + ", customerItemId=" + customerItemId
-				+ ", customerItemDescription=" + customerItemDescription + ", supplierItemId=" + supplierItemId
-				+ ", supplierItemDescription=" + supplierItemDescription + ", unitPrice=" + unitPrice + ", priceBasis="
+				+ ", flexDatePOHeader4=" + flexDatePOHeader4 + ", flexDatePOHeader5=" + flexDatePOHeader5 + ", LineID="
+				+ LineID + ", lineStatus=" + lineStatus + ", CustomerItemID=" + CustomerItemID
+				+ ", customerItemDescription=" + customerItemDescription + ", supplierItemID=" + supplierItemID
+				+ ", supplierItemDescription=" + supplierItemDescription + ", UnitPrice=" + UnitPrice + ", priceBasis="
 				+ priceBasis + ", paymentCurrency=" + paymentCurrency + ", totalLineAmount=" + totalLineAmount
-				+ ", UOM=" + UOM + ", customerOrderLineNotes=" + customerOrderLineNotes + ", suoplierOrderLineNotes="
-				+ suoplierOrderLineNotes + ", drawingVersion=" + drawingVersion + ", drawingNumber=" + drawingNumber
+				+ ", uOM=" + uOM + ", customerOrderLineNotes=" + customerOrderLineNotes + ", supplierOrderLineNotes="
+				+ supplierOrderLineNotes + ", drawingVersion=" + drawingVersion + ", drawingNumber=" + drawingNumber
 				+ ", itemCategory=" + itemCategory + ", shipToLocation=" + shipToLocation + ", flexStringPOLine5="
 				+ flexStringPOLine5 + ", flexStringPOLine6=" + flexStringPOLine6 + ", flexStringPOLine7="
 				+ flexStringPOLine7 + ", flexStringPOLine8=" + flexStringPOLine8 + ", flexStringPOLine9="
@@ -2388,49 +2737,50 @@ public class PoItemsEntity extends TableServiceEntity {
 				+ ", flexFloatPOLine3=" + flexFloatPOLine3 + ", flexFloatPOLine4=" + flexFloatPOLine4
 				+ ", flexFloatPOLine5=" + flexFloatPOLine5 + ", flexDatePOLine1=" + flexDatePOLine1
 				+ ", flexDatePOLine2=" + flexDatePOLine2 + ", flexDatePOLine3=" + flexDatePOLine3 + ", flexDatePOLine4="
-				+ flexDatePOLine4 + ", flexDatePOLine5=" + flexDatePOLine5 + ", requestNumber=" + requestNumber
-				+ ", requestStatus=" + requestStatus + ", action=" + action + ", requestQty=" + requestQty
-				+ ", requestDate=" + requestDate + ", requestedShipDate=" + requestedShipDate + ", carrier=" + carrier
-				+ ", customerSite=" + customerSite + ", shipToAddressDescriptor=" + shipToAddressDescriptor
+				+ flexDatePOLine4 + ", flexDatePOLine5=" + flexDatePOLine5 + ", RequestID=" + RequestID
+				+ ", requestStatus=" + requestStatus + ", Action=" + Action + ", RequestQty=" + RequestQty
+				+ ", RequestDate=" + RequestDate + ", requestedShipDate=" + requestedShipDate + ", carrier=" + carrier
+				+ ", CustomerSite=" + CustomerSite + ", shipToAddressDescriptor=" + shipToAddressDescriptor
 				+ ", shipToAddress1=" + shipToAddress1 + ", shipToAddress2=" + shipToAddress2 + ", shipToAddress3="
 				+ shipToAddress3 + ", shipToAddress4=" + shipToAddress4 + ", shipToAddress5=" + shipToAddress5
 				+ ", shipToCity=" + shipToCity + ", shipToCounty=" + shipToCounty + ", shipToState=" + shipToState
 				+ ", shipToCountry=" + shipToCountry + ", shipToZip=" + shipToZip + ", refOrderType=" + refOrderType
-				+ ", refOrderId=" + refOrderId + ", refOrderLineId=" + refOrderLineId + ", refOrderRequestId="
-				+ refOrderRequestId + ", refCustomerId=" + refCustomerId + ", refSupplierId=" + refSupplierId
+				+ ", refOrderID=" + refOrderID + ", refOrderLineID=" + refOrderLineID + ", refOrderRequestID="
+				+ refOrderRequestID + ", refCustomerID=" + refCustomerID + ", refSupplierID=" + refSupplierID
 				+ ", flexStringPORequest1=" + flexStringPORequest1 + ", flexStringPORequest2=" + flexStringPORequest2
 				+ ", flexStringPORequest3=" + flexStringPORequest3 + ", flexStringPORequest4=" + flexStringPORequest4
 				+ ", flexStringPORequest5=" + flexStringPORequest5 + ", flexStringPORequest6=" + flexStringPORequest6
 				+ ", flexStringPORequest7=" + flexStringPORequest7 + ", flexStringPORequest8=" + flexStringPORequest8
-				+ ", flexStringPORequest9=" + flexStringPORequest9 + ", flexPORequest1=" + flexPORequest1
-				+ ", flexPORequest2=" + flexPORequest2 + ", flexPORequest3=" + flexPORequest3 + ", flexPORequest4="
-				+ flexPORequest4 + ", flexPORequest5=" + flexPORequest5 + ", flexFloatPORequest1=" + flexFloatPORequest1
-				+ ", flexFloatPORequest2=" + flexFloatPORequest2 + ", flexFloatPORequest3=" + flexFloatPORequest3
-				+ ", flexFloatPORequest4=" + flexFloatPORequest4 + ", flexFloatPORequest5=" + flexFloatPORequest5
-				+ ", flexDatePORequest1=" + flexDatePORequest1 + ", flexDatePORequest2=" + flexDatePORequest2
-				+ ", flexDatePORequest3=" + flexDatePORequest3 + ", flexDatePORequest4=" + flexDatePORequest4
-				+ ", flexDatePORequest5=" + flexDatePORequest5 + ", promiseId=" + promiseId + ", promiseQty="
-				+ promiseQty + ", promiseDate=" + promiseDate + ", promiseShipDate=" + promiseShipDate
-				+ ", supplierSite=" + supplierSite + ", shipFromAddressDescriptor=" + shipFromAddressDescriptor
-				+ ", shipFromAddress1=" + shipFromAddress1 + ", shipFromAddress2=" + shipFromAddress2
-				+ ", shipFromAddress3=" + shipFromAddress3 + ", shipFromAddress4=" + shipFromAddress4
-				+ ", shipFromAddress5=" + shipFromAddress5 + ", shipFromCity=" + shipFromCity + ", shipFromCounty="
-				+ shipFromCounty + ", shipFromState=" + shipFromState + ", shipFromCountry=" + shipFromCountry
-				+ ", shipFromZip=" + shipFromZip + ", flexStringPOPromise1=" + flexStringPOPromise1
-				+ ", flexStringPOPromise2=" + flexStringPOPromise2 + ", flexStringPOPromise3=" + flexStringPOPromise3
-				+ ", flexStringPOPromise4=" + flexStringPOPromise4 + ", flexStringPOPromise5=" + flexStringPOPromise5
-				+ ", flexStringPOPromise6=" + flexStringPOPromise6 + ", flexStringPOPromise7=" + flexStringPOPromise7
-				+ ", flexStringPOPromise8=" + flexStringPOPromise8 + ", flexStringPOPromise9=" + flexStringPOPromise9
-				+ ", flexIntPOPromise1=" + flexIntPOPromise1 + ", flexIntPOPromise2=" + flexIntPOPromise2
-				+ ", flexIntPOPromise3=" + flexIntPOPromise3 + ", flexIntPOPromise4=" + flexIntPOPromise4
-				+ ", flexIntPOPromise5=" + flexIntPOPromise5 + ", flexFloatPOPromise1=" + flexFloatPOPromise1
-				+ ", flexFloatPOPromise2=" + flexFloatPOPromise2 + ", flexFloatPOPromise3=" + flexFloatPOPromise3
-				+ ", flexFloatPOPromise4=" + flexFloatPOPromise4 + ", flexFloatPOPromise5=" + flexFloatPOPromise5
-				+ ", flexDatePOPromise1=" + flexDatePOPromise1 + ", flexDatePOPromise2=" + flexDatePOPromise2
-				+ ", flexDatePOPromise3=" + flexDatePOPromise3 + ", flexDatePOPromise4=" + flexDatePOPromise4
-				+ ", flexDatePOPromise5=" + flexDatePOPromise5 + ", revNo=" + revNo + ", shipToCustomerId="
-				+ shipToCustomerId + "]";
+				+ ", flexStringPORequest9=" + flexStringPORequest9 + ", flexIntPORequest1=" + flexIntPORequest1
+				+ ", flexIntPORequest2=" + flexIntPORequest2 + ", flexIntPORequest3=" + flexIntPORequest3
+				+ ", flexIntPORequest4=" + flexIntPORequest4 + ", flexIntPORequest5=" + flexIntPORequest5
+				+ ", flexFloatPORequest1=" + flexFloatPORequest1 + ", flexFloatPORequest2=" + flexFloatPORequest2
+				+ ", flexFloatPORequest3=" + flexFloatPORequest3 + ", flexFloatPORequest4=" + flexFloatPORequest4
+				+ ", flexFloatPORequest5=" + flexFloatPORequest5 + ", flexDatePORequest1=" + flexDatePORequest1
+				+ ", flexDatePORequest2=" + flexDatePORequest2 + ", flexDatePORequest3=" + flexDatePORequest3
+				+ ", flexDatePORequest4=" + flexDatePORequest4 + ", flexDatePORequest5=" + flexDatePORequest5
+				+ ", promiseID=" + promiseID + ", promiseQty=" + promiseQty + ", promiseDate=" + promiseDate
+				+ ", promisedShipDate=" + promisedShipDate + ", supplierSite=" + supplierSite
+				+ ", shipFromAddressDescriptor=" + shipFromAddressDescriptor + ", shipFromAddress1=" + shipFromAddress1
+				+ ", shipFromAddress2=" + shipFromAddress2 + ", shipFromAddress3=" + shipFromAddress3
+				+ ", shipFromAddress4=" + shipFromAddress4 + ", shipFromAddress5=" + shipFromAddress5
+				+ ", shipFromCity=" + shipFromCity + ", shipFromCounty=" + shipFromCounty + ", shipFromState="
+				+ shipFromState + ", shipFromCountry=" + shipFromCountry + ", shipFromZip=" + shipFromZip
+				+ ", flexStringPOPromise1=" + flexStringPOPromise1 + ", flexStringPOPromise2=" + flexStringPOPromise2
+				+ ", flexStringPOPromise3=" + flexStringPOPromise3 + ", flexStringPOPromise4=" + flexStringPOPromise4
+				+ ", flexStringPOPromise5=" + flexStringPOPromise5 + ", flexStringPOPromise6=" + flexStringPOPromise6
+				+ ", flexStringPOPromise7=" + flexStringPOPromise7 + ", flexStringPOPromise8=" + flexStringPOPromise8
+				+ ", flexStringPOPromise9=" + flexStringPOPromise9 + ", FlexIntPOPromise1=" + FlexIntPOPromise1
+				+ ", FlexIntPOPromise2=" + FlexIntPOPromise2 + ", flexIntPOPromise3=" + flexIntPOPromise3
+				+ ", flexIntPOPromise4=" + flexIntPOPromise4 + ", flexIntPOPromise5=" + flexIntPOPromise5
+				+ ", flex_Float_PO_Promise1=" + flex_Float_PO_Promise1 + ", flexFloatPOPromise2=" + flexFloatPOPromise2
+				+ ", flexFloatPOPromise3=" + flexFloatPOPromise3 + ", flexFloatPOPromise4=" + flexFloatPOPromise4
+				+ ", flexFloatPOPromise5=" + flexFloatPOPromise5 + ", flexDatePOPromise1=" + flexDatePOPromise1
+				+ ", flexDatePOPromise2=" + flexDatePOPromise2 + ", flexDatePOPromise3=" + flexDatePOPromise3
+				+ ", flexDatePOPromise4=" + flexDatePOPromise4 + ", flexDatePOPromise5=" + flexDatePOPromise5 + ", rev="
+				+ rev + ", shipToCustomerID=" + shipToCustomerID + "]";
 	}
+
 
 	
 

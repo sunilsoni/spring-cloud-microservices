@@ -28,11 +28,11 @@ import com.microsoft.azure.storage.table.TableOperation;
 public class JobRepoImpl implements JobRepo {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JobRepoImpl.class);
-	private static int errorCount;
-	private static int successCount;
+	//private static int errorCount;
+	//private static int successCount;
 	private static int intransitCount;
 	static int counter=0;
-	final int batchSize = 100;
+	final int batchSize = 20;
 	
 	@Autowired
 	private AzureStorage azureStorage;
@@ -44,12 +44,13 @@ public class JobRepoImpl implements JobRepo {
 	}
 
 	@Override
-	//@Transactional
 	public BatchInsertRes batchInsert(BatchInsertReq request){
-		LOG.info("#### Starting TableStorageRepositoryImpl.batchInsert ###" +request);
+		LOG.info("#### Starting JobRepoImpl.batchInsert ###" +request);
 		BatchInsertRes response = new BatchInsertRes();
 		
 		String erpName = request.getErpName();
+		 LOG.error("erpName--->"+erpName);
+		 
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
 		
 		 HashMap<String,List<TableEntity>> errorMap = new HashMap<String,List<TableEntity>>();
@@ -62,23 +63,31 @@ public class JobRepoImpl implements JobRepo {
 					cloudTable = azureStorage.getTable(entry.getKey());
 				} catch (Exception e) {
 					errorMap.put(entry.getKey(), entry.getValue());
-					LOG.error("### Exception in TableStorageRepositoryImpl.batchInsert.getTable ###"+e);
+					LOG.error("### Exception in JobRepoImpl.batchInsert.getTable ###"+e);
 					e.printStackTrace();
 					response.setError(true);
 					continue;
 				}
-		     
+		     LOG.error("Table Name--->"+cloudTable.getName());
 		  // Define a batch operation.
 			    TableBatchOperation batchOperation = new TableBatchOperation();
 			    List<TableEntity> value = entry.getValue();
+			    //LOG.error("value.size()--->"+value.size());
+			   // LOG.error("value.toString()--->"+value.toString());
+			    
 			    
 			    for (int i = 0; i < value.size(); i++) {
+			    //for (int i = 0; i < 1; i++) {//Sunil Remove this
 			    	TableEntity entity = value.get(i) ;
 			    	if(entity instanceof PoEntity){
 			    		counter= counter+1;
 			    	}
-			    	
+			    	//LOG.error("entity--->"+entity.toString());
+			    	 
 			    	batchOperation.insertOrReplace(entity);
+			    	//LOG.error("batchOperation.size()--->"+batchOperation.size());
+			    	//LOG.error("intransitCount--->"+intransitCount);
+			    	//LOG.error("counter--->"+counter);
 			    	if (i!=0 && i % batchSize == 0) {
 			    		try {
 							cloudTable.execute(batchOperation);
@@ -90,12 +99,17 @@ public class JobRepoImpl implements JobRepo {
 							errorMap.put(entry.getKey(), entry.getValue());
 							response.setError(true);
 							counter = 0;
-							LOG.error("### Exception in TableStorageRepositoryImpl.batchInsert.execute ###"+e);
+							LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
 							e.printStackTrace();
 							continue;
 						}
 			    	 }
 			    }
+			    
+			   // LOG.error("intransitCount 1--->"+intransitCount);
+		    	//LOG.error("counter 1--->"+counter);
+		    	
+			   // LOG.error("batchOperation.size()--->"+batchOperation.size());
 			    if(batchOperation.size()>0){
 			    	try {
 						cloudTable.execute(batchOperation);
@@ -106,7 +120,7 @@ public class JobRepoImpl implements JobRepo {
 						errorMap.put(entry.getKey(), entry.getValue());
 						response.setError(true);
 						counter = 0;
-						LOG.error("### Exception in TableStorageRepositoryImpl.batchInsert.execute ###"+e);
+						LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
 						e.printStackTrace();
 						continue;
 					}
@@ -115,6 +129,8 @@ public class JobRepoImpl implements JobRepo {
 		 
 		 response.setErrorMap(errorMap);
 		 response.setSuccessMap(successMap);
+		 
+		// LOG.error("intransitCount 2--->"+intransitCount);
 		 
 		//Insert MIsc data
 		MiscDataEntity miscEntity=null;
@@ -136,7 +152,7 @@ public class JobRepoImpl implements JobRepo {
 			response.setError(true);
 			e.printStackTrace();
 		}
-		LOG.info("#### Ending TableStorageRepositoryImpl.batchInsert ###"+response );
+		LOG.info("#### Ending JobRepoImpl.batchInsert ###"+response );
 		return response;		
 	}
 	

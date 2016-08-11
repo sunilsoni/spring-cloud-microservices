@@ -1,11 +1,12 @@
 package com.jci.po.utils;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jci.po.azure.data.DataHelper;
-import com.jci.po.repo.PoRepoImpl;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
 import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
@@ -16,7 +17,7 @@ public class QueryBuilder {
 	private static final String PARTITION_KEY = "PartitionKey";
 	private static final String STATUS_KEY = "Status";
 	private static final String TIMESTAMP = "Timestamp";
-	//private static final String ROWKEY = "RowKey";
+	private static final String ROWKEY = "RowKey";
 	
 	
 	public static String poQuery(DataHelper request){
@@ -81,6 +82,35 @@ public class QueryBuilder {
 		 String partitionFilter = TableQuery.generateFilterCondition(PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
 	     String statusFilter = TableQuery.generateFilterCondition(STATUS_KEY,QueryComparisons.EQUAL, Constants.STATUS_ERROR);
 	     return  TableQuery.combineFilters(partitionFilter, Operators.AND, statusFilter);
+	}
+	
+	//(PartitionKey  eq 'SAP_PO' or PartitionKey eq 'SYMIX_PO') and (RowKey eq '4713010' or  RowKey eq '3714011')
+	public static String processPosQuery(String partitionKey, List<String> poList){
+		LOG.info("#### Starting QueryBuilder.processPosQuery ###" + poList);
+		
+		 // Create filters to limit the data
+	   String partitionFilter = TableQuery.generateFilterCondition(PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
+	      
+	   String combinedFilter = null;
+	   String rowKeyFilter = null;
+	   
+	   StringBuilder builder =  new StringBuilder();
+	   for(int i=0;i<poList.size();i++){  
+		 builder.append(" ( ");
+		 rowKeyFilter = TableQuery.generateFilterCondition(ROWKEY, QueryComparisons.EQUAL, poList.get(i));
+	     combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter); 
+	     builder.append(combinedFilter);
+	     builder.append(" ) ");
+	     
+	     if(i!=(poList.size()-1)){
+			   builder.append(" or ");
+		  }
+	   }
+	   
+	   rowKeyFilter = builder.toString();
+	   combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter);
+       LOG.info("#### Ending  QueryBuilder.processPosQuery ###" + combinedFilter);
+		return rowKeyFilter;
 	}
 	
 }

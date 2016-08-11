@@ -10,8 +10,10 @@ public class BatchInsertResp {
 	private boolean isError;
 	private String msg;
 	
-	private  HashMap<String,List<TableEntity>> errorMap;
-	private  HashMap<String,List<TableEntity>> successMap;
+	HashMap<String,List<TableEntity>> errorMap ;
+	HashMap<String,List<TableEntity>> successMap;
+	
+	
 	
 	public boolean isError() {
 		return isError;
@@ -39,12 +41,11 @@ public class BatchInsertResp {
 	}
 	@Override
 	public String toString() {
-		return "BatchInsertResponse [isError=" + isError + ", msg=" + msg + ", errorMap=" + errorMap + ", successMap="
+		return "BatchInsertResp [isError=" + isError + ", msg=" + msg + ", errorMap=" + errorMap + ", successMap="
 				+ successMap + "]";
 	}
-	
-	
-	
+
+
 	
 
 }

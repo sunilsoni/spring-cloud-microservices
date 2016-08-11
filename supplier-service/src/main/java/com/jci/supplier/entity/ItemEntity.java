@@ -12,56 +12,60 @@ public class ItemEntity extends TableServiceEntity {
 	public ItemEntity() {
 	}
 
-	private String enterpriseCode;
-	private String siteName;
-	private String supplierId;
-	private String customerItemId;
+	private String materialNumber;
+	private String status;
+	private String message;
+	private String date;
+	private String EnterpriseCode;
+	private String SiteName;
+	private String SupplierID;
+	private String CustomerItemID;//PK
 	private String customerItemDescription;
-	private String supplierItemId;
+	private String supplierItemID;
 	private String supplierItemDescription;
-	private String globalCustomerId;
-	private String globalSupplierId;
-	private String globalItemId;
-	private String eolGuidence;
+	private String globalCustomerID;
+	private String globalSupplierID;
+	private String globalItemID;
+	private String eOLGuidance;
 	private String purchasingGroup;
 	private String commodityCode;
 	private String classificationCode;
-	private Double unitPrice;
-	private Double priceBasis;
+	private String UnitPrice;
+	private String priceBasis;
 	private String currency;
-	private String uomppo;
+	private String uOMPO;
 	private String criticalItem;
-	private int leadTimeDays;
-	private int forcastGracePeriod;
+	private int leadTimeDays;// leadTime(Days)
+	private int forecastGracePeriod;
 	private int blanketExpiryTolerance;
 	private int orderGracePeriod;
-	private int RequestOrPromiseDateTolerance;
-	private Double commitQuantityToleranceMin;
-	private Double commitQuantityToleranceMax;
-	private Double minDos;
-	private Double maxDos;
-	private Double TargetDos;
-	private Double minToleranceRequestOrPromiseQuantity;
-	private Double maxToleranceRequestOrPromiseQuantity;
-	private Double minToleranceRequestOrShippedQuantity;
-	private Double maxToleranceRequestOrShippedQuantity;
-	private Double minToleranceRequestOrReceivedQuantity;
-	private Double maxToleranceRequestOrReceivedQuantity;
-	private Double minToleranceRequestOrInvoicedQuantity;
-	private Double maxToleranceRequestOrInvoicedQuantity;
-	private Double minToleranceReceivedOrInvoicedQuantity;
-	private Double maxToleranceReceivedOrInvoicedQuantity;
-	private Double minToleranceInvoicePriceMismatch;
-	private Double maxToleranceInvoicePriceMismatch;
-	private int lateShipmentsTolerance;
-	private int lateDeliveriesTolerance;
-	private Double customerMOQ;
-	private Double supplierShipmentSize;
-	private String itemHierarchyLevel1;
-	private String itemHierarchyLevel2;
-	private String itemHierarchyLevel3;
-	private String itemHierarchyLevel4;
-	private String itemHierarchyLevel5;
+	private int requestOrPromiseDateTolrance;// request/PromiseDateTolerance
+	private double commitQuantityToleranceMin;
+	private double commitQuantityToleranceMax;
+	private double minDOS;
+	private double maxDOS;
+	private double targetDOS;
+	private double minToleranceRequestOrPromiseQuantity;// minToleranceRequest/PromiseQuantity
+	private double maxToleranceRequestOrPromiseQuantity;// maxToleranceRequest/PromiseQuantity
+	private double maxToleranceRequestOrShippedQuantity;// minToleranceRequest/ShippedQuantity
+	private double minToleranceRequestOrShippedQuantity;// minToleranceRequest/ShippedQuantity
+	private double minToleranceRequestOrReceivedQuantity;// minToleranceRequest/ReceivedQuantity
+	private double maxToleranceRequestOrReceivedQuantity;// maxToleranceRequest/ReceivedQuantity
+	private double minToleranceRequestOrInvoicedQuantity;// minToleranceRequest/InvoicedQuantity
+	private double maxToleranceRequestOrInvoicedQuantity;// maxToleranceRequest/InvoicedQuantity
+	private double minToleranceReceivedOrInvoicedQuantity;// minToleranceReceived/InvoicedQuantity
+	private double maxToleranceReceivedOrInvoicedQuantity;// maxToleranceReceived/InvoicedQuantity
+	private double minToleranceInvoicePriceMismatch;
+	private double maxToleranceInvoicePriceMismatch;
+	private double lateShipmentsTolerance;
+	private double lateDeliveriesTolerance;
+	private double customerMOQ;
+	private double supplierShipmentSize;
+	private double itemHierarchyLevel1;
+	private double itemHierarchyLevel2;
+	private double itemHierarchyLevel3;
+	private double itemHierarchyLevel4;
+	private double itemHierarchyLevel5;
 	private String planningBucketType;
 	private String productLine;
 	private String planningBuckets;
@@ -77,36 +81,68 @@ public class ItemEntity extends TableServiceEntity {
 	private String overShipmentTolerance;
 	private String priceMismatchToleranceMin;
 	private String priceMismatchToleranceMax;
+	public String getMaterialNumber() {
+		return materialNumber;
+	}
+
+	public void setMaterialNumber(String materialNumber) {
+		this.materialNumber = materialNumber;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
 	public String getEnterpriseCode() {
-		return enterpriseCode;
+		return EnterpriseCode;
 	}
 
 	public void setEnterpriseCode(String enterpriseCode) {
-		this.enterpriseCode = enterpriseCode;
+		EnterpriseCode = enterpriseCode;
 	}
 
 	public String getSiteName() {
-		return siteName;
+		return SiteName;
 	}
 
 	public void setSiteName(String siteName) {
-		this.siteName = siteName;
+		SiteName = siteName;
 	}
 
-	public String getSupplierId() {
-		return supplierId;
+	public String getSupplierID() {
+		return SupplierID;
 	}
 
-	public void setSupplierId(String supplierId) {
-		this.supplierId = supplierId;
+	public void setSupplierID(String supplierID) {
+		SupplierID = supplierID;
 	}
 
-	public String getCustomerItemId() {
-		return customerItemId;
+	public String getCustomerItemID() {
+		return CustomerItemID;
 	}
 
-	public void setCustomerItemId(String customerItemId) {
-		this.customerItemId = customerItemId;
+	public void setCustomerItemID(String customerItemID) {
+		CustomerItemID = customerItemID;
 	}
 
 	public String getCustomerItemDescription() {
@@ -117,12 +153,12 @@ public class ItemEntity extends TableServiceEntity {
 		this.customerItemDescription = customerItemDescription;
 	}
 
-	public String getSupplierItemId() {
-		return supplierItemId;
+	public String getSupplierItemID() {
+		return supplierItemID;
 	}
 
-	public void setSupplierItemId(String supplierItemId) {
-		this.supplierItemId = supplierItemId;
+	public void setSupplierItemID(String supplierItemID) {
+		this.supplierItemID = supplierItemID;
 	}
 
 	public String getSupplierItemDescription() {
@@ -133,36 +169,36 @@ public class ItemEntity extends TableServiceEntity {
 		this.supplierItemDescription = supplierItemDescription;
 	}
 
-	public String getGlobalCustomerId() {
-		return globalCustomerId;
+	public String getGlobalCustomerID() {
+		return globalCustomerID;
 	}
 
-	public void setGlobalCustomerId(String globalCustomerId) {
-		this.globalCustomerId = globalCustomerId;
+	public void setGlobalCustomerID(String globalCustomerID) {
+		this.globalCustomerID = globalCustomerID;
 	}
 
-	public String getGlobalSupplierId() {
-		return globalSupplierId;
+	public String getGlobalSupplierID() {
+		return globalSupplierID;
 	}
 
-	public void setGlobalSupplierId(String globalSupplierId) {
-		this.globalSupplierId = globalSupplierId;
+	public void setGlobalSupplierID(String globalSupplierID) {
+		this.globalSupplierID = globalSupplierID;
 	}
 
-	public String getGlobalItemId() {
-		return globalItemId;
+	public String getGlobalItemID() {
+		return globalItemID;
 	}
 
-	public void setGlobalItemId(String globalItemId) {
-		this.globalItemId = globalItemId;
+	public void setGlobalItemID(String globalItemID) {
+		this.globalItemID = globalItemID;
 	}
 
-	public String getEolGuidence() {
-		return eolGuidence;
+	public String geteOLGuidance() {
+		return eOLGuidance;
 	}
 
-	public void setEolGuidence(String eolGuidence) {
-		this.eolGuidence = eolGuidence;
+	public void seteOLGuidance(String eOLGuidance) {
+		this.eOLGuidance = eOLGuidance;
 	}
 
 	public String getPurchasingGroup() {
@@ -189,19 +225,19 @@ public class ItemEntity extends TableServiceEntity {
 		this.classificationCode = classificationCode;
 	}
 
-	public Double getUnitPrice() {
-		return unitPrice;
+	public String getUnitPrice() {
+		return UnitPrice;
 	}
 
-	public void setUnitPrice(Double unitPrice) {
-		this.unitPrice = unitPrice;
+	public void setUnitPrice(String unitPrice) {
+		UnitPrice = unitPrice;
 	}
 
-	public Double getPriceBasis() {
+	public String getPriceBasis() {
 		return priceBasis;
 	}
 
-	public void setPriceBasis(Double priceBasis) {
+	public void setPriceBasis(String priceBasis) {
 		this.priceBasis = priceBasis;
 	}
 
@@ -213,12 +249,12 @@ public class ItemEntity extends TableServiceEntity {
 		this.currency = currency;
 	}
 
-	public String getUomppo() {
-		return uomppo;
+	public String getuOMPO() {
+		return uOMPO;
 	}
 
-	public void setUomppo(String uomppo) {
-		this.uomppo = uomppo;
+	public void setuOMPO(String uOMPO) {
+		this.uOMPO = uOMPO;
 	}
 
 	public String getCriticalItem() {
@@ -237,12 +273,12 @@ public class ItemEntity extends TableServiceEntity {
 		this.leadTimeDays = leadTimeDays;
 	}
 
-	public int getForcastGracePeriod() {
-		return forcastGracePeriod;
+	public int getForecastGracePeriod() {
+		return forecastGracePeriod;
 	}
 
-	public void setForcastGracePeriod(int forcastGracePeriod) {
-		this.forcastGracePeriod = forcastGracePeriod;
+	public void setForecastGracePeriod(int forecastGracePeriod) {
+		this.forecastGracePeriod = forecastGracePeriod;
 	}
 
 	public int getBlanketExpiryTolerance() {
@@ -261,219 +297,219 @@ public class ItemEntity extends TableServiceEntity {
 		this.orderGracePeriod = orderGracePeriod;
 	}
 
-	public int getRequestOrPromiseDateTolerance() {
-		return RequestOrPromiseDateTolerance;
+	public int getRequestOrPromiseDateTolrance() {
+		return requestOrPromiseDateTolrance;
 	}
 
-	public void setRequestOrPromiseDateTolerance(int requestOrPromiseDateTolerance) {
-		RequestOrPromiseDateTolerance = requestOrPromiseDateTolerance;
+	public void setRequestOrPromiseDateTolrance(int requestOrPromiseDateTolrance) {
+		this.requestOrPromiseDateTolrance = requestOrPromiseDateTolrance;
 	}
 
-	public Double getCommitQuantityToleranceMin() {
+	public double getCommitQuantityToleranceMin() {
 		return commitQuantityToleranceMin;
 	}
 
-	public void setCommitQuantityToleranceMin(Double commitQuantityToleranceMin) {
+	public void setCommitQuantityToleranceMin(double commitQuantityToleranceMin) {
 		this.commitQuantityToleranceMin = commitQuantityToleranceMin;
 	}
 
-	public Double getCommitQuantityToleranceMax() {
+	public double getCommitQuantityToleranceMax() {
 		return commitQuantityToleranceMax;
 	}
 
-	public void setCommitQuantityToleranceMax(Double commitQuantityToleranceMax) {
+	public void setCommitQuantityToleranceMax(double commitQuantityToleranceMax) {
 		this.commitQuantityToleranceMax = commitQuantityToleranceMax;
 	}
 
-	public Double getMinDos() {
-		return minDos;
+	public double getMinDOS() {
+		return minDOS;
 	}
 
-	public void setMinDos(Double minDos) {
-		this.minDos = minDos;
+	public void setMinDOS(double minDOS) {
+		this.minDOS = minDOS;
 	}
 
-	public Double getMaxDos() {
-		return maxDos;
+	public double getMaxDOS() {
+		return maxDOS;
 	}
 
-	public void setMaxDos(Double maxDos) {
-		this.maxDos = maxDos;
+	public void setMaxDOS(double maxDOS) {
+		this.maxDOS = maxDOS;
 	}
 
-	public Double getTargetDos() {
-		return TargetDos;
+	public double getTargetDOS() {
+		return targetDOS;
 	}
 
-	public void setTargetDos(Double targetDos) {
-		TargetDos = targetDos;
+	public void setTargetDOS(double targetDOS) {
+		this.targetDOS = targetDOS;
 	}
 
-	public Double getMinToleranceRequestOrPromiseQuantity() {
+	public double getMinToleranceRequestOrPromiseQuantity() {
 		return minToleranceRequestOrPromiseQuantity;
 	}
 
-	public void setMinToleranceRequestOrPromiseQuantity(Double minToleranceRequestOrPromiseQuantity) {
+	public void setMinToleranceRequestOrPromiseQuantity(double minToleranceRequestOrPromiseQuantity) {
 		this.minToleranceRequestOrPromiseQuantity = minToleranceRequestOrPromiseQuantity;
 	}
 
-	public Double getMaxToleranceRequestOrPromiseQuantity() {
+	public double getMaxToleranceRequestOrPromiseQuantity() {
 		return maxToleranceRequestOrPromiseQuantity;
 	}
 
-	public void setMaxToleranceRequestOrPromiseQuantity(Double maxToleranceRequestOrPromiseQuantity) {
+	public void setMaxToleranceRequestOrPromiseQuantity(double maxToleranceRequestOrPromiseQuantity) {
 		this.maxToleranceRequestOrPromiseQuantity = maxToleranceRequestOrPromiseQuantity;
 	}
 
-	public Double getMinToleranceRequestOrShippedQuantity() {
-		return minToleranceRequestOrShippedQuantity;
-	}
-
-	public void setMinToleranceRequestOrShippedQuantity(Double minToleranceRequestOrShippedQuantity) {
-		this.minToleranceRequestOrShippedQuantity = minToleranceRequestOrShippedQuantity;
-	}
-
-	public Double getMaxToleranceRequestOrShippedQuantity() {
+	public double getMaxToleranceRequestOrShippedQuantity() {
 		return maxToleranceRequestOrShippedQuantity;
 	}
 
-	public void setMaxToleranceRequestOrShippedQuantity(Double maxToleranceRequestOrShippedQuantity) {
+	public void setMaxToleranceRequestOrShippedQuantity(double maxToleranceRequestOrShippedQuantity) {
 		this.maxToleranceRequestOrShippedQuantity = maxToleranceRequestOrShippedQuantity;
 	}
 
-	public Double getMinToleranceRequestOrReceivedQuantity() {
+	public double getMinToleranceRequestOrShippedQuantity() {
+		return minToleranceRequestOrShippedQuantity;
+	}
+
+	public void setMinToleranceRequestOrShippedQuantity(double minToleranceRequestOrShippedQuantity) {
+		this.minToleranceRequestOrShippedQuantity = minToleranceRequestOrShippedQuantity;
+	}
+
+	public double getMinToleranceRequestOrReceivedQuantity() {
 		return minToleranceRequestOrReceivedQuantity;
 	}
 
-	public void setMinToleranceRequestOrReceivedQuantity(Double minToleranceRequestOrReceivedQuantity) {
+	public void setMinToleranceRequestOrReceivedQuantity(double minToleranceRequestOrReceivedQuantity) {
 		this.minToleranceRequestOrReceivedQuantity = minToleranceRequestOrReceivedQuantity;
 	}
 
-	public Double getMaxToleranceRequestOrReceivedQuantity() {
+	public double getMaxToleranceRequestOrReceivedQuantity() {
 		return maxToleranceRequestOrReceivedQuantity;
 	}
 
-	public void setMaxToleranceRequestOrReceivedQuantity(Double maxToleranceRequestOrReceivedQuantity) {
+	public void setMaxToleranceRequestOrReceivedQuantity(double maxToleranceRequestOrReceivedQuantity) {
 		this.maxToleranceRequestOrReceivedQuantity = maxToleranceRequestOrReceivedQuantity;
 	}
 
-	public Double getMinToleranceRequestOrInvoicedQuantity() {
+	public double getMinToleranceRequestOrInvoicedQuantity() {
 		return minToleranceRequestOrInvoicedQuantity;
 	}
 
-	public void setMinToleranceRequestOrInvoicedQuantity(Double minToleranceRequestOrInvoicedQuantity) {
+	public void setMinToleranceRequestOrInvoicedQuantity(double minToleranceRequestOrInvoicedQuantity) {
 		this.minToleranceRequestOrInvoicedQuantity = minToleranceRequestOrInvoicedQuantity;
 	}
 
-	public Double getMaxToleranceRequestOrInvoicedQuantity() {
+	public double getMaxToleranceRequestOrInvoicedQuantity() {
 		return maxToleranceRequestOrInvoicedQuantity;
 	}
 
-	public void setMaxToleranceRequestOrInvoicedQuantity(Double maxToleranceRequestOrInvoicedQuantity) {
+	public void setMaxToleranceRequestOrInvoicedQuantity(double maxToleranceRequestOrInvoicedQuantity) {
 		this.maxToleranceRequestOrInvoicedQuantity = maxToleranceRequestOrInvoicedQuantity;
 	}
 
-	public Double getMinToleranceReceivedOrInvoicedQuantity() {
+	public double getMinToleranceReceivedOrInvoicedQuantity() {
 		return minToleranceReceivedOrInvoicedQuantity;
 	}
 
-	public void setMinToleranceReceivedOrInvoicedQuantity(Double minToleranceReceivedOrInvoicedQuantity) {
+	public void setMinToleranceReceivedOrInvoicedQuantity(double minToleranceReceivedOrInvoicedQuantity) {
 		this.minToleranceReceivedOrInvoicedQuantity = minToleranceReceivedOrInvoicedQuantity;
 	}
 
-	public Double getMaxToleranceReceivedOrInvoicedQuantity() {
+	public double getMaxToleranceReceivedOrInvoicedQuantity() {
 		return maxToleranceReceivedOrInvoicedQuantity;
 	}
 
-	public void setMaxToleranceReceivedOrInvoicedQuantity(Double maxToleranceReceivedOrInvoicedQuantity) {
+	public void setMaxToleranceReceivedOrInvoicedQuantity(double maxToleranceReceivedOrInvoicedQuantity) {
 		this.maxToleranceReceivedOrInvoicedQuantity = maxToleranceReceivedOrInvoicedQuantity;
 	}
 
-	public Double getMinToleranceInvoicePriceMismatch() {
+	public double getMinToleranceInvoicePriceMismatch() {
 		return minToleranceInvoicePriceMismatch;
 	}
 
-	public void setMinToleranceInvoicePriceMismatch(Double minToleranceInvoicePriceMismatch) {
+	public void setMinToleranceInvoicePriceMismatch(double minToleranceInvoicePriceMismatch) {
 		this.minToleranceInvoicePriceMismatch = minToleranceInvoicePriceMismatch;
 	}
 
-	public Double getMaxToleranceInvoicePriceMismatch() {
+	public double getMaxToleranceInvoicePriceMismatch() {
 		return maxToleranceInvoicePriceMismatch;
 	}
 
-	public void setMaxToleranceInvoicePriceMismatch(Double maxToleranceInvoicePriceMismatch) {
+	public void setMaxToleranceInvoicePriceMismatch(double maxToleranceInvoicePriceMismatch) {
 		this.maxToleranceInvoicePriceMismatch = maxToleranceInvoicePriceMismatch;
 	}
 
-	public int getLateShipmentsTolerance() {
+	public double getLateShipmentsTolerance() {
 		return lateShipmentsTolerance;
 	}
 
-	public void setLateShipmentsTolerance(int lateShipmentsTolerance) {
+	public void setLateShipmentsTolerance(double lateShipmentsTolerance) {
 		this.lateShipmentsTolerance = lateShipmentsTolerance;
 	}
 
-	public int getLateDeliveriesTolerance() {
+	public double getLateDeliveriesTolerance() {
 		return lateDeliveriesTolerance;
 	}
 
-	public void setLateDeliveriesTolerance(int lateDeliveriesTolerance) {
+	public void setLateDeliveriesTolerance(double lateDeliveriesTolerance) {
 		this.lateDeliveriesTolerance = lateDeliveriesTolerance;
 	}
 
-	public Double getCustomerMOQ() {
+	public double getCustomerMOQ() {
 		return customerMOQ;
 	}
 
-	public void setCustomerMOQ(Double customerMOQ) {
+	public void setCustomerMOQ(double customerMOQ) {
 		this.customerMOQ = customerMOQ;
 	}
 
-	public Double getSupplierShipmentSize() {
+	public double getSupplierShipmentSize() {
 		return supplierShipmentSize;
 	}
 
-	public void setSupplierShipmentSize(Double supplierShipmentSize) {
+	public void setSupplierShipmentSize(double supplierShipmentSize) {
 		this.supplierShipmentSize = supplierShipmentSize;
 	}
 
-	public String getItemHierarchyLevel1() {
+	public double getItemHierarchyLevel1() {
 		return itemHierarchyLevel1;
 	}
 
-	public void setItemHierarchyLevel1(String itemHierarchyLevel1) {
+	public void setItemHierarchyLevel1(double itemHierarchyLevel1) {
 		this.itemHierarchyLevel1 = itemHierarchyLevel1;
 	}
 
-	public String getItemHierarchyLevel2() {
+	public double getItemHierarchyLevel2() {
 		return itemHierarchyLevel2;
 	}
 
-	public void setItemHierarchyLevel2(String itemHierarchyLevel2) {
+	public void setItemHierarchyLevel2(double itemHierarchyLevel2) {
 		this.itemHierarchyLevel2 = itemHierarchyLevel2;
 	}
 
-	public String getItemHierarchyLevel3() {
+	public double getItemHierarchyLevel3() {
 		return itemHierarchyLevel3;
 	}
 
-	public void setItemHierarchyLevel3(String itemHierarchyLevel3) {
+	public void setItemHierarchyLevel3(double itemHierarchyLevel3) {
 		this.itemHierarchyLevel3 = itemHierarchyLevel3;
 	}
 
-	public String getItemHierarchyLevel4() {
+	public double getItemHierarchyLevel4() {
 		return itemHierarchyLevel4;
 	}
 
-	public void setItemHierarchyLevel4(String itemHierarchyLevel4) {
+	public void setItemHierarchyLevel4(double itemHierarchyLevel4) {
 		this.itemHierarchyLevel4 = itemHierarchyLevel4;
 	}
 
-	public String getItemHierarchyLevel5() {
+	public double getItemHierarchyLevel5() {
 		return itemHierarchyLevel5;
 	}
 
-	public void setItemHierarchyLevel5(String itemHierarchyLevel5) {
+	public void setItemHierarchyLevel5(double itemHierarchyLevel5) {
 		this.itemHierarchyLevel5 = itemHierarchyLevel5;
 	}
 
@@ -599,43 +635,48 @@ public class ItemEntity extends TableServiceEntity {
 
 	@Override
 	public String toString() {
-		return "ItemEntity [enterpriseCode=" + enterpriseCode + ", siteName=" + siteName + ", supplierId=" + supplierId
-				+ ", customerItemId=" + customerItemId + ", customerItemDescription=" + customerItemDescription
-				+ ", supplierItemId=" + supplierItemId + ", supplierItemDescription=" + supplierItemDescription
-				+ ", globalCustomerId=" + globalCustomerId + ", globalSupplierId=" + globalSupplierId
-				+ ", globalItemId=" + globalItemId + ", eolGuidence=" + eolGuidence + ", purchasingGroup="
-				+ purchasingGroup + ", commodityCode=" + commodityCode + ", classificationCode=" + classificationCode
-				+ ", unitPrice=" + unitPrice + ", priceBasis=" + priceBasis + ", currency=" + currency + ", uomppo="
-				+ uomppo + ", criticalItem=" + criticalItem + ", leadTimeDays=" + leadTimeDays + ", forcastGracePeriod="
-				+ forcastGracePeriod + ", blanketExpiryTolerance=" + blanketExpiryTolerance + ", orderGracePeriod="
-				+ orderGracePeriod + ", RequestOrPromiseDateTolerance=" + RequestOrPromiseDateTolerance
-				+ ", commitQuantityToleranceMin=" + commitQuantityToleranceMin + ", commitQuantityToleranceMax="
-				+ commitQuantityToleranceMax + ", minDos=" + minDos + ", maxDos=" + maxDos + ", TargetDos=" + TargetDos
-				+ ", minToleranceRequestOrPromiseQuantity=" + minToleranceRequestOrPromiseQuantity
-				+ ", maxToleranceRequestOrPromiseQuantity=" + maxToleranceRequestOrPromiseQuantity
-				+ ", minToleranceRequestOrShippedQuantity=" + minToleranceRequestOrShippedQuantity
-				+ ", maxToleranceRequestOrShippedQuantity=" + maxToleranceRequestOrShippedQuantity
-				+ ", minToleranceRequestOrReceivedQuantity=" + minToleranceRequestOrReceivedQuantity
-				+ ", maxToleranceRequestOrReceivedQuantity=" + maxToleranceRequestOrReceivedQuantity
-				+ ", minToleranceRequestOrInvoicedQuantity=" + minToleranceRequestOrInvoicedQuantity
-				+ ", maxToleranceRequestOrInvoicedQuantity=" + maxToleranceRequestOrInvoicedQuantity
-				+ ", minToleranceReceivedOrInvoicedQuantity=" + minToleranceReceivedOrInvoicedQuantity
-				+ ", maxToleranceReceivedOrInvoicedQuantity=" + maxToleranceReceivedOrInvoicedQuantity
-				+ ", minToleranceInvoicePriceMismatch=" + minToleranceInvoicePriceMismatch
-				+ ", maxToleranceInvoicePriceMismatch=" + maxToleranceInvoicePriceMismatch + ", lateShipmentsTolerance="
-				+ lateShipmentsTolerance + ", lateDeliveriesTolerance=" + lateDeliveriesTolerance + ", customerMOQ="
-				+ customerMOQ + ", supplierShipmentSize=" + supplierShipmentSize + ", itemHierarchyLevel1="
-				+ itemHierarchyLevel1 + ", itemHierarchyLevel2=" + itemHierarchyLevel2 + ", itemHierarchyLevel3="
-				+ itemHierarchyLevel3 + ", itemHierarchyLevel4=" + itemHierarchyLevel4 + ", itemHierarchyLevel5="
-				+ itemHierarchyLevel5 + ", planningBucketType=" + planningBucketType + ", productLine=" + productLine
-				+ ", planningBuckets=" + planningBuckets + ", serialNumberFlag=" + serialNumberFlag + ", oldPartNumber="
-				+ oldPartNumber + ", materialType=" + materialType + ", materialGroup=" + materialGroup
-				+ ", bulkItemFlag=" + bulkItemFlag + ", flexStringCollab04=" + flexStringCollab04
-				+ ", flexStringCollab05=" + flexStringCollab05 + ", blockShipments=" + blockShipments
-				+ ", earlyShipmentTolerance=" + earlyShipmentTolerance + ", overShipmentTolerance="
-				+ overShipmentTolerance + ", priceMismatchToleranceMin=" + priceMismatchToleranceMin
-				+ ", priceMismatchToleranceMax=" + priceMismatchToleranceMax + "]";
+		return "ItemEntity [materialNumber=" + materialNumber + ", status=" + status + ", message=" + message
+				+ ", date=" + date + ", EnterpriseCode=" + EnterpriseCode + ", SiteName=" + SiteName + ", SupplierID="
+				+ SupplierID + ", CustomerItemID=" + CustomerItemID + ", customerItemDescription="
+				+ customerItemDescription + ", supplierItemID=" + supplierItemID + ", supplierItemDescription="
+				+ supplierItemDescription + ", globalCustomerID=" + globalCustomerID + ", globalSupplierID="
+				+ globalSupplierID + ", globalItemID=" + globalItemID + ", eOLGuidance=" + eOLGuidance
+				+ ", purchasingGroup=" + purchasingGroup + ", commodityCode=" + commodityCode + ", classificationCode="
+				+ classificationCode + ", UnitPrice=" + UnitPrice + ", priceBasis=" + priceBasis + ", currency="
+				+ currency + ", uOMPO=" + uOMPO + ", criticalItem=" + criticalItem + ", leadTimeDays=" + leadTimeDays
+				+ ", forecastGracePeriod=" + forecastGracePeriod + ", blanketExpiryTolerance=" + blanketExpiryTolerance
+				+ ", orderGracePeriod=" + orderGracePeriod + ", requestOrPromiseDateTolrance="
+				+ requestOrPromiseDateTolrance + ", commitQuantityToleranceMin=" + commitQuantityToleranceMin
+				+ ", commitQuantityToleranceMax=" + commitQuantityToleranceMax + ", minDOS=" + minDOS + ", maxDOS="
+				+ maxDOS + ", targetDOS=" + targetDOS + ", minToleranceRequestOrPromiseQuantity="
+				+ minToleranceRequestOrPromiseQuantity + ", maxToleranceRequestOrPromiseQuantity="
+				+ maxToleranceRequestOrPromiseQuantity + ", maxToleranceRequestOrShippedQuantity="
+				+ maxToleranceRequestOrShippedQuantity + ", minToleranceRequestOrShippedQuantity="
+				+ minToleranceRequestOrShippedQuantity + ", minToleranceRequestOrReceivedQuantity="
+				+ minToleranceRequestOrReceivedQuantity + ", maxToleranceRequestOrReceivedQuantity="
+				+ maxToleranceRequestOrReceivedQuantity + ", minToleranceRequestOrInvoicedQuantity="
+				+ minToleranceRequestOrInvoicedQuantity + ", maxToleranceRequestOrInvoicedQuantity="
+				+ maxToleranceRequestOrInvoicedQuantity + ", minToleranceReceivedOrInvoicedQuantity="
+				+ minToleranceReceivedOrInvoicedQuantity + ", maxToleranceReceivedOrInvoicedQuantity="
+				+ maxToleranceReceivedOrInvoicedQuantity + ", minToleranceInvoicePriceMismatch="
+				+ minToleranceInvoicePriceMismatch + ", maxToleranceInvoicePriceMismatch="
+				+ maxToleranceInvoicePriceMismatch + ", lateShipmentsTolerance=" + lateShipmentsTolerance
+				+ ", lateDeliveriesTolerance=" + lateDeliveriesTolerance + ", customerMOQ=" + customerMOQ
+				+ ", supplierShipmentSize=" + supplierShipmentSize + ", itemHierarchyLevel1=" + itemHierarchyLevel1
+				+ ", itemHierarchyLevel2=" + itemHierarchyLevel2 + ", itemHierarchyLevel3=" + itemHierarchyLevel3
+				+ ", itemHierarchyLevel4=" + itemHierarchyLevel4 + ", itemHierarchyLevel5=" + itemHierarchyLevel5
+				+ ", planningBucketType=" + planningBucketType + ", productLine=" + productLine + ", planningBuckets="
+				+ planningBuckets + ", serialNumberFlag=" + serialNumberFlag + ", oldPartNumber=" + oldPartNumber
+				+ ", materialType=" + materialType + ", materialGroup=" + materialGroup + ", bulkItemFlag="
+				+ bulkItemFlag + ", flexStringCollab04=" + flexStringCollab04 + ", flexStringCollab05="
+				+ flexStringCollab05 + ", blockShipments=" + blockShipments + ", earlyShipmentTolerance="
+				+ earlyShipmentTolerance + ", overShipmentTolerance=" + overShipmentTolerance
+				+ ", priceMismatchToleranceMin=" + priceMismatchToleranceMin + ", priceMismatchToleranceMax="
+				+ priceMismatchToleranceMax + "]";
 	}
+	
+	
+	
 	
 	
 }

@@ -48,18 +48,19 @@ var graphObj = (function($){
                 renderTo : id
             },
             title: {
-                text: 'Source Collaboration Dashboard'
+                text: 'Supplier Collaboration Dashboard'
             },
             xAxis: {
                 categories: categoryArr,
                 crosshair: true
+				
             },
             yAxis: {
                 min: 0,
                 tickInterval:1,
                 allowDecimals:false,
                 title: {
-                    text: 'Count'
+                    text: 'Purchase Orders'
                 }
             },
             tooltip: {

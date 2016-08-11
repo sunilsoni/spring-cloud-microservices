@@ -1,4 +1,4 @@
-package com.jci.job.entity;
+package com.jci.item.entity;
 
 import com.microsoft.azure.storage.table.TableServiceEntity;
 

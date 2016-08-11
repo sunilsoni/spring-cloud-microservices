@@ -336,6 +336,21 @@ hr {
     margin-top: 10px;
 }
 
+.max-height{
+	min-height:492px;
+}
+
+.slick-header-columns  input[type=checkbox]{
+	margin:0px;
+}
+
+.hide-arrow-btn .slick-header-menubutton{
+	display:none;
+}
+
+.slick-cell-checkboxsel{
+	padding-left:11px;
+}
 
 
 

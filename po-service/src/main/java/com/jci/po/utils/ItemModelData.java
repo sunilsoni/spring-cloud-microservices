@@ -8,7 +8,7 @@ public class ItemModelData {
 		
 		entity.setEnterpriseCode("JCI-BE");
 		entity.setSiteName("5061");
-		entity.setSupplierId("SH-DOYEN");
+		/*entity.setSupplierId("SH-DOYEN");
 		entity.setCustomerItemId("YVAA-MAT1");
 		entity.setCustomerItemDescription("风冷冷水机组物料1");
 		entity.setSupplierItemId("YVAA-MAT1");
@@ -39,7 +39,7 @@ public class ItemModelData {
 		entity.setProductLine("Product Line 1");
 		entity.setPlanningBuckets("1");
 		entity.setSerialNumberFlag("Y");
-		entity.setOldPartNumber("OLD-PART-123");
+		entity.setOldPartNumber("OLD-PART-123");*/
 		
 		return entity;
 	}

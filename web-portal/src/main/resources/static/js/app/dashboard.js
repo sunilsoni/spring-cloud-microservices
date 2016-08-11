@@ -21,7 +21,7 @@ server calls: none
 * @param {Object} jQuery 
 */
 var e2OpenDashboard = (function($){
-    var checkedRecords = [], mainGrid = {}, resultSetData={}, errorData = {}, erpData;
+    var checkedRecords = [], mainGrid = {}, resultSetData={}, errorData = {}, erpData,allGridsData = {};
     
     /*
      * To create grid and graph on load (O records) and to adjust the graph height based on screen height
@@ -37,6 +37,7 @@ var e2OpenDashboard = (function($){
         console.log("reqObj-->"+reqObj);
 		
         serviceObj.pullPoData(reqObj).then(function( data, textStatus, jqXHR ) {
+			allGridsData = data;
             // remove the loading screen
             commonUtil.removeLoader();
             
@@ -55,7 +56,8 @@ var e2OpenDashboard = (function($){
 							var errorCount = buildDashboardGrids(erpData, data.resultSet);
 							buildGraph(data.graphData);
 							resultSetData = data.resultSet;
-							commonUtil.updateErrorCount(errorCount);
+							$('#main1 .tabUl li a:first').trigger('click');
+							console.log(mainGrid);
 							break;
 						
 						case "supplier":
@@ -64,7 +66,8 @@ var e2OpenDashboard = (function($){
 							var supplierData = data.supplierData;
 							erpData = commonUtil.dashboardErp(supplierData);
 							buildContainer('supplier',erpData,supplierData);
-							var errorCount = buildSupplierGrids(erpData, supplierData);
+							buildSupplierGrids(erpData, supplierData);
+							$('#main1 .tabUl li a:first').trigger('click');
 							break;
 							
 						case "item":
@@ -74,6 +77,7 @@ var e2OpenDashboard = (function($){
 							erpData = commonUtil.dashboardErp(itemData);
 							buildContainer('item',erpData,itemData);
 							var errorCount = buildItemGrids(erpData, itemData);
+							$('#main1 .tabUl li a:first').trigger('click');
 							break;
 							
 					}
@@ -102,6 +106,7 @@ var e2OpenDashboard = (function($){
         //plot the graph based on the status
         commonUtil.plotGraph();*/
     }
+	
 	
 	function fngenerateHomeHtml(){
 		var html = "";
@@ -191,13 +196,18 @@ var e2OpenDashboard = (function($){
         var tabChilds = '';
         var avtiveClass='';
         var activeTab = '';
+		
+		var className = "";
+		if(type == "item" || type == "supplier")
+			className = "max-height";
+		
         for(var i=0;i<erpData.length;i++){
             if(i== 0){
                 avtiveClass='active';
                 activeTab = 'in active';
             }
             li += '<li class="'+avtiveClass+'"><a data-toggle="tab" href="#'+type+erpData[i]+'" grid="'+type+'-'+erpData[i]+'-grid'+'">'+erpData[i]+'</a></li>';
-            tabChilds += '<div id="'+type+erpData[i]+'" class="tab-pane fade '+activeTab+'"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="'+type+'-'+erpData[i]+'-grid'+'" class="grid-style"></div><div id="'+type+'-'+erpData[i]+'-pager'+'" class="pager-style"></div></div></div></div></div>';
+            tabChilds += '<div id="'+type+erpData[i]+'" class="tab-pane fade '+activeTab+'"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="'+type+'-'+erpData[i]+'-grid'+'" class="grid-style '+className+'"></div><div id="'+type+'-'+erpData[i]+'-pager'+'" class="pager-style"></div></div></div></div></div>';
             avtiveClass = '';
             activeTab = '';
         }
@@ -213,6 +223,7 @@ var e2OpenDashboard = (function($){
 			$(tab).find('.pagination-data .lastRow').text(paginationData.lastRow)
 			$(tab).find('.pagination-data .nextPartition').text(paginationData.nextPartition)
 			$(tab).find('.pagination-data .nextRow').text(paginationData.nextRow);
+			
 		}
 		
     }
@@ -235,7 +246,6 @@ var e2OpenDashboard = (function($){
             
             errorCount += errorData[erpData[i]].series.length;
         }
-        
         return errorCount;
     }
 	
@@ -245,20 +255,18 @@ var e2OpenDashboard = (function($){
          //getting the columns and grid options via the commonUtil API
         var columns = commonUtil.getSupplierGridColumns();
         var options = commonUtil.getDashboardGridOptions();
-        var errorCount = 0;
+       
         
         for(var i=0;i<erpData.length;i++){
             //creating a grid and assigning it to mainGrid
             mainGrid['supplier-'+erpData[i]+'-grid'] = Object.create(BuildGrid.prototype);
             
              // passing data to the constructor for the dashboard grid
-             mainGrid['supplier-'+erpData[i]+'-grid'].constructor('#supplier-'+erpData[i]+'-grid',resultSet[erpData[i]].series,columns,options,'#supplier-'+erpData[i]+'-pager');
-             mainGrid['supplier-'+erpData[i]+'-grid'].createGrid();
+            mainGrid['supplier-'+erpData[i]+'-grid'].constructor('#supplier-'+erpData[i]+'-grid',resultSet[erpData[i]].series,columns,options,'#supplier-'+erpData[i]+'-pager');
+			 
+            mainGrid['supplier-'+erpData[i]+'-grid'].createGrid();
             
-            //errorCount += resultSet[erpData[i]].errorData.length;
         }
-        
-        return errorCount;
 	}
 	
 	function buildItemGrids(erpData, resultSet){
@@ -284,6 +292,12 @@ var e2OpenDashboard = (function($){
 	}
     
     function buildGraph(graphData){
+		var errorCount = 0 ;
+		for(var i = 0; i < erpData.length ; i++ ){
+			errorCount += graphData[erpData[i]][2];
+		}
+		commonUtil.updateErrorCount(errorCount);
+		
         var graphDataObject={},categoryArr=[], categoryData={},errorGraphData=[], transitGraphData=[],processGraphData=[];
             graphDataObject = graphData;
                 
@@ -312,11 +326,9 @@ var e2OpenDashboard = (function($){
         
          //getting the columns and grid options via the commonUtil API
        
-         
-       
         buildContainer('error',erpData,resultSet);
         var columnsErr = commonUtil.getProcessErrorGridColumns();
-             var optionsErr = commonUtil.getProcessErrorGridOptions();
+        var optionsErr = commonUtil.getProcessErrorGridOptions();
         for(var i=0;i<erpData.length;i++){
              mainGrid['error-'+erpData[i]+'-grid'] = Object.create(BuildGrid.prototype);
              
@@ -458,7 +470,6 @@ var e2OpenDashboard = (function($){
         pullPoData();
     });
     */
-    
 
     //click function defined on the processPoDataBtn - to process the checked records
     $('#processPoDataBtn').click(function() {
@@ -513,6 +524,8 @@ var e2OpenDashboard = (function($){
         mainGridErr.constructor('#myGridErr',errorRecords,columnsErr,optionsErr,'#pagerErr');
         mainGridErr.createGrid();*/
         buildErrorGrids(errorData,erpData);
+		console.log(mainGrid);
+		$('#main2 .tabUl li a:first').trigger('click');
     });
     
     //code to be run on load
@@ -522,42 +535,118 @@ var e2OpenDashboard = (function($){
         //pullPoData();
     });
 	
+	
+	
 	$('#submitErrBtn').off('click').on('click',function(){
 		var tab = $('#main2 .tab-pane.fade.in.active');
 		
 		var poNumArray = [];
 		
-		tab.find('.grid-canvas input[type="checkbox"]').each(function(){
-			if($(this).is(':checked')){
-				var row = $(this).closest('.slick-row');
-				var poNum = row.find('.poNumber').text();
-				poNumArray.push(poNum);
-			}
-		});
+		var activeGrid = $('#main2 .tab-pane.fade.in.active .grid-style').attr('id');
 		
+		var selectedRows = mainGrid[activeGrid].grid.getSelectedRows();
+		
+		if(selectedRows.length == 0){
+			toastr.error('Select PO to be processed');
+			return;
+		}
+		
+		for(var i = 0 ; i < selectedRows.length ;i++){
+			var item = mainGrid[activeGrid].grid.getDataItem(selectedRows[i])
+			
+			poNumArray.push(item.OrderNumber);
+		}
+		var comment = $('#txtDescErr').val();
+		
+		var erp = activeGrid.split('-')[1];	
 		console.log(poNumArray);
+		var sendObj = JSON.stringify({"erpName":erp,"poNo":poNumArray,"globalId": "csonisk","userName": "Sunil Soni","comment":comment});
+		commonUtil.addLoader();
+		$.ajax({
+			  url :"api/po/processErrorPos",
+			  data :sendObj,
+			  async:true,
+			  crossDomain:true,
+			  method:"POST",
+		      headers: {
+				'content-type': "application/json",
+				'cache-control': "no-cache"
+			  },
+			  success:function(result,status,xhr){
+				commonUtil.removeLoader();  
+				console.log(result);  
+				var successList = result.successList;
+				var errorList = result.errorList;
+				if(successList.length > 0 || errorList.length > 0){
+					
+					if(successList.length > 0){
+						mainGrid[activeGrid].deleteItems(successList);
+						$('#main2 .tab-pane.fade.in.active input[type="checkbox"]').each(function(){
+							$(this).attr('checked',false);
+						});
+						var dashboardGrid = activeGrid.replace('error','dashboard');
+						mainGrid[dashboardGrid].updateItems(successList);
+						buildGraph(result.graphData);
+					}
+					var sl = "",slMsg = "",el="",elMsg="";
+					if(successList.length > 0){
+						sl = successList.join(",");
+						slMsg = "Processing Error Request success for "+sl;
+					}
+					if(errorList.length > 0){
+						el = errorList.join(",")
+						elMsg = "Error occured while processing process "+el;
+					}
+					
+					if(slMsg)
+						toastr.success(slMsg);
+					
+					if(elMsg)
+						toastr.error(elMsg);
+					
+				}
+			  },
+			  error:function(xhr,status,error){
+				console.log("error");    
+			  }
+		})	  
+		
 		
 	});
     
     $(document).on('click','.autopager', function(e) {
+		  
           e.stopPropagation();
-    	  
+		  var selfEle = $(this);
+    	  var activeGrid = $(this).attr('grid');
 		  var url = "";
 		  var postObj = {};
 		  var mainTab = $('.nav-tabs.nav-justified li.active a').attr('data-tab');
 		  var subTab = "";
 		  if(mainTab == "home"){
-			url = "http://m2237117.asia.jci.com:8765/api/po/getSegmentedPoDetails";  
-			subTab = $('section.active').attr('data-item-type'); 
+			subTab = $('section.active').attr('data-item-type');
+			if(subTab == "home")
+				url = "api/po/getSegmentedPoDetails"; 
+			else
+				url = "api/po/getSegmentedErrorDetails";	
 		  }  
 		  else if(mainTab == "supplier")
-			  url = "http://m2237117.asia.jci.com:8765/api/po/getSegmentedSupplierDetails"
+			  url = "api/supplier/getSegmentedSupplierDetails"
 		  else
-			  url = "http://m2237117.asia.jci.com:8765/api/po/getSegmentedItemDetails";
+			  url = "api/item/getSegmentedItemDetails";
 		  
 		  var erp = ($(this).attr('grid')).split('-')[1];
+			  
 		  
 		  var paginationData = $(this).closest('.tab-pane').find('.pagination-data');
+		  
+		   if($(paginationData).find('.nextPartition').text() == "null" || $(paginationData).find('.nextRow').text() == "null"){
+			  toastr.error('No further data to show');
+			  return;
+		  }
+		  
+		  commonUtil.addLoader();	
+		  
 		  var pagination = {};
 		  pagination.lastPartition = $(paginationData).find('.lastPartition').text();
 		  pagination.lastRow = $(paginationData).find('.lastRow').text();
@@ -576,15 +665,17 @@ var e2OpenDashboard = (function($){
 		  var newpaginationData = "";
 		  $.ajax({
 			  url : url,
-			  data : postObj,
+			  data : JSON.stringify(postObj),
 			  async: true,
 			  crossDomain: true,
+			  method:"POST",
 		      headers: {
 				'content-type': "application/json",
 				'cache-control': "no-cache"
 			  },
 			  success:function(result,status,xhr){
 				  console.log("success");
+				  commonUtil.removeLoader();
 				  var data = result ;
 				  if(mainTab == "home"){
 					  if(subTab == "home"){
@@ -594,7 +685,8 @@ var e2OpenDashboard = (function($){
 					  else{
 						newData = data.errorData[erp].series; 
 						newpaginationData = data.errorData[erp].pagination;  
-					  }		
+					  }
+					  newData = fnChangeStatus(newData); 		
 					  
 				  }  
 				  else if(mainTab == "supplier"){
@@ -609,11 +701,15 @@ var e2OpenDashboard = (function($){
 					$(paginationData).find('.lastPartition').text(newpaginationData.lastPartition);
 					$(paginationData).find('.lastRow').text(newpaginationData.lastRow);
 					$(paginationData).find('.nextPartition').text(newpaginationData.nextPartition);
-					$(paginationData).find('.nextRow').text(newpaginationData);
+					$(paginationData).find('.nextRow').text(newpaginationData.nextRow);
 					
 					$.merge(currentData,newData);
-					mainGrid[$(this).attr('grid')].grid.invalidate();
-					mainGrid[$(this).attr('grid')].updateGrid(currentData);
+					mainGrid[activeGrid].grid.invalidate();
+					mainGrid[activeGrid].updateGrid(currentData);
+					commonUtil.resizeCanvas(activeGrid);
+					
+					if(newpaginationData.nextRow == "null" && newpaginationData.nextPartition == "null" )
+						$(selfEle).remove();
 				  
 			  },
 			  error:function(xhr,status,error){
@@ -657,6 +753,29 @@ var e2OpenDashboard = (function($){
             
           
     });
+	
+	function fnChangeStatus(newData){
+		for(var i = 0; i< newData.length; i++){
+          
+          var statusCode = newData[i]['Status'];
+          if(statusCode === "1"){
+              newData[i]['Status'] = "In-transit";
+             
+          }
+          else if(statusCode === "2"){
+              newData[i]['Status'] = "Transaction Completed";
+              
+          }
+          else if(statusCode === "3"){
+              newData[i]['Status'] = "Error in Process";
+              
+          }
+		}
+		
+		return newData;
+	}	
+	
+	
     
     /************************ events on dashboard screen end ****************************/
     

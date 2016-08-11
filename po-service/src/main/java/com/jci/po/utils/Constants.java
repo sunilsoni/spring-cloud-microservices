@@ -36,6 +36,14 @@ public class Constants {
 	
 	public static final String ERROR_MSG ="The application has encountered an error!";
 	
-	public static final String ALL_ERP_NAMES ="SYMIX,SAP";
+	//public static final String ALL_ERP_NAMES ="SYMIX,SAP";
+	public static final String ALL_ERP_NAMES ="SYMIX";
+	
+	//http://c201s009.cg.na.jci.com:15080/E2OPOC
+	public static final String E2OPEN_URL ="http://gtstaging.controls.johnsoncontrols.com/E2OPOC"; 
+	//https://gtstaging.controls.johnsoncontrols.com/E2OPOC
+	
+	public static final int DESTINATION_E2OPEN =1;
+	public static final int DESTINATION_EDI =2;
 	
 }

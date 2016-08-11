@@ -1,6 +1,0 @@
-logging:
-  level:
-    org.springframework.web: DEBUG
-  file: C:/Apigee/micro-services/Work/Azure/pologs/web-portal.log
-#${HOME}\site\wwwroot\pologs\web-portal.log
-#C:/Apigee/micro-services/Work/Azure/pologs/web-portal.log

@@ -18,10 +18,10 @@
         var self = this;
         var handler = new Slick.EventHandler();
         var defaults = {
-            buttonImage: "../images/down.png",
-            filterImage: "../images/filter.png",
-            sortAscImage: "../images/sort-asc.png",
-            sortDescImage: "../images/sort-desc.png"
+            buttonImage: "../img/down.png",
+            filterImage: "../img/filter.png",
+            sortAscImage: "../img/sort-asc.png",
+            sortDescImage: "../img/sort-desc.png"
         };
         var $menu;
 

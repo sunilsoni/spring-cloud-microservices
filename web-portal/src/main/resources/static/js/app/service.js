@@ -46,8 +46,8 @@ var serviceObj = (function($){
     
     function pullPoData(data){
 		console.log(JSON.stringify(data));
-        //var promise = callToSever('api/po/getSegmentedPoDetails', data, 'POST');
-		var promise = callToSever('../local.json', data, 'GET');
+        var promise = callToSever('api/po/getSegmentedPoDetails', data, 'POST');
+		//var promise = callToSever('../local.json', data, 'GET');
         return promise;
     }
     
