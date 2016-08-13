@@ -10,11 +10,17 @@ import com.jci.job.api.res.ItemDetailsRes;
 import com.jci.job.api.res.PoDetailsRes;
 import com.jci.job.api.res.SupplierDetailsRes;
 
+/**
+ * <p>
+ * <strong>Rest Client for fetching Purchase Orders, Suppliers and Items from Apigee APIs.</strong>
+ * <p>
+ *
+ * @author cdevdat, csonisk
+ */
 @FeignClient(value = "ApigeeServer", url = "${e2open.url.staging}")
 public interface ApiClient {
 
 	@RequestMapping(value = "/poAzureData", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	//public ResponseEntity<PoDetailsResponse>  getPoDetails(@RequestBody PoRequest request);
 	public ResponseEntity<PoDetailsRes>  getPoDetails();
 
 	

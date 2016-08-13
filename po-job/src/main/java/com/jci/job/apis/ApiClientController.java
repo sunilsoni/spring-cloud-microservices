@@ -24,9 +24,13 @@ import com.jci.job.service.ApiClientService;
 import com.microsoft.azure.storage.table.TableEntity;
 
 /**
- * @author cdevdat
+ * <p>
+ * <strong>Scheduler layer for fetching Purchase Orders, Suppliers and Items from Apigee APIs.</strong>
+ * <p>
  *
+ * @author cdevdat, csonisk
  */
+
 @RestController
 public class ApiClientController {
 

@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 //import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +45,13 @@ import com.microsoft.azure.storage.table.TableQuery;
 
 
 @Repository
+@RefreshScope
 public class PoRepoImpl implements PoRepo {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(PoRepoImpl.class);
+    @Value("${all.erp.names}")
+    private String allErps;
+    
 	private static int errorCount;
 	private static int successCount;
 	private static int intransitCount;
@@ -63,7 +69,11 @@ public class PoRepoImpl implements PoRepo {
 	
 	@Override
 	public HashMap<String, ArrayList<Integer>> getGraphData() throws InvalidKeyException, URISyntaxException, StorageException {
-		TableQuery<MiscDataEntity> partitionQuery =  TableQuery.from(MiscDataEntity.class).where(QueryBuilder.partitionWhereCondition(Constants.PARTITION_KEY_MISCDATA,null,null));
+		
+		String query = QueryBuilder.graphQuery(Constants.PARTITION_KEY_MISCDATA,allErps);
+		LOG.info("query : " + query);
+		
+		TableQuery<MiscDataEntity> partitionQuery =  TableQuery.from(MiscDataEntity.class).where(query);
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
 		
 		HashMap<String, ArrayList<Integer>> graphData = new HashMap<String, ArrayList<Integer>>();
@@ -97,7 +107,10 @@ public class PoRepoImpl implements PoRepo {
 	public List<HashMap<String, String>> getErrorData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("#### Ending TableStorageRepositoryImpl.getErrorData ###" );
 		List<HashMap<String, String>> errorData = new ArrayList<HashMap<String, String>>();
-		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(QueryBuilder.errorDataQuery(partitionKey));
+		
+		String query = QueryBuilder.errorQuery(partitionKey,allErps);
+		LOG.info("query-->"+query);
+		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 		
 		//multiplePartitionWhereCondition
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);

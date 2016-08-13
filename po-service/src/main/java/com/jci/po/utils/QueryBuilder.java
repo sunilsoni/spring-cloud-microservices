@@ -88,7 +88,7 @@ public class QueryBuilder {
 	public static String processPosQuery(String partitionKey, List<String> poList){
 		LOG.info("#### Starting QueryBuilder.processPosQuery ###" + poList);
 		
-		 // Create filters to limit the data
+		// Create filters to limit the data
 	   String partitionFilter = TableQuery.generateFilterCondition(PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
 	      
 	   String combinedFilter = null;
@@ -110,6 +110,67 @@ public class QueryBuilder {
 	   rowKeyFilter = builder.toString();
 	   combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter);
        LOG.info("#### Ending  QueryBuilder.processPosQuery ###" + combinedFilter);
+		return rowKeyFilter;
+	}
+	
+	public static String graphQuery(String partitionKey, String allErps){
+		LOG.info("#### Starting QueryBuilder.processPosQuery ###" + allErps);
+		String[] rowKey = allErps.split(",");
+		
+		// Create filters to limit the data
+	   String partitionFilter = TableQuery.generateFilterCondition(PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
+	      
+	   String combinedFilter = null;
+	   String rowKeyFilter = null;
+	   
+	   StringBuilder builder =  new StringBuilder();
+	   for(int i=0;i<rowKey.length;i++){  
+		 builder.append(" ( ");
+		 rowKeyFilter = TableQuery.generateFilterCondition(ROWKEY, QueryComparisons.EQUAL, rowKey[i]);
+	     combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter); 
+	     builder.append(combinedFilter);
+	     builder.append(" ) ");
+	     
+	     if(i!=(rowKey.length-1)){
+			   builder.append(" or ");
+		  }
+	   }
+	   
+	   rowKeyFilter = builder.toString();
+	   combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter);
+       LOG.info("#### Ending  QueryBuilder.processPosQuery ###" + combinedFilter);
+		return rowKeyFilter;
+	}
+	
+	public static String errorQuery(String partitionKey, String allErps){
+		LOG.info("#### Starting QueryBuilder.errorQuery ###" + allErps);
+		String[] rowKey = allErps.split(",");
+		
+		
+		// Create filters to limit the data
+	   String partitionFilter = TableQuery.generateFilterCondition(PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
+	   String statusFilter = TableQuery.generateFilterCondition(STATUS_KEY,QueryComparisons.EQUAL, Constants.STATUS_ERROR);
+	   
+	  String combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, statusFilter); 
+	   
+	   String rowKeyFilter = null;
+	   
+	   StringBuilder builder =  new StringBuilder();
+	   for(int i=0;i<rowKey.length;i++){  
+		 builder.append(" ( ");
+		 rowKeyFilter = TableQuery.generateFilterCondition(ROWKEY, QueryComparisons.EQUAL, rowKey[i]);
+	     combinedFilter = TableQuery.combineFilters(combinedFilter, Operators.AND, rowKeyFilter); 
+	     builder.append(combinedFilter);
+	     builder.append(" ) ");
+	     
+	     if(i!=(rowKey.length-1)){
+			   builder.append(" or ");
+		  }
+	   }
+	   
+	   rowKeyFilter = builder.toString();
+	   combinedFilter = TableQuery.combineFilters(combinedFilter, Operators.AND, rowKeyFilter);
+       LOG.info("#### Ending  QueryBuilder.errorQuery ###" + combinedFilter);
 		return rowKeyFilter;
 	}
 	

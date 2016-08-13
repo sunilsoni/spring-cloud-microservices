@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
 <title>Supplier Collaboration</title>
 
@@ -55,14 +56,19 @@
 	
 	<div id="loadingindicator"></div>
 	<div class="container jci-color" id="mainContent">
+		<div class="username-msg" style="display:none;">
+			<div class="message">
+				<span class="welcome-msg">Welcome,</span><span id="username"></span>
+			</div>
+		</div>
 		<header style="padding-bottom:0px;">
 			<div class="row ">
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					<a href="index.html"><img src="img/Johnson_Controls.png"
 						 id="logo-img"/></a>
 
 				</div>
-				<div class="col-sm-10" style="margin-top:28px;padding-left:0px;">
+				<div class="col-sm-9" style="margin-top:28px;padding-left:0px;">
 					<ul class="nav nav-tabs nav-justified" id="main-tabs">
 						<li><a data-toggle="tab" href="#home" data-tab="home">Home</a></li>
 						<li><a data-toggle="tab" href="#supplier" data-tab="supplier">Supplier</a></li>
@@ -104,7 +110,7 @@
 	
 		</header>
 		<!--Sunil: Dashboard-->
-        <section id="main1" data-item-type="home" class="active">
+        <section id="main1" data-item-type="home" class="active" style="margin-top:-8px;">
 			<!--<div id="dashboardGridContainer">
                 <div class="row" >
                     <div class="col-sm-2 col-xs-6">
@@ -159,7 +165,7 @@
 
             <div class="margin-all-10">
 				<button type="button" id="goBack" class="btn btn-info">Go Back</button>
-                <ul class="nav nav-tabs tabUl" id="error-ul-tabs">
+                <ul class="nav nav-pills tabUl" id="error-ul-tabs">
                     <!--<li class="active"><a data-toggle="tab" href="#home">Symix</a></li>
                     <li><a data-toggle="tab" href="#menu1">SAP</a></li>
                     <li><a data-toggle="tab" href="#menu2">Oracle</a></li>-->

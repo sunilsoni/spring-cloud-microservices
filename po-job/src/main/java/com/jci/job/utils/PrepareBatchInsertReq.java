@@ -29,7 +29,9 @@ public class PrepareBatchInsertReq {
 		//Map<String,List<PoItemsEntity>> poNumToEntityListMap;
 		List<BatchInsertReq> finalList = new ArrayList<BatchInsertReq>();
 		for ( Map.Entry<String,Map<String,List<PoItemsEntity>>> entry : dsToPoItemList.entrySet()) {//loop1
+			
 			String partitionKey = CommonUtils.getPartitionKey(entry.getKey().toUpperCase());
+			//partitionKey = "SAP_PO";//1:delete this code
 			for (Map.Entry<String,List<PoItemsEntity>> entry1 : entry.getValue().entrySet()) {//loop2 po numbers map
 				PoEntity itemEntity = new PoEntity(partitionKey,entry1.getKey());
 				
@@ -45,6 +47,7 @@ public class PrepareBatchInsertReq {
 				 }
 				itemEntity.setOrderCreationDate(new Date());
 				itemEntity.setSourceErpName(entry.getKey().toUpperCase());
+				//itemEntity.setSourceErpName("SAP");//2:delete this code
 				itemEntity.setStatus(Constants.STATUS_IN_TRANSIT);
 				poDetailsList.add(itemEntity);
 				
@@ -71,6 +74,7 @@ public class PrepareBatchInsertReq {
 		
 		for ( Entry<String, List<SupplierEntity>> entry : dsToSupplierList.entrySet()) {//loop1
 			String partitionKey = CommonUtils.getPartitionKey(entry.getKey().toUpperCase());//DS name like symix
+			//partitionKey = "SAP_PO";//delete this code
 			for (SupplierEntity entity : entry.getValue()) {
 				entity.setPartitionKey(partitionKey);
 				entity.setRowKey(entity.getSupplierID());
@@ -83,6 +87,7 @@ public class PrepareBatchInsertReq {
 			
 			BatchInsertReq res = new BatchInsertReq();
 			res.setErpName(entry.getKey().toUpperCase());
+			//res.setErpName("SAP");//2:delete this code
 			res.setTableNameToEntityMap(tableNameToEntityMap);
 			finalList.add(res);
 		}	
@@ -97,9 +102,11 @@ public class PrepareBatchInsertReq {
 		
 		for ( Entry<String, List<ItemEntity>> entry : dsToItemList.entrySet()) {//loop1
 			String partitionKey = CommonUtils.getPartitionKey(entry.getKey().toUpperCase());
+			//partitionKey = "SAP_PO";//delete this code
 			for (ItemEntity entity : entry.getValue()) {
 				entity.setPartitionKey(partitionKey);
-				entity.setRowKey(entity.getCustomerItemID());
+				//entity.setRowKey((entity.getCustomerItemID()+"_"+entity.getSupplierID()));
+				entity.setRowKey((entity.getCustomerItemID()));
 				poItemDetailsList.add(entity);
 			 }
 			
@@ -108,6 +115,7 @@ public class PrepareBatchInsertReq {
 			
 			BatchInsertReq res = new BatchInsertReq();
 			res.setErpName(entry.getKey().toUpperCase());
+			//res.setErpName("SAP");//2:delete this code
 			res.setTableNameToEntityMap(tableNameToEntityMap);
 			finalList.add(res);
 		}	

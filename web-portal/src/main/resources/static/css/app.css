@@ -18,7 +18,7 @@ footer {
         }
 
 header {
-    padding: 5px 0 10px;
+    /*padding: 5px 0 10px;*/
     border-bottom: 3px solid #009CDE;
 }
 
@@ -57,7 +57,7 @@ body {
 }
 
 .gridContainer {
-    box-shadow: 0px 5px 5px #888888;
+    /*box-shadow: 0px 5px 5px #888888;*/
     border: 1px solid #bdbdbd;
     background-color: #fff;
 }
@@ -285,10 +285,11 @@ hr {
 }
 
 .errorActionContainer{
-    margin-bottom:10px;
-    border: 1px dashed grey; 
+    /*margin-bottom:10px;
+    border: 1px dashed grey; */
     border-radius: 2px;
     padding: 2px;
+	float:right;
 }
 
 #dashboardGridContainer{
@@ -351,6 +352,45 @@ hr {
 .slick-cell-checkboxsel{
 	padding-left:11px;
 }
+
+.slick-pager{
+	border:none;
+}
+
+#highchartContainer{
+	height:308px;
+}
+
+.tab-content{
+	margin-top:5px;
+}
+
+.slickgrid, 
+.slickgrid *,
+.slick-header-column {
+    box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+}
+
+.username-msg{
+	width:100%;
+	height:20px;
+}
+
+.message{
+	float:right;
+}
+
+.welcome-msg{
+	color:rgb(0,112,192);
+}
+
+#username{
+	color:red;
+}
+
+
 
 
 

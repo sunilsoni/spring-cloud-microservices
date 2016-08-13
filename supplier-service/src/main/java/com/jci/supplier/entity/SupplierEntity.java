@@ -1,4 +1,4 @@
-package com.jci.job.entity;
+package com.jci.supplier.entity;
 
 import java.util.Date;
 

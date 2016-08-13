@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import com.jci.po.azure.data.DataHelper;
@@ -19,12 +21,10 @@ import com.jci.po.azure.query.PaginationParam;
 import com.jci.po.azure.query.ScrollingParam;
 import com.jci.po.dto.req.BatchInsertReq;
 import com.jci.po.dto.req.BatchUpdateReq;
-import com.jci.po.dto.req.FlatFileReq;
 import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.SegmentedDetailReq;
 import com.jci.po.dto.res.BatchInsertResp;
 import com.jci.po.dto.res.BatchUpdateRes;
-import com.jci.po.dto.res.FlatFileRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.entity.ItemEntity;
 import com.jci.po.entity.PoEntity;
@@ -40,6 +40,7 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.TableEntity;
 
 @Service
+@RefreshScope
 public class PoServiceImpl implements PoService{
 
 	private static final Logger LOG = LoggerFactory.getLogger(PoServiceImpl.class);
@@ -47,8 +48,11 @@ public class PoServiceImpl implements PoService{
 	@Autowired
 	private PoRepo repo;
 	
-	@Autowired
-	private ApiClientService apiService;
+    @Value("${all.erp.names}")
+    private String allErps;
+	
+	//@Autowired
+	//private ApiClientService apiService;
 	
 	 @Override
 	 public String getLastPo() throws InvalidKeyException, URISyntaxException, StorageException {
@@ -85,8 +89,10 @@ public class PoServiceImpl implements PoService{
 		HashMap<String, ResultSet>  itemMap = new HashMap<String, ResultSet>();
 		HashMap<String, ResultSet>  errorMap = new HashMap<String, ResultSet>();
 		
+		LOG.info("allErps---> "+allErps);
+		
 		if(request.isFirstRequest()){
-			String[] erpArr  = Constants.ALL_ERP_NAMES.split(",");			
+			String[] erpArr  = allErps.split(",");			
 			for (int i=0;i<erpArr.length;i++){				
 				azureRequest = new DataHelper();
 				azureRequest.setErrorDataRequired(false);
@@ -128,6 +134,14 @@ public class PoServiceImpl implements PoService{
 			response.setResultSet(resultSetMap);
 		}
 		response.setMessage(Constants.JSON_OK);
+		
+		//Remove this
+		HashMap userData = new HashMap();
+		userData.put("UserName", "Sunil Soni");
+		userData.put("GlobalId", "csonisk");
+		userData.put("Role", "Admin");
+		
+		response.setUserData(userData);
 		
 		LOG.info("### Ending Ending PoServiceImpl.getSegmentedResultSet ### " );
 		
@@ -235,14 +249,12 @@ public class PoServiceImpl implements PoService{
 		return response;
 	}
 
-
-	
 	
 	public void insertSymixDummyData() throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("### Starting PoServiceImpl.insertSymixDummyData ###" );
 		BatchInsertReq request  = new BatchInsertReq();
 
-	    String partitionKey = AzureUtils.getPartitionKey(Constants.ERP_SYMIX);
+	    String partitionKey = null;//AzureUtils.getPartitionKey(Constants.ERP_SYMIX);
 		
 		//Inserting dummy data
 	    PoEntity poEntity = null;
@@ -302,7 +314,7 @@ public class PoServiceImpl implements PoService{
 		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, tableList4);
 		
 		request.setTableNameToEntityMap(tableNameToEntityMap);
-		request.setErpName(Constants.ERP_SYMIX);
+		//request.setErpName(Constants.ERP_SYMIX);
 		
 		BatchInsertResp response = repo.batchInsert(request);
 		
@@ -313,7 +325,7 @@ public class PoServiceImpl implements PoService{
 		LOG.info("### Starting PoServiceImpl.insertSapDummyData ###" );
 		BatchInsertReq request  = new BatchInsertReq();
 
-	    String partitionKey = AzureUtils.getPartitionKey(Constants.ERP_SAP);
+	    String partitionKey =null;// AzureUtils.getPartitionKey(Constants.ERP_SAP);
 
 	    //Inserting dummy data
 	    PoEntity poEntity = null;
@@ -372,10 +384,12 @@ public class PoServiceImpl implements PoService{
 		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, tableList4);
 		
 		request.setTableNameToEntityMap(tableNameToEntityMap);
-		request.setErpName(Constants.ERP_SAP);
+		//request.setErpName(Constants.ERP_SAP);
 		
 		BatchInsertResp response = repo.batchInsert(request);
 		
+		
+		//Setting dummy data:
 		LOG.info("### Ending PoServiceImpl.insertSapDummyData ###" +response);
 	}
 
@@ -386,9 +400,4 @@ public class PoServiceImpl implements PoService{
 		insertSapDummyData();
 		LOG.info("### Ending PoServiceImpl.insertDummyData ###" );
 	}
-
-
-
-
-
 }

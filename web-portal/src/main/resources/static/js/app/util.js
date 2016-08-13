@@ -57,7 +57,7 @@ var commonUtil = (function($){
             name: "Select",
             field: "poId",////initially it was poId
             formatter:checkBoxFormatter,
-            width: 200,
+            width: 65,
 			cssClass:"poId",
 			sortable:false,
 			filterValues : [],
@@ -76,7 +76,7 @@ var commonUtil = (function($){
             name: "PO Description",
             field: "Description",//initially it was poDesc
             sortable : true,
-            width: 300,
+            width: 450,
 			cssClass:"poDesc",
 			sortable:false,
 			filterValues : []
@@ -945,9 +945,9 @@ var commonUtil = (function($){
 			cssClass:"poDesc"
           }, 
 		  {
-            id: "dataSourceName",
+            id: "SourceErpName",
             name: "Data Source",
-            field: "dataSourceName",
+            field: "SourceErpName",
             minWidth: 200,
             resizable:true
           }, 

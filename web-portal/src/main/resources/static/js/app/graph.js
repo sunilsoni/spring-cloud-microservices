@@ -81,6 +81,7 @@ var graphObj = (function($){
                    enabled: false
             },
             series: plotData
+			
         };
         
         /*var graphCategoriesData = plotData;

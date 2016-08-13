@@ -21,7 +21,7 @@ import com.microsoft.azure.storage.StorageException;
 
 /**
  * <p>
- * <strong>REST layer for managing PO, Supplier and Item data.</strong>
+ * <strong>REST layer for managing Item data.</strong>
  * <p>
  *
  * @author csonisk

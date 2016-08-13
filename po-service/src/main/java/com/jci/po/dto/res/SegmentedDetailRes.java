@@ -18,6 +18,8 @@ public class SegmentedDetailRes {
 	HashMap<String, ResultSet>  itemData;
 	HashMap<String, ResultSet>  errorData;
 	
+	HashMap<String, String>  userData;
+	
 	public boolean isError() {
 		return isError;
 	}
@@ -74,14 +76,19 @@ public class SegmentedDetailRes {
 		this.errorData = errorData;
 	}
 
+	public HashMap<String, String> getUserData() {
+		return userData;
+	}
+
+	public void setUserData(HashMap<String, String> userData) {
+		this.userData = userData;
+	}
+
 	@Override
 	public String toString() {
 		return "SegmentedDetailRes [isError=" + isError + ", message=" + message + ", resultSet=" + resultSet
 				+ ", graphData=" + graphData + ", supplierData=" + supplierData + ", itemData=" + itemData
-				+ ", errorData=" + errorData + "]";
+				+ ", errorData=" + errorData + ", userData=" + userData + "]";
 	}
 
-	
-	
-	
 }

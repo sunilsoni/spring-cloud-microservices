@@ -40,7 +40,9 @@ var e2OpenDashboard = (function($){
 			allGridsData = data;
             // remove the loading screen
             commonUtil.removeLoader();
-            
+            $('#username').text(data.userData.UserName);
+            $('#username').attr('data-global-id',data.userData.GlobalId);
+			$('.username-msg').show();
             if(!data.error){
 				$('#main-tabs li').off('click').on('click',function(){
 					$(this).siblings().removeClass('active');
@@ -48,7 +50,7 @@ var e2OpenDashboard = (function($){
 					var tab = $(this).find('a').attr('data-tab');
 					switch(tab){
 						case "home":
-							fngenerateHomeHtml();	
+							fngenerateHomeHtml(data.userData.Role);	
 							var dashboardData = data.resultSet;
 							erpData = commonUtil.dashboardErp(dashboardData);
 							buildContainer('dashboard',erpData,dashboardData);
@@ -108,8 +110,22 @@ var e2OpenDashboard = (function($){
     }
 	
 	
-	function fngenerateHomeHtml(){
+	function fngenerateHomeHtml(role){
 		var html = "";
+		
+		var col = 'col-sm-12';
+		var errorContainer = "";
+		
+		if(role == "Admin"){
+			col = "col-sm-6";
+			errorContainer = "<div class='col-sm-6'>"+
+								"<div class='errorActionContainer'>"+
+									"<span>Action Required:</span>"+
+									"<button id='errorBtn' class='btn btn-danger' click='errorinProcess()'>Errors in Process - <span id='errorCount'>0</span></button>"+
+								"</div>"+
+							"</div>";
+		}
+			
 		
 		html += "<div id='dashboardGridContainer'>"+
 					"<div class='row'>"+
@@ -119,15 +135,10 @@ var e2OpenDashboard = (function($){
 					"<div class='clearfix'></div>"+
 					"<div id='dashboard-tabs'>"+
 						"<div class='row'>"+
-							"<div class='col-sm-8 col-xs-6'>"+
-								"<ul class='nav nav-tabs tabUl' id='dashboard-ul-tabs'></ul>"+
+							"<div class='"+col+"'>"+
+								"<ul class='nav nav-pills tabUl' id='dashboard-ul-tabs'></ul>"+
 							"</div>"+
-							"<div class='col-sm-4 col-xs-6'>"+
-								"<div class='errorActionContainer'>"+
-									"<span>Action Required:</span>"+
-									"<button id='errorBtn' class='btn btn-danger' click='errorinProcess()'>Errors in Process - <span id='errorCount'>0</span></button>"+
-								"</div>"+
-							"</div>"+
+							errorContainer+
 						"</div>"+
 						"<div class='tab-content' id='dashboard-tab-content'></div>"+
 					"</div>"+
@@ -135,9 +146,9 @@ var e2OpenDashboard = (function($){
 				
 				"<div class='row'>"+
 					"<div class='col-sm-12'>"+
-						"<div class='margin-top-10'>"+
+						//"<div class='margin-top-10'>"+
 							"<div id='highchartContainer'></div>"+
-						"</div>"+
+						//"</div>"+
 					"</div>"+
 				"</div>";
 
@@ -157,7 +168,7 @@ var e2OpenDashboard = (function($){
 					"<div id='supplier-tabs'>"+
 						"<div class='row'>"+
 							"<div class='col-sm-12 col-xs-12'>"+
-								"<ul class='nav nav-tabs tabUl' id='supplier-ul-tabs'></ul>"+
+								"<ul class='nav nav-pills tabUl' id='supplier-ul-tabs'></ul>"+
 							"</div>"+
 						"</div>"+
 						"<div class='tab-content' id='supplier-tab-content'></div>"+
@@ -179,7 +190,7 @@ var e2OpenDashboard = (function($){
 					"<div id='item-tabs'>"+
 						"<div class='row'>"+
 							"<div class='col-sm-12 col-xs-12'>"+
-								"<ul class='nav nav-tabs tabUl' id='item-ul-tabs'></ul>"+
+								"<ul class='nav nav-pills tabUl' id='item-ul-tabs'></ul>"+
 							"</div>"+
 							
 						"</div>"+
@@ -297,6 +308,11 @@ var e2OpenDashboard = (function($){
 			errorCount += graphData[erpData[i]][2];
 		}
 		commonUtil.updateErrorCount(errorCount);
+		
+		if(errorCount == 0)
+			$('#errorCount').attr('disabled','true');
+		else
+			$('#errorCount').removeAttr('disabled');
 		
         var graphDataObject={},categoryArr=[], categoryData={},errorGraphData=[], transitGraphData=[],processGraphData=[];
             graphDataObject = graphData;
@@ -560,7 +576,9 @@ var e2OpenDashboard = (function($){
 		
 		var erp = activeGrid.split('-')[1];	
 		console.log(poNumArray);
-		var sendObj = JSON.stringify({"erpName":erp,"poNo":poNumArray,"globalId": "csonisk","userName": "Sunil Soni","comment":comment});
+		var userName = $('#username').text();
+		var globalId = $('#username').attr('data-global-id');
+		var sendObj = JSON.stringify({"erpName":erp,"poNo":poNumArray,"globalId": globalId,"userName": userName,"comment":comment});
 		commonUtil.addLoader();
 		$.ajax({
 			  url :"api/po/processErrorPos",
