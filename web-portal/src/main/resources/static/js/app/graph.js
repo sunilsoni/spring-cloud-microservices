@@ -18,7 +18,7 @@ var graphObj = (function($){
      * @param {String} id
      * @param {Array} plotData 
      */
-    function createChart(id, plotData,categoryArr){
+    function createChart(id, plotData,name,categoryArr){
         if(id && id != null && id != undefined){
             $('#'+id).empty();
         }
@@ -48,7 +48,7 @@ var graphObj = (function($){
                 renderTo : id
             },
             title: {
-                text: 'Supplier Collaboration Dashboard'
+                text: name.title
             },
             xAxis: {
                 categories: categoryArr,
@@ -60,7 +60,7 @@ var graphObj = (function($){
                 tickInterval:1,
                 allowDecimals:false,
                 title: {
-                    text: 'Purchase Orders'
+                    text: name["y-axis"]
                 }
             },
             tooltip: {

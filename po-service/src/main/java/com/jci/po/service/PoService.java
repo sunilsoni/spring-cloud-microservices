@@ -4,8 +4,10 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
 import com.jci.po.dto.req.PoDetailsReq;
+import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.req.SegmentedDetailReq;
 import com.jci.po.dto.res.BatchUpdateRes;
+import com.jci.po.dto.res.PoItemDetailRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.microsoft.azure.storage.StorageException;
 
@@ -17,6 +19,8 @@ public interface PoService {
 	
 	
 	BatchUpdateRes processErrorPos(PoDetailsReq request)throws InvalidKeyException, URISyntaxException, StorageException;
+	
+	PoItemDetailRes getPoItemDetail(PoItemDetailReq request)throws InvalidKeyException, URISyntaxException, StorageException;
 	
 	//Need to delete this 
 	void insertDummyData() throws InvalidKeyException, URISyntaxException, StorageException;

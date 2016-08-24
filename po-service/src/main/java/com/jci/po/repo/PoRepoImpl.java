@@ -32,6 +32,7 @@ import com.jci.po.entity.PoEntity;
 import com.jci.po.entity.PoItemsEntity;
 import com.jci.po.utils.Constants;
 import com.jci.po.utils.QueryBuilder;
+import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.ResultContinuation;
 import com.microsoft.azure.storage.ResultSegment;
 import com.microsoft.azure.storage.StorageException;
@@ -127,22 +128,68 @@ public class PoRepoImpl implements PoRepo {
 	}
 	
 	@Override
-	public List<PoItemsEntity> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+	public Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("#### Ending TableStorageRepositoryImpl.getErrorPos ###" );
 		
-		String query = QueryBuilder.processPosQuery(partitionKey,poList);
+		String query = QueryBuilder.getErrorPosQuery(partitionKey,poList);
 		LOG.info("query--->"+query);
 		
-		
-		List<PoItemsEntity> errorData = new ArrayList<PoItemsEntity>();
+		//List<PoItemsEntity> errorData = new ArrayList<PoItemsEntity>();
 		TableQuery<PoItemsEntity> partitionQuery =  TableQuery.from(PoItemsEntity.class).where(query);
-		
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+		
+		OperationContext opContext = new OperationContext();
+		
+		TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);//Need to discuss this
+		
+		Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
+		DynamicTableEntity row;
+		EntityProperty ep;
+		HashMap<String, Object> hashmap;
+		//List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
+		
+		Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<String,List<HashMap<String, Object>>>();
+		
+		while(rows.hasNext()) {
+			row = rows.next() ;
+			HashMap<String, EntityProperty> map = row.getProperties();
+			
+			//row.getRowKey().split("_")[0]
+			hashmap = new HashMap<String, Object>();
+			for (String key : map.keySet()) {
+				ep = map.get(key);
+				hashmap.put(key, ep.getValueAsString());
+			}
+			//series.add(hashmap);
+			
+			if(poNumToItemListMap.containsKey(row.getRowKey().split("_")[0])){
+				List<HashMap<String, Object>> list =poNumToItemListMap.get(row.getRowKey().split("_")[0]);
+	    		list.add(hashmap);
+	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+	    	}else{
+	    		List<HashMap<String, Object>> list = new  ArrayList<HashMap<String, Object>>();
+	    		list.add(hashmap);
+	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+	    	}
+			
+		}		
+		
+		/*Map<String,List<PoItemsEntity>> itemMap = new HashMap<String,List<PoItemsEntity>>();
 	    for (PoItemsEntity entity : cloudTable.execute(partitionQuery)) {
-	    	errorData.add(entity);
-	    }
+	    	
+	    	//errorData.add(entity);
+	    	if(itemMap.containsKey(entity.getOrderNumber())){
+	    		List<PoItemsEntity> list =itemMap.get(entity.getOrderNumber());
+	    		list.add(entity);
+	    		itemMap.put(entity.getOrderNumber(), list);
+	    	}else{
+	    		List<PoItemsEntity> list = new  ArrayList<PoItemsEntity>();
+	    		list.add(entity);
+	    		itemMap.put(entity.getOrderNumber(), list);
+	    	}
+	    }*/
 	    LOG.info("#### Ending TableStorageRepositoryImpl.getErrorPos ###" );
-		 return errorData;
+		 return poNumToItemListMap;
 	}
 	
 	@Override
@@ -480,5 +527,56 @@ public class PoRepoImpl implements PoRepo {
 		LOG.info("#### Ending TableStorageRepositoryImpl.batchUpdate ###" );
 		return response;
 		
+	}
+
+	@Override
+	public ResultSet getPoItemDetail(ScrollingParam param,DataHelper request)	throws InvalidKeyException, URISyntaxException, StorageException {
+		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
+		PaginationParam pagination = new PaginationParam();
+		if(continuationToken != null) {
+			pagination.setLastPartition(param.getPartition());
+			pagination.setLastRow(param.getRow());
+		}
+		 
+		// Create the query
+		String  whereCondition = QueryBuilder.poItemDetailQuery(request);
+		 if(StringUtils.isBlank(whereCondition) ){
+			 return null;
+		 }
+		 
+		 TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
+		  CloudTable table = azureStorage.getTable(request.getTableName());
+       
+		// segmented query
+       ResultSegment<DynamicTableEntity> response = table.executeSegmented(query, continuationToken) ;
+       
+		// next continuation token
+		continuationToken = response.getContinuationToken() ;
+		if(continuationToken != null) {
+			pagination.setNextPartition(continuationToken.getNextPartitionKey());
+			pagination.setNextRow(continuationToken.getNextRowKey());
+		}
+		    
+		HashMap<String, Object> hashmap;
+		
+		List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
+		DynamicTableEntity row;
+		EntityProperty ep;
+		
+		Iterator<DynamicTableEntity> rows = response.getResults().iterator() ;
+		while(rows.hasNext()) {
+			row = rows.next() ;
+			HashMap<String, EntityProperty> map = row.getProperties();
+			hashmap = new HashMap<String, Object>();
+			hashmap.put("id", row.getRowKey());  
+			for (String key : map.keySet()) {
+				ep = map.get(key);
+				hashmap.put(key, ep.getValueAsString());
+			}
+			series.add(hashmap);
+		}
+
+		
+		return new ResultSet(series,pagination) ;
 	}
 }

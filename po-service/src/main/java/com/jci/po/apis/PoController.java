@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jci.po.dto.req.PoDetailsReq;
+import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.req.SegmentedDetailReq;
 import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.dto.res.PoDetailsRes;
+import com.jci.po.dto.res.PoItemDetailRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.service.PoService;
 import com.jci.po.utils.AzureUtils;
@@ -83,7 +85,7 @@ public class PoController {
 	
 	@RequestMapping(value = "/processErrorPos", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  BatchUpdateRes processErrorPos(@RequestBody final PoDetailsReq request){
-		
+		long startTime = System.nanoTime();
 		LOG.info("### Starting PoController.processErrorPos ###" +request);
 		BatchUpdateRes response = new BatchUpdateRes();
 		
@@ -91,11 +93,36 @@ public class PoController {
 			response = poService.processErrorPos(request);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			response.setError(true);
+			response.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
+		long endTime = System.nanoTime();
+		
+		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		
+		double seconds = (double)duration / 1000000000.0;
+		LOG.info("seconds--->"+seconds);
+		
+		
 		LOG.info("### Ending PoController.processErrorPos ###"+response );
 		return response;
 	}	
+	
+	@RequestMapping(value = "/getPoItemDetail", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public  PoItemDetailRes getPoItemDetail(@RequestBody PoItemDetailReq request){
+		LOG.info("### Starting PoController.getPoItemDetail ###" +request);
+		PoItemDetailRes res = new PoItemDetailRes();
+		try {
+			res = poService.getPoItemDetail(request);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			res.setError(true);
+			res.setMessage(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		LOG.info("### Ending PoController.getPoItemDetail ###"+res );
+		return res;
+	}
 	
 	@RequestMapping(value = "/processPos", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  PoDetailsRes processPoData(@RequestBody final PoDetailsReq request){

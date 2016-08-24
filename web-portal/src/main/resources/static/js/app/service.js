@@ -44,9 +44,14 @@ var serviceObj = (function($){
         return promise;
     }*/
     
-    function pullPoData(data){
+    function pullPoData(data,type){
 		console.log(JSON.stringify(data));
-        var promise = callToSever('api/po/getSegmentedPoDetails', data, 'POST');
+        var promise = "";
+		if(type && type == "ecn")
+			promise = callToSever('../ecnlocal.json', data, 'GET');
+		else
+			promise = callToSever('api/po/getSegmentedPoDetails', data, 'POST');
+		
 		//var promise = callToSever('../local.json', data, 'GET');
         return promise;
     }

@@ -1,0 +1,81 @@
+{
+    "message": "OK",
+    "resultSet": {
+        "SAP": {
+            "series": [
+                {
+                    "PTCAckMsg": "PTCACkMessage",
+                    "BomPayloadProcessed": "true",
+                    "ModifiedDate": "2016-07-22T00:00:00Z",
+                    "Plant": "Reynosa",
+                    "UIReprocessingDate": "2016-07-27T00:00:00Z",
+                    "PartError": "true",
+                    "BomErrorMsg": "BomErrorMessage",
+                    "ECNNumber": "115",
+                    "PtcAck": "false",
+                    "isErrorDataRequired": "true",
+                    "Status": "3",
+                    "OutputXMLEtag": "cdc3b234",
+                    "PartPayloadProcessed": "false",
+                    "ERPName": "Symix",
+                    "Error": "error",
+                    "BomError": "true",
+                    "TxnID": "7",
+                    "PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
+                    "InputXMLEtag": "cdc3b121",
+                    "UIReprocessing": "part/bom",
+                    "CreatedDate": "2016-07-21T00:00:00Z",
+                    "BomPayloadProcessedDate": "2016-07-23T00:00:00Z",
+                    "Region": "Reynosa",
+                    "PTCAckSentDate": "2016-07-26T00:00:00Z",
+                    "PartErrorMsg": "PartErrorMessage"
+                }
+            ]
+        }
+    },
+    "graphData": {
+        "SAP": [
+            4,
+            2
+        ]
+    },
+    "errorData": {
+        "SAP": {
+            "series": [
+                {
+                    "PTCAckMsg": "PTCACkMessage",
+                    "BomPayloadProcessed": "true",
+                    "ModifiedDate": "2016-07-22T00:00:00Z",
+                    "Plant": "Reynosa",
+                    "UIReprocessingDate": "2016-07-27T00:00:00Z",
+                    "PartError": "true",
+                    "BomErrorMsg": "BomErrorMessage",
+                    "ECNNumber": "115",
+                    "PtcAck": "false",
+                    "isErrorDataRequired": "true",
+                    "Status": "3",
+                    "OutputXMLEtag": "cdc3b234",
+                    "PartPayloadProcessed": "false",
+                    "ERPName": "Symix",
+                    "Error": "error",
+                    "BomError": "true",
+                    "TxnID": "7",
+                    "PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
+                    "InputXMLEtag": "cdc3b121",
+                    "UIReprocessing": "part/bom",
+                    "CreatedDate": "2016-07-21T00:00:00Z",
+                    "BomPayloadProcessedDate": "2016-07-23T00:00:00Z",
+                    "Region": "Reynosa",
+                    "PTCAckSentDate": "2016-07-26T00:00:00Z",
+                    "PartErrorMsg": "PartErrorMessage"
+                }
+            ]
+        }
+    },
+    "userData": {
+        "Role": "Admin",
+        "UserName": "Sunil Soni",
+        "GlobalId": "csonisk"
+    },
+    "error": false
+}

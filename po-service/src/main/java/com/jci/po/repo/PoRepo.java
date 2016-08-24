@@ -5,12 +5,14 @@ import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.jci.po.azure.data.DataHelper;
 import com.jci.po.azure.data.ResultSet;
 import com.jci.po.azure.query.ScrollingParam;
 import com.jci.po.dto.req.BatchInsertReq;
 import com.jci.po.dto.req.BatchUpdateReq;
+import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.res.BatchInsertResp;
 import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.entity.PoEntity;
@@ -25,6 +27,8 @@ public interface PoRepo {
 	BatchUpdateRes batchUpdate(BatchUpdateReq request);
 	HashMap<String, ArrayList<Integer>> getGraphData() throws InvalidKeyException, URISyntaxException, StorageException ;
 	
-	List<PoItemsEntity> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
+	Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
 	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException ;
+	
+	ResultSet getPoItemDetail(ScrollingParam param,DataHelper request)throws InvalidKeyException, URISyntaxException, StorageException;
 }

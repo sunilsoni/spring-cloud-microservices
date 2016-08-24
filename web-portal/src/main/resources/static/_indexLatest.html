@@ -1,0 +1,297 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+<title>Supplier Collaboration</title>
+
+<!-- Bootstrap -->
+<link rel="stylesheet" media="screen" href="/css/bootstrap.min.css" />
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/css/verticalbargraph.css" />
+<link rel="stylesheet" href="/js/lib/SlickGrid/slick.grid.css"
+	type="text/css" />
+<link rel="stylesheet" href="/js/lib/SlickGrid/slick.grid.css"
+	type="text/css" />
+<link rel="stylesheet" href="/js/lib/SlickGrid/controls/slick.pager.css"
+	type="text/css" />
+<link rel="stylesheet" href="/js/lib/SlickGrid/css/smoothness/jquery-ui-1.8.16.custom.css"
+	type="text/css" />
+<link rel="stylesheet" href="/css/plugins-common.css" type="text/css" />
+<link rel="stylesheet" href="/css/plugins-excel-style.css" type="text/css" />
+
+<link rel="stylesheet" href="/js/lib/SlickGrid/controls/slick.columnpicker.css" type="text/css" />
+<link rel="stylesheet" href="/css/app.css" />
+<link rel="stylesheet" href="/css/custom-grid-style.css" type="text/css" />
+
+<link rel="stylesheet" href="/css/toastr.css" type="text/css" />
+	
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]
+	      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"/></script>
+	      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"/></script>
+	    <![endif]-->
+
+
+<!-- <link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet"> -->
+<!-- <style type="text/css">
+[ng\:cloak], [ng-cloak], .ng-cloak {
+	display: none !important;
+}
+</style> -->
+</head>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]
+	      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"/></script>
+	      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"/></script>
+	    <![endif]-->
+
+
+<body>
+	
+	<div id="loadingindicator"></div>
+	<div class="container jci-color" id="mainContent">
+		<div class="username-msg" style="display:none;">
+			<div class="message">
+				<span class="welcome-msg">Welcome,</span><span id="username"></span>
+			</div>
+		</div>
+		<header style="padding-bottom:0px;">
+			<div class="row ">
+				<div class="col-sm-3">
+					<a href="index.html"><img src="img/Johnson_Controls.png"
+						 id="logo-img"/></a>
+
+				</div>
+				<div class="col-sm-9" style="margin-top:28px;padding-left:0px;">
+					<ul class="nav nav-tabs nav-justified" id="main-tabs">
+						<li><a data-toggle="tab" href="#home" data-tab="home">Home</a></li>
+						<li><a data-toggle="tab" href="#supplier" data-tab="supplier">Supplier</a></li>
+						<li><a data-toggle="tab" href="#item" data-tab="item">Item</a></li>
+					</ul>
+				</div>
+				<!--<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group headerDiv">
+								<label for="usr" class="listview-label colorheader">Welcome
+									:</label> <label for="usr" class="listview-label"
+									id="userLabel"></label>
+								<div class=" headerDivOne">
+									<label for="usr" class="listview-label colorheaderdeg" id="roleLabel"></label>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="pull-right">
+						<a class="btn btn-danger" id="logOff">Log Off</a>
+					</div>
+				</div>-->
+
+				
+			</div>
+			<!--<div class="row">
+				<div class="col-sm-12 col-xs-12">
+					<ul class="nav nav-tabs tabUl">
+						<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+						<li><a data-toggle="tab" href="#supplier">Supplier</a></li>
+						<li><a data-toggle="tab" href="#item">Item</a></li>
+					</ul>
+				</div>
+			</div>-->
+	
+		</header>
+		<!--Sunil: Dashboard-->
+        <section id="main1" data-item-type="home" class="active" style="margin-top:-8px;">
+			<!--<div id="dashboardGridContainer">
+                <div class="row" >
+                    <div class="col-sm-2 col-xs-6">
+                        
+                    </div>
+                    <div class="col-sm-2 col-xs-6">
+                        
+                    </div>
+                    
+                    
+                </div>
+                
+                <div class="clearfix"></div>
+				
+				<div id="dashboard-tabs">
+					<div class="row">	
+						<div class="col-sm-8 col-xs-6">
+							<ul class="nav nav-tabs tabUl" id="dashboard-ul-tabs">
+								
+							</ul>
+						</div>
+						<div class="col-sm-4 col-xs-6" >
+					   
+								<div class="errorActionContainer">
+									<span>Action Required:</span>
+						   
+									<button type="button" id="errorBtn" class="btn btn-danger" click="errorinProcess()">
+										Error in Process - <span id="errorCount">0</span>
+									</button>
+								</div>
+								
+						 
+						</div>
+					</div>
+					<div id="dashboard-tab-content" class="tab-content">
+					</div>
+				</div>
+			</div>
+            <hr />
+            <div class="row">
+				<div class="col-sm-12">
+					<div class="margin-top-10">
+					    
+						<div id="highchartContainer"></div>
+					</div>
+				</div>
+			</div>-->
+		</section>
+		
+		<!-- Sunil: Error-->
+		<section id="main2" data-item-type="error" class=""> 
+
+            <div class="margin-all-10">
+				<button type="button" id="goBack" class="btn btn-info">Go Back</button>
+                <ul class="nav nav-pills tabUl" id="error-ul-tabs">
+                    <!--<li class="active"><a data-toggle="tab" href="#home">Symix</a></li>
+                    <li><a data-toggle="tab" href="#menu1">SAP</a></li>
+                    <li><a data-toggle="tab" href="#menu2">Oracle</a></li>-->
+                </ul>
+
+                <div id="error-tab-content" class="tab-content">
+                    <!--<div id="home" class="tab-pane fade in active">
+						<div class="gridContainer">
+                        <div class="row">
+                            <div class="col-sm-12">
+								<div id="myGridErr" class="grid-style"></div>
+								<div id="pagerErr" class="pager-style"></div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="menu1" class="tab-pane fade">
+                        <h3>SAP</h3>
+
+                    </div>
+                    <div id="menu2" class="tab-pane fade">
+                        <h3>Oracle</h3>
+
+                    </div>-->
+
+                </div>
+				
+                <div class="clearfix"></div>
+                
+            </div>
+            <hr />
+            <div class="tableError">
+                <p class="details">PO Details: </p>
+                <div class="row" id="form">
+                    <div>
+                        <div class="col-sm-6 form-horizontal">
+                            <div class="form-group">
+                                <label for="txtBURegion" class="listview-label control-label col-sm-4 ">
+                                    PO #
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control " placeholder="PO #" id="txtPoNum" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-horizontal">
+                            <div class="form-group">
+                                <label for="txtBURegion" class="listview-label control-label col-sm-4 ">
+                                    Supplier Id
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control " placeholder="Supplier Id" id="txtSupplierId" disabled="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 form-horizontal">
+                            <div class="form-group">
+                                <label for="txtBURegion" class="listview-label control-label col-sm-2 " >
+                                    Change Log
+                                </label>
+                                <div class="col-sm-10">
+                                    <textarea rows="4" class="form-control "  id="txtDescErr"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-horizontal">
+                            <div class="form-group">
+                                <div class="col-sm-7">
+                                    <button type="button" class="btn btn-info col-sm-3 pull-right" id="submitErrBtn">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+		
+		<footer>
+			<div class="footer-copyright">
+				<div class="container">
+					<div class="row text-center" >
+						<div class="col-sm-12 text-center" >
+							<p class="text-center">
+								&copy; 2016 Johnson Controls, Inc. All rights reserved. <span
+									class="mobile-divider"><a
+									href="http://www.johnsoncontrols.com/content/us/en/privacy.html"
+									target="_blank">Privacy</a> | <a
+									href="http://www.johnsoncontrols.com/content/us/en/terms.html"
+									target="_blank">Terms of use</a></span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<div class="clearfix-height"></div>
+		
+		
+	</div>
+
+	
+	<script src="/js/lib/jquery-1.9.1.min.js"></script>
+	<script src="/js/lib/bootstrap.min.js"></script>
+	<script src="/js/lib/highcharts.js"></script>
+	<script src="/js/lib/jquery.highchartTable-min.js"></script>
+    <script src="/js/lib/SlickGrid/lib/jquery-ui-1.10.js"></script>
+	<script src="/js/lib/SlickGrid/lib/jquery.event.drag-2.2.js"></script>
+	<script src="/js/lib/SlickGrid/slick.core.js"></script>
+	<script src="/js/lib/SlickGrid/slick.formatters.js"></script>
+	<script src="/js/lib/SlickGrid/slick.editors.js"></script>
+	<script src="/js/lib/SlickGrid/slick.grid.js"></script>
+	<script src="/js/lib/SlickGrid/plugins/slick.checkboxselectcolumn.js"></script>
+	<script src="/js/lib/SlickGrid/plugins/slick.rowselectionmodel.js"></script>
+	<script src="/js/lib/SlickGrid/slick.dataview.js"></script>
+	<script src="/js/lib/SlickGrid/controls/slick.pager.js"></script>
+	<script src="/js/lib/SlickGrid/controls/slick.columnpicker.js"></script>
+    <script src="/js/lib/SlickGrid/plugins/filter/underscore.js"></script>
+    <script src="/js/lib/SlickGrid/plugins/filter/ext.headerfilter.js"></script>
+	<script src="/js/lib/toastr.js"></script>
+    <script src="/js/app/util.js"></script>
+    <script src="/js/app/service.js"></script>
+    <script src="/js/app/graph.js"></script>
+    <script src="/js/app/custom-grid.js"></script>
+    <script src="/js/app/process-error.js"></script>
+	<script src="/js/app/dashboard.js"></script>
+    
+</body>
+</html>

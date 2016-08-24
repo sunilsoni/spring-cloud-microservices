@@ -52,7 +52,7 @@ var commonUtil = (function($){
      * @return {Array} column definition array of objects
      */
     function getDashboardGridColumns(){
-        return [{
+        return [/*{
             id: "poId",
             name: "Select",
             field: "poId",////initially it was poId
@@ -62,13 +62,14 @@ var commonUtil = (function($){
 			sortable:false,
 			filterValues : [],
 			headerCssClass : "hide-arrow-btn"
-        }, {
+        },*/ {
             id: "poNum",
             name: "PO Number",
             field: "OrderNumber", //initially it was poNum
             sortable : true,
             width: 150,
 			cssClass:"poNumber",
+			formatter:hrefFormatter,
 			sortable:false,
 			filterValues : []
         }, {
@@ -81,13 +82,13 @@ var commonUtil = (function($){
 			sortable:false,
 			filterValues : []
         }, 
-		{
+		/*{
             id: "dataSource",
             name: "Data Source",
             field: "SourceErpName",//initially it was dataSource
             sortable : true,
             width: 200
-        },
+        },*/
 		{
             id: "statusVal",
             name: "Status",
@@ -944,13 +945,13 @@ var commonUtil = (function($){
             resizable:true,
 			cssClass:"poDesc"
           }, 
-		  {
+		  /*{
             id: "SourceErpName",
             name: "Data Source",
             field: "SourceErpName",
             minWidth: 200,
             resizable:true
-          }, 
+          }, */
 		  {
             id: "statusVal",
             name: "Status",
@@ -960,6 +961,127 @@ var commonUtil = (function($){
 			cssClass:"statusVal"
           }];
     }
+	
+	function getECNGridColumns(){
+		return [{
+			id: "ECNNumber",
+            name: "ECN Number",
+            field: "ECNNumber",
+            minWidth: 250,
+            resizable:true
+		},
+		{
+			id: "TxnID",
+            name: "Txn ID",
+            field: "TxnID",
+            minWidth: 250,
+            resizable:true
+		},
+		{
+			id: "Error",
+            name: "Error",
+            field: "Error",
+            minWidth: 250,
+            resizable:true
+		}
+		];
+	}
+	
+	/*function getPOItemDetailsColumns(){
+		var ArrayObj = [
+		{id:"DrawingNumber",name:"Drawing Number",field:"DrawingNumber",sortable:true,width:200},
+		{id:"LineStatus",name:"Line Status",field:"LineStatus",sortable:true,width:200},
+		{id:"LineID",name:"Line ID",field:"LineID",sortable:true,width:200}
+		];
+		
+		return ArrayObj;
+		
+	}*/
+	
+	function getPOItemDetailsColumns(){
+		return [
+		{
+			id:"LineID",
+			name:"Line ID",
+			field:"LineID",
+			sortable:true,
+			width:200
+		},
+		{
+			id:"LineStatus",
+			name:"Line Status",
+			field:"LineStatus",
+			minWidth:200
+		},
+		{
+			id:"OrderStatus",
+			name:"Order Status",
+			field:"OrderStatus",
+			minWidth:200
+		},
+		{
+			id:"DrawingNumber",
+			name:"Drawing Number",
+			field:"DrawingNumber",
+			sortable:true,
+			width:200
+		},
+		{
+			id:"OrderCreationDate",
+			name:"Order Creation Date",
+			field:"OrderCreationDate",
+			minWidth:350
+		},
+		{
+			id:"RequestDate",
+			name:"Request Date",
+			field:"RequestDate",
+			minWidth:300
+		},
+		{
+			id:"SupplierID",
+			name:"Supplier ID",
+			field:"SupplierID",
+			minWidth:200
+		},
+		{
+			id:"SupplierDescription",
+			name:"Supplier Description",
+			field:"SupplierDescription",
+			minWidth:350
+		},
+		{
+			id:"ItemCategory",
+			name:"Item Category",
+			field:"ItemCategory",
+			minWidth:250
+		},
+		{
+			id:"CustomerItemDescription",
+			name:"Customer Item Description",
+			field:"CustomerItemDescription",
+			minWidth:400
+		},
+		{
+			id:"CustomerAddressDescriptor",
+			name:"Customer Address Descriptor",
+			sortable:true,
+			field:"CustomerAddressDescriptor",
+			width:400
+		},
+		{
+			id:"CustomerCountry",
+			name:"Customer Country",
+			field:"CustomerCountry",
+			minWidth:300
+		},
+		{
+			id:"CustomerDescription",
+			name:"Customer Description",
+			field:"CustomerDescription",
+			minWidth:350
+		}]
+	}
 	
 	
     
@@ -1061,6 +1183,18 @@ var commonUtil = (function($){
                 color: "#AA4643"
             }];
     }
+	
+	function prepareECNGraphData(data){
+        return [{
+                name: 'Processed',
+                data: data.process,
+                color: "#90ed7d"
+            }, {
+                name: 'Errored',
+                data: data.error,
+                color: "#AA4643"
+            }];
+    }
     
     
     function createGraphData(graphDataObject){
@@ -1097,13 +1231,13 @@ var commonUtil = (function($){
      * To plot the graph showing the statistics based on the Status field
      * @param {Array} plotData 
      */
-    function plotGraph(plotData,categoryArr){
+    function plotGraph(plotData,name,categoryArr){
         var highchartContainer = getGraphContainer();
         if(plotData){
-            graphObj.createChart(highchartContainer, plotData, categoryArr);
+            graphObj.createChart(highchartContainer, plotData,name,categoryArr);
         }
         else{
-            graphObj.createChart(highchartContainer,null,categoryArr);
+            graphObj.createChart(highchartContainer,null,name,categoryArr);
         }
         
     }
@@ -1172,7 +1306,10 @@ var commonUtil = (function($){
         getGraphContainer : getGraphContainer,
         plotGraph : plotGraph,
         dashboardErp : dashboardErp,
-		resizeCanvas:resizeCanvas
+		resizeCanvas:resizeCanvas,
+		getECNGridColumns:getECNGridColumns,
+		prepareECNGraphData:prepareECNGraphData,
+		getPOItemDetailsColumns:getPOItemDetailsColumns
 //        createGraphData : createGraphData
     }
 

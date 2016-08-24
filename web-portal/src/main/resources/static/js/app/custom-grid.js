@@ -41,7 +41,7 @@ BuildGrid.prototype.createGrid = function(){
 	
 	var pageSize = 10;
 	
-	if(gridId.indexOf('supplier') != -1 || gridId.indexOf('item') != -1)
+	if(gridId.indexOf('supplier') != -1 || gridId.indexOf('item') != -1 || gridId.indexOf('podetails') != -1)
 		pageSize = 100;
     
     function comparer(a, b) {
@@ -63,7 +63,7 @@ BuildGrid.prototype.createGrid = function(){
 		
 			var flg = false;	
 			
-			$('#main2 input[type="checkbox"]').each(function(){
+			$('.errro-data-container input[type="checkbox"]').each(function(){
 				if($(this).is(':checked')){
 					flg = true;	
 				}					
@@ -140,7 +140,7 @@ BuildGrid.prototype.createGrid = function(){
 	  dataView.endUpdate();
 	  
 	  
-	  /*var filterPlugin = new Ext.Plugins.HeaderFilter({});
+	  var filterPlugin = new Ext.Plugins.HeaderFilter({});
 
 		// This event is fired when a filter is selected
 		filterPlugin.onFilterApplied.subscribe(function () {
@@ -165,7 +165,7 @@ BuildGrid.prototype.createGrid = function(){
 
 		grid.registerPlugin(filterPlugin);
 
-		grid.init();*/
+		grid.init();
 	
   
 
@@ -343,6 +343,14 @@ function checkBoxFormatter(row, cell, value, columnDef, dataContext) {
         return "<input type='checkbox' class='checkbox-button' record-id='" + dataContext["id"] + "' disabled/>";
     }
 };
+
+function hrefFormatter(row, cell, value, columnDef, dataContext){
+	var text = "";
+	
+	text += "<a href='#' class='po-number' data-value='"+value+"'>"+value+"</a>";
+	
+	return text ;
+}
 
 
 function checkBoxFormatterErr(row, cell, value, columnDef, dataContext) {

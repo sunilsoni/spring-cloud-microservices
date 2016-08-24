@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.jci.po.apis.ApiClient;
 import com.jci.po.dto.req.FlatFileReq;
+import com.jci.po.dto.req.TempRequest;
 import com.jci.po.dto.res.FlatFileRes;
+import com.jci.po.dto.res.TempResponse;
+import com.jci.po.entity.PoItemsEntity;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
@@ -67,6 +70,19 @@ public class ApiClientServiceImpl implements ApiClientService {
 		res.setMessage("Process Po Details Fallback call, seems PO API service is down");
 		
 		LOG.info("### Ending ApigeeClientService.processFlatFileFallback ####"+res);
+		return res;
+	}
+
+
+
+	@Override
+	public TempResponse postSupplierData(TempRequest req) {
+		LOG.info("### Starting ApigeeClientService.postSupplierData ####"+req);
+		ResponseEntity<TempResponse> entity = client.postSupplierData(req);
+		LOG.info("getBody--->"+entity.getBody());
+		TempResponse res = new TempResponse();
+		LOG.info("### Ending ApigeeClientService.postSupplierData ####"+res);
+		
 		return res;
 	}
 

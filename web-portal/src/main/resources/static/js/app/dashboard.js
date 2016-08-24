@@ -21,13 +21,13 @@ server calls: none
 * @param {Object} jQuery 
 */
 var e2OpenDashboard = (function($){
-    var checkedRecords = [], mainGrid = {}, resultSetData={}, errorData = {}, erpData,allGridsData = {};
+    var checkedRecords = [], mainGrid = {}, resultSetData={}, errorData = {}, erpData,allGridsData = {},graphData = {};
     
     /*
      * To create grid and graph on load (O records) and to adjust the graph height based on screen height
      */
     function init(){
-        
+        mainGrid = {};errorData = {};erpData={};allGridsData = {};graphData = {};
         var obj = JSON.parse('{"firstRequest":true,"size":100,"erpName":"SYMIX"}');
     	JSON.stringify(obj);
     	var obj2 = JSON.parse('{"paginationParam":{"lastPartition":null,"lastRow":null,"nextPartition":null,"nextRow":null}}');
@@ -37,78 +37,355 @@ var e2OpenDashboard = (function($){
         console.log("reqObj-->"+reqObj);
 		
         serviceObj.pullPoData(reqObj).then(function( data, textStatus, jqXHR ) {
-			allGridsData = data;
-            // remove the loading screen
-            commonUtil.removeLoader();
-            $('#username').text(data.userData.UserName);
-            $('#username').attr('data-global-id',data.userData.GlobalId);
-			$('.username-msg').show();
             if(!data.error){
-				$('#main-tabs li').off('click').on('click',function(){
-					$(this).siblings().removeClass('active');
+				allGridsData = data;
+				// remove the loading screen
+				
+				commonUtil.removeLoader();
+				$('#username').text(data.userData.UserName);
+				$('#username').attr('data-global-id',data.userData.GlobalId);
+				$('.username-msg').show();
+				$('.logout').show();
+				/*if($(window).width() > 767)
+					$('.sidebar').css('margin-top','51px');*/
+				errorData = data.errorData;
+				graphData = data.graphData;
+				
+				fnGeneratePOSubMenus(data.resultSet);
+				fnGenerateSupplierSubMenus(data.supplierData);
+				fnGenerateItemSubMenus(data.itemData);
+				
+				//$(document).on('click','.nav-second-level li a',function(e){
+				$('.nav-second-level li a').off('click').on('click',function(e){	
+					e.stopPropagation();
+					e.stopImmediatePropagation();
+					var li = $(this).closest('ul').closest('li');
+					li.siblings().find('.nav-second-level li a').each(function(){
+						$(this).removeClass('active');
+					});
 					$(this).addClass('active');
-					var tab = $(this).find('a').attr('data-tab');
-					switch(tab){
-						case "home":
-							fngenerateHomeHtml(data.userData.Role);	
+					var tab = $(this).closest('.nav-second-level').attr('data-item');
+					var grid = $(this).attr('grid');
+					var erp = grid.split('-')[1];
+					if(tab == "po"){
+						fnGenerateGridHtml(data.resultSet,grid,"dashboard",data.userData.Role,data.graphData,errorData);
+						buildDashboardGrids(erp,data.resultSet);
+						buildErrorGrids(errorData,erp);
+					}
+						
+					else if(tab == "supplier"){
+						var minHeight = "";	
+						if((data.supplierData[erp].series).length < 16 && (data.supplierData[erp].series).length > 10){
+							minHeight = (data.supplierData[erp].series).length * 25 + 75;
+						}
+						fnGenerateGridHtml(data.supplierData,grid,"supplier");
+						if(minHeight)
+							$('.gridContainer .grid-style').css('min-height',minHeight+"px");
+						buildSupplierGrids(erp,data.supplierData);
+					}
+						
+					else if(tab == "item"){
+						var minHeight = "";	
+						if((data.itemData[erp].series).length < 16 && (data.itemData[erp].series).length > 10){
+							minHeight = (data.itemData[erp].series).length * 25 + 75;
+						}
+						fnGenerateGridHtml(data.itemData,grid,"item");
+						if(minHeight)
+							$('.gridContainer .grid-style').css('min-height',minHeight+"px");
+						buildItemGrids(erp,data.itemData);
+					}
+						
+				});
+				
+				
+				$('#side-menu li.menu').off('click').on('click',function(e){
+					
+					//if(!$(this).find('.nav-second-level').hasClass('in')){
+						$(this).siblings().find('a').removeClass('active');
+						$(this).find('a').not('.nav-second-level a').addClass('active');
+						
+						var data_tab = $(this).attr('data-tab');
+						
+						if(data_tab == "home"){
+							/*fngenerateGraphHtml();
 							var dashboardData = data.resultSet;
 							erpData = commonUtil.dashboardErp(dashboardData);
-							buildContainer('dashboard',erpData,dashboardData);
-							errorData = data.errorData;
-							var errorCount = buildDashboardGrids(erpData, data.resultSet);
-							buildGraph(data.graphData);
-							resultSetData = data.resultSet;
-							$('#main1 .tabUl li a:first').trigger('click');
-							console.log(mainGrid);
-							break;
-						
-						case "supplier":
-							fngenerateSupplierHtml();
-							commonUtil.handleHideShow('dashboardScreen');
-							var supplierData = data.supplierData;
-							erpData = commonUtil.dashboardErp(supplierData);
-							buildContainer('supplier',erpData,supplierData);
-							buildSupplierGrids(erpData, supplierData);
-							$('#main1 .tabUl li a:first').trigger('click');
-							break;
 							
-						case "item":
-							fngenerateItemHtml();
-							commonUtil.handleHideShow('dashboardScreen');
-							var itemData = data.itemData;
-							erpData = commonUtil.dashboardErp(itemData);
-							buildContainer('item',erpData,itemData);
-							var errorCount = buildItemGrids(erpData, itemData);
-							$('#main1 .tabUl li a:first').trigger('click');
-							break;
+							buildGraph(graphData,erpData);*/
 							
-					}
+							var menuHtml = "";
+							menuHtml +='<li data-tab="home" class="menu">'+
+											'<a href="#" class="active"><i class="fa fa-home fa-fw" ></i> Home</a>'+
+										'</li>';
+										
+							$('#side-menu').html(menuHtml);	
+							$('#main1').html('');
+							$('#main1').hide();
+							$('#main2').hide();
+							$('#main0').show();
+							$('#main3').hide();
+						}
+						else if(data_tab == "po"){
+							fnGeneratePOHtml();
+							buildGraph(graphData);
+						}
+						else
+							$(this).find('.nav-second-level li:first a').trigger('click');
+					//}
 				});
-				$('#main-tabs li:first').trigger('click');
+				
+				$('li[data-tab="po"]').trigger('click');
+				
             }
             console.log(erpData);
         });
-        
-        /*//creating a grid and assigning it to mainGrid
-        mainGrid = Object.create(BuildGrid.prototype);
-        
-        //getting the columns and grid options via the commonUtil API
-        var columns = commonUtil.getDashboardGridColumns();
-        var options = commonUtil.getDashboardGridOptions();
-
-        // passing data to the constructor for the dashboard grid
-        mainGrid.constructor('#myGrid',[],columns,options,'#pager');
-        
-        // adjusting the graph height dynamically (to make sure it comes in first fold for desktop screens
-        graphObj.adjustGraphHeight();
-        
-        // create the dashboard grid
-        mainGrid.createGrid();
-        
-        //plot the graph based on the status
-        commonUtil.plotGraph();*/
     }
 	
+	function fnGeneratePOHtml(){
+		var html = "";
+		
+		html += "<div class='row'>"+
+						"<div class='col-sm-12'>"+
+							//"<div class='margin-top-10'>"+
+								"<div id='highchartContainer' style='height:500px;'></div>"+
+							//"</div>"+
+						"</div>"+
+					"</div>";
+					
+		$('#main1').html(html);				
+	}
+	
+	function fnGenerateGridHtml(data,grid,type,role,graphData,errorData){
+		
+		var newGraphData = {};
+		
+		var html = "";
+		
+		var erp = grid.split('-')[1];
+		
+		if(graphData)
+			newGraphData[erp] = graphData[erp]; 
+		
+		var errorCount = 0 ;
+		
+		
+		
+		if(graphData){
+			/*for(var i = 0; i < erpData.length ; i++ ){
+				errorCount += graphData[erpData[i]][2];
+			}*/
+			errorCount += graphData[erp][2];
+		}
+		
+		var className = "";
+		if(type != "error" && type != "dashboard")
+			className = "max-height";
+		
+		var disabled = "";
+		
+		if(type == "dashboard" /*&& errorCount > 0*/ && role == "Admin"){
+			html += "<div class='row'><div class='col-lg-6'>";
+		}
+		
+		/*if(type == "dashboard" && role == "Admin"){
+			
+			if(errorCount <= 0)
+				disabled = "disabled='true'";
+			
+			
+			 
+			html += "<div class='row'><div class='col-sm-12'>"+
+						"<div class='errorActionContainer'>"+
+							"<button id='errorBtn' class='btn btn-danger' "+disabled+" click='errorinProcess()'>Errors in Process - <span id='errorCount'>"+errorCount+"</span></button>"+
+						"</div>"+
+					"</div></div>";
+		}*/
+		
+		var label = type.toUpperCase()+" DATA";
+		
+		var lblMargin = "margin-left:25%;"
+		
+		if(label == "DASHBOARD DATA"){
+			label = "PO DATA";
+			lblMargin = "margin-left:15%;"
+		}
+			
+		
+		html += '<div class="row" style="margin-bottom:5px;"><div class="col-xs-9 process-error-header"><span style="'+lblMargin+'">'+label+'</span></div><div class="col-xs-3"><button id="exportBtn" grid="'+type+'-'+erp+'-grid'+'" class="btn btn-info" style="float:right;display:none;">Export To  Excel</button></div></div><div class="row"><div class="col-sm-12"><div id="'+type+erp+'" class="tab-pane fade in active"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="'+type+'-'+erp+'-grid'+'" class="grid-style '+className+'"></div><div id="'+type+'-'+erp+'-pager'+'" class="pager-style"></div></div></div></div></div></div></div>';
+		
+		if(type == "dashboard"){
+			html += "<div class='row'>"+
+						"<div class='col-sm-12'>"+
+							//"<div class='margin-top-10'>"+
+								"<div id='highchartContainer'></div>"+
+							//"</div>"+
+						"</div>"+
+					"</div>";
+					
+			if(/*errorCount > 0 && */role == "Admin"){
+				var errorHtml = fnGetErrorGridHtml("error",erp);
+				
+				html += "</div><div class='col-lg-6 errro-data-container'>"+errorHtml+"</div></div>";
+			}	
+					
+					
+			/*var dashboardData = data;
+			erpData = commonUtil.dashboardErp(dashboardData);*/		
+					
+					
+		}
+		
+		$('#main1').html(html);	
+		
+		var id = "main1";
+		
+		/*if(type != "error")
+			$('#main1').html(html);	
+		else{
+			$('#main2 .error-container').html(html);
+			id = "main2";
+		}*/
+				
+
+		var paginationData = data[erp].pagination;
+		
+		$('#'+id+' .tab-pane').find('.pagination-data .lastPartition').text(paginationData.lastPartition)
+		$('#'+id+' .tab-pane').find('.pagination-data .lastRow').text(paginationData.lastRow)
+		$('#'+id+' .tab-pane').find('.pagination-data .nextPartition').text(paginationData.nextPartition)
+		$('#'+id+' .tab-pane').find('.pagination-data .nextRow').text(paginationData.nextRow);
+		
+		if(type == "dashboard"){
+			buildGraph(newGraphData,erpData);
+			if(/*errorCount > 0 && */role == "Admin"){
+				paginationData = errorData[erp].pagination	;
+				
+				$('.errro-data-container').find('.pagination-data .lastPartition').text(paginationData.lastPartition)
+				$('.errro-data-container').find('.pagination-data .lastRow').text(paginationData.lastRow)
+				$('.errro-data-container').find('.pagination-data .nextPartition').text(paginationData.nextPartition)
+				$('.errro-data-container').find('.pagination-data .nextRow').text(paginationData.nextRow);
+			}
+		}
+			
+		
+		
+	}
+	
+	function fnGetErrorGridHtml(type,erp){
+		var html = "";
+		
+		html += '<div class="row" style="margin-bottom:5px;"><div class="col-xs-9 process-error-header"><span style="margin-left:15%;">PROCESS ERROR DATA</span></div><div class="col-xs-3"><button id="exportBtn" grid="'+type+'-'+erp+'-grid'+'" class="btn btn-info" style="float:right;display:none;">Export To  Excel</button></div></div><div class="row"><div class="col-sm-12"><div id="'+type+erp+'" class="tab-pane fade in active"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="'+type+'-'+erp+'-grid'+'" class="grid-style"></div><div id="'+type+'-'+erp+'-pager'+'" class="pager-style"></div></div></div></div></div></div></div>';
+		
+		html += '<div class="tableError">'+
+					'<p class="details">PO Details: </p>'+
+					'<div class="row" id="form">'+
+						'<div>'+
+							/*'<div class="col-sm-6 form-horizontal">'+
+								'<div class="form-group">'+
+									'<label for="txtBURegion" class="listview-label control-label col-sm-4 ">PO #</label>'+
+									'<div class="col-sm-8">'+
+										'<input type="text" class="form-control " placeholder="PO #" id="txtPoNum" disabled="true"/>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+							'<div class="col-sm-6 form-horizontal">'+
+								'<div class="form-group">'+
+									'<label for="txtBURegion" class="listview-label control-label col-sm-5 ">Supplier Id</label>'+
+									'<div class="col-sm-7">'+
+										'<input type="text" class="form-control " placeholder="Supplier Id" id="txtSupplierId" disabled="true"/>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+*/
+							'<div class="col-sm-12 form-horizontal">'+
+								'<div class="form-group">'+
+									'<label for="txtBURegion" class="listview-label control-label col-sm-2">Change Log</label>'+
+									'<div class="col-sm-10">'+
+										'<textarea rows="4" class="form-control "  id="txtDescErr"></textarea>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+							'<div class="col-sm-12 form-horizontal">'+
+								'<div class="form-group">'+
+									'<div class="col-sm-7">'+
+										'<button type="button" class="btn btn-info col-sm-3 pull-right" id="submitErrBtn">Submit</button>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'+
+				'</div>';
+				
+		return html ;		
+		
+		
+		
+	}
+	
+	function fnGetPoDetailsGridHtml(paginationData,type,erp,poNum){
+		var html = "";
+		
+		html += '<div class="row" style="margin-bottom:5px;"><div class="col-xs-9 process-error-header"><span style="margin-left:15%;">PO '+poNum+' Details</span></div><div class="col-xs-3"><button id="exportBtn" grid="'+type+'-'+erp+'-grid'+'" class="btn btn-info" style="float:right;display:none;">Export To  Excel</button></div></div><div class="row"><div class="col-sm-12"><div id="'+type+erp+'" class="tab-pane fade in active"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="'+type+'-'+erp+'-grid'+'" class="grid-style max-height"></div><div id="'+type+'-'+erp+'-pager'+'" class="pager-style"></div></div></div></div></div></div></div>';
+		
+		$('#main3 .item-details-container').html(html);
+		
+		var id = "main3";
+		
+		$('#'+id+' .tab-pane').find('.pagination-data .lastPartition').text(paginationData.lastPartition)
+		$('#'+id+' .tab-pane').find('.pagination-data .lastRow').text(paginationData.lastRow)
+		$('#'+id+' .tab-pane').find('.pagination-data .nextPartition').text(paginationData.nextPartition)
+		$('#'+id+' .tab-pane').find('.pagination-data .nextRow').text(paginationData.nextRow);
+		
+		
+	}
+	
+	function fnGeneratePOSubMenus(dashboardData){
+		erpData = commonUtil.dashboardErp(dashboardData);
+		
+		var html = "";
+		
+		for(var i = 0 ; i < erpData.length ; i++){
+			html += '<li><a data-toggle="tab" href="#" grid="dashboard-'+erpData[i]+'-grid'+'">'+erpData[i]+'</a></li>';
+		}
+		
+		$('#PoSubMenu').html(html);
+	}
+	
+	function fnGenerateSupplierSubMenus(supplierData){
+		erpData = commonUtil.dashboardErp(supplierData);
+		
+		var html = "";
+		
+		for(var i = 0 ; i < erpData.length ; i++){
+			html += '<li><a data-toggle="tab" href="#" grid="supplier-'+erpData[i]+'-grid'+'">'+erpData[i]+'</a></li>';
+		}
+		
+		$('#SuppSubMenu').html(html);
+	}
+	
+	function fnGenerateItemSubMenus(itemData){
+		erpData = commonUtil.dashboardErp(itemData);
+		
+		var html = "";
+		
+		for(var i = 0 ; i < erpData.length ; i++){
+			html += '<li><a data-toggle="tab" href="#" grid="item-'+erpData[i]+'-grid'+'">'+erpData[i]+'</a></li>';
+		}
+		
+		$('#ItemSubMenu').html(html);
+	}
+	
+	function fngenerateGraphHtml(){
+		var html = "";
+		 html += "<div class='row'>"+
+					"<div class='col-sm-12'>"+
+						//"<div class='margin-top-10'>"+
+							"<div id='highchartContainer'></div>"+
+						//"</div>"+
+					"</div>"+
+				"</div>";
+				
+		$('#main1').html(html);			
+				
+	}
 	
 	function fngenerateHomeHtml(role){
 		var html = "";
@@ -239,7 +516,7 @@ var e2OpenDashboard = (function($){
 		
     }
     
-    function buildDashboardGrids(erpData, resultSet){
+    function buildDashboardGrids(erp, resultSet){
         //var mainGrid = {};
         
          //getting the columns and grid options via the commonUtil API
@@ -247,20 +524,20 @@ var e2OpenDashboard = (function($){
         var options = commonUtil.getDashboardGridOptions();
         var errorCount = 0;
         
-        for(var i=0;i<erpData.length;i++){
+        //for(var i=0;i<erpData.length;i++){
             //creating a grid and assigning it to mainGrid
-            mainGrid['dashboard-'+erpData[i]+'-grid'] = Object.create(BuildGrid.prototype);
+            mainGrid['dashboard-'+erp+'-grid'] = Object.create(BuildGrid.prototype);
             
              // passing data to the constructor for the dashboard grid
-             mainGrid['dashboard-'+erpData[i]+'-grid'].constructor('#dashboard-'+erpData[i]+'-grid',resultSet[erpData[i]].series,columns,options,'#dashboard-'+erpData[i]+'-pager');
-             mainGrid['dashboard-'+erpData[i]+'-grid'].createGrid();
+             mainGrid['dashboard-'+erp+'-grid'].constructor('#dashboard-'+erp+'-grid',resultSet[erp].series,columns,options,'#dashboard-'+erp+'-pager');
+             mainGrid['dashboard-'+erp+'-grid'].createGrid();
             
-            errorCount += errorData[erpData[i]].series.length;
-        }
+            //errorCount += errorData[erp].series.length;
+        //}
         return errorCount;
     }
 	
-	function buildSupplierGrids(erpData, resultSet){
+	function buildSupplierGrids(erp, resultSet){
 		//var mainGrid = {};
         
          //getting the columns and grid options via the commonUtil API
@@ -268,19 +545,19 @@ var e2OpenDashboard = (function($){
         var options = commonUtil.getDashboardGridOptions();
        
         
-        for(var i=0;i<erpData.length;i++){
+        //for(var i=0;i<erpData.length;i++){
             //creating a grid and assigning it to mainGrid
-            mainGrid['supplier-'+erpData[i]+'-grid'] = Object.create(BuildGrid.prototype);
+            mainGrid['supplier-'+erp+'-grid'] = Object.create(BuildGrid.prototype);
             
              // passing data to the constructor for the dashboard grid
-            mainGrid['supplier-'+erpData[i]+'-grid'].constructor('#supplier-'+erpData[i]+'-grid',resultSet[erpData[i]].series,columns,options,'#supplier-'+erpData[i]+'-pager');
+            mainGrid['supplier-'+erp+'-grid'].constructor('#supplier-'+erp+'-grid',resultSet[erp].series,columns,options,'#supplier-'+erp+'-pager');
 			 
-            mainGrid['supplier-'+erpData[i]+'-grid'].createGrid();
+            mainGrid['supplier-'+erp+'-grid'].createGrid();
             
-        }
+       // }
 	}
 	
-	function buildItemGrids(erpData, resultSet){
+	function buildItemGrids(erp, resultSet){
 		//var mainGrid = {};
         
          //getting the columns and grid options via the commonUtil API
@@ -288,21 +565,24 @@ var e2OpenDashboard = (function($){
         var options = commonUtil.getDashboardGridOptions();
         var errorCount = 0;
         
-        for(var i=0;i<erpData.length;i++){
+        //for(var i=0;i<erpData.length;i++){
             //creating a grid and assigning it to mainGrid
-            mainGrid['item-'+erpData[i]+'-grid'] = Object.create(BuildGrid.prototype);
+            mainGrid['item-'+erp+'-grid'] = Object.create(BuildGrid.prototype);
             
              // passing data to the constructor for the dashboard grid
-             mainGrid['item-'+erpData[i]+'-grid'].constructor('#item-'+erpData[i]+'-grid',resultSet[erpData[i]].series,columns,options,'#item-'+erpData[i]+'-pager');
-             mainGrid['item-'+erpData[i]+'-grid'].createGrid();
+             mainGrid['item-'+erp+'-grid'].constructor('#item-'+erp+'-grid',resultSet[erp].series,columns,options,'#item-'+erp+'-pager');
+             mainGrid['item-'+erp+'-grid'].createGrid();
             
             //errorCount += resultSet[erpData[i]].errorData.length;
-        }
+       // }
         
         return errorCount;
 	}
     
-    function buildGraph(graphData){
+    function buildGraph(graphData,erpData){
+		/*if(!erpData)
+			erpData = erpData;
+		
 		var errorCount = 0 ;
 		for(var i = 0; i < erpData.length ; i++ ){
 			errorCount += graphData[erpData[i]][2];
@@ -312,7 +592,7 @@ var e2OpenDashboard = (function($){
 		if(errorCount == 0)
 			$('#errorCount').attr('disabled','true');
 		else
-			$('#errorCount').removeAttr('disabled');
+			$('#errorCount').removeAttr('disabled');*/
 		
         var graphDataObject={},categoryArr=[], categoryData={},errorGraphData=[], transitGraphData=[],processGraphData=[];
             graphDataObject = graphData;
@@ -330,28 +610,64 @@ var e2OpenDashboard = (function($){
         
             var plotData = commonUtil.prepareGraphData(categoryData);
 
-//          var plotData = commonUtil.createGraphData(graphDataObject);
-
-            
-            // plot the graph
-            commonUtil.plotGraph(plotData,categoryArr);
+			var name = {"x-axis":"","y-axis":"Purchase Orders","title":"Supplier Collaboration Dashboard"};
+            commonUtil.plotGraph(plotData,name,categoryArr);
     }
+	
+	function buildECNGraph(graphData,erpData){
+		var graphDataObject={},categoryArr=[], categoryData={},errorGraphData=[], processGraphData=[];
+            graphDataObject = graphData;
+                
+            for(var grph in graphDataObject){
+                categoryArr.push(grph);
+                errorGraphData.push(graphDataObject[grph][1]);
+                
+                processGraphData.push(graphDataObject[grph][0]);
+                 
+            }
+            categoryData['error'] = errorGraphData;
+            
+            categoryData['process'] = processGraphData;
+        
+            var plotData = commonUtil.prepareECNGraphData(categoryData);
+
+			var name = {"x-axis":"","y-axis":"Purchase Orders","title":"Widchill PLM Dashboard"};
+            commonUtil.plotGraph(plotData,name,categoryArr);
+		
+	}
     
-    function buildErrorGrids(resultSet,erpData){
+    function buildErrorGrids(resultSet,erp){
         //var mainGrid = {};
         
          //getting the columns and grid options via the commonUtil API
        
-        buildContainer('error',erpData,resultSet);
-        var columnsErr = commonUtil.getProcessErrorGridColumns();
-        var optionsErr = commonUtil.getProcessErrorGridOptions();
-        for(var i=0;i<erpData.length;i++){
-             mainGrid['error-'+erpData[i]+'-grid'] = Object.create(BuildGrid.prototype);
-             
-             mainGrid['error-'+erpData[i]+'-grid'].constructor('#error-'+erpData[i]+'-grid', resultSet[erpData[i]].series,columnsErr,optionsErr,'#error-'+erpData[i]+'-pager');
-             mainGrid['error-'+erpData[i]+'-grid'].createGrid();
-        }
+        //buildContainer('error',erpData,resultSet);
+		if($('#error-'+erp+'-grid').length > 0){
+			var columnsErr = commonUtil.getProcessErrorGridColumns();
+			var optionsErr = commonUtil.getProcessErrorGridOptions();
+			//for(var i=0;i<erpData.length;i++){
+				 mainGrid['error-'+erp+'-grid'] = Object.create(BuildGrid.prototype);
+				 
+				 mainGrid['error-'+erp+'-grid'].constructor('#error-'+erp+'-grid', resultSet[erp].series,columnsErr,optionsErr,'#error-'+erp+'-pager');
+				 mainGrid['error-'+erp+'-grid'].createGrid();
+			//}
+		}
+        
     }
+	
+	
+	function buildPODetailsGrid(data,erp){
+		if($('#podetails-'+erp+'-grid').length > 0){
+			var PODetailscolumnsErr = commonUtil.getPOItemDetailsColumns();
+			var optionsErr = commonUtil.getDashboardGridOptions();
+			
+			 mainGrid['podetails-'+erp+'-grid'] = Object.create(BuildGrid.prototype);
+			 
+			 mainGrid['podetails-'+erp+'-grid'].constructor('#podetails-'+erp+'-grid', data,PODetailscolumnsErr,optionsErr,'#podetails-'+erp+'-pager');
+			 mainGrid['podetails-'+erp+'-grid'].createGrid();
+			
+		}
+	}
     
     /*
      * To make the call to the service layer with the data for processind PO
@@ -539,26 +855,25 @@ var e2OpenDashboard = (function($){
         var optionsErr = commonUtil.getProcessErrorGridOptions();
         mainGridErr.constructor('#myGridErr',errorRecords,columnsErr,optionsErr,'#pagerErr');
         mainGridErr.createGrid();*/
-        buildErrorGrids(errorData,erpData);
+		
+		var grid = (($('.nav.nav-second-level.collapse.in a.active').attr('grid')).replace('dashboard','error'));
+		var erp = grid.split('-')[1];
+		
+		fnGenerateGridHtml(errorData,grid,"error");
+		buildErrorGrids(errorData,erp);
+        //buildErrorGrids(errorData,erpData);
 		console.log(mainGrid);
-		$('#main2 .tabUl li a:first').trigger('click');
-    });
-    
-    //code to be run on load
-    $(document).ready(function(){
-        init();
-        commonUtil.addLoader();
-        //pullPoData();
+		//$('#main2 .tabUl li a:first').trigger('click');
     });
 	
-	
-	
-	$('#submitErrBtn').off('click').on('click',function(){
-		var tab = $('#main2 .tab-pane.fade.in.active');
+	$(document).on('click','#submitErrBtn',function(e){	
+	//$('#submitErrBtn').off('click').on('click',function(){
+		//var tab = $('#main2 .tab-pane.fade.in.active');
 		
 		var poNumArray = [];
 		
-		var activeGrid = $('#main2 .tab-pane.fade.in.active .grid-style').attr('id');
+		//var activeGrid = $('#main2 .tab-pane.fade.in.active .grid-style').attr('id');
+		var activeGrid = ($('.nav.nav-second-level.collapse.in a.active').attr('grid')).replace('dashboard','error');
 		
 		var selectedRows = mainGrid[activeGrid].grid.getSelectedRows();
 		
@@ -599,12 +914,17 @@ var e2OpenDashboard = (function($){
 					
 					if(successList.length > 0){
 						mainGrid[activeGrid].deleteItems(successList);
-						$('#main2 .tab-pane.fade.in.active input[type="checkbox"]').each(function(){
+						$('#main1 .errro-data-container input[type="checkbox"]').each(function(){
 							$(this).attr('checked',false);
 						});
 						var dashboardGrid = activeGrid.replace('error','dashboard');
 						mainGrid[dashboardGrid].updateItems(successList);
-						buildGraph(result.graphData);
+						graphData = result.graphData;
+						var newGraphData = {};
+						newGraphData[erp] = graphData[erp];
+						buildGraph(newGraphData);
+						$('#txtDescErr').val('');
+						
 					}
 					var sl = "",slMsg = "",el="",elMsg="";
 					if(successList.length > 0){
@@ -632,21 +952,22 @@ var e2OpenDashboard = (function($){
 		
 	});
     
-    $(document).on('click','.autopager', function(e) {
-		  
+    $(document).on('click','.sc .autopager', function(e) {
           e.stopPropagation();
 		  var selfEle = $(this);
     	  var activeGrid = $(this).attr('grid');
 		  var url = "";
 		  var postObj = {};
-		  var mainTab = $('.nav-tabs.nav-justified li.active a').attr('data-tab');
+		  var mainTab = $('.nav.nav-second-level.collapse.in').attr('data-item');
 		  var subTab = "";
-		  if(mainTab == "home"){
-			subTab = $('section.active').attr('data-item-type');
-			if(subTab == "home")
-				url = "api/po/getSegmentedPoDetails"; 
+		  if(mainTab == "po"){
+			if(activeGrid.indexOf('error') != -1)
+				url = "api/po/getSegmentedErrorDetails";
+			else if($('#main3').hasClass('active'))
+				url = "api/po/getPoItemDetail";
 			else
-				url = "api/po/getSegmentedErrorDetails";	
+				url = "api/po/getSegmentedPoDetails"; 
+			
 		  }  
 		  else if(mainTab == "supplier")
 			  url = "api/supplier/getSegmentedSupplierDetails"
@@ -734,41 +1055,6 @@ var e2OpenDashboard = (function($){
 				  console.log("error");
 			  }
 		  })
-        
-          //get new data here and replace with newData
-          /*var newData = [{
-                "Status": "3",
-                "Description": "test",
-                "OrderNumber": "test",
-                "SourceErpName": "1",
-                "id":1000001
-            },
-            {
-                "Status": "3",
-                "Description": "test",
-                "OrderNumber": "test",
-                "SourceErpName": "1",
-                "id":1000002
-            },
-            {
-                "Status": "3",
-                "Description": "test",
-                "OrderNumber": "3713933",
-                "SourceErpName": "1",
-                "id":1000003
-            },
-            {
-                "Status": "3",
-                "Description": "test",
-                "OrderNumber": "test",
-                "SourceErpName": "1",
-                "id":1000004
-            }];
-        
-            $.merge(currentData,newData);
-            mainGrid[$(this).attr('grid')].grid.invalidate();
-            mainGrid[$(this).attr('grid')].updateGrid(currentData);*/
-            
           
     });
 	
@@ -793,6 +1079,757 @@ var e2OpenDashboard = (function($){
 		return newData;
 	}	
 	
+	
+	$(document).on('click','.grid-style .po-number',function(e){
+		e.preventDefault();
+		var poNum = $(this).attr('data-value');
+		var erp = ($('.nav.nav-second-level.collapse.in li a.active').attr('grid')).split('-')[1];
+		
+		var reqObj = {
+			"poNum": poNum,
+			"erpName": erp,
+			"size": 100,
+			"paginationParam": {
+			  "lastPartition": null,
+			  "lastRow": null,
+			  "nextPartition": null,
+			  "nextRow": null
+			}
+		}
+		
+		
+		commonUtil.addLoader();
+		$.ajax({
+			  url : "api/po/getPoItemDetail",
+			  data : JSON.stringify(reqObj),
+			  async: true,
+			  crossDomain: true,
+			  method:"POST",
+		      headers: {
+				'content-type': "application/json",
+				'cache-control': "no-cache"
+			  },
+			  success:function(result,status,xhr){
+				  $('#main1').hide();
+				  $('#main3').show();
+				  $('#main3').addClass('active');
+				  console.log("success");
+				  var data = result.resultSet.series;
+				  var minHeight = "";
+				  if(data.length < 16 && data.length > 10){
+						minHeight = (data).length * 25 + 75;
+				  }
+				  commonUtil.removeLoader();
+				  fnGetPoDetailsGridHtml(result.resultSet.pagination,"podetails",erp,poNum);
+				  if(minHeight)
+					$('#main3 .gridContainer .grid-style').css('min-height',minHeight+"px");
+				  buildPODetailsGrid(data,erp);
+				  
+				  
+			  },
+			  error:function(xhr,status,error){
+				  console.log("error");
+			  }
+		  })
+		
+		
+	});
+	
+	$(document).on('click','#showDashboard',function(e){
+		$('#main3').hide();
+		$('#main1').show();
+		$('#main3').removeClass('active');
+	});
+	
+	
+	$(document).on('click','#exportBtn',function(e){
+		var excelOptions = {
+			  headerStyle: {
+				  font: {
+					  bold: true,  //enable bold
+					  font: 12, // font size
+					  color: 'ffffff' //font color --Note: Add 00 before the color code
+				  },
+				  fill: {   //fill background
+					  type: 'pattern', 
+					  patternType: 'solid',
+					  fgColor: '428BCA' //background color --Note: Add 00 before the color code
+				  }
+			  },
+			  cellStyle: {
+				  font: {
+					  bold: false,  //enable bold
+					  font: 12, // font size
+					  color: '000000' //font color --Note: Add 00 before the color code
+				  },
+				  fill: {   //fill background
+					  type: 'pattern',
+					  patternType: 'solid',
+					  fgColor: 'ffffff' //background color --Note: Add 00 before the color code
+				  }
+			  },
+		  };
+  
+		var activeGrid = $(this).attr('grid');
+		
+		var Data = mainGrid[activeGrid].dataView.getItems();
+		
+		 $('body').exportToExcel("Report.xlsx", "Report", Data, excelOptions, function (response) {
+			console.log(response);
+			window.open($('#downloadLink').attr('href'));
+		});
+	});
+	
+	//code to be run on load
+	
+	
+    $(document).ready(function(){
+		  
+		var menuHtml = "";
+		menuHtml +='<li data-tab="home" class="menu">'+
+                        '<a href="#" class="active"><i class="fa fa-home fa-fw" ></i> Home</a>'+
+                    '</li>';
+					
+		$('#side-menu').html(menuHtml);	
+		
+		$('#scBtn').off('click').on('click',function(){
+			$('#main1').removeClass('plm');
+			$('#main1').addClass('sc');
+			
+			$('#page-wrapper').removeClass('plm');
+			$('#page-wrapper').addClass('sc');
+			menuHtml = "";
+			menuHtml += '<li data-tab="home" class="menu">'+
+                            '<a href="#"><i class="fa fa-home fa-fw"></i> Home</a>'+
+                        '</li>'+
+                        '<li data-tab="po" class="menu">'+
+                            '<a href="#"><i class="fa fa-dashboard fa-fw"></i> PO<span class="fa arrow"></span></a>'+
+                            '<ul class="nav nav-second-level collapse in" id="PoSubMenu" data-item="po"></ul>'+
+                        '</li>'+
+						'<li data-tab="supplier" class="menu">'+
+                            '<a href="#"><i class="fa fa-group fa-fw"></i> Supplier<span class="fa arrow"></span></a>'+
+                            '<ul class="nav nav-second-level" id="SuppSubMenu" data-item="supplier"></ul>'+
+                        '</li>'+
+                        '<li data-tab="item" class="menu">'+
+                            '<a href="#"><i class="fa fa-files-o fa-fw"></i> Item<span class="fa arrow"></span></a>'+
+                            '<ul class="nav nav-second-level" id="ItemSubMenu" data-item="item"></ul>'+
+                        '</li>';
+						
+			$('#side-menu').html(menuHtml);
+			$('#side-menu').metisMenu();	
+			$('#main0').hide();
+			$('#main1').show();
+			$("body").scrollTop(0);			
+			init();
+			commonUtil.addLoader();
+		});	
+        
+        $('#plmBtn').off('click').on('click',function(){
+			$('#main1').removeClass('sc');
+			$('#main1').addClass('plm');
+			
+			$('#page-wrapper').removeClass('sc');
+			$('#page-wrapper').addClass('plm');
+			menuHtml = "";
+			menuHtml += '<li data-tab="home" class="menu">'+
+                            '<a href="#"><i class="fa fa-home fa-fw"></i> Home</a>'+
+                        '</li>'+
+                        '<li data-tab="ecn" class="menu">'+
+                            '<a href="#"><i class="fa fa-dashboard fa-fw"></i>ECN<span class="fa arrow"></span></a>'+
+                            '<ul class="nav nav-second-level collapse in" id="ECNSubMenu" data-item="ecn"></ul>'+
+                        '</li>';
+						
+			$('#side-menu').html(menuHtml);
+			$('#side-menu').metisMenu();	
+			$('#main0').hide();
+			$('#main1').show();
+			$("body").scrollTop(0);	
+			commonUtil.addLoader();			
+			EcnInit();
+						
+		});
+    });	
+
+	function EcnInit(){
+		var obj = JSON.parse('{"firstRequest":true,"size":100,"erpName":"SYMIX"}');
+    	JSON.stringify(obj);
+    	var obj2 = JSON.parse('{"paginationParam":{"lastPartition":null,"lastRow":null,"nextPartition":null,"nextRow":null}}');
+    	JSON.stringify(obj2);
+    	var finalObj = $.extend(obj, obj2);
+    	var reqObj = JSON.stringify(finalObj);
+        console.log("reqObj-->"+reqObj);
+		var type = "ecn";
+		
+		//serviceObj.pullPoData(reqObj,type).then(function( data, textStatus, jqXHR ) {
+			data = {
+				"message": "OK",
+				"resultSet": {
+					"SAP": {
+						"series": [
+							{
+								"PTCAckMsg": "PTCACkMessage",
+								"BomPayloadProcessed": "true",
+								"ModifiedDate": "2016-07-22T00:00:00Z",
+								"Plant": "Reynosa",
+								"UIReprocessingDate": "2016-07-27T00:00:00Z",
+								"PartError": "true",
+								 "id": "0004",
+								"BomErrorMsg": "BomErrorMessage",
+								"ECNNumber": "115",
+								"PtcAck": "false",
+								"isErrorDataRequired": "true",
+								"Status": "3",
+								"OutputXMLEtag": "cdc3b234",
+								"PartPayloadProcessed": "false",
+								"ERPName": "Symix",
+								"Error": "error",
+								"BomError": "true",
+								"TxnID": "7",
+								"PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
+								"InputXMLEtag": "cdc3b121",
+								"UIReprocessing": "part/bom",
+								"CreatedDate": "2016-07-21T00:00:00Z",
+								"BomPayloadProcessedDate": "2016-07-23T00:00:00Z",
+								"Region": "Reynosa",
+								"PTCAckSentDate": "2016-07-26T00:00:00Z",
+								"PartErrorMsg": "PartErrorMessage"
+							}
+						],
+						"pagination": {
+							"lastPartition": null,
+							"lastRow": null,
+							"nextPartition": null,
+							"nextRow": null
+						}
+					}
+				},
+				"graphData": {
+					"SAP": [
+						4,
+						2
+					]
+				},
+				"errorData": {
+					"SAP": {
+						"series": [
+							{
+								"PTCAckMsg": "PTCACkMessage",
+								"BomPayloadProcessed": "true",
+								"ModifiedDate": "2016-07-22T00:00:00Z",
+								"Plant": "Reynosa",
+								"UIReprocessingDate": "2016-07-27T00:00:00Z",
+								"PartError": "true",
+								"BomErrorMsg": "BomErrorMessage",
+								"ECNNumber": "115",
+								"PtcAck": "false",
+								 "id": "0004",
+								"isErrorDataRequired": "true",
+								"Status": "3",
+								"OutputXMLEtag": "cdc3b234",
+								"PartPayloadProcessed": "false",
+								"ERPName": "Symix",
+								"Error": "error",
+								"BomError": "true",
+								"TxnID": "7",
+								"PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
+								"InputXMLEtag": "cdc3b121",
+								"UIReprocessing": "part/bom",
+								"CreatedDate": "2016-07-21T00:00:00Z",
+								"BomPayloadProcessedDate": "2016-07-23T00:00:00Z",
+								"Region": "Reynosa",
+								"PTCAckSentDate": "2016-07-26T00:00:00Z",
+								"PartErrorMsg": "PartErrorMessage"
+							}
+						],
+						"pagination": {
+							"lastPartition": null,
+							"lastRow": null,
+							"nextPartition": null,
+							"nextRow": null
+						}
+					}
+				},
+				"userData": {
+					"Role": "Admin",
+					"UserName": "Sunil Soni",
+					"GlobalId": "csonisk"
+				},
+				"error": false
+			}
+			
+			mainGrid = {};errorData = {};erpData={};allGridsData = {};graphData = {};
+			if(!data.error){
+				allGridsData = data;
+				
+				$('#username').text("Sunil Soni");
+				$('#username').attr('data-global-id',"csonisk");
+				$('.username-msg').show();
+				$('.logout').show();
+				
+				errorData = data.errorData;
+				graphData = data.graphData;
+				
+				$('#username').text(data.userData.UserName);
+				$('#username').attr('data-global-id',data.userData.GlobalId);
+				$('.username-msg').show();
+				$('.logout').show();
+				
+				commonUtil.removeLoader();
+				
+				fnGenerateECNSubMenus(data.resultSet);
+				
+				$('.nav-second-level li a').off('click').on('click',function(e){	
+					e.stopPropagation();
+					e.stopImmediatePropagation();
+					var li = $(this).closest('ul').closest('li');
+					li.siblings().find('.nav-second-level li a').each(function(){
+						$(this).removeClass('active');
+					});
+					$(this).addClass('active');
+					var tab = $(this).closest('.nav-second-level').attr('data-item');
+					var grid = $(this).attr('grid');
+					var erp = grid.split('-')[1];
+					if(tab == "ecn"){
+						fnGenerateECNGridHtml(data.resultSet,grid,"ecn",data.userData.Role,data.graphData,errorData);
+						buildECNGrids(erp,data.resultSet);
+						
+					}	
+				});
+				
+				
+				$('#side-menu li.menu').off('click').on('click',function(e){
+					$(this).siblings().find('a').removeClass('active');
+					$(this).find('a').not('.nav-second-level a').addClass('active');
+					
+					var data_tab = $(this).attr('data-tab');
+					
+					if(data_tab == "home"){
+						var menuHtml = "";
+						menuHtml +='<li data-tab="home" class="menu">'+
+										'<a href="#" class="active"><i class="fa fa-home fa-fw" ></i> Home</a>'+
+									'</li>';
+									
+						$('#side-menu').html(menuHtml);	
+						$('#main1').html('');
+						$('#main1').hide();
+						$('#main2').hide();
+						$('#main0').show();
+					}
+					else if(data_tab == "ecn"){
+						$('#main2').hide();
+						$('#main1').show();
+						fnGenerateEcnHtml();
+						buildECNGraph(graphData);
+					}
+					else
+						$(this).find('.nav-second-level li:first a').trigger('click');
+					
+				});
+				
+				$('li[data-tab="ecn"]').trigger('click');
+			}
+			
+		//});	
+	}
+
+	function fnGenerateECNSubMenus(ecnData){
+		erpData = commonUtil.dashboardErp(ecnData);
+		
+		var html = "";
+		
+		for(var i = 0 ; i < erpData.length ; i++)
+			html += '<li><a data-toggle="tab" href="#" grid="ecn-'+erpData[i]+'-grid">'+erpData[i]+'</a></li>';
+		
+		
+		$('#ECNSubMenu').html(html);
+		
+	}
+
+	function fnGenerateEcnHtml(){
+		var html = "";
+		
+		html += "<div class='row'>"+
+						"<div class='col-sm-12'>"+
+							//"<div class='margin-top-10'>"+
+								"<div id='highchartContainer' style='height:500px;'></div>"+
+							//"</div>"+
+						"</div>"+
+					"</div>";
+					
+		$('#main1').html(html);		
+		
+	}
+
+	function fnGenerateECNGridHtml(ecnData,grid,type,role,graphData,errorData){
+		var html = "";
+		
+		var newGraphData = {};
+		
+		var html = "";
+		
+		var erp = grid.split('-')[1];
+		
+		
+		
+		if(graphData)
+			newGraphData[erp] = graphData[erp]; 
+		
+		var errorCount = 0 ;
+		
+		if(graphData){
+			errorCount += graphData[erp][1];
+		}
+		
+		
+		
+		var lblMargin = "margin-left:25%;"
+		var label = "ECN DATA";
+		
+		var disabled = "";
+		if(errorCount <= 0)
+			disabled = "disabled='true'";
+		
+		var ProcessErrbtn = "";
+		if(role == "Admin")
+			ProcessErrbtn = '<button id="ecnProcessError" class="btn btn-danger" style="float:right;" '+disabled+'>Process Error - <span id="ecrErrorCount">'+errorCount+'</span></button>';
+		
+		
+		
+		
+		html += '<div class="row" style="margin-bottom:5px;"><div class="col-xs-9 process-error-header"><span style="'+lblMargin+'">'+label+'</span></div><div class="col-xs-3">'+ProcessErrbtn+'</div></div><div class="row"><div class="col-sm-12"><div id="'+type+erp+'" class="tab-pane fade in active"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="'+type+'-'+erp+'-grid'+'" class="grid-style"></div><div id="'+type+'-'+erp+'-pager'+'" class="pager-style"></div></div></div></div></div></div></div>';
+		
+		
+		html += "<div class='row'>"+
+					"<div class='col-sm-12'>"+
+						//"<div class='margin-top-10'>"+
+							"<div id='highchartContainer' style='border:1px solid lightgrey;'></div>"+
+						//"</div>"+
+					"</div>"+
+				"</div>";
+				
+			
+		
+		$('#main1').html(html);	
+		
+		var id = "main1";
+		
+		var paginationData = ecnData[erp].pagination;
+		
+		$('#'+id+' .tab-pane').find('.pagination-data .lastPartition').text(paginationData.lastPartition)
+		$('#'+id+' .tab-pane').find('.pagination-data .lastRow').text(paginationData.lastRow)
+		$('#'+id+' .tab-pane').find('.pagination-data .nextPartition').text(paginationData.nextPartition)
+		$('#'+id+' .tab-pane').find('.pagination-data .nextRow').text(paginationData.nextRow);
+		
+		if(type == "ecn"){
+			buildECNGraph(newGraphData,erpData);
+		}
+		
+	}
+	
+	function fnGetECNErrorGridHtml(type,erp){
+		var html = "";
+		
+		html += '<div class="row" style="margin-bottom:5px;"><div class="col-xs-9 process-error-header"><span style="margin-left:15%;">PROCESS ERROR DATA</span></div><div class="col-xs-3"><button id="exportBtn" grid="ecn'+type+'-'+erp+'-grid'+'" class="btn btn-info" style="float:right;display:none;">Export To  Excel</button></div></div><div class="row"><div class="col-sm-12"><div id="ecn'+type+erp+'" class="tab-pane fade in active"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="ecn'+type+'-'+erp+'-grid'+'" class="grid-style"></div><div id="ecn'+type+'-'+erp+'-pager'+'" class="pager-style"></div></div></div></div></div></div></div>';
+		
+		html += '<div class="tableError">'+
+					'<p class="details">PO Details: </p>'+
+					'<div class="row" id="form">'+
+						'<div>'+
+							'<div class="col-sm-6 form-horizontal">'+
+								'<div class="form-group">'+
+									'<label for="txtBURegion" class="listview-label control-label col-sm-4 ">ECN Description</label>'+
+									'<div class="col-sm-8">'+
+										'<input type="text" class="form-control "  id="txtDesc" />'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+							'<div class="col-sm-6 form-horizontal">'+
+								'<div class="form-group">'+
+									'<label for="txtBURegion" class="listview-label control-label col-sm-5 ">Error Message</label>'+
+									'<div class="col-sm-7">'+
+										'<input type="text" class="form-control " placeholder="Supplier Id" id="txtErrMsg" />'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+							'<div class="col-sm-12 form-horizontal">'+
+								'<div class="form-group">'+
+									'<label for="txtBURegion" class="listview-label control-label col-sm-2">XML</label>'+
+									'<div class="col-sm-10">'+
+										'<textarea rows="4" class="form-control "  id="txtXML"></textarea>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+							'<div class="col-sm-12 form-horizontal">'+
+								'<div class="form-group">'+
+									'<div class="col-sm-7">'+
+										'<button type="button" class="btn btn-info col-sm-3 pull-right" id="submitECRErrBtn">ReProcess</button>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'+
+				'</div>';
+				
+		return html ;
+		
+	}
+	
+	function fnGenerateEcnErrorGridHtml(errorData,grid,type){
+		var html = "";
+		
+		var lblMargin = "margin-left:25%;"
+		var label = "ECN ERROR DATA";
+		
+		var erp = grid.split('-')[1];
+		
+		html += '<div class="row"><div class="col-sm-12"><div id="ecn'+type+erp+'" class="tab-pane fade in active"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="ecn'+type+'-'+erp+'-grid'+'" class="grid-style"></div><div id="ecn'+type+'-'+erp+'-pager'+'" class="pager-style"></div></div></div></div></div></div></div>';
+		
+		$('#main2 .ecn-error-container').html(html);
+		
+		var id = "main2";
+		
+		var paginationData = errorData[erp].pagination;
+		
+		$('#'+id+' .tab-pane').find('.pagination-data .lastPartition').text(paginationData.lastPartition)
+		$('#'+id+' .tab-pane').find('.pagination-data .lastRow').text(paginationData.lastRow)
+		$('#'+id+' .tab-pane').find('.pagination-data .nextPartition').text(paginationData.nextPartition)
+		$('#'+id+' .tab-pane').find('.pagination-data .nextRow').text(paginationData.nextRow);
+		
+	}
+
+	function buildECNGrids(erp,resultSet){
+		
+        var columns = commonUtil.getECNGridColumns();
+        var options = commonUtil.getDashboardGridOptions();
+        
+        mainGrid['ecn-'+erp+'-grid'] = Object.create(BuildGrid.prototype);
+             
+        mainGrid['ecn-'+erp+'-grid'].constructor('#ecn-'+erp+'-grid',resultSet[erp].series,columns,options,'#ecn-'+erp+'-pager');
+		
+        mainGrid['ecn-'+erp+'-grid'].createGrid();
+            
+            
+        
+	}
+
+	$(document).on('click','#ecnProcessError',function(){
+		
+		commonUtil.handleHideShow('processErrorScreen');
+		
+		var grid = (($('.nav.nav-second-level.collapse.in a.active').attr('grid')).replace('ecn','ecnerror'));
+		var erp = grid.split('-')[1];
+		
+		fnGenerateEcnErrorGridHtml(errorData,grid,"error");
+		buildECNErrorGrids(errorData,erp);
+	});
+
+	function buildECNErrorGrids(resultSet,erp){
+		var columns = commonUtil.getECNGridColumns();
+        var options = commonUtil.getDashboardGridOptions();
+        
+        mainGrid['ecnerror-'+erp+'-grid'] = Object.create(BuildGrid.prototype);
+             
+        mainGrid['ecnerror-'+erp+'-grid'].constructor('#ecnerror-'+erp+'-grid',resultSet[erp].series,columns,options,'#ecnerror-'+erp+'-pager');
+		
+        mainGrid['ecnerror-'+erp+'-grid'].createGrid();
+	}
+	
+	function buildECNGraph(graphData,erpData){
+		var graphDataObject={},categoryArr=[], categoryData={},errorGraphData=[], processGraphData=[];
+            graphDataObject = graphData;
+                
+            for(var grph in graphDataObject){
+                categoryArr.push(grph);
+                errorGraphData.push(graphDataObject[grph][1]);
+                
+                processGraphData.push(graphDataObject[grph][0]);
+                 
+            }
+            categoryData['error'] = errorGraphData;
+            
+            categoryData['process'] = processGraphData;
+        
+            var plotData = commonUtil.prepareECNGraphData(categoryData);
+
+			var name = {"x-axis":"","y-axis":"Purchase Orders","title":"Widchill PLM Dashboard"};
+            commonUtil.plotGraph(plotData,name,categoryArr);
+		
+	}
+
+	$(document).on('click','.plm .autopager', function(e) {
+		  e.stopPropagation();
+		  var selfEle = $(this);
+    	  var activeGrid = $(this).attr('grid');
+		  var url = "";
+		  var postObj = {};
+		  var mainTab = $('.nav.nav-second-level.collapse.in').attr('data-item');
+		  var subTab = "";
+		  if(mainTab == "ecn"){
+			if($('section.active').attr('data-item-type') == "error")
+				url = "";          // error ecn url
+			else
+				url = "";        //ecn url 
+		  }  
+		  
+		  
+		  var erp = ($(this).attr('grid')).split('-')[1];
+			  
+		  
+		  var paginationData = $(this).closest('.tab-pane').find('.pagination-data');
+		  
+		   if($(paginationData).find('.nextPartition').text() == "null" || $(paginationData).find('.nextRow').text() == "null"){
+			  toastr.error('No further data to show');
+			  return;
+		  }
+		  
+		  commonUtil.addLoader();	
+		  
+		  var pagination = {};
+		  pagination.lastPartition = $(paginationData).find('.lastPartition').text();
+		  pagination.lastRow = $(paginationData).find('.lastRow').text();
+		  pagination.nextPartition = $(paginationData).find('.nextPartition').text();
+		  pagination.nextRow = $(paginationData).find('.nextRow').text();
+		  
+		  
+		 
+		  postObj.paginationParam = pagination;
+		  postObj.erpName = erp;
+		  postObj.size = 10;
+         
+          var currentData = mainGrid[$(this).attr('grid')].dataView.getItems();
+		  
+		  var newData = "";
+		  var newpaginationData = "";
+		  $.ajax({
+			  url : url,
+			  data : JSON.stringify(postObj),
+			  async: true,
+			  crossDomain: true,
+			  method:"POST",
+		      headers: {
+				'content-type': "application/json",
+				'cache-control': "no-cache"
+			  },
+			  success:function(result,status,xhr){
+				  console.log("success");
+				  commonUtil.removeLoader();
+				  var data = result ;
+				  if(mainTab == "ecn"){
+					  if(subTab == "home"){
+						newData = data.resultSet[erp].series; 
+						newpaginationData = data.resultSet[erp].pagination;  
+					  }
+					  else{
+						newData = data.errorData[erp].series; 
+						newpaginationData = data.errorData[erp].pagination;  
+					  }
+					  newData = fnChangeStatus(newData); 		
+					  
+				  }  
+				  
+				  
+					$(paginationData).find('.lastPartition').text(newpaginationData.lastPartition);
+					$(paginationData).find('.lastRow').text(newpaginationData.lastRow);
+					$(paginationData).find('.nextPartition').text(newpaginationData.nextPartition);
+					$(paginationData).find('.nextRow').text(newpaginationData.nextRow);
+					
+					$.merge(currentData,newData);
+					mainGrid[activeGrid].grid.invalidate();
+					mainGrid[activeGrid].updateGrid(currentData);
+					commonUtil.resizeCanvas(activeGrid);
+					
+					if(newpaginationData.nextRow == "null" && newpaginationData.nextPartition == "null" )
+						$(selfEle).remove();
+				  
+			  },
+			  error:function(xhr,status,error){
+				  console.log("error");
+			  }
+		  })
+	});	
+	
+	$(document).on('click','#submitECRErrBtn', function(e) {
+		var poNumArray = [];
+		
+		//var activeGrid = $('#main2 .tab-pane.fade.in.active .grid-style').attr('id');
+		var activeGrid = ($('.nav.nav-second-level.collapse.in a.active').attr('grid')).replace('ecn','ecnerror');
+		
+		var selectedRows = mainGrid[activeGrid].grid.getSelectedRows();
+		
+		if(selectedRows.length == 0){
+			toastr.error('Select PO to be processed');
+			return;
+		}
+		
+		for(var i = 0 ; i < selectedRows.length ;i++){
+			var item = mainGrid[activeGrid].grid.getDataItem(selectedRows[i])
+			
+			poNumArray.push(item.ECNNumber);
+		}
+		var comment = $('#txtDescErr').val();
+		
+		var erp = activeGrid.split('-')[1];	
+		console.log(poNumArray);
+		var userName = $('#username').text();
+		var globalId = $('#username').attr('data-global-id');
+		var sendObj = JSON.stringify({"erpName":erp,"poNo":poNumArray,"globalId": globalId,"userName": userName,"comment":comment});
+		commonUtil.addLoader();
+		$.ajax({
+			  url :"",
+			  data :sendObj,
+			  async:true,
+			  crossDomain:true,
+			  method:"POST",
+		      headers: {
+				'content-type': "application/json",
+				'cache-control': "no-cache"
+			  },
+			  success:function(result,status,xhr){
+				commonUtil.removeLoader();  
+				console.log(result);  
+				var successList = result.successList;
+				var errorList = result.errorList;
+				if(successList.length > 0 || errorList.length > 0){
+					
+					if(successList.length > 0){
+						mainGrid[activeGrid].deleteItems(successList);
+						$('#main2 .tab-pane.fade.in.active input[type="checkbox"]').each(function(){
+							$(this).attr('checked',false);
+						});
+						var dashboardGrid = activeGrid.replace('ecnerror','ecn');
+						mainGrid[dashboardGrid].updateItems(successList);
+						graphData = result.graphData;
+						var newGraphData = {};
+						newGraphData[erp] = graphData[erp];
+						buildECNGraphGraph(newGraphData);
+						var errorCount = newGraphData[erp][1];
+						$('#ecrErrorCount').text(errorCount);
+						$('#txtDescErr').val('');
+						
+					}
+					var sl = "",slMsg = "",el="",elMsg="";
+					if(successList.length > 0){
+						sl = successList.join(",");
+						slMsg = "Processing Error Request success for "+sl;
+					}
+					if(errorList.length > 0){
+						el = errorList.join(",")
+						elMsg = "Error occured while processing process "+el;
+					}
+					
+					if(slMsg)
+						toastr.success(slMsg);
+					
+					if(elMsg)
+						toastr.error(elMsg);
+					
+				}
+			  },
+			  error:function(xhr,status,error){
+				console.log("error");    
+			  }
+		})
+	});
 	
     
     /************************ events on dashboard screen end ****************************/

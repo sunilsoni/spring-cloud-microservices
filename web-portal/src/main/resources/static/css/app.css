@@ -8,13 +8,17 @@
  }
 footer {
             padding: 10px 0 10px;
-            border-top: 3px solid #009CDE;
+            /*border-top: 3px solid #009CDE;*/
             font-size: 12px;
-			background: #f4f7f9;
-			position:absolute;
+			/*background: #f4f7f9;*/
+			background-color:white;
+			/*position:absolute;*/
+			position:relative;
 			bottom:0px;
 			height:40px;
-            width: 97.5%;
+            /*width: 97.5%;*/
+			/*width:100%;*/
+			width:83%;
         }
 
 header {
@@ -125,7 +129,7 @@ body {
 .wait{
       position: absolute;
       width: 100%;
-      height: 100%;
+      height: 108%;
       top: 0%;
       left: 0;
       z-index: 10000000;
@@ -175,6 +179,7 @@ body {
 #mainContent{
 	position:relative;
 	min-height:100%;
+	/*overflow:hidden;*/
 }
 
 #loginContent,#main1,#main2{
@@ -296,7 +301,7 @@ hr {
     margin-top:10px;
 }
 
-#goBack{
+#goBack,#showDashboard{
     float: right;
     width:115px;
     margin-bottom:10px
@@ -358,7 +363,7 @@ hr {
 }
 
 #highchartContainer{
-	height:308px;
+	height:272px;
 }
 
 .tab-content{
@@ -376,10 +381,19 @@ hr {
 .username-msg{
 	width:100%;
 	height:20px;
+	padding:5px;
 }
 
-.message{
+.logout{
+	width:100%;
+	height:35px;
+	padding:5px;
+	display:none;
+}
+
+.message,.logout-btn{
 	float:right;
+	padding:5px;
 }
 
 .welcome-msg{
@@ -391,6 +405,66 @@ hr {
 }
 
 
+@media(max-width:768px) {
+	footer{
+		width:97%;
+	}
+	
+	.username-msg{
+		height:25px;
+	}
+}
 
+
+.sc-content{
+	width:100%;
+	padding:5px;
+	height:300px;
+	border:1px solid lightgrey;
+}
+
+.sc-text{
+	min-height:250px;
+	width:100%;
+}
+
+.plm-content{
+	width:100%;
+	padding:5px;
+	height:300px;
+	border:1px solid lightgrey;
+	margin-top:10px;
+}
+
+.plm-text{
+	min-height:250px;
+	width:100%;
+}
+
+.sc-btn{
+	margin-left:35%;
+}
+
+.plm-btn{
+	margin-left:38%;
+}
+
+
+.tableError{
+	border:1px solid lightgrey;
+	padding:5px;
+}
+
+.process-error-header{
+	font-size: 16px;
+    text-align: center;
+    font-weight: 800;
+    color: rgb(0,112,192);
+    margin-top: 5px;
+}
+
+#logout:hover{
+	color:red;
+}
 
 

@@ -1,19 +1,31 @@
 package com.jci.po.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.URLConnection;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.jci.po.azure.data.DataHelper;
 import com.jci.po.azure.data.ResultSet;
@@ -22,19 +34,25 @@ import com.jci.po.azure.query.ScrollingParam;
 import com.jci.po.dto.req.BatchInsertReq;
 import com.jci.po.dto.req.BatchUpdateReq;
 import com.jci.po.dto.req.PoDetailsReq;
+import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.req.SegmentedDetailReq;
+import com.jci.po.dto.req.TempRequest;
 import com.jci.po.dto.res.BatchInsertResp;
 import com.jci.po.dto.res.BatchUpdateRes;
+import com.jci.po.dto.res.PoItemDetailRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
+import com.jci.po.dto.res.TempResponse;
 import com.jci.po.entity.ItemEntity;
 import com.jci.po.entity.PoEntity;
 import com.jci.po.entity.PoItemsEntity;
 import com.jci.po.entity.SupplierEntity;
 import com.jci.po.repo.PoRepo;
 import com.jci.po.utils.AzureUtils;
+import com.jci.po.utils.CommonUtils;
 import com.jci.po.utils.Constants;
 import com.jci.po.utils.ItemModelData;
 import com.jci.po.utils.PoModelData;
+import com.jci.po.utils.PrepareFlatFile;
 import com.jci.po.utils.SupplierModelData;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.TableEntity;
@@ -51,8 +69,8 @@ public class PoServiceImpl implements PoService{
     @Value("${all.erp.names}")
     private String allErps;
 	
-	//@Autowired
-	//private ApiClientService apiService;
+	@Autowired
+	private ApiClientService apiService;
 	
 	 @Override
 	 public String getLastPo() throws InvalidKeyException, URISyntaxException, StorageException {
@@ -206,8 +224,34 @@ public class PoServiceImpl implements PoService{
 			return res;
 		}
 		
-		List<PoItemsEntity>  itemList = repo.getErrorPos(partitionKey,poList);
-		LOG.info(" itemList--->"+ itemList);
+		Map<String,List<HashMap<String, Object>>>  poNumToItemsMap = repo.getErrorPos(partitionKey,poList);
+		LOG.info(" poNumToItemsMap--->"+ poNumToItemsMap);
+		
+		//Starting JS poc Code
+		/*TempRequest tempReq = new TempRequest();
+		tempReq.setPoNumToItemsMap(poNumToItemsMap);
+		TempResponse flatFileRes  = apiService.postSupplierData(tempReq);
+		LOG.info(" flatFileRes--->"+ flatFileRes);		
+		*/
+		//Ending JS poc CODE
+		
+		BatchUpdateRes response = null;
+		/*if(true){//Sunil: Remove below if condition 
+			return response;
+		}*/
+		
+		//Starting JAVA Code to process flat file
+		HashMap<Integer,String>  mappping = CommonUtils.getDestMapping();
+		LOG.info(" mappping--->"+ mappping);
+		
+		
+		PrepareFlatFile file = new PrepareFlatFile();
+		Map<String,List<String>> fileNameToRowsMap = file.prepareSupplierData(mappping,poNumToItemsMap);
+		
+		LOG.info(" fileNameToRowsMap--->"+ fileNameToRowsMap);
+		
+		
+		
 		
 		List<PoEntity>  poEntity = repo.getPoDetails(partitionKey,poList);
 		
@@ -217,11 +261,66 @@ public class PoServiceImpl implements PoService{
 		/**
 		 * Code to process e2open flat files:
 		 */
+		//HashMap<String,File> nameToFileMap=new HashMap<String,File>();
+		for (Map.Entry<String,List<String>> entry : fileNameToRowsMap.entrySet()){
+			File toFile = new File(entry.getKey());
+			
+			 try {
+			    	FileUtils.writeLines(toFile,"UTF-8", entry.getValue(),false);
+			    	
+					//Files.write(file, res.getLines(), Charset.forName("UTF-8"));
+					//Files.write(file, lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
+				} catch (IOException e) {
+					e.printStackTrace();
+					//finalRes.setError(true);
+					//return finalRes;
+				}
+			// nameToFileMap.put(entry.getKey(), toFile);
+			 
+			 
+			 String mimeType= URLConnection.guessContentTypeFromName(toFile.getName());
+			 LOG.info(" mimeType--->"+ mimeType);
+			 
+			 //start
+			 try{
+				 RestTemplate template = new RestTemplate();
+
+				 MultiValueMap<String, Object> requestMap = new LinkedMultiValueMap<String, Object>();
+				 requestMap.add("name", toFile.getName());
+				 requestMap.add("filename", toFile.getName());
+				 requestMap.set("Content-Type",mimeType);
+				 requestMap.set("Content-Length",(int)toFile.length());			 
+				 
+				 InputStream input = new FileInputStream(toFile);
+				 ByteArrayResource contentsAsResource = new ByteArrayResource(IOUtils.toByteArray(input)){
+				             @Override
+				             public String getFilename(){
+				                 return entry.getKey();
+				             }
+				 };
+				 requestMap.add("file", contentsAsResource);
+				// map.add("file", res.getLines());
+				 
+				 System.out.println("URL-->"+Constants.E2OPEN_URL+"?filename="+toFile.getName());
+				 
+				 String result = template.postForObject((Constants.E2OPEN_URL+"?filename="+toFile.getName()), requestMap, String.class);
+				 
+				 LOG.info(" result--->"+ result);
+				 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			 //end
+		}
+		//Ending JAVA Code to process flat file
 		
 		/*FlatFileReq flatFileReq = new FlatFileReq();
-		FlatFileRes flatFileRes  = apiService.processFlatFile(flatFileReq);
-		LOG.info("flatFileRes--->"+flatFileRes);*/
+		flatFileReq.setNameToFileMap(nameToFileMap);
 		
+		
+		FlatFileRes flatFileRes  = apiService.processFlatFile(flatFileReq);
+		LOG.info("flatFileRes--->"+flatFileRes);
+		*/
 		BatchUpdateReq req = new  BatchUpdateReq ();
 		
 		//if data processing is success than update status success in db
@@ -241,7 +340,7 @@ public class PoServiceImpl implements PoService{
 		
 		req.setComment(request.getComment());
 				
-		BatchUpdateRes response =  repo.batchUpdate(req);
+		response =  repo.batchUpdate(req);
 		response.setGraphData(repo.getGraphData());
 		
 		
@@ -249,155 +348,40 @@ public class PoServiceImpl implements PoService{
 		return response;
 	}
 
-	
-	public void insertSymixDummyData() throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting PoServiceImpl.insertSymixDummyData ###" );
-		BatchInsertReq request  = new BatchInsertReq();
-
-	    String partitionKey = null;//AzureUtils.getPartitionKey(Constants.ERP_SYMIX);
-		
-		//Inserting dummy data
-	    PoEntity poEntity = null;
-	    HashMap<String, List<TableEntity>> tableNameToEntityMap = new HashMap<String, List<TableEntity>>();
-	    List<TableEntity> tableList1 = new ArrayList<TableEntity>();
-	    List<TableEntity> tableList2 = new ArrayList<TableEntity>();
-	   
-	    
-		for (int i=3713511;i<3715011;i++){
-			PoItemsEntity  poItemsEntity = new PoItemsEntity(partitionKey, i+"");
-			poItemsEntity = PoModelData.getDummyData(poItemsEntity)	;
-			
-			poItemsEntity.setOrderNumber(i+"");
-
-			
-			
-			//need to save above data
-			poEntity = new PoEntity(partitionKey, i+"");
-			poEntity.setDescription("(GE45RC375060)3/8x3/8x6  OAL: RH .060");
-			poEntity.setOrderCreationDate(new Date());
-			//poEntity.setOrderNumber(i+"");
-			//poEntity.setSourceErpName(Constants.ERP_SYMIX);
-			
-			if(i%2==0){
-				poEntity.setStatus(Constants.STATUS_IN_TRANSIT);
-			}else if(i%3==0){
-				poEntity.setStatus(Constants.STATUS_SUCCESS);
-			}else{
-				poEntity.setStatus(Constants.STATUS_ERROR);
-			}
-			
-			tableList1.add(poItemsEntity);
-			tableList2.add(poEntity);
-			
-			//azureStorage.getTable(Constants.TABLE_PO_DETAILS).execute(TableOperation.insertOrReplace(poEntity));
-		}
-		tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, tableList2);
-		tableNameToEntityMap.put(Constants.TABLE_PO_ITEM_DETAILS, tableList1);
-		
-		 List<TableEntity> tableList3 = new ArrayList<TableEntity>();
-		 List<TableEntity> tableList4 = new ArrayList<TableEntity>();
-		for (int i=433001;i<435003;i++){
-			ItemEntity entity1 = new ItemEntity();
-			entity1 = ItemModelData.getDummyData(entity1);
-			entity1.setRowKey(i+"");
-			//entity1.setSupplierId(i+"");
-			tableList3.add(entity1);
-		   
-		    SupplierEntity entity2 = new SupplierEntity();
-		    entity2 = SupplierModelData.getDummyData(entity2);
-		    entity2.setRowKey(i+"");
-		   // entity1.setSupplierId(i+"");
-		    tableList4.add(entity2);
-		}
-		
-		tableNameToEntityMap.put(Constants.TABLE_ITEM, tableList3);
-		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, tableList4);
-		
-		request.setTableNameToEntityMap(tableNameToEntityMap);
-		//request.setErpName(Constants.ERP_SYMIX);
-		
-		BatchInsertResp response = repo.batchInsert(request);
-		
-		LOG.info("### Ending PoServiceImpl.insertSymixDummyData ###"  +response.getErrorMap());
-	}
-
-	public void insertSapDummyData() throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting PoServiceImpl.insertSapDummyData ###" );
-		BatchInsertReq request  = new BatchInsertReq();
-
-	    String partitionKey =null;// AzureUtils.getPartitionKey(Constants.ERP_SAP);
-
-	    //Inserting dummy data
-	    PoEntity poEntity = null;
-	    HashMap<String, List<TableEntity>> tableNameToEntityMap = new HashMap<String, List<TableEntity>>();
-	    List<TableEntity> tableList1 = new ArrayList<TableEntity>();
-	    List<TableEntity> tableList2 = new ArrayList<TableEntity>();
-	   
-	    
-		for (int i=4714011;i<4714511;i++){
-			PoItemsEntity  poItemsEntity = new PoItemsEntity(partitionKey, i+"");
-			poItemsEntity = PoModelData.getDummyData(poItemsEntity)	;
-			
-			poItemsEntity.setOrderNumber(i+"");
-			
-			//need to save above data
-			poEntity = new PoEntity(partitionKey, i+"");
-			poEntity.setDescription("(GE45RC375060)3/8x3/8x6  OAL: RH .060");
-			poEntity.setOrderCreationDate(new Date());
-			//poEntity.setOrderNumber(i+"");
-			
-			//poEntity.setSourceErpName(Constants.ERP_SAP);
-			
-			if(i%2==0){
-				poEntity.setStatus(Constants.STATUS_IN_TRANSIT);
-			}else if(i%3==0){
-				poEntity.setStatus(Constants.STATUS_SUCCESS);
-			}else{
-				poEntity.setStatus(Constants.STATUS_ERROR);
-			}
-			
-			tableList1.add(poItemsEntity);
-			tableList2.add(poEntity);
-			
-		}
-		tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, tableList2);
-		tableNameToEntityMap.put(Constants.TABLE_PO_ITEM_DETAILS, tableList1);
-		
-		 List<TableEntity> tableList3 = new ArrayList<TableEntity>();
-		 List<TableEntity> tableList4 = new ArrayList<TableEntity>();
-		for (int i=533201;i<533701;i++){
-			ItemEntity entity1 = new ItemEntity(partitionKey, i+"");
-			entity1 = ItemModelData.getDummyData(entity1);
-			entity1.setRowKey(i+"");
-			//entity1.setSupplierId(i+"");
-			tableList3.add(entity1);
-		   
-		    SupplierEntity entity2 = new SupplierEntity(partitionKey, i+"");
-		    entity2 = SupplierModelData.getDummyData(entity2);
-		    entity2.setRowKey(i+"");
-		    //entity1.setSupplierId(i+"");
-		    tableList4.add(entity2);
-		    
-		    //LOG.info("getPartitionKey-->"+entity1.getPartitionKey());
-		}
-		tableNameToEntityMap.put(Constants.TABLE_ITEM, tableList3);
-		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, tableList4);
-		
-		request.setTableNameToEntityMap(tableNameToEntityMap);
-		//request.setErpName(Constants.ERP_SAP);
-		
-		BatchInsertResp response = repo.batchInsert(request);
-		
-		
-		//Setting dummy data:
-		LOG.info("### Ending PoServiceImpl.insertSapDummyData ###" +response);
-	}
-
 	@Override
-	public void insertDummyData() throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting PoServiceImpl.insertDummyData ###" );
-		//insertSymixDummyData();
-		insertSapDummyData();
-		LOG.info("### Ending PoServiceImpl.insertDummyData ###" );
+	public PoItemDetailRes getPoItemDetail(PoItemDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException {
+		LOG.info("### Starting PoServiceImpl.getPoItemDetail ###"+request );
+
+		
+		PaginationParam paginationParam = request.getPaginationParam();
+		
+		ScrollingParam param  = new ScrollingParam();
+		
+		if(paginationParam!=null){
+			param.setPartition(paginationParam.getNextPartition());
+			param.setRow(paginationParam.getNextRow());
+		}
+		
+		//For where condition
+		param.setSize(request.getSize());
+		
+		DataHelper azureRequest = new DataHelper();
+		azureRequest.setErpName(request.getErpName());
+		azureRequest.setPoNum(request.getPoNum());
+		azureRequest.setPartitionValue(AzureUtils.getPartitionKey(request.getErpName()));
+		
+		azureRequest.setTableName(Constants.TABLE_PO_ITEM_DETAILS);
+		
+		ResultSet resultSet = repo.getPoItemDetail(param, azureRequest);
+		
+		PoItemDetailRes response = new PoItemDetailRes();
+		
+		response.setResultSet(resultSet);
+		response.setMessage(Constants.JSON_OK);
+		
+		
+		LOG.info("### Ending PoServiceImpl.getPoItemDetail ###"+response );
+		return response;
 	}
+	
 }

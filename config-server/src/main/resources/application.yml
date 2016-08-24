@@ -4,8 +4,8 @@ spring:
       server:
         git:
           uri: file://C:/Apigee/micro-services/Work/supplier-collaboration-config-dev
-      refresh: true
-      delay: 5000
+      #refresh: true
+#      delay: 5000
 #username: sunilsoni@live.in
 #password: sunil@git0102
 #file://C:/Apigee/micro-services/Work/supplier-collaboration-config-dev

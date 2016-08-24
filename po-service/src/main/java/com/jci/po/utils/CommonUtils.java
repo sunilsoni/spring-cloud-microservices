@@ -1,11 +1,18 @@
 package com.jci.po.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class CommonUtils {
@@ -54,6 +61,22 @@ public class CommonUtils {
 	/*public static String fixedLengthString(String string, int length) {
 	    return String.format("%1$"+length+ "s", string);
 	}*/
-
 	
+	public static HashMap<Integer,String> getDestMapping(){
+
+		ObjectMapper mapper = new ObjectMapper(); 
+	    File from = new File("C:/Apigee/micro-services/Work/supplier-collaboration-config-dev/e2open.json"); 
+	    System.out.println("from " + from.getName()); 
+	    TypeReference<HashMap<Integer,String>> typeRef  = new TypeReference<HashMap<Integer,String>>() {};
+	    HashMap<Integer, String> map=null;
+		try {
+			map = mapper.readValue(from, typeRef);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	   
+		return map ;
+	}
+	
+
 }
