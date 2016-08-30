@@ -2,14 +2,31 @@ package com.jci.po.utils;
 
 public class Constants {
 
-	public static final String SYMIX_QUERY ="SELECT * FROM \"po\" \"poAlias\" INNER JOIN \"poitem\" \"poitemAlias\"  ON  \"poAlias\".\"po-num\" = \"poitemAlias\".\"po-num\"  INNER JOIN \"vendor\" \"vAlias\"  ON  \"poAlias\".\"vend-num\" = \"vAlias\".\"vend-num\"  INNER JOIN \"item\" \"iAlias\"  ON  \"poitemAlias\".\"item\" = \"iAlias\".\"item\"   INNER JOIN \"shipto\" \"sAlias\"  ON  \"poitemAlias\".\"drop-ship-no\" = \"sAlias\".\"drop-ship-no\" and \"poAlias\".\"drop-ship-no\" = \"sAlias\".\"drop-ship-no\" INNER JOIN \"po-div\" \"podAlias\"  ON  \"podAlias\".\"po-num\" = \"poAlias\".\"po-num\" INNER JOIN \"vendor-div\" \"vdAlias\"  ON  \"vdAlias\".\"vend-num\" = \"vAlias\".\"vend-num\"  INNER JOIN \"item-div\" \"idAlias\"  ON  \"idAlias\".\"item\" = \"iAlias\".\"item\" INNER JOIN \"vendaddr\" \"vaAlias\"  ON  \"vaAlias\".\"vend-num\" = \"vAlias\".\"vend-num\"   WHERE \"poAlias\".\"order-date\" >=  ? ";
-	
-	//Azure Table names 
-	public static final String TABLE_PO_DETAILS ="PODETAILS";
-	public static final String TABLE_PO_ITEM_DETAILS ="POITEMDETAILS";
-	public static final String TABLE_ITEM ="ITEM";
-	public static final String TABLE_SUPPLIER ="SUPPLIER";
+	/**
+	 * Azure Table names 
+	 */
+	public static final String TABLE_PO_DETAILS ="PODETAILSTEST";
+	public static final String TABLE_PO_ITEM_DETAILS ="POITEMDETAILSTEST";
+	public static final String TABLE_ITEM ="ITEMTEST";
+	public static final String TABLE_SUPPLIER ="SUPPLIERTEST";
 	public static final String TABLE_MISC ="MISCDATA";
+	
+	
+	/**
+	 * Azure table column fields
+	 */
+	public static final String PARTITION_KEY = "PartitionKey";
+	public static final String STATUS_KEY = "Status";
+	public static final String TIMESTAMP = "Timestamp";
+	public static final String ROWKEY = "RowKey";	
+	public static final String ORDER_NUMBER = "OrderNumber";
+	
+	/**
+	 * PO Status type
+	 */
+	public static final int  STATUS_IN_TRANSIT =1;
+	public static final int  STATUS_SUCCESS =2;
+	public static final int  STATUS_ERROR =3;
 	
 	//public static final String ERP_SYMIX ="SYMIX";
 	//public static final String ERP_SAP ="SAP";
@@ -25,44 +42,23 @@ public class Constants {
 	
 	//public static final String PARTITION_KEY_SYMIX ="SYMIX_PO";
 	public static final String PARTITION_KEY_MISCDATA ="STATUS_COUNT";
-	public static final String ROW_KEY_SYMIX_MISCDATA ="SYMIX";
+	//public static final String ROW_KEY_SYMIX_MISCDATA ="SYMIX";
 	
-	
-	public static final int  STATUS_IN_TRANSIT =1;
-	public static final int  STATUS_SUCCESS =2;
-	public static final int  STATUS_ERROR =3;
+
 	
 	public static final int  MAX_ROW_SIZE =1000;
-	
 	public static final String ERROR_MSG ="The application has encountered an error!";
 	
 	//public static final String ALL_ERP_NAMES ="SYMIX,SAP";
 	//public static final String ALL_ERP_NAMES ="SYMIX";
 	
 	//http://c201s009.cg.na.jci.com:15080/E2OPOC
-	public static final String E2OPEN_URL ="http://gtstaging.controls.johnsoncontrols.com/E2OPOC"; 
+	//public static final String E2OPEN_URL ="http://gtstaging.controls.johnsoncontrols.com/E2OPOC"; 
 	
 	//https://gtstaging.controls.johnsoncontrols.com/E2OPOC
 	
 	public static final int DESTINATION_E2OPEN =1;
 	public static final int DESTINATION_EDI =2;
+
 	
-	
-	public static final String PARTITION_KEY = "PartitionKey";
-	public static final String STATUS_KEY = "Status";
-	public static final String TIMESTAMP = "Timestamp";
-	public static final String ROWKEY = "RowKey";	
-	public static final String ORDER_NUMBER = "OrderNumber";
-	
-	/**
-	 * Flat file name details 
-	 * E.g. 4501700273.006092860_006092860_DiscreteOrder_1.0_5061_20160323035453001.txt
-	 * First is PO No and last is Timestamp.
-	 */
-	public static final String FILE_SENDER_DUNS = "006092860";
-	public static final String FILE_RECEIVER_DUNS = "006092860";
-	public static final String FILE_MESSAGE_TYPE = "DiscreteOrder";
-	public static final String FILE_VERSION = "1.0";
-	public static final String FILE_SITEID = "JUA";
-	public static final String FILE_DATE_FORMAT = "yyyyMMddHHmmssSSS";
 }

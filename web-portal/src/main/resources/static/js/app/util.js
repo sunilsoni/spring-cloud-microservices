@@ -77,7 +77,7 @@ var commonUtil = (function($){
             name: "PO Description",
             field: "Description",//initially it was poDesc
             sortable : true,
-            width: 450,
+            width: 288,
 			cssClass:"poDesc",
 			sortable:false,
 			filterValues : []
@@ -94,7 +94,7 @@ var commonUtil = (function($){
             name: "Status",
             field: "Status",//initially it was statusVal
             sortable : true,
-            width: 250,
+            width: 180,
 			cssClass:"statusVal",
 			sortable:false,
 			filterValues : []
@@ -934,14 +934,14 @@ var commonUtil = (function($){
             id: "poNum",
             name: "PO Number",
             field: "OrderNumber",
-            minWidth: 150,
+            minWidth: 135,
             resizable:true,
 			cssClass:"poNumber"
           }, {
             id: "poDesc",
             name: "PO Description",
             field: "Description",
-            minWidth: 300,
+            minWidth: 268,
             resizable:true,
 			cssClass:"poDesc"
           }, 
@@ -956,7 +956,7 @@ var commonUtil = (function($){
             id: "statusVal",
             name: "Status",
             field: "Status",
-            minWidth: 250,
+            minWidth: 166,
             resizable:true,
 			cssClass:"statusVal"
           }];
@@ -965,21 +965,28 @@ var commonUtil = (function($){
 	function getECNGridColumns(){
 		return [{
 			id: "ECNNumber",
-            name: "ECN Number",
+            name: "Change Number",
             field: "ECNNumber",
             minWidth: 250,
             resizable:true
 		},
 		{
-			id: "TxnID",
-            name: "Txn ID",
-            field: "TxnID",
+			id: "Description",
+            name: "Description",
+            field: "Description",
+            minWidth: 250,
+            resizable:true
+		},
+		{
+			id: "Plant",
+            name: "Plant",
+            field: "Plant",
             minWidth: 250,
             resizable:true
 		},
 		{
 			id: "Error",
-            name: "Error",
+            name: "Status",
             field: "Error",
             minWidth: 250,
             resizable:true
@@ -987,16 +994,58 @@ var commonUtil = (function($){
 		];
 	}
 	
-	/*function getPOItemDetailsColumns(){
-		var ArrayObj = [
-		{id:"DrawingNumber",name:"Drawing Number",field:"DrawingNumber",sortable:true,width:200},
-		{id:"LineStatus",name:"Line Status",field:"LineStatus",sortable:true,width:200},
-		{id:"LineID",name:"Line ID",field:"LineID",sortable:true,width:200}
+	function getECNErrorGridColumns(){
+		return [{
+			id: "ECNNumber",
+            name: "Change Number",
+            field: "ECNNumber",
+            minWidth: 155,
+            resizable:true
+		},
+		{
+			id: "Plant",
+            name: "Plant",
+            field: "Plant",
+            minWidth: 130,
+            resizable:true
+		},
+		{
+			id: "ChangeType",
+            name: "Change Type",
+            field: "ChangeType",
+            minWidth: 200,
+            resizable:true
+		},
+		{
+			id: "Error",
+            name: "Status",
+            field: "Error",
+            minWidth: 150,
+            resizable:true
+		},
+		{
+			id: "EcnRequestor",
+            name: "ECN Requestor",
+            field: "EcnRequestor",
+            minWidth: 200,
+            resizable:true
+		},
+		{
+			id: "CreatedDate",
+            name: "ESI TRX Date",
+            field: "CreatedDate",
+            minWidth: 200,
+            resizable:true
+		},
+		{
+			id: "ProcessedDate",
+            name: "Processed Date",
+            field: "ProcessedDate",
+            minWidth: 200,
+            resizable:true
+		}
 		];
-		
-		return ArrayObj;
-		
-	}*/
+	}
 	
 	function getPOItemDetailsColumns(){
 		return [
@@ -1092,7 +1141,9 @@ var commonUtil = (function($){
     function getDashboardGridOptions(){
       return {
             enableCellNavigation: true,
-            enableColumnReorder: false
+            enableColumnReorder: false,
+			enableAddRow: false,
+			//rowHeight:30
 			//explicitInitialization: true
         };
     }
@@ -1104,7 +1155,9 @@ var commonUtil = (function($){
     function getProcessErrorGridOptions(){
        return {
             enableCellNavigation: true,
-            enableColumnReorder: false
+            enableColumnReorder: false,
+			enableAddRow: false,
+			//rowHeight:30
         };
     }
     
@@ -1231,8 +1284,13 @@ var commonUtil = (function($){
      * To plot the graph showing the statistics based on the Status field
      * @param {Array} plotData 
      */
-    function plotGraph(plotData,name,categoryArr){
-        var highchartContainer = getGraphContainer();
+    function plotGraph(plotData,name,categoryArr,container){
+        var highchartContainer = "";
+		if(container)
+			highchartContainer = container;
+		else
+			highchartContainer = getGraphContainer();
+		
         if(plotData){
             graphObj.createChart(highchartContainer, plotData,name,categoryArr);
         }
@@ -1309,7 +1367,8 @@ var commonUtil = (function($){
 		resizeCanvas:resizeCanvas,
 		getECNGridColumns:getECNGridColumns,
 		prepareECNGraphData:prepareECNGraphData,
-		getPOItemDetailsColumns:getPOItemDetailsColumns
+		getPOItemDetailsColumns:getPOItemDetailsColumns,
+		getECNErrorGridColumns:getECNErrorGridColumns
 //        createGraphData : createGraphData
     }
 

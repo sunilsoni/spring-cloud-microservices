@@ -17,6 +17,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Repository;
 //import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jci.po.azure.AzureStorage;
 import com.jci.po.azure.data.DataHelper;
 import com.jci.po.azure.data.DataUtil;
@@ -52,6 +53,7 @@ public class PoRepoImpl implements PoRepo {
 	private static final Logger LOG = LoggerFactory.getLogger(PoRepoImpl.class);
     @Value("${all.erp.names}")
     private String allErps;
+
     
 	private static int errorCount;
 	private static int successCount;
@@ -106,7 +108,7 @@ public class PoRepoImpl implements PoRepo {
 
 	//Final
 	public List<HashMap<String, String>> getErrorData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("#### Ending TableStorageRepositoryImpl.getErrorData ###" );
+		LOG.info("#### Starting PoRepoImpl.getErrorData ###" );
 		List<HashMap<String, String>> errorData = new ArrayList<HashMap<String, String>>();
 		
 		String query = QueryBuilder.errorQuery(partitionKey,allErps);
@@ -123,19 +125,19 @@ public class PoRepoImpl implements PoRepo {
 	    	map.put("SourceErpName",String.valueOf(entity.getSourceErpName()));
 	    	errorData.add(map);
 	   }
-	    LOG.info("#### Ending TableStorageRepositoryImpl.getErrorData ###" );
+	    LOG.info("#### Ending PoRepoImpl.getErrorData ###" );
 		 return errorData;
 	}
 	
 	@Override
 	public Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("#### Ending TableStorageRepositoryImpl.getErrorPos ###" );
+		LOG.info("#### Starting PoRepoImpl.getErrorPos ###" );
 		
 		String query = QueryBuilder.getErrorPosQuery(partitionKey,poList);
 		LOG.info("query--->"+query);
 		
 		//List<PoItemsEntity> errorData = new ArrayList<PoItemsEntity>();
-		TableQuery<PoItemsEntity> partitionQuery =  TableQuery.from(PoItemsEntity.class).where(query);
+		//TableQuery<PoItemsEntity> partitionQuery =  TableQuery.from(PoItemsEntity.class).where(query);
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
 		
 		OperationContext opContext = new OperationContext();
@@ -173,28 +175,13 @@ public class PoRepoImpl implements PoRepo {
 	    	}
 			
 		}		
-		
-		/*Map<String,List<PoItemsEntity>> itemMap = new HashMap<String,List<PoItemsEntity>>();
-	    for (PoItemsEntity entity : cloudTable.execute(partitionQuery)) {
-	    	
-	    	//errorData.add(entity);
-	    	if(itemMap.containsKey(entity.getOrderNumber())){
-	    		List<PoItemsEntity> list =itemMap.get(entity.getOrderNumber());
-	    		list.add(entity);
-	    		itemMap.put(entity.getOrderNumber(), list);
-	    	}else{
-	    		List<PoItemsEntity> list = new  ArrayList<PoItemsEntity>();
-	    		list.add(entity);
-	    		itemMap.put(entity.getOrderNumber(), list);
-	    	}
-	    }*/
-	    LOG.info("#### Ending TableStorageRepositoryImpl.getErrorPos ###" );
+	    LOG.info("#### Ending PoRepoImpl.getErrorPos ###" );
 		 return poNumToItemListMap;
 	}
 	
 	@Override
 	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("#### Ending TableStorageRepositoryImpl.getErrorPos ###" );
+		LOG.info("#### Starting PoRepoImpl.getErrorPos ###" );
 		
 		String query = QueryBuilder.processPosQuery(partitionKey,poList);
 		LOG.info("query--->"+query);
@@ -207,13 +194,13 @@ public class PoRepoImpl implements PoRepo {
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 	    	errorData.add(entity);
 	    }
-	    LOG.info("#### Ending TableStorageRepositoryImpl.getErrorPos ###" );
+	    LOG.info("#### Ending PoRepoImpl.getErrorPos ###" );
 		 return errorData;
 	}
 	
    @Override
 	public ResultSet getSegmentedResultSet(ScrollingParam param,DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException  {
-		LOG.info("#### Starting TableStorageRepositoryImpl.getSegmentedResultSet ###" );
+		LOG.info("#### Starting PoRepoImpl.getSegmentedResultSet ###" );
 		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
 		PaginationParam pagination = new PaginationParam();
 		if(continuationToken != null) {
@@ -224,9 +211,9 @@ public class PoRepoImpl implements PoRepo {
 		// Create the query
 		String whereCondition = null;
 		 if(request.isErrorDataRequired()){
-			 whereCondition = QueryBuilder.errorDataQuery(request.getPartitionValue());
+			 whereCondition = QueryBuilder.errorDataQuery("PO_SYMIX");
 		 }else{
-			 whereCondition = QueryBuilder.partitionWhereCondition(request.getPartitionValue());
+			 whereCondition = QueryBuilder.partitionWhereCondition("PO_SYMIX");
 		 }
 		 
 		 if(StringUtils.isBlank(whereCondition) ){
@@ -247,7 +234,6 @@ public class PoRepoImpl implements PoRepo {
 		}
 		    
 		HashMap<String, Object> hashmap;
-		
 		List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
 		DynamicTableEntity row;
 		EntityProperty ep;
@@ -273,7 +259,7 @@ public class PoRepoImpl implements PoRepo {
    
 	@Override
 	public BatchInsertResp batchInsert(BatchInsertReq request){
-		LOG.info("#### Starting TableStorageRepositoryImpl.batchInsert ###" );
+		LOG.info("#### Starting PoRepoImpl.batchInsert ###" );
 		BatchInsertResp response = new BatchInsertResp();
 		
 		String erpName = request.getErpName();
@@ -290,7 +276,7 @@ public class PoRepoImpl implements PoRepo {
 					
 				} catch (Exception e) {
 					errorMap.put(entry.getKey(), entry.getValue());
-					LOG.error("### Exception in TableStorageRepositoryImpl.batchInsert.getTable ###"+e);
+					LOG.error("### Exception in PoRepoImpl.batchInsert.getTable ###"+e);
 					e.printStackTrace();
 					response.setError(true);
 					continue;
@@ -328,7 +314,7 @@ public class PoRepoImpl implements PoRepo {
 							errorMap.put(entry.getKey(), entry.getValue());
 							response.setError(true);
 							counter = 0;
-							LOG.error("### Exception in TableStorageRepositoryImpl.batchInsert.execute ###"+e);
+							LOG.error("### Exception in PoRepoImpl.batchInsert.execute ###"+e);
 							e.printStackTrace();
 							continue;
 						}
@@ -345,7 +331,7 @@ public class PoRepoImpl implements PoRepo {
 						errorMap.put(entry.getKey(), entry.getValue());
 						response.setError(true);
 						counter = 0;
-						LOG.error("### Exception in TableStorageRepositoryImpl.batchInsert.execute ###"+e);
+						LOG.error("### Exception in PoRepoImpl.batchInsert.execute ###"+e);
 						e.printStackTrace();
 						continue;
 					}
@@ -383,13 +369,13 @@ public class PoRepoImpl implements PoRepo {
 			response.setError(true);
 			e.printStackTrace();
 		}
-		LOG.info("#### Ending TableStorageRepositoryImpl.batchInsert ###" );
+		LOG.info("#### Ending PoRepoImpl.batchInsert ###" );
 		return response;		
 	}
 	
 	public BatchUpdateRes batchUpdate(BatchUpdateReq request){
 		
-		LOG.info("#### Starting TableStorageRepositoryImpl.batchInsert ###" +request);
+		LOG.info("#### Starting PoRepoImpl.batchInsert ###" +request);
 		BatchUpdateRes response = new BatchUpdateRes();
 		
 		String erpName = request.getErpName();
@@ -404,7 +390,7 @@ public class PoRepoImpl implements PoRepo {
 		     try {
 					cloudTable = azureStorage.getTable(entry.getKey());
 				} catch (Exception e) {
-					LOG.error("### Exception in TableStorageRepositoryImpl.batchUpdate.getTable ###"+e);
+					LOG.error("### Exception in PoRepoImpl.batchUpdate.getTable ###"+e);
 					e.printStackTrace();
 					response.setError(true);
 					response.setMessage("The Application has encountered an error! Table  does not exist !");
@@ -423,11 +409,10 @@ public class PoRepoImpl implements PoRepo {
 			    	entity.setUserName(request.getUserName());
 			    	entity.setComment(request.getComment());
 			    	
-			    	//Need to maintain destination mapping file and make this dynamic
-			    	if(request.getDestination()==1){
-			    		entity.setE2openProcessed(true);
-			    	}else if(request.getDestination()==2){
-			    		entity.setEdiProcessed(true);
+			    	if(StringUtils.isBlank(entity.getSuppliers())){
+			    		entity.setSuppliers(request.getDestination());
+			    	}else{
+			    		entity.setSuppliers(entity.getSuppliers()+","+request.getDestination());
 			    	}
 			    	
 			    	if(request.isSuccess()){//Means we are updating(success) status for pos which has been successfully processed to e2opne
@@ -456,7 +441,7 @@ public class PoRepoImpl implements PoRepo {
 					    	}else{
 					    		errorCount = errorCount-1;
 					    	}
-							LOG.error("### Exception in TableStorageRepositoryImpl.batchUpdate.execute ###"+e);
+							LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
 							e.printStackTrace();
 							continue;
 						}
@@ -480,7 +465,7 @@ public class PoRepoImpl implements PoRepo {
 				    	}else{
 				    		errorCount = errorCount-1;
 				    	}
-						LOG.error("### Exception in TableStorageRepositoryImpl.batchUpdate.execute ###"+e);
+						LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
 						e.printStackTrace();
 						continue;
 					}
@@ -524,7 +509,7 @@ public class PoRepoImpl implements PoRepo {
 			response.setMessage("The Application has encountered an error!");
 			e.printStackTrace();
 		}
-		LOG.info("#### Ending TableStorageRepositoryImpl.batchUpdate ###" );
+		LOG.info("#### Ending PoRepoImpl.batchUpdate ###" );
 		return response;
 		
 	}

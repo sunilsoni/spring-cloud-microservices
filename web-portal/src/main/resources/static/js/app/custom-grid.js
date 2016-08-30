@@ -34,7 +34,7 @@ BuildGrid.prototype.createGrid = function(){
     this.grid = new Slick.Grid(gridId, this.dataView, columns, gridOptions);
 	 grid = this.grid, dataView = this.dataView;
 	var pager = new Slick.Controls.Pager(dataView, grid, $(paginationId));
-	var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, gridOptions);
+	//var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, gridOptions);
     
     var sortcol = "";
     var sortdir = 1;
@@ -121,6 +121,7 @@ BuildGrid.prototype.createGrid = function(){
           this.prepareData();
       }
       
+	  //grid.registerPlugin( new Slick.AutoColumnSize());   //for columns auto size
 	  
 	  //dataView.beginUpdate();
 

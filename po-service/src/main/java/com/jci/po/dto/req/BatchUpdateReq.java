@@ -15,7 +15,7 @@ public class BatchUpdateReq {
 	private String userName;
 	private String globalId;
 	private String comment;
-	private int destination;
+	private String destination;
 	
 	
 	public HashMap<String, List<PoEntity>> getTableNameToEntityMap() {
@@ -56,19 +56,19 @@ public class BatchUpdateReq {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public int getDestination() {
+	public String getDestination() {
 		return destination;
 	}
-	public void setDestination(int destination) {
+	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	
 	@Override
 	public String toString() {
 		return "BatchUpdateReq [tableNameToEntityMap=" + tableNameToEntityMap + ", erpName=" + erpName + ", isSuccess="
 				+ isSuccess + ", userName=" + userName + ", globalId=" + globalId + ", comment=" + comment
 				+ ", destination=" + destination + "]";
 	}
+	
 	
 	
 }

@@ -87,6 +87,7 @@ var serviceObj = (function($){
     return{
        pullPoData : pullPoData,
        processPoData : processPoData,
+	   callToSever:callToSever
     }
 
 })(jQuery);

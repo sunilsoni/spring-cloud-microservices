@@ -1,40 +1,63 @@
 package com.jci.job.api.res;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import com.jci.job.entity.PoItemsEntity;
 
 public class PoDetailsRes {
 
-	private boolean isErrorInDataFetch;
-	private String errorMsg;
-	private Map<String, Map<String,List<PoItemsEntity>>> dsToPoItemList;
+	private int code;
+	private String status;
+	private String message;
+	private String date;
 	
-	public boolean isErrorInDataFetch() {
-		return isErrorInDataFetch;
+	private List<PoDetails> poList;
+
+	public int getCode() {
+		return code;
 	}
-	public void setErrorInDataFetch(boolean isErrorInDataFetch) {
-		this.isErrorInDataFetch = isErrorInDataFetch;
+
+	public void setCode(int code) {
+		this.code = code;
 	}
-	public String getErrorMsg() {
-		return errorMsg;
+
+	public String getStatus() {
+		return status;
 	}
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
-	public Map<String, Map<String, List<PoItemsEntity>>> getDsToPoItemList() {
-		return dsToPoItemList;
+
+	public String getMessage() {
+		return message;
 	}
-	public void setDsToPoItemList(Map<String, Map<String, List<PoItemsEntity>>> dsToPoItemList) {
-		this.dsToPoItemList = dsToPoItemList;
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
-	
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public List<PoDetails> getPoList() {
+		return poList;
+	}
+
+	public void setPoList(List<PoDetails> poList) {
+		this.poList = poList;
+	}
+
 	@Override
 	public String toString() {
-		return "PoDetailsResponse [isErrorInDataFetch=" + isErrorInDataFetch + ", errorMsg=" + errorMsg
-				+ ", dsToPoItemList=" + dsToPoItemList + "]";
+		return "PoDetailsRes [code=" + code + ", status=" + status + ", message=" + message + ", date=" + date
+				+ ", poList=" + poList + "]";
 	}
+
 	
 	
 }

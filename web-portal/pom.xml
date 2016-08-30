@@ -13,6 +13,12 @@
   	<artifactId>supplier-collaboration</artifactId>
   </parent>
   
+    <properties>
+        <docker.plugin.version>0.4.11</docker.plugin.version>
+        <start-class>com.jci.portal.Application</start-class>
+        <docker.image.prefix>supplier-collaboration</docker.image.prefix>
+    </properties>
+    
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -61,7 +67,7 @@
   
    <build>
         <plugins>
-            <plugin>
+           <!--  <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
@@ -71,6 +77,30 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin> -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+               <!--  <version>${docker.plugin.version}</version> -->
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
             </plugin>
         </plugins>
     </build>

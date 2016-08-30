@@ -47,15 +47,14 @@
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 			
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
                 <a href="index.html"><img src="img/Johnson_Controls.png" id="logo-img"/></a>
-				
             </div>
             <!-- /.navbar-header -->
 			
@@ -112,7 +111,51 @@
 			<div class='row'>
 				<section class="col-sm-12" id="main0" style="padding-top:15px;">
 					<div class='row'>
-						<div class='col-sm-8 col-xs-12'>
+						<div class="col-sm-12">
+							<div class="graph_heading sc-heading"><span>Supplier Collaboration</span></div>
+							<div class="sc-content">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="sc-image">
+											<img src="../img/Supplier_Collaboration.jpg" alt="Supplier Collaboration" class="img-responsive" />
+										</div>
+									</div>
+									<div class="col-md-8">
+										<div class='sc-text'>
+										</div>
+										<div class='sc-btn'>
+											<button id='scBtn' class='btn btn-info'>Supplier Collaboration</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="graph_heading plm-heading" style="margin-top:10px;"><span>Windchill PLM</span></div>
+							<div class="plm-content" style="margin-top:0px;">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="plm-image">
+											<img src="../img/PLM-ERP-integration.jpg" alt="Supplier Collaboration" class="img-responsive" />
+										</div>
+									</div>
+									<div class="col-md-8">
+										<div class='plm-text'>
+										</div>
+										<div class='plm-btn'>
+											<button id='plmBtn' class='btn btn-info'>Windchill PLM</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--<div class='col-md-4 col-xs-12'>
+							<div class="sc-image">
+								<img src="../img/Supplier_Collaboration.jpg" alt="Supplier Collaboration" style="height:100%;width:100%;" class="img-responsive" />
+							</div>
+							<div class="plm-image">
+								<img src="../img/PLM-ERP-integration.jpg" alt="Supplier Collaboration" style="height:100%;width:100%;" class="img-responsive" />
+							</div>
+						</div>
+						<div class='col-md-8 col-xs-12'>
 							<div class='sc-content'>
 								<div class='sc-text'>
 								</div>
@@ -127,14 +170,13 @@
 									<button id='plmBtn' class='btn btn-success'>Windchill PLM</button>
 								</div>
 							</div>
-						</div>
-						<div class='col-sm-4 hidden-xs'>
-						</div>
+						</div>-->
+						
 					</div>	
 				</section>
 			</div>
 			<div class="row">
-				<section class="col-sm-12" id="main1" data-item-type="home" class="active" style="padding-top:15px;display:none;">
+				<section class="col-sm-12" id="main1" data-item-type="home" class="active" style="padding-top:14px;display:none;">
 					
 				</section>
 				<!--<section class="col-sm-3 hidden-xs" id="main3" style="border:1px solid lightgrey;height:660px;">
@@ -149,8 +191,8 @@
 					<div class="ecn-error-container">
 					</div>
 				<!--</div>-->
-				<!--<hr />
-				<div class="tableError">
+				<!--<hr />-->
+				<div class="tableError" style="min-height:300px;">
 					<p class="details">Details: </p>
 					<div class="row" id="form">
 						<div>
@@ -193,7 +235,7 @@
 							</div>
 						</div>
 					</div>
-				</div>-->
+				</div>
 			</section>
 			</div>
 			<div class="row">
@@ -227,7 +269,22 @@
             
         </div>
         <!-- /#page-wrapper -->
-		
+		  <!-- Modal -->
+		  <div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+			
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+				  <p>Some text in the modal.</p>
+				</div>
+			  </div>
+			  
+			</div>
+		  </div>
 
     </div>
     <!-- /#wrapper -->
@@ -264,6 +321,7 @@
 	<script src="/js/app/metisMenu.min.js"></script>
 	<script src="/js/lib/require.js"></script>
     <script src="/js/lib/SlickGrid/export-excel.js"></script>
+    <script src="/js/lib/SlickGrid/slick.autocolumnsize.js"></script>
 </body>
 
 </html>

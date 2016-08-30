@@ -22,6 +22,7 @@ server calls: none
 */
 var e2OpenDashboard = (function($){
     var checkedRecords = [], mainGrid = {}, resultSetData={}, errorData = {}, erpData,allGridsData = {},graphData = {};
+	var supplierData = {},itemData= {};
     
     /*
      * To create grid and graph on load (O records) and to adjust the graph height based on screen height
@@ -46,8 +47,7 @@ var e2OpenDashboard = (function($){
 				$('#username').attr('data-global-id',data.userData.GlobalId);
 				$('.username-msg').show();
 				$('.logout').show();
-				/*if($(window).width() > 767)
-					$('.sidebar').css('margin-top','51px');*/
+				
 				errorData = data.errorData;
 				graphData = data.graphData;
 				
@@ -55,8 +55,12 @@ var e2OpenDashboard = (function($){
 				fnGenerateSupplierSubMenus(data.supplierData);
 				fnGenerateItemSubMenus(data.itemData);
 				
-				//$(document).on('click','.nav-second-level li a',function(e){
-				$('.nav-second-level li a').off('click').on('click',function(e){	
+				
+				
+				
+				$('.nav-second-level li a').off('click').on('click',function(e){
+					$('#main3').hide();	
+					$('#main1').show();			
 					e.stopPropagation();
 					e.stopImmediatePropagation();
 					var li = $(this).closest('ul').closest('li');
@@ -64,35 +68,66 @@ var e2OpenDashboard = (function($){
 						$(this).removeClass('active');
 					});
 					$(this).addClass('active');
+					
+					li.addClass('active');
+					li.siblings().removeClass('active');
+					
 					var tab = $(this).closest('.nav-second-level').attr('data-item');
 					var grid = $(this).attr('grid');
 					var erp = grid.split('-')[1];
 					if(tab == "po"){
-						fnGenerateGridHtml(data.resultSet,grid,"dashboard",data.userData.Role,data.graphData,errorData);
+						fnGenerateGridHtml(data.resultSet,grid,"dashboard",data.userData.Role,errorData);
 						buildDashboardGrids(erp,data.resultSet);
 						buildErrorGrids(errorData,erp);
-					}
-						
+					}						
 					else if(tab == "supplier"){
-						var minHeight = "";	
-						if((data.supplierData[erp].series).length < 16 && (data.supplierData[erp].series).length > 10){
-							minHeight = (data.supplierData[erp].series).length * 25 + 75;
+						if(jQuery.isEmptyObject(supplierData)){
+							var pagination = {};
+							pagination.lastPartition = "null";
+							pagination.lastRow = "null";
+							pagination.nextPartition = "null";
+							pagination.nextRow = "null";
+							  
+							var postObj = {} ;
+							 
+							postObj.paginationParam = pagination;
+							postObj.erpName = erp;
+							postObj.size = 10;
+							commonUtil.addLoader();	
+							serviceObj.callToSever("api/supplier/getSegmentedSupplierDetails",JSON.stringify(postObj),"POST").then(function(result,xhr,status){
+								commonUtil.removeLoader();
+								supplierData = result;
+								supplierGrid(supplierData,erp,grid);
+							});
 						}
-						fnGenerateGridHtml(data.supplierData,grid,"supplier");
-						if(minHeight)
-							$('.gridContainer .grid-style').css('min-height',minHeight+"px");
-						buildSupplierGrids(erp,data.supplierData);
+						else
+							supplierGrid(supplierData,erp,grid);
+						
 					}
 						
 					else if(tab == "item"){
-						var minHeight = "";	
-						if((data.itemData[erp].series).length < 16 && (data.itemData[erp].series).length > 10){
-							minHeight = (data.itemData[erp].series).length * 25 + 75;
+						if(jQuery.isEmptyObject(itemData)){
+							var pagination = {};
+							pagination.lastPartition = "null";
+							pagination.lastRow = "null";
+							pagination.nextPartition = "null";
+							pagination.nextRow = "null";
+							  
+							var postObj = {} ;
+							 
+							postObj.paginationParam = pagination;
+							postObj.erpName = erp;
+							postObj.size = 10;
+							commonUtil.addLoader();
+							serviceObj.callToSever("api/item/getSegmentedItemDetails",JSON.stringify(postObj),"POST").then(function(result,xhr,status){
+								commonUtil.removeLoader();
+								itemData = result;
+								itemGrid(itemData,erp,grid);
+							});
 						}
-						fnGenerateGridHtml(data.itemData,grid,"item");
-						if(minHeight)
-							$('.gridContainer .grid-style').css('min-height',minHeight+"px");
-						buildItemGrids(erp,data.itemData);
+						else
+							itemGrid(itemData,erp,grid);
+						
 					}
 						
 				});
@@ -100,9 +135,13 @@ var e2OpenDashboard = (function($){
 				
 				$('#side-menu li.menu').off('click').on('click',function(e){
 					
-					//if(!$(this).find('.nav-second-level').hasClass('in')){
+					
 						$(this).siblings().find('a').removeClass('active');
 						$(this).find('a').not('.nav-second-level a').addClass('active');
+						
+						var li = $(this);
+						li.addClass('active');
+						li.siblings().removeClass('active');
 						
 						var data_tab = $(this).attr('data-tab');
 						
@@ -114,7 +153,7 @@ var e2OpenDashboard = (function($){
 							buildGraph(graphData,erpData);*/
 							
 							var menuHtml = "";
-							menuHtml +='<li data-tab="home" class="menu">'+
+							menuHtml +='<li data-tab="home" class="menu active">'+
 											'<a href="#" class="active"><i class="fa fa-home fa-fw" ></i> Home</a>'+
 										'</li>';
 										
@@ -131,7 +170,7 @@ var e2OpenDashboard = (function($){
 						}
 						else
 							$(this).find('.nav-second-level li:first a').trigger('click');
-					//}
+					
 				});
 				
 				$('li[data-tab="po"]').trigger('click');
@@ -141,8 +180,34 @@ var e2OpenDashboard = (function($){
         });
     }
 	
+	function supplierGrid(data,erp,grid){
+		var minHeight = "";	
+		if((data.supplierData[erp].series).length < 16 && (data.supplierData[erp].series).length > 10){
+			minHeight = (data.supplierData[erp].series).length * 25 + 75;
+		}
+		fnGenerateGridHtml(data.supplierData,grid,"supplier");
+		if(minHeight)
+			$('.gridContainer .grid-style').css('min-height',minHeight+"px");
+		buildSupplierGrids(erp,data.supplierData);
+	}
+	
+	function itemGrid(data,erp,grid){
+		var minHeight = "";	
+		if((data.itemData[erp].series).length < 16 && (data.itemData[erp].series).length > 10){
+			minHeight = (data.itemData[erp].series).length * 25 + 75;
+		}
+		fnGenerateGridHtml(data.itemData,grid,"item");
+		if(minHeight)
+			$('.gridContainer .grid-style').css('min-height',minHeight+"px");
+		buildItemGrids(erp,data.itemData);
+	}
+	
 	function fnGeneratePOHtml(){
 		var html = "";
+		
+		html += "<div class='graph_outer'>"+
+					"<div class='graph_heading'><span>Supplier Collaboration</span></div>"+
+					"<div class='graph_content'>";
 		
 		html += "<div class='row'>"+
 						"<div class='col-sm-12'>"+
@@ -152,10 +217,12 @@ var e2OpenDashboard = (function($){
 						"</div>"+
 					"</div>";
 					
+		html += "</div></div>";			
+					
 		$('#main1').html(html);				
 	}
 	
-	function fnGenerateGridHtml(data,grid,type,role,graphData,errorData){
+	function fnGenerateGridHtml(data,grid,type,role,errorData){
 		
 		var newGraphData = {};
 		
@@ -183,7 +250,7 @@ var e2OpenDashboard = (function($){
 		
 		var disabled = "";
 		
-		if(type == "dashboard" /*&& errorCount > 0*/ && role == "Admin"){
+		if(type == "dashboard" && errorCount > 0 && role == "Admin"){
 			html += "<div class='row'><div class='col-lg-6'>";
 		}
 		
@@ -206,7 +273,7 @@ var e2OpenDashboard = (function($){
 		var lblMargin = "margin-left:25%;"
 		
 		if(label == "DASHBOARD DATA"){
-			label = "PO DATA";
+			label = "PURCHASE ORDERS DATA";
 			lblMargin = "margin-left:15%;"
 		}
 			
@@ -214,6 +281,10 @@ var e2OpenDashboard = (function($){
 		html += '<div class="row" style="margin-bottom:5px;"><div class="col-xs-9 process-error-header"><span style="'+lblMargin+'">'+label+'</span></div><div class="col-xs-3"><button id="exportBtn" grid="'+type+'-'+erp+'-grid'+'" class="btn btn-info" style="float:right;display:none;">Export To  Excel</button></div></div><div class="row"><div class="col-sm-12"><div id="'+type+erp+'" class="tab-pane fade in active"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="'+type+'-'+erp+'-grid'+'" class="grid-style '+className+'"></div><div id="'+type+'-'+erp+'-pager'+'" class="pager-style"></div></div></div></div></div></div></div>';
 		
 		if(type == "dashboard"){
+			html += "<div class='graph_outer' style='margin-top:10px;'>"+
+					"<div class='graph_heading' style='height:28px;'><span>"+erp+"</span><a class='graphIconClick' href='#'><img src='../img/maximize_icon.png'></a></div>"+
+					"<div class='graph_content' style='padding:0px;'>";
+					
 			html += "<div class='row'>"+
 						"<div class='col-sm-12'>"+
 							//"<div class='margin-top-10'>"+
@@ -222,7 +293,9 @@ var e2OpenDashboard = (function($){
 						"</div>"+
 					"</div>";
 					
-			if(/*errorCount > 0 && */role == "Admin"){
+			html += "</div></div>";		
+					
+			if(errorCount > 0 && role == "Admin"){
 				var errorHtml = fnGetErrorGridHtml("error",erp);
 				
 				html += "</div><div class='col-lg-6 errro-data-container'>"+errorHtml+"</div></div>";
@@ -256,7 +329,7 @@ var e2OpenDashboard = (function($){
 		
 		if(type == "dashboard"){
 			buildGraph(newGraphData,erpData);
-			if(/*errorCount > 0 && */role == "Admin"){
+			if(errorCount > 0 && role == "Admin"){
 				paginationData = errorData[erp].pagination	;
 				
 				$('.errro-data-container').find('.pagination-data .lastPartition').text(paginationData.lastPartition)
@@ -343,7 +416,8 @@ var e2OpenDashboard = (function($){
 		var html = "";
 		
 		for(var i = 0 ; i < erpData.length ; i++){
-			html += '<li><a data-toggle="tab" href="#" grid="dashboard-'+erpData[i]+'-grid'+'">'+erpData[i]+'</a></li>';
+			//html += '<li><a data-toggle="tab" href="#" grid="dashboard-'+erpData[i]+'-grid'+'">'+erpData[i]+'</a></li>';
+			html += '<li><a data-toggle="tab" href="#" grid="dashboard-'+erpData[i]+'-grid'+'"><span class="menu-text">'+erpData[i]+'</span><span class="selected"></span></a></li>';
 		}
 		
 		$('#PoSubMenu').html(html);
@@ -355,7 +429,7 @@ var e2OpenDashboard = (function($){
 		var html = "";
 		
 		for(var i = 0 ; i < erpData.length ; i++){
-			html += '<li><a data-toggle="tab" href="#" grid="supplier-'+erpData[i]+'-grid'+'">'+erpData[i]+'</a></li>';
+			html += '<li><a data-toggle="tab" href="#" grid="supplier-'+erpData[i]+'-grid'+'"><span class="menu-text">'+erpData[i]+'</span><span class="selected"></span></a></li>';
 		}
 		
 		$('#SuppSubMenu').html(html);
@@ -367,7 +441,7 @@ var e2OpenDashboard = (function($){
 		var html = "";
 		
 		for(var i = 0 ; i < erpData.length ; i++){
-			html += '<li><a data-toggle="tab" href="#" grid="item-'+erpData[i]+'-grid'+'">'+erpData[i]+'</a></li>';
+			html += '<li><a data-toggle="tab" href="#" grid="item-'+erpData[i]+'-grid'+'"><span class="menu-text">'+erpData[i]+'</span><span class="selected"></span></a></li>';
 		}
 		
 		$('#ItemSubMenu').html(html);
@@ -579,7 +653,7 @@ var e2OpenDashboard = (function($){
         return errorCount;
 	}
     
-    function buildGraph(graphData,erpData){
+    function buildGraph(graphData,erpData,container){
 		/*if(!erpData)
 			erpData = erpData;
 		
@@ -611,7 +685,10 @@ var e2OpenDashboard = (function($){
             var plotData = commonUtil.prepareGraphData(categoryData);
 
 			var name = {"x-axis":"","y-axis":"Purchase Orders","title":"Supplier Collaboration Dashboard"};
-            commonUtil.plotGraph(plotData,name,categoryArr);
+			if(container)
+				commonUtil.plotGraph(plotData,name,categoryArr,container);
+			else
+				commonUtil.plotGraph(plotData,name,categoryArr);
     }
 	
 	function buildECNGraph(graphData,erpData){
@@ -895,17 +972,7 @@ var e2OpenDashboard = (function($){
 		var globalId = $('#username').attr('data-global-id');
 		var sendObj = JSON.stringify({"erpName":erp,"poNo":poNumArray,"globalId": globalId,"userName": userName,"comment":comment});
 		commonUtil.addLoader();
-		$.ajax({
-			  url :"api/po/processErrorPos",
-			  data :sendObj,
-			  async:true,
-			  crossDomain:true,
-			  method:"POST",
-		      headers: {
-				'content-type': "application/json",
-				'cache-control': "no-cache"
-			  },
-			  success:function(result,status,xhr){
+		serviceObj.callToSever("api/po/processErrorPos",sendObj,"POST").then(function(result,status,xhr){
 				commonUtil.removeLoader();  
 				console.log(result);  
 				var successList = result.successList;
@@ -941,15 +1008,9 @@ var e2OpenDashboard = (function($){
 					
 					if(elMsg)
 						toastr.error(elMsg);
+				}	
 					
-				}
-			  },
-			  error:function(xhr,status,error){
-				console.log("error");    
-			  }
-		})	  
-		
-		
+		});
 	});
     
     $(document).on('click','.sc .autopager', function(e) {
@@ -1002,17 +1063,7 @@ var e2OpenDashboard = (function($){
 		  
 		  var newData = "";
 		  var newpaginationData = "";
-		  $.ajax({
-			  url : url,
-			  data : JSON.stringify(postObj),
-			  async: true,
-			  crossDomain: true,
-			  method:"POST",
-		      headers: {
-				'content-type': "application/json",
-				'cache-control': "no-cache"
-			  },
-			  success:function(result,status,xhr){
+		  serviceObj.callToSever(url,JSON.stringify(postObj),"POST").then(function(result,status,xhr){
 				  console.log("success");
 				  commonUtil.removeLoader();
 				  var data = result ;
@@ -1049,13 +1100,8 @@ var e2OpenDashboard = (function($){
 					
 					if(newpaginationData.nextRow == "null" && newpaginationData.nextPartition == "null" )
 						$(selfEle).remove();
-				  
-			  },
-			  error:function(xhr,status,error){
-				  console.log("error");
-			  }
-		  })
-          
+			  
+		  });
     });
 	
 	function fnChangeStatus(newData){
@@ -1082,6 +1128,11 @@ var e2OpenDashboard = (function($){
 	
 	$(document).on('click','.grid-style .po-number',function(e){
 		e.preventDefault();
+		
+		/*$('.nav.nav-second-level.collapse.in li').each(function(){
+			$(this).addClass('disabled');
+		});*/
+		
 		var poNum = $(this).attr('data-value');
 		var erp = ($('.nav.nav-second-level.collapse.in li a.active').attr('grid')).split('-')[1];
 		
@@ -1099,39 +1150,23 @@ var e2OpenDashboard = (function($){
 		
 		
 		commonUtil.addLoader();
-		$.ajax({
-			  url : "api/po/getPoItemDetail",
-			  data : JSON.stringify(reqObj),
-			  async: true,
-			  crossDomain: true,
-			  method:"POST",
-		      headers: {
-				'content-type': "application/json",
-				'cache-control': "no-cache"
-			  },
-			  success:function(result,status,xhr){
-				  $('#main1').hide();
-				  $('#main3').show();
-				  $('#main3').addClass('active');
-				  console.log("success");
-				  var data = result.resultSet.series;
-				  var minHeight = "";
-				  if(data.length < 16 && data.length > 10){
-						minHeight = (data).length * 25 + 75;
-				  }
-				  commonUtil.removeLoader();
-				  fnGetPoDetailsGridHtml(result.resultSet.pagination,"podetails",erp,poNum);
-				  if(minHeight)
-					$('#main3 .gridContainer .grid-style').css('min-height',minHeight+"px");
-				  buildPODetailsGrid(data,erp);
-				  
-				  
-			  },
-			  error:function(xhr,status,error){
-				  console.log("error");
-			  }
-		  })
 		
+		serviceObj.callToSever("api/po/getPoItemDetail",JSON.stringify(reqObj),"POST").then(function(result,status,xhr){
+			  $('#main1').hide();
+			  $('#main3').show();
+			  $('#main3').addClass('active');
+			  console.log("success");
+			  var data = result.resultSet.series;
+			  var minHeight = "";
+			  if(data.length < 16 && data.length > 10){
+					minHeight = (data).length * 25 + 75;
+			  }
+			  commonUtil.removeLoader();
+			  fnGetPoDetailsGridHtml(result.resultSet.pagination,"podetails",erp,poNum);
+			  if(minHeight)
+				$('#main3 .gridContainer .grid-style').css('min-height',minHeight+"px");
+			  buildPODetailsGrid(data,erp);
+		});
 		
 	});
 	
@@ -1139,6 +1174,9 @@ var e2OpenDashboard = (function($){
 		$('#main3').hide();
 		$('#main1').show();
 		$('#main3').removeClass('active');
+		$('.nav.nav-second-level.collapse.in li').each(function(){
+			$(this).removeClass('disabled');
+		});
 	});
 	
 	
@@ -1186,7 +1224,7 @@ var e2OpenDashboard = (function($){
     $(document).ready(function(){
 		  
 		var menuHtml = "";
-		menuHtml +='<li data-tab="home" class="menu">'+
+		menuHtml +='<li data-tab="home" class="menu active">'+
                         '<a href="#" class="active"><i class="fa fa-home fa-fw" ></i> Home</a>'+
                     '</li>';
 					
@@ -1202,7 +1240,7 @@ var e2OpenDashboard = (function($){
 			menuHtml += '<li data-tab="home" class="menu">'+
                             '<a href="#"><i class="fa fa-home fa-fw"></i> Home</a>'+
                         '</li>'+
-                        '<li data-tab="po" class="menu">'+
+                        '<li data-tab="po" class="menu active">'+
                             '<a href="#"><i class="fa fa-dashboard fa-fw"></i> PO<span class="fa arrow"></span></a>'+
                             '<ul class="nav nav-second-level collapse in" id="PoSubMenu" data-item="po"></ul>'+
                         '</li>'+
@@ -1234,7 +1272,7 @@ var e2OpenDashboard = (function($){
 			menuHtml += '<li data-tab="home" class="menu">'+
                             '<a href="#"><i class="fa fa-home fa-fw"></i> Home</a>'+
                         '</li>'+
-                        '<li data-tab="ecn" class="menu">'+
+                        '<li data-tab="ecn" class="menu active">'+
                             '<a href="#"><i class="fa fa-dashboard fa-fw"></i>ECN<span class="fa arrow"></span></a>'+
                             '<ul class="nav nav-second-level collapse in" id="ECNSubMenu" data-item="ecn"></ul>'+
                         '</li>';
@@ -1264,27 +1302,61 @@ var e2OpenDashboard = (function($){
 			data = {
 				"message": "OK",
 				"resultSet": {
-					"SAP": {
+					"SYMIX": {
 						"series": [
 							{
 								"PTCAckMsg": "PTCACkMessage",
+								"Description": "CUMMINS PART NPI",
 								"BomPayloadProcessed": "true",
 								"ModifiedDate": "2016-07-22T00:00:00Z",
+								"ProcessedDate": "2016-07-27T00:00:00Z",
+								"EcnRequestor": "Administrator",
 								"Plant": "Reynosa",
 								"UIReprocessingDate": "2016-07-27T00:00:00Z",
 								"PartError": "true",
-								 "id": "0004",
+								"id": "0004",
 								"BomErrorMsg": "BomErrorMessage",
 								"ECNNumber": "115",
 								"PtcAck": "false",
-								"isErrorDataRequired": "true",
+								"isErrorDataRequired": "false",
 								"Status": "3",
 								"OutputXMLEtag": "cdc3b234",
 								"PartPayloadProcessed": "false",
 								"ERPName": "Symix",
-								"Error": "error",
+								"Error": "401",
 								"BomError": "true",
-								"TxnID": "7",
+								"TxnID": "5",
+								"PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
+								"InputXMLEtag": "cdc3b121",
+								"UIReprocessing": "part/bom",
+								"CreatedDate": "2016-07-22T00:00:00Z",
+								"BomPayloadProcessedDate": "2016-07-23T00:00:00Z",
+								"Region": "Reynosa",
+								"PTCAckSentDate": "2016-07-26T00:00:00Z",
+								"PartErrorMsg": "PartErrorMessage"
+							},
+							{
+								"PTCAckMsg": "PTCACkMessage",
+								"Description": "CUMMINS PART NPI",
+								"BomPayloadProcessed": "true",
+								"ModifiedDate": "2016-07-22T00:00:00Z",
+								"ProcessedDate": "2016-07-27T00:00:00Z",
+								"EcnRequestor": "Administrator",
+								"Plant": "Reynosa",
+								"UIReprocessingDate": "2016-07-27T00:00:00Z",
+								"PartError": "true",
+								"id": "0006",
+								"BomErrorMsg": "BomErrorMessage",
+								"ECNNumber": "116",
+								"PtcAck": "false",
+								"isErrorDataRequired": "false",
+								"Status": "3",
+								"OutputXMLEtag": "cdc3b234",
+								"PartPayloadProcessed": "false",
+								"ERPName": "Symix",
+								"Error": "404",
+								"BomError": "true",
+								"TxnID": "6",
 								"PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
 								"InputXMLEtag": "cdc3b121",
 								"UIReprocessing": "part/bom",
@@ -1298,39 +1370,74 @@ var e2OpenDashboard = (function($){
 						"pagination": {
 							"lastPartition": null,
 							"lastRow": null,
-							"nextPartition": null,
-							"nextRow": null
+							"nextPartition": "1!8!U0FQX1BP",
+							"nextRow": "1!8!MDAwNw--"
 						}
 					}
 				},
 				"graphData": {
-					"SAP": [
+					"SYMIX": [
+						6,
 						4,
 						2
 					]
 				},
 				"errorData": {
-					"SAP": {
+					"SYMIX": {
 						"series": [
 							{
 								"PTCAckMsg": "PTCACkMessage",
+								"Description": "CUMMINS PART NPI",
 								"BomPayloadProcessed": "true",
 								"ModifiedDate": "2016-07-22T00:00:00Z",
+								"ProcessedDate": "2016-07-27T00:00:00Z",
+								"EcnRequestor": "Administrator",
 								"Plant": "Reynosa",
 								"UIReprocessingDate": "2016-07-27T00:00:00Z",
 								"PartError": "true",
+								"id": "0004",
 								"BomErrorMsg": "BomErrorMessage",
 								"ECNNumber": "115",
 								"PtcAck": "false",
-								 "id": "0004",
-								"isErrorDataRequired": "true",
+								"isErrorDataRequired": "false",
 								"Status": "3",
 								"OutputXMLEtag": "cdc3b234",
 								"PartPayloadProcessed": "false",
 								"ERPName": "Symix",
-								"Error": "error",
+								"Error": "401",
 								"BomError": "true",
-								"TxnID": "7",
+								"TxnID": "5",
+								"PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
+								"InputXMLEtag": "cdc3b121",
+								"UIReprocessing": "part/bom",
+								"CreatedDate": "2016-07-22T00:00:00Z",
+								"BomPayloadProcessedDate": "2016-07-23T00:00:00Z",
+								"Region": "Reynosa",
+								"PTCAckSentDate": "2016-07-26T00:00:00Z",
+								"PartErrorMsg": "PartErrorMessage"
+							},
+							{
+								"PTCAckMsg": "PTCACkMessage",
+								"Description": "CUMMINS PART NPI",
+								"BomPayloadProcessed": "true",
+								"ModifiedDate": "2016-07-22T00:00:00Z",
+								"ProcessedDate": "2016-07-27T00:00:00Z",
+								"EcnRequestor": "Administrator",
+								"Plant": "Reynosa",
+								"UIReprocessingDate": "2016-07-27T00:00:00Z",
+								"PartError": "true",
+								"id": "0006",
+								"BomErrorMsg": "BomErrorMessage",
+								"ECNNumber": "116",
+								"PtcAck": "false",
+								"isErrorDataRequired": "false",
+								"Status": "3",
+								"OutputXMLEtag": "cdc3b234",
+								"PartPayloadProcessed": "false",
+								"ERPName": "Symix",
+								"Error": "404",
+								"BomError": "true",
+								"TxnID": "6",
 								"PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
 								"InputXMLEtag": "cdc3b121",
 								"UIReprocessing": "part/bom",
@@ -1344,8 +1451,8 @@ var e2OpenDashboard = (function($){
 						"pagination": {
 							"lastPartition": null,
 							"lastRow": null,
-							"nextPartition": null,
-							"nextRow": null
+							"nextPartition": "1!8!U0FQX1BP",
+							"nextRow": "1!8!MDAwNw--"
 						}
 					}
 				},
@@ -1401,11 +1508,15 @@ var e2OpenDashboard = (function($){
 					$(this).siblings().find('a').removeClass('active');
 					$(this).find('a').not('.nav-second-level a').addClass('active');
 					
+					var li = $(this);
+					li.addClass('active');
+					li.siblings().removeClass('active');
+					
 					var data_tab = $(this).attr('data-tab');
 					
 					if(data_tab == "home"){
 						var menuHtml = "";
-						menuHtml +='<li data-tab="home" class="menu">'+
+						menuHtml +='<li data-tab="home" class="menu active">'+
 										'<a href="#" class="active"><i class="fa fa-home fa-fw" ></i> Home</a>'+
 									'</li>';
 									
@@ -1438,7 +1549,7 @@ var e2OpenDashboard = (function($){
 		var html = "";
 		
 		for(var i = 0 ; i < erpData.length ; i++)
-			html += '<li><a data-toggle="tab" href="#" grid="ecn-'+erpData[i]+'-grid">'+erpData[i]+'</a></li>';
+			html += '<li><a data-toggle="tab" href="#" grid="ecn-'+erpData[i]+'-grid"><span class="menu-text">'+erpData[i]+'</span><span class="selected"></span></a></li>';
 		
 		
 		$('#ECNSubMenu').html(html);
@@ -1448,6 +1559,10 @@ var e2OpenDashboard = (function($){
 	function fnGenerateEcnHtml(){
 		var html = "";
 		
+		html += "<div class='graph_outer'>"+
+					"<div class='graph_heading'><span>Windchill PLM Dashboard</span></div>"+
+					"<div class='graph_content'>";	
+		
 		html += "<div class='row'>"+
 						"<div class='col-sm-12'>"+
 							//"<div class='margin-top-10'>"+
@@ -1455,6 +1570,8 @@ var e2OpenDashboard = (function($){
 							//"</div>"+
 						"</div>"+
 					"</div>";
+					
+		html += "</div></div>";			
 					
 		$('#main1').html(html);		
 		
@@ -1499,6 +1616,10 @@ var e2OpenDashboard = (function($){
 		html += '<div class="row" style="margin-bottom:5px;"><div class="col-xs-9 process-error-header"><span style="'+lblMargin+'">'+label+'</span></div><div class="col-xs-3">'+ProcessErrbtn+'</div></div><div class="row"><div class="col-sm-12"><div id="'+type+erp+'" class="tab-pane fade in active"><div class="pagination-data" style="display:none;"><span class="lastPartition"></span><span class="lastRow"></span><span class="nextPartition"></span><span class="nextRow"></span></div><div class="gridContainer"><div class="row"><div class="col-sm-12"><div id="'+type+'-'+erp+'-grid'+'" class="grid-style"></div><div id="'+type+'-'+erp+'-pager'+'" class="pager-style"></div></div></div></div></div></div></div>';
 		
 		
+		html += "<div class='graph_outer' style='margin-top:10px;margin-bottom:10px;'>"+
+					"<div class='graph_heading'><span>"+erp+"</span><a class='graphIconClick' href='#'><img src='../img/maximize_icon.png'></a></div>"+
+					"<div class='graph_content' style='padding:0px;'>";	
+		
 		html += "<div class='row'>"+
 					"<div class='col-sm-12'>"+
 						//"<div class='margin-top-10'>"+
@@ -1506,6 +1627,8 @@ var e2OpenDashboard = (function($){
 						//"</div>"+
 					"</div>"+
 				"</div>";
+				
+		html += "</div></div>";		
 				
 			
 		
@@ -1624,7 +1747,7 @@ var e2OpenDashboard = (function($){
 	});
 
 	function buildECNErrorGrids(resultSet,erp){
-		var columns = commonUtil.getECNGridColumns();
+		var columns = commonUtil.getECNErrorGridColumns();
         var options = commonUtil.getDashboardGridOptions();
         
         mainGrid['ecnerror-'+erp+'-grid'] = Object.create(BuildGrid.prototype);
@@ -1634,7 +1757,7 @@ var e2OpenDashboard = (function($){
         mainGrid['ecnerror-'+erp+'-grid'].createGrid();
 	}
 	
-	function buildECNGraph(graphData,erpData){
+	function buildECNGraph(graphData,erpData,container){
 		var graphDataObject={},categoryArr=[], categoryData={},errorGraphData=[], processGraphData=[];
             graphDataObject = graphData;
                 
@@ -1652,7 +1775,10 @@ var e2OpenDashboard = (function($){
             var plotData = commonUtil.prepareECNGraphData(categoryData);
 
 			var name = {"x-axis":"","y-axis":"Purchase Orders","title":"Widchill PLM Dashboard"};
-            commonUtil.plotGraph(plotData,name,categoryArr);
+			if(container)
+				commonUtil.plotGraph(plotData,name,categoryArr,container);
+			else
+				commonUtil.plotGraph(plotData,name,categoryArr);
 		
 	}
 
@@ -1689,8 +1815,6 @@ var e2OpenDashboard = (function($){
 		  pagination.lastRow = $(paginationData).find('.lastRow').text();
 		  pagination.nextPartition = $(paginationData).find('.nextPartition').text();
 		  pagination.nextRow = $(paginationData).find('.nextRow').text();
-		  
-		  
 		 
 		  postObj.paginationParam = pagination;
 		  postObj.erpName = erp;
@@ -1700,17 +1824,7 @@ var e2OpenDashboard = (function($){
 		  
 		  var newData = "";
 		  var newpaginationData = "";
-		  $.ajax({
-			  url : url,
-			  data : JSON.stringify(postObj),
-			  async: true,
-			  crossDomain: true,
-			  method:"POST",
-		      headers: {
-				'content-type': "application/json",
-				'cache-control': "no-cache"
-			  },
-			  success:function(result,status,xhr){
+		  serviceObj.callToSever(url,JSON.stringify(postObj),"POST").then(function(result,status,xhr){
 				  console.log("success");
 				  commonUtil.removeLoader();
 				  var data = result ;
@@ -1740,12 +1854,7 @@ var e2OpenDashboard = (function($){
 					
 					if(newpaginationData.nextRow == "null" && newpaginationData.nextPartition == "null" )
 						$(selfEle).remove();
-				  
-			  },
-			  error:function(xhr,status,error){
-				  console.log("error");
-			  }
-		  })
+		  });
 	});	
 	
 	$(document).on('click','#submitECRErrBtn', function(e) {
@@ -1774,18 +1883,8 @@ var e2OpenDashboard = (function($){
 		var globalId = $('#username').attr('data-global-id');
 		var sendObj = JSON.stringify({"erpName":erp,"poNo":poNumArray,"globalId": globalId,"userName": userName,"comment":comment});
 		commonUtil.addLoader();
-		$.ajax({
-			  url :"",
-			  data :sendObj,
-			  async:true,
-			  crossDomain:true,
-			  method:"POST",
-		      headers: {
-				'content-type': "application/json",
-				'cache-control': "no-cache"
-			  },
-			  success:function(result,status,xhr){
-				commonUtil.removeLoader();  
+		serviceObj.callToSever("",sendObj,"POST").then(function(){
+			commonUtil.removeLoader();  
 				console.log(result);  
 				var successList = result.successList;
 				var errorList = result.errorList;
@@ -1801,7 +1900,7 @@ var e2OpenDashboard = (function($){
 						graphData = result.graphData;
 						var newGraphData = {};
 						newGraphData[erp] = graphData[erp];
-						buildECNGraphGraph(newGraphData);
+						buildECNGraph(newGraphData);
 						var errorCount = newGraphData[erp][1];
 						$('#ecrErrorCount').text(errorCount);
 						$('#txtDescErr').val('');
@@ -1824,12 +1923,46 @@ var e2OpenDashboard = (function($){
 						toastr.error(elMsg);
 					
 				}
-			  },
-			  error:function(xhr,status,error){
-				console.log("error");    
-			  }
-		})
+		});
 	});
+	
+	$(document).on('click','.graphIconClick',function(){
+		var erp = ($('.nav.nav-second-level.collapse.in li a.active').attr('grid')).split('-')[1];
+		
+		var type = "";
+		
+		if($('#main1').hasClass('sc'))
+			type = "sc";
+		else
+			type = "plm";
+		
+		var html = "";
+		
+		html += "<div class='graph_outer'>"+
+					"<div class='graph_heading'><span>"+erp+"</span></div>"+
+					"<div class='graph_content'>";	
+		
+		html += "<div class='row'>"+
+						"<div class='col-sm-12'>"+
+							//"<div class='margin-top-10'>"+
+								"<div id='modal-highchartContainer' style='height:500px;width:70%;'></div>"+
+							//"</div>"+
+						"</div>"+
+					"</div>";
+					
+		html += "</div></div>";			
+					
+		$('#myModal .modal-body').html(html);
+
+		var newGraphData = {};
+		newGraphData[erp] = graphData[erp];
+		if(type == "sc")
+			buildGraph(newGraphData,"","modal-highchartContainer");
+		else
+			buildECNGraph(newGraphData,"","modal-highchartContainer");
+		
+		$('#myModal').modal('show');
+	})
 	
     
     /************************ events on dashboard screen end ****************************/

@@ -7,32 +7,59 @@ import com.jci.job.entity.SupplierEntity;
 
 public class SupplierDetailsRes {
 
-	private boolean isErrorInDataFetch;
-	private String errorMsg;
-	private Map<String, List<SupplierEntity>> dsToSupplierList;
-	public boolean isErrorInDataFetch() {
-		return isErrorInDataFetch;
+	private int code;
+	private String status;
+	private String message;
+	private String date;
+	
+	private List<Object> supplierList;
+
+	public int getCode() {
+		return code;
 	}
-	public void setErrorInDataFetch(boolean isErrorInDataFetch) {
-		this.isErrorInDataFetch = isErrorInDataFetch;
+
+	public void setCode(int code) {
+		this.code = code;
 	}
-	public String getErrorMsg() {
-		return errorMsg;
+
+	public String getStatus() {
+		return status;
 	}
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
-	public Map<String, List<SupplierEntity>> getDsToSupplierList() {
-		return dsToSupplierList;
+
+	public String getMessage() {
+		return message;
 	}
-	public void setDsToSupplierList(Map<String, List<SupplierEntity>> dsToSupplierList) {
-		this.dsToSupplierList = dsToSupplierList;
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public List<Object> getSupplierList() {
+		return supplierList;
+	}
+
+	public void setSupplierList(List<Object> supplierList) {
+		this.supplierList = supplierList;
+	}
+
 	@Override
 	public String toString() {
-		return "SupplierDetailsRes [isErrorInDataFetch=" + isErrorInDataFetch + ", errorMsg=" + errorMsg
-				+ ", dsToSupplierList=" + dsToSupplierList + "]";
+		return "SupplierDetailsRes [code=" + code + ", status=" + status + ", message=" + message + ", date=" + date
+				+ ", supplierList=" + supplierList + "]";
 	}
+	
 	
 	
 }

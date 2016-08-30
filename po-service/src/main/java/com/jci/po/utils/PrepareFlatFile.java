@@ -2,7 +2,6 @@ package com.jci.po.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +11,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jci.po.azure.FlatFile;
+
 public class PrepareFlatFile {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(PrepareFlatFile.class);
 	
-	public  Map<String,List<String>>  prepareSupplierData(HashMap<Integer,String> mapping,Map<String,List<HashMap<String, Object>>>  poNumToItemsMap){
+	public  Map<String,List<String>>  prepareSupplierData(HashMap<Integer,String> mapping,Map<String,List<HashMap<String, Object>>>  poNumToItemsMap,FlatFile config){
 		LOG.info("### Starting PrepareFlatFile.prepareSupplierData");
 		
 		Map<String,List<String>> fileNameToRowsMap = new HashMap<String,List<String>>();
@@ -24,7 +25,7 @@ public class PrepareFlatFile {
 		List<String> lines = null;
 		
 		for (Map.Entry<String,List<HashMap<String, Object>>> entry : poNumToItemsMap.entrySet()){
-			LOG.info(entry.getKey() + "/" + entry.getValue());
+			//LOG.info(entry.getKey() + "/" + entry.getValue());
 		    
 			lines = new ArrayList<String>();
 			List<HashMap<String, Object>> list =  entry.getValue();
@@ -34,7 +35,7 @@ public class PrepareFlatFile {
 				lines.add(fixedLengthString((list.get(i)),mapping).toString());
 			}
 		    
-		    String fileName = getFileName(entry.getKey());
+		    String fileName = getFileName(entry.getKey(),config);
 		    fileNameToRowsMap.put(fileName, lines);
 		}
 		
@@ -79,27 +80,27 @@ public class PrepareFlatFile {
 		return false;
 	}
 	
-	public static String getFileName(String poNum) {
+	public  String getFileName(String poNum,FlatFile ff) {
 		
 		StringBuilder name = new StringBuilder();
 		
 		name.append(poNum);
 		name.append(".");
-		name.append(Constants.FILE_SENDER_DUNS);
+		name.append(ff.getSenderDuns());
 		name.append("_");
-		name.append(Constants.FILE_RECEIVER_DUNS);
+		name.append(ff.getReceiverDuns());
 		name.append("_");
-		name.append(Constants.FILE_MESSAGE_TYPE);
+		name.append(ff.getMessageType());
 		name.append("_");
-		name.append(Constants.FILE_VERSION);
+		name.append(ff.getVersion());
 		name.append("_");
-		name.append(Constants.FILE_SITEID);
+		name.append(ff.getSiteId());
 		name.append("_");
 		
-		SimpleDateFormat isoFormat = new SimpleDateFormat(Constants.FILE_DATE_FORMAT);
-		isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		SimpleDateFormat isoFormat = new SimpleDateFormat(ff.getDateFormat());
+		isoFormat.setTimeZone(TimeZone.getTimeZone(ff.getTimeZone()));
 
-		String timestamp = isoFormat.format(new Date());
+		String timestamp = null;//isoFormat.format(new Date());
 		
 		name.append(timestamp);
 		name.append(".txt");

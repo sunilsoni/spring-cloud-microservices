@@ -552,7 +552,15 @@ public class PoItemsEntity extends TableServiceEntity {
 	private String itemCategory;
 
 	// 109: Ship To Location VARCHAR(128)
-	private String shipToLocation;
+	private String shipToLocation;// --Checked
+
+	private String kanbanFlag;// --Checked newly added .
+
+	private int salesOrderNumber;// --Checked newly added dataType not sure!.
+
+	private String materialRevisionLevel;// --Checked newly added .
+
+	private String mrpControllerNumberEva;// --Checked newly added .
 
 	// 110: Flex String PO Line 5 VARCHAR(128)
 	private String flexStringPOLine5;
@@ -852,7 +860,7 @@ public class PoItemsEntity extends TableServiceEntity {
 	private int flexIntPOPromise5;
 
 	// 209: Flex double PO Promise 1 double
-	private double flex_Float_PO_Promise1;
+	private double flexFloatPOPromise1;// --Checked
 
 	// 210: Flex double PO Promise 2 double
 	private double flexFloatPOPromise2;
@@ -2583,14 +2591,6 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.flexIntPOPromise5 = flexIntPOPromise5;
 	}
 
-	public double getFlex_Float_PO_Promise1() {
-		return flex_Float_PO_Promise1;
-	}
-
-	public void setFlex_Float_PO_Promise1(double flex_Float_PO_Promise1) {
-		this.flex_Float_PO_Promise1 = flex_Float_PO_Promise1;
-	}
-
 	public double getFlexFloatPOPromise2() {
 		return flexFloatPOPromise2;
 	}
@@ -2679,6 +2679,46 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.shipToCustomerID = shipToCustomerID;
 	}
 
+	public String getKanbanFlag() {
+		return kanbanFlag;
+	}
+
+	public void setKanbanFlag(String kanbanFlag) {
+		this.kanbanFlag = kanbanFlag;
+	}
+
+	public int getSalesOrderNumber() {
+		return salesOrderNumber;
+	}
+
+	public void setSalesOrderNumber(int salesOrderNumber) {
+		this.salesOrderNumber = salesOrderNumber;
+	}
+
+	public String getMaterialRevisionLevel() {
+		return materialRevisionLevel;
+	}
+
+	public void setMaterialRevisionLevel(String materialRevisionLevel) {
+		this.materialRevisionLevel = materialRevisionLevel;
+	}
+
+	public String getMrpControllerNumberEva() {
+		return mrpControllerNumberEva;
+	}
+
+	public void setMrpControllerNumberEva(String mrpControllerNumberEva) {
+		this.mrpControllerNumberEva = mrpControllerNumberEva;
+	}
+
+	public double getFlexFloatPOPromise1() {
+		return flexFloatPOPromise1;
+	}
+
+	public void setFlexFloatPOPromise1(double flexFloatPOPromise1) {
+		this.flexFloatPOPromise1 = flexFloatPOPromise1;
+	}
+
 	@Override
 	public String toString() {
 		return "PoItemsEntity [OrderNumber=" + OrderNumber + ", status=" + status + ", message=" + message + ", date="
@@ -2728,12 +2768,14 @@ public class PoItemsEntity extends TableServiceEntity {
 				+ priceBasis + ", paymentCurrency=" + paymentCurrency + ", totalLineAmount=" + totalLineAmount
 				+ ", uOM=" + uOM + ", customerOrderLineNotes=" + customerOrderLineNotes + ", supplierOrderLineNotes="
 				+ supplierOrderLineNotes + ", drawingVersion=" + drawingVersion + ", drawingNumber=" + drawingNumber
-				+ ", itemCategory=" + itemCategory + ", shipToLocation=" + shipToLocation + ", flexStringPOLine5="
-				+ flexStringPOLine5 + ", flexStringPOLine6=" + flexStringPOLine6 + ", flexStringPOLine7="
-				+ flexStringPOLine7 + ", flexStringPOLine8=" + flexStringPOLine8 + ", flexStringPOLine9="
-				+ flexStringPOLine9 + ", freeItemFlag=" + freeItemFlag + ", flexIntPOLine2=" + flexIntPOLine2
-				+ ", flexIntPOLine3=" + flexIntPOLine3 + ", flexIntPOLine4=" + flexIntPOLine4 + ", flexIntPOLine5="
-				+ flexIntPOLine5 + ", flexFloatPOLine1=" + flexFloatPOLine1 + ", flexFloatPOLine2=" + flexFloatPOLine2
+				+ ", itemCategory=" + itemCategory + ", shipToLocation=" + shipToLocation + ", kanbanFlag=" + kanbanFlag
+				+ ", salesOrderNumber=" + salesOrderNumber + ", materialRevisionLevel=" + materialRevisionLevel
+				+ ", mrpControllerNumberEva=" + mrpControllerNumberEva + ", flexStringPOLine5=" + flexStringPOLine5
+				+ ", flexStringPOLine6=" + flexStringPOLine6 + ", flexStringPOLine7=" + flexStringPOLine7
+				+ ", flexStringPOLine8=" + flexStringPOLine8 + ", flexStringPOLine9=" + flexStringPOLine9
+				+ ", freeItemFlag=" + freeItemFlag + ", flexIntPOLine2=" + flexIntPOLine2 + ", flexIntPOLine3="
+				+ flexIntPOLine3 + ", flexIntPOLine4=" + flexIntPOLine4 + ", flexIntPOLine5=" + flexIntPOLine5
+				+ ", flexFloatPOLine1=" + flexFloatPOLine1 + ", flexFloatPOLine2=" + flexFloatPOLine2
 				+ ", flexFloatPOLine3=" + flexFloatPOLine3 + ", flexFloatPOLine4=" + flexFloatPOLine4
 				+ ", flexFloatPOLine5=" + flexFloatPOLine5 + ", flexDatePOLine1=" + flexDatePOLine1
 				+ ", flexDatePOLine2=" + flexDatePOLine2 + ", flexDatePOLine3=" + flexDatePOLine3 + ", flexDatePOLine4="
@@ -2773,16 +2815,13 @@ public class PoItemsEntity extends TableServiceEntity {
 				+ ", flexStringPOPromise9=" + flexStringPOPromise9 + ", FlexIntPOPromise1=" + FlexIntPOPromise1
 				+ ", FlexIntPOPromise2=" + FlexIntPOPromise2 + ", flexIntPOPromise3=" + flexIntPOPromise3
 				+ ", flexIntPOPromise4=" + flexIntPOPromise4 + ", flexIntPOPromise5=" + flexIntPOPromise5
-				+ ", flex_Float_PO_Promise1=" + flex_Float_PO_Promise1 + ", flexFloatPOPromise2=" + flexFloatPOPromise2
+				+ ", flexFloatPOPromise1=" + flexFloatPOPromise1 + ", flexFloatPOPromise2=" + flexFloatPOPromise2
 				+ ", flexFloatPOPromise3=" + flexFloatPOPromise3 + ", flexFloatPOPromise4=" + flexFloatPOPromise4
 				+ ", flexFloatPOPromise5=" + flexFloatPOPromise5 + ", flexDatePOPromise1=" + flexDatePOPromise1
 				+ ", flexDatePOPromise2=" + flexDatePOPromise2 + ", flexDatePOPromise3=" + flexDatePOPromise3
 				+ ", flexDatePOPromise4=" + flexDatePOPromise4 + ", flexDatePOPromise5=" + flexDatePOPromise5 + ", rev="
 				+ rev + ", shipToCustomerID=" + shipToCustomerID + "]";
 	}
-
-
 	
-
 
 }

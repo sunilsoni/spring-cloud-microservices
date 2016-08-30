@@ -32,7 +32,7 @@ public class ApiClientServiceImpl implements ApiClientService {
 	@HystrixCommand(commandProperties = {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.timeout.enabled", value = "true"),
-			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"),
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000"),
 			@HystrixProperty(name = "execution.isolation.thread.interruptOnTimeout", value = "true"),
 			@HystrixProperty(name = "fallback.enabled", value = "true"),
 			@HystrixProperty(name = "circuitBreaker.enabled", value = "true"),

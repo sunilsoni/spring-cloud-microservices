@@ -5,22 +5,57 @@
             "series": [
                 {
                     "PTCAckMsg": "PTCACkMessage",
+                    "Description": "CUMMINS PART NPI",
                     "BomPayloadProcessed": "true",
                     "ModifiedDate": "2016-07-22T00:00:00Z",
+                    "ProcessedDate": "2016-07-27T00:00:00Z",
+                    "EcnRequestor": "Administrator",
                     "Plant": "Reynosa",
                     "UIReprocessingDate": "2016-07-27T00:00:00Z",
                     "PartError": "true",
+                    "id": "0004",
                     "BomErrorMsg": "BomErrorMessage",
                     "ECNNumber": "115",
                     "PtcAck": "false",
-                    "isErrorDataRequired": "true",
+                    "isErrorDataRequired": "false",
                     "Status": "3",
                     "OutputXMLEtag": "cdc3b234",
                     "PartPayloadProcessed": "false",
                     "ERPName": "Symix",
-                    "Error": "error",
+                    "Error": "401",
                     "BomError": "true",
-                    "TxnID": "7",
+                    "TxnID": "5",
+                    "PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
+                    "InputXMLEtag": "cdc3b121",
+                    "UIReprocessing": "part/bom",
+                    "CreatedDate": "2016-07-22T00:00:00Z",
+                    "BomPayloadProcessedDate": "2016-07-23T00:00:00Z",
+                    "Region": "Reynosa",
+                    "PTCAckSentDate": "2016-07-26T00:00:00Z",
+                    "PartErrorMsg": "PartErrorMessage"
+                },
+                {
+                    "PTCAckMsg": "PTCACkMessage",
+                    "Description": "CUMMINS PART NPI",
+                    "BomPayloadProcessed": "true",
+                    "ModifiedDate": "2016-07-22T00:00:00Z",
+                    "ProcessedDate": "2016-07-27T00:00:00Z",
+                    "EcnRequestor": "Administrator",
+                    "Plant": "Reynosa",
+                    "UIReprocessingDate": "2016-07-27T00:00:00Z",
+                    "PartError": "true",
+                    "id": "0006",
+                    "BomErrorMsg": "BomErrorMessage",
+                    "ECNNumber": "116",
+                    "PtcAck": "false",
+                    "isErrorDataRequired": "false",
+                    "Status": "3",
+                    "OutputXMLEtag": "cdc3b234",
+                    "PartPayloadProcessed": "false",
+                    "ERPName": "Symix",
+                    "Error": "404",
+                    "BomError": "true",
+                    "TxnID": "6",
                     "PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
                     "InputXMLEtag": "cdc3b121",
                     "UIReprocessing": "part/bom",
@@ -30,11 +65,18 @@
                     "PTCAckSentDate": "2016-07-26T00:00:00Z",
                     "PartErrorMsg": "PartErrorMessage"
                 }
-            ]
+            ],
+            "pagination": {
+                "lastPartition": null,
+                "lastRow": null,
+                "nextPartition": "1!8!U0FQX1BP",
+                "nextRow": "1!8!MDAwNw--"
+            }
         }
     },
     "graphData": {
         "SAP": [
+            6,
             4,
             2
         ]
@@ -44,22 +86,57 @@
             "series": [
                 {
                     "PTCAckMsg": "PTCACkMessage",
+                    "Description": "CUMMINS PART NPI",
                     "BomPayloadProcessed": "true",
                     "ModifiedDate": "2016-07-22T00:00:00Z",
+                    "ProcessedDate": "2016-07-27T00:00:00Z",
+                    "EcnRequestor": "Administrator",
                     "Plant": "Reynosa",
                     "UIReprocessingDate": "2016-07-27T00:00:00Z",
                     "PartError": "true",
+                    "id": "0004",
                     "BomErrorMsg": "BomErrorMessage",
                     "ECNNumber": "115",
                     "PtcAck": "false",
-                    "isErrorDataRequired": "true",
+                    "isErrorDataRequired": "false",
                     "Status": "3",
                     "OutputXMLEtag": "cdc3b234",
                     "PartPayloadProcessed": "false",
                     "ERPName": "Symix",
-                    "Error": "error",
+                    "Error": "401",
                     "BomError": "true",
-                    "TxnID": "7",
+                    "TxnID": "5",
+                    "PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
+                    "InputXMLEtag": "cdc3b121",
+                    "UIReprocessing": "part/bom",
+                    "CreatedDate": "2016-07-22T00:00:00Z",
+                    "BomPayloadProcessedDate": "2016-07-23T00:00:00Z",
+                    "Region": "Reynosa",
+                    "PTCAckSentDate": "2016-07-26T00:00:00Z",
+                    "PartErrorMsg": "PartErrorMessage"
+                },
+                {
+                    "PTCAckMsg": "PTCACkMessage",
+                    "Description": "CUMMINS PART NPI",
+                    "BomPayloadProcessed": "true",
+                    "ModifiedDate": "2016-07-22T00:00:00Z",
+                    "ProcessedDate": "2016-07-27T00:00:00Z",
+                    "EcnRequestor": "Administrator",
+                    "Plant": "Reynosa",
+                    "UIReprocessingDate": "2016-07-27T00:00:00Z",
+                    "PartError": "true",
+                    "id": "0006",
+                    "BomErrorMsg": "BomErrorMessage",
+                    "ECNNumber": "116",
+                    "PtcAck": "false",
+                    "isErrorDataRequired": "false",
+                    "Status": "3",
+                    "OutputXMLEtag": "cdc3b234",
+                    "PartPayloadProcessed": "false",
+                    "ERPName": "Symix",
+                    "Error": "404",
+                    "BomError": "true",
+                    "TxnID": "6",
                     "PartPayloadProcessedDate": "2016-07-22T00:00:00Z",
                     "InputXMLEtag": "cdc3b121",
                     "UIReprocessing": "part/bom",
@@ -69,7 +146,13 @@
                     "PTCAckSentDate": "2016-07-26T00:00:00Z",
                     "PartErrorMsg": "PartErrorMessage"
                 }
-            ]
+            ],
+            "pagination": {
+                "lastPartition": null,
+                "lastRow": null,
+                "nextPartition": "1!8!U0FQX1BP",
+                "nextRow": "1!8!MDAwNw--"
+            }
         }
     },
     "userData": {

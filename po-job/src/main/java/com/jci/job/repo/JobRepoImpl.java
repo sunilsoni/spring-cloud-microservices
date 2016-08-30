@@ -2,34 +2,47 @@ package com.jci.job.repo;
 
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.jci.job.api.req.BatchUpdateReq;
+import com.jci.job.api.res.BatchUpdateRes;
 import com.jci.job.azure.AzureStorage;
 import com.jci.job.azure.BatchInsertReq;
 import com.jci.job.azure.BatchInsertRes;
+import com.jci.job.entity.ItemEntity;
 import com.jci.job.entity.MiscDataEntity;
 import com.jci.job.entity.PoEntity;
+import com.jci.job.entity.PoItemsEntity;
+import com.jci.job.entity.SupplierEntity;
 import com.jci.job.utils.Constants;
+import com.jci.job.utils.QueryBuilder;
+import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.CloudTable;
+import com.microsoft.azure.storage.table.DynamicTableEntity;
+import com.microsoft.azure.storage.table.EntityProperty;
 import com.microsoft.azure.storage.table.TableBatchOperation;
 import com.microsoft.azure.storage.table.TableEntity;
 import com.microsoft.azure.storage.table.TableOperation;
+import com.microsoft.azure.storage.table.TableQuery;
 
 
 @Repository
 public class JobRepoImpl implements JobRepo {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JobRepoImpl.class);
-	//private static int errorCount;
-	//private static int successCount;
+	private static int errorCount;
+	private static int successCount;
 	private static int intransitCount;
 	static int counter=0;
 	final int batchSize = 20;
@@ -44,28 +57,24 @@ public class JobRepoImpl implements JobRepo {
 	}
 
 	@Override
-	public BatchInsertRes batchInsert(BatchInsertReq request){
+	public List<String> batchInsert(BatchInsertReq request){
 		LOG.info("#### Starting JobRepoImpl.batchInsert ###" +request);
-		BatchInsertRes response = new BatchInsertRes();
-		
+		boolean isMiscData=false;
 		String erpName = request.getErpName();
-		 LOG.error("erpName--->"+erpName);
-		 
+		LOG.error("erpName--->"+erpName);
+		
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
-		
-		 HashMap<String,List<TableEntity>> errorMap = new HashMap<String,List<TableEntity>>();
-		 HashMap<String,List<TableEntity>> successMap =  new HashMap<String,List<TableEntity>>();;
-		
-		 CloudTable cloudTable=null;
+	
+		List<String> poSuccessList =  new ArrayList<String>();
+		CloudTable cloudTable=null;
 		 
 		 for (Map.Entry<String, List<TableEntity>> entry : tableNameToEntityMap.entrySet()){
 		     try {
 					cloudTable = azureStorage.getTable(entry.getKey());
 				} catch (Exception e) {
-					errorMap.put(entry.getKey(), entry.getValue());
+					//errorMap.put(entry.getKey(), entry.getValue());
 					LOG.error("### Exception in JobRepoImpl.batchInsert.getTable ###"+e);
 					e.printStackTrace();
-					response.setError(true);
 					continue;
 				}
 		     LOG.error("Table Name--->"+cloudTable.getName());
@@ -77,27 +86,22 @@ public class JobRepoImpl implements JobRepo {
 			    
 			    
 			    for (int i = 0; i < value.size(); i++) {
-			    //for (int i = 0; i < 1; i++) {//Sunil Remove this
 			    	TableEntity entity = value.get(i) ;
-			    	if(entity instanceof PoEntity){
+			    	if(entity instanceof PoEntity ){
 			    		counter= counter+1;
+			    		isMiscData=true;
+			    		poSuccessList.add(entity.getRowKey());
+			    	}else if(entity instanceof ItemEntity || entity instanceof SupplierEntity){
+			    		poSuccessList.add(entity.getRowKey());
 			    	}
-			    	//LOG.error("entity--->"+entity.toString());
-			    	 
 			    	batchOperation.insertOrReplace(entity);
-			    	//LOG.error("batchOperation.size()--->"+batchOperation.size());
-			    	//LOG.error("intransitCount--->"+intransitCount);
-			    	//LOG.error("counter--->"+counter);
 			    	if (i!=0 && i % batchSize == 0) {
 			    		try {
 							cloudTable.execute(batchOperation);
 							batchOperation.clear();
-							successMap.put(entry.getKey(), entry.getValue());
 							intransitCount = intransitCount+counter;
 							counter = 0;
 						} catch (Exception e) {
-							errorMap.put(entry.getKey(), entry.getValue());
-							response.setError(true);
 							counter = 0;
 							LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
 							e.printStackTrace();
@@ -106,19 +110,14 @@ public class JobRepoImpl implements JobRepo {
 			    	 }
 			    }
 			    
-			   // LOG.error("intransitCount 1--->"+intransitCount);
-		    	//LOG.error("counter 1--->"+counter);
-		    	
 			   // LOG.error("batchOperation.size()--->"+batchOperation.size());
 			    if(batchOperation.size()>0){
 			    	try {
 						cloudTable.execute(batchOperation);
-						successMap.put(entry.getKey(), entry.getValue());
+						//successMap.put(entry.getKey(), entry.getValue());
 						intransitCount = intransitCount+counter;
 						counter = 0;
 					} catch (Exception e) {
-						errorMap.put(entry.getKey(), entry.getValue());
-						response.setError(true);
 						counter = 0;
 						LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
 						e.printStackTrace();
@@ -127,33 +126,38 @@ public class JobRepoImpl implements JobRepo {
 			    }
 		 }	
 		 
-		 response.setErrorMap(errorMap);
-		 response.setSuccessMap(successMap);
+		 HashMap<String,List<String>> successMap = null;
+		 if(poSuccessList.size()>0){
+			 successMap =  new HashMap<String,List<String>>();;
+			 successMap.put(Constants.TABLE_PO_DETAILS, poSuccessList);
+			// response.setSuccessMap(successMap);
+		 }
 		 
-		// LOG.error("intransitCount 2--->"+intransitCount);
-		 
+
 		//Insert MIsc data
-		MiscDataEntity miscEntity=null;
-		try {
-			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			e.printStackTrace();
-		}
-		if(miscEntity!=null){
-			miscEntity.setIntransitCount((miscEntity.getIntransitCount()+intransitCount));
-		}else{
-			miscEntity = new MiscDataEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-			miscEntity.setIntransitCount(intransitCount);
-		}
+		 if(isMiscData){
+			 MiscDataEntity miscEntity=null;
+				try {
+					miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					e.printStackTrace();
+				}
+				if(miscEntity!=null){
+					miscEntity.setIntransitCount((miscEntity.getIntransitCount()+intransitCount));
+				}else{
+					miscEntity = new MiscDataEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
+					miscEntity.setIntransitCount(intransitCount);
+				}
+				
+				try {
+					updateStatusCountEntity(miscEntity);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					e.printStackTrace();
+				}
+		 }
 		
-		try {
-			updateStatusCountEntity(miscEntity);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			response.setError(true);
-			e.printStackTrace();
-		}
-		LOG.info("#### Ending JobRepoImpl.batchInsert ###"+response );
-		return response;		
+		LOG.info("#### Ending JobRepoImpl.batchInsert ###"+poSuccessList );
+		return poSuccessList;		
 	}
 	
 	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws InvalidKeyException, URISyntaxException, StorageException {
@@ -167,5 +171,253 @@ public class JobRepoImpl implements JobRepo {
 		
 		TableOperation insert = TableOperation.insertOrReplace(entity);
 		cloudTable.execute(insert);
+	}
+	
+	@Override
+	public Map<String,List<HashMap<String, Object>>> getPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+		LOG.info("#### Starting JobRepoImpl.getPos ###" );
+		
+		String query = QueryBuilder.poQuery(partitionKey,poList);
+		LOG.info("query--->"+query);
+		
+		//List<PoItemsEntity> errorData = new ArrayList<PoItemsEntity>();
+		//TableQuery<PoItemsEntity> partitionQuery =  TableQuery.from(PoItemsEntity.class).where(query);
+		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+		
+		OperationContext opContext = new OperationContext();
+		
+		TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);//Need to discuss this
+		
+		Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
+		DynamicTableEntity row;
+		EntityProperty ep;
+		HashMap<String, Object> hashmap;
+		//List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
+		
+		Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<String,List<HashMap<String, Object>>>();
+		
+		while(rows.hasNext()) {
+			row = rows.next() ;
+			HashMap<String, EntityProperty> map = row.getProperties();
+			
+			//row.getRowKey().split("_")[0]
+			hashmap = new HashMap<String, Object>();
+			for (String key : map.keySet()) {
+				ep = map.get(key);
+				hashmap.put(key, ep.getValueAsString());
+			}
+			//series.add(hashmap);
+			
+			if(poNumToItemListMap.containsKey(row.getRowKey().split("_")[0])){
+				List<HashMap<String, Object>> list =poNumToItemListMap.get(row.getRowKey().split("_")[0]);
+	    		list.add(hashmap);
+	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+	    	}else{
+	    		List<HashMap<String, Object>> list = new  ArrayList<HashMap<String, Object>>();
+	    		list.add(hashmap);
+	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+	    	}
+			
+		}		
+	    LOG.info("#### Ending JobRepoImpl.getPos ###" );
+		 return poNumToItemListMap;
+	}
+	
+	@Override
+	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+		LOG.info("#### Starting JobRepoImpl.getPoDetails ###" );
+		
+		String query = QueryBuilder.processPosQuery(partitionKey,poList);
+		LOG.info("query--->"+query);
+		
+		
+		List<PoEntity> errorData = new ArrayList<PoEntity>();
+		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
+		
+		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
+	    	errorData.add(entity);
+	    }
+	    LOG.info("#### Ending JobRepoImpl.getPoDetails ###" );
+		 return errorData;
+	}
+	
+	@Override
+	public BatchUpdateRes batchUpdate(BatchUpdateReq request){		
+		LOG.info("#### Starting PoRepoImpl.batchUpdate ###" +request);
+		BatchUpdateRes response = new BatchUpdateRes();
+		
+		String erpName = request.getErpName();
+		HashMap<String,List<PoEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
+		
+		 List<String> errorList = new ArrayList<String>();
+		 List<String> successList = new ArrayList<String>();
+		
+		 CloudTable cloudTable=null;
+		 PoEntity entity = null;
+		 
+		 for (Map.Entry<String, List<PoEntity>> entry : tableNameToEntityMap.entrySet()){
+		     try {
+					cloudTable = azureStorage.getTable(entry.getKey());
+				} catch (Exception e) {
+					LOG.error("### Exception in PoRepoImpl.batchUpdate.getTable ###"+e);
+					e.printStackTrace();
+					response.setError(true);
+					response.setMessage("The Application has encountered an error! Table  does not exist !");
+					continue;
+				}
+		     
+		  // Define a batch operation.
+			    TableBatchOperation batchOperation = new TableBatchOperation();
+			    List<PoEntity> value = entry.getValue();
+			    
+			    for (int i = 0; i < value.size(); i++) {
+			    	entity = value.get(i) ;
+			    	counter= counter+1;
+			    	
+			    	entity.setGlobalId(request.getGlobalId());
+			    	entity.setUserName(request.getUserName());
+			    	entity.setComment(request.getComment());
+			    	
+			    	if(StringUtils.isBlank(entity.getDestSuppliers())){
+			    		entity.setDestSuppliers(request.getDestination());
+			    	}else{
+			    		entity.setDestSuppliers(entity.getDestSuppliers()+","+request.getDestination());
+			    	}
+			    	
+			    	if(request.isSuccess()){//Means we are updating(success) status for pos which has been successfully processed to e2open
+			    		entity.setStatus(Constants.STATUS_SUCCESS);
+			    		successCount = successCount+1;
+			    		successList.add(entity.getRowKey());
+			    	}else{//Request is for error status update
+			    		entity.setStatus(Constants.STATUS_ERROR);
+			    		errorCount = errorCount+1;
+			    		errorList.add(entity.getRowKey());
+			    	}
+			    	
+			    	
+			    	batchOperation.insertOrReplace(entity);
+			    	if (i!=0 && (i % batchSize) == 0) {
+			    		try {
+							cloudTable.execute(batchOperation);
+							batchOperation.clear();
+							counter = 0;
+						} catch (Exception e) {
+							response.setError(true);
+							response.setMessage("The Application has encountered an error!");
+							counter = 0;
+							if(request.isSuccess()){
+					    		successCount = successCount-1;
+					    	}else{
+					    		errorCount = errorCount-1;
+					    	}
+							LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
+							e.printStackTrace();
+							continue;
+						}
+			    	 }
+			    }
+			    
+			    LOG.info("batchOperation.size()-->"+batchOperation.size());
+			    
+			    if(batchOperation.size()>0){
+			    	
+			    	try {
+						cloudTable.execute(batchOperation);
+						counter = 0;
+					} catch (Exception e) {
+						//errorList.add(entity.getRowKey());
+						response.setError(true);
+						response.setMessage("The Application has encountered an error!");
+						counter = 0;
+						if(request.isSuccess()){
+				    		successCount = successCount-1;
+				    	}else{
+				    		errorCount = errorCount-1;
+				    	}
+						LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
+						e.printStackTrace();
+						continue;
+					}
+			    }
+		 }	
+		 
+		 response.setErrorList(errorList);
+		 response.setSuccessList(successList);
+		 
+		  LOG.info("errorCount-->"+errorCount);
+		  LOG.info("successCount-->"+successCount);
+		   
+		//Insert MIsc data: need to make sure only for podetails
+		MiscDataEntity miscEntity=null;
+		try {
+			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			response.setError(true);
+			response.setMessage("The Application has encountered an error!");
+			e.printStackTrace();
+		}
+		
+		if(errorCount>0){
+			  int sum1 = miscEntity.getErrorCount()+errorCount;
+			  miscEntity.setErrorCount((sum1));
+			  int sum2 = miscEntity.getIntransitCount()-errorCount;
+			  miscEntity.setIntransitCount(sum2);
+		}
+		
+		if(successCount>0){
+			 int sum1 = miscEntity.getProcessedCount()+successCount;
+			 int sum2 = miscEntity.getErrorCount()-successCount;
+			 miscEntity.setProcessedCount((sum1));
+			 miscEntity.setErrorCount((sum2));
+		}
+		
+		try {
+			updateStatusCountEntity(miscEntity);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			response.setError(true);
+			response.setMessage("The Application has encountered an error!");
+			e.printStackTrace();
+		}
+		LOG.info("#### Ending PoRepoImpl.batchUpdate ###" );
+		return response;
+		
+	}
+
+   
+	@Override
+	public List<Map<String,List<HashMap<String, Object>>>> getFlatFileData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException{
+		
+		String query = QueryBuilder.intransitWhereCond(partitionKey);
+		LOG.info("query--->"+query);
+		
+		List<PoEntity> intransitData = new ArrayList<PoEntity>();
+		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
+		Map<String,List<String>> pkToRowkeyList = new HashMap<String,List<String>>();
+		LOG.info("partitionQuery--->"+partitionQuery.getFilterString());
+		
+		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
+	    	LOG.info("entity--->"+entity);
+	    	
+	    	intransitData.add(entity);
+	    	
+	    	if(pkToRowkeyList.containsKey(entity.getPartitionKey())){
+				List<String> list = pkToRowkeyList.get(entity.getPartitionKey());
+				list.add(entity.getRowKey());
+				pkToRowkeyList.put(entity.getPartitionKey(), list);
+			}else{
+				List<String> list = new ArrayList<String>();
+				list.add(entity.getRowKey());
+				pkToRowkeyList.put(entity.getPartitionKey(), list);
+			}
+	    }
+		
+		List<Map<String,List<HashMap<String, Object>>>> list = new ArrayList<Map<String,List<HashMap<String, Object>>>>();
+		for (Map.Entry<String,List<String>> entry : pkToRowkeyList.entrySet()){	
+			list.add(getPos(entry.getKey(),entry.getValue()));
+		}
+		LOG.info("list--->"+list);
+		return list;
 	}
 }

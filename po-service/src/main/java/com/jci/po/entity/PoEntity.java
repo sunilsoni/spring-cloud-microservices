@@ -30,8 +30,9 @@ public class PoEntity extends TableServiceEntity {
 	private String globalId;
 	
 	private String comment;
-	private boolean e2openProcessed;
-	private boolean ediProcessed;
+	
+	private String suppliers;
+	
 	
 	public Date getOrderCreationDate() {
 		return orderCreationDate;
@@ -89,30 +90,19 @@ public class PoEntity extends TableServiceEntity {
 		this.comment = comment;
 	}
 
-	public boolean getE2openProcessed() {
-		return e2openProcessed;
+	public String getSuppliers() {
+		return suppliers;
 	}
 
-	public void setE2openProcessed(boolean e2openProcessed) {
-		this.e2openProcessed = e2openProcessed;
-	}
-
-	public boolean getEdiProcessed() {
-		return ediProcessed;
-	}
-
-	public void setEdiProcessed(boolean ediProcessed) {
-		this.ediProcessed = ediProcessed;
+	public void setSuppliers(String suppliers) {
+		this.suppliers = suppliers;
 	}
 
 	@Override
 	public String toString() {
 		return "PoEntity [orderCreationDate=" + orderCreationDate + ", status=" + status + ", sourceErpName="
 				+ sourceErpName + ", description=" + description + ", userName=" + userName + ", globalId=" + globalId
-				+ ", comment=" + comment + ", e2openProcessed=" + e2openProcessed + ", ediProcessed=" + ediProcessed
-				+ "]";
+				+ ", comment=" + comment + ", suppliers=" + suppliers + "]";
 	}
-
-
 
 }

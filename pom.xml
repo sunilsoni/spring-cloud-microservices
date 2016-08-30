@@ -15,8 +15,7 @@
 		<module>web-portal</module>		
         <module>po-service</module> 
 		<module>item-service</module> 
-		<module>supplier-service</module> 		
-        <module>asn-service</module>
+		<module>supplier-service</module>
         <module>po-job</module>  
     </modules>
 
@@ -32,6 +31,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+         <docker.plugin.version>0.4.11</docker.plugin.version>
+         <docker.image.prefix>supplier-collaboration</docker.image.prefix>
     </properties>
 
     <dependencies>
@@ -70,9 +71,32 @@
 	            <type>pom</type>
 	            <scope>import</scope>
 	        </dependency>
+	        
 	    </dependencies>
 	</dependencyManagement>
 
+<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.spotify</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>${docker.plugin.version}</version>
+					<configuration>
+						<skipDockerBuild>true</skipDockerBuild>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+</build>
+	
+	
     <repositories>
      	<!-- <repository>
 	      <id>spring-release</id>

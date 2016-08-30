@@ -22,6 +22,4 @@ public interface PoService {
 	
 	PoItemDetailRes getPoItemDetail(PoItemDetailReq request)throws InvalidKeyException, URISyntaxException, StorageException;
 	
-	//Need to delete this 
-	void insertDummyData() throws InvalidKeyException, URISyntaxException, StorageException;
 }

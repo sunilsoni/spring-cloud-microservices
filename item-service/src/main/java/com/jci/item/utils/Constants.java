@@ -8,8 +8,8 @@ public class Constants {
 	public static final String TABLE_PO_DETAILS ="PODETAILS";
 	public static final String TABLE_PO_ITEM_DETAILS ="POITEMDETAILS";
 	
-	public static final String TABLE_ITEM ="ITEM";
-	public static final String TABLE_SUPPLIER ="SUPPLIER";
+	public static final String TABLE_ITEM ="ITEMTEST";
+	public static final String TABLE_SUPPLIER ="SUPPLIERTEST";
 	
 	public static final String TABLE_MISC ="MISCDATA";
 	

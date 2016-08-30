@@ -12,6 +12,7 @@ footer {
             font-size: 12px;
 			/*background: #f4f7f9;*/
 			background-color:white;
+			/*background-color:#f1f4f5;*/
 			/*position:absolute;*/
 			position:relative;
 			bottom:0px;
@@ -62,8 +63,11 @@ body {
 
 .gridContainer {
     /*box-shadow: 0px 5px 5px #888888;*/
-    border: 1px solid #bdbdbd;
+	border: 1px solid #bdbdbd;
     background-color: #fff;
+	-webkit-box-shadow:0 0 10px #ccc;
+	box-shadow:0 0 10px #ccc;
+	border-radius:5px;
 }
 
 .tabUl > li > a {
@@ -134,7 +138,8 @@ body {
       left: 0;
       z-index: 10000000;
       cursor: progress;
-      background: url(../img/giphy.gif) no-repeat center center / 30px 30px rgba(0,0,0,0.2);
+      /*background: url(../img/giphy.gif) no-repeat center center / 30px 30px rgba(0,0,0,0.2);*/
+      background: url(../img/loading.gif) no-repeat center center / 100px 100px rgba(0,0,0,0.2);
 }
 
 #main2{
@@ -151,10 +156,14 @@ body {
     text-align: center;
 }
 
-.ui-state-default, .slick-cell{
-	font-family: sans-serif;
-    font-size: 14px;
+.ui-state-default, .slick-cell,.slick-pager{
+	font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    font-size: 16px;
 	
+}
+
+.slick-pager{
+	font-size:14px;
 }
 
 .headerDiv,#logOff{
@@ -183,7 +192,8 @@ body {
 }
 
 #loginContent,#main1,#main2{
-   padding-bottom:40px;
+  /* padding-bottom:40px;*/
+  padding-bottom:0px;
 }
 
 .clearfix-height{
@@ -312,13 +322,15 @@ hr {
 }
 
 #logo-img{
-    height: 70px; 
-    width: 145px
+    /*height: 70px; 
+    width: 145px*/
+	height:50px;
+	width:100px;
 }
 
 .grid-style{
     width: 100%; 
-    height: 282px;
+    height: 294px;
 }
 
 .pager-style{
@@ -360,10 +372,11 @@ hr {
 
 .slick-pager{
 	border:none;
+	
 }
 
 #highchartContainer{
-	height:272px;
+	height:280px;
 }
 
 .tab-content{
@@ -401,7 +414,8 @@ hr {
 }
 
 #username{
-	color:red;
+	/*color:red;*/
+	color:rgb(66,165,245);
 }
 
 
@@ -419,8 +433,11 @@ hr {
 .sc-content{
 	width:100%;
 	padding:5px;
-	height:300px;
-	border:1px solid lightgrey;
+	height:100%;
+	/*border:1px solid lightgrey;*/
+	background-color:white !important;
+	-webkit-box-shadow: 0 0 10px #cccccc;
+    box-shadow: 0 0 10px #cccccc;
 }
 
 .sc-text{
@@ -431,9 +448,12 @@ hr {
 .plm-content{
 	width:100%;
 	padding:5px;
-	height:300px;
-	border:1px solid lightgrey;
+	height:100%;
+	/*border:1px solid lightgrey;*/
 	margin-top:10px;
+	background-color:white !important;
+	-webkit-box-shadow: 0 0 10px #cccccc;
+    box-shadow: 0 0 10px #cccccc;
 }
 
 .plm-text{
@@ -451,20 +471,225 @@ hr {
 
 
 .tableError{
-	border:1px solid lightgrey;
-	padding:5px;
+	/*border:1px solid lightgrey;*/
+	padding:25px;
+	margin-top:10px;
+	background-color:white;
+	-webkit-box-shadow: 0 0 10px #cccccc;
+    box-shadow: 0 0 10px #cccccc;
+	min-height:307px;
+	border-radius:5px;
+	
 }
 
 .process-error-header{
 	font-size: 16px;
     text-align: center;
     font-weight: 800;
-    color: rgb(0,112,192);
+    color: #08338F;  /**/
     margin-top: 5px;
 }
 
 #logout:hover{
 	color:red;
+}
+
+.slick-row.new-row{
+	display:none;
+}
+
+/******** grid style ********/
+
+.slick-header.ui-state-default{
+	/*background-color:rgb(0,112,192)  !important;*/
+	background:none !important;
+	border:none;
+	background-color: rgb(66,165,245) !important; 
+	border-top-left-radius: 5px;
+    border-top-right-radius: 5px;	
+}
+
+.ui-state-default.slick-header-column{
+	color:white !important;
+	background:none ;
+   /* background-color:rgb(0,112,192)  !important ;*/
+	background-color: rgb(66,165,245) !important; /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(66,165,245,1) 0%, rgba(33,150,243,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(66,165,245,1) 0%, rgba(33,150,243,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(66,165,245,1) 0%, rgba(33,150,243,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#42a5f5', endColorstr='#2196f3', GradientType=0 ); /* IE6-9 */
+       
+}
+
+.slick-pager{
+	background:none;
+	/*background-color:lightgrey;*/
+}
+
+.ui-state-default.slick-header-column{
+	color:white !important;
+}
+
+
+.slick-header-columns{
+	/*background-color:rgb(0,112,192) !important ;*/
+	background-color:rgb(66,165,245) !important; ;
+}
+
+.ui-widget-content.slick-row .slick-cell{
+	padding:5px;
+}
+
+.slick-cell-checkboxsel  input[type="checkbox"]{
+	margin-left:7px;
+}
+
+.slick-row.odd .slick-cell{
+	background-color:rgb(233,245,254);
+}
+
+.slick-row .slick-cell{
+	border:none !important;
+}
+
+.slick-header-column.hide-arrow-btn  input[type="checkbox"]{
+	margin-left:10px !important;
+	margin-top:4px !important;
+}
+
+.ui-state-default{
+	background:none;
+}
+
+/*.slick-header.ui-state-default{
+	background:url(../img/ul.png) 50% 50% repeat-x !important;
+	
+}*/
+
+.slick-header-column.ui-state-default{
+	/*border-right:1px solid white !important;*/
+	border-right:none !important;
+}
+
+.slick-header-menubutton{
+	/*border-left:1px solid white !important;*/
+	border-left:none !important;
+}
+
+.sc-image{
+	height:295px;
+	width:100%;
+	/*background:url(../img/Supplier_Collaboration.jpg)*/
+	
+}
+
+
+.plm-image{
+	height:295px;
+	width:100%;
+	/*background:url(../img/PLM-ERP-integration.jpg)*/
+	
+}
+
+.slick-column-name{
+	text-transform:none;
+}
+
+.navbar-header{
+	padding:5px;
+	/*background-color:#f8f8f8;*/
+	width:250px;
+	padding-left:15px;
+}
+
+@media (min-width: 768px){
+	.modal-dialog {
+		width: 750px;
+	}
+}
+
+.modal-header .close {
+    margin-top: -10px;
+}
+
+.modal .modal-dialog {
+  width: 80%;
+}
+
+@media (max-width: 768px){
+	.graphIconClick {
+		display:none;
+	}
+	
+	.side-body{
+		padding:10px;
+		
+	}
+	
+	body{
+		background-color:white !important;
+	}
+	
+	.sc-btn{
+		margin-left:20%;
+	}
+	
+	.plm-btn{
+		margin-left:20%;
+	}
+}
+
+
+/************ graph css ****************/
+.graph_outer {
+				background-color:white !important;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                -webkit-box-shadow: 0 0 10px #cccccc;
+                -ms-box-shadow: 0 0 10px #cccccc;
+                -o-box-shadow: 0 0 10px #cccccc;
+                -moz-box-shadow: 0 0 10px #cccccc;
+                box-shadow: 0 0 10px #cccccc;
+}
+.graph_outer img {
+                max-width: 100% !important;
+}
+.graph_heading {
+				height:30px;
+                padding: 5px 10px;
+                text-align: right;
+                -webkit-border-top-left-radius: 5px;
+                -webkit-border-top-right-radius: 5px;
+                -moz-border-radius-topleft: 5px;
+                -moz-border-radius-topright: 5px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#42a5f5+0,2196f3+100 */
+                background: rgb(66,165,245); /* Old browsers */
+                background: -moz-linear-gradient(top, rgba(66,165,245,1) 0%, rgba(33,150,243,1) 100%); /* FF3.6-15 */
+                background: -webkit-linear-gradient(top, rgba(66,165,245,1) 0%, rgba(33,150,243,1) 100%); /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to bottom, rgba(66,165,245,1) 0%, rgba(33,150,243,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#42a5f5', endColorstr='#2196f3', GradientType=0 ); /* IE6-9 */
+}
+.graph_heading span {
+                float: left;
+                font-weight: bold;
+                color: #fff;
+}
+.graph_heading a img {
+                width: 18px;
+}
+.graph_content {
+                /*text-align:center;*/
+                min-height: 200px;
+                padding: 20px;
+}
+.graph_content img {
+                max-height: 150px;
+}
+.graph_content_full img {
+                max-height: none;
+                max-width: 50% !important;
 }
 
 

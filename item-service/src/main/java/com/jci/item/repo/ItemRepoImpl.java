@@ -1,11 +1,13 @@
 package com.jci.item.repo;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 //import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jci.item.azure.AzureStorage;
 import com.jci.item.azure.data.DataHelper;
 import com.jci.item.azure.data.DataUtil;
@@ -54,13 +58,13 @@ public class ItemRepoImpl implements ItemRepo {
 		}
 		 
 		// Create the query
-		String whereCondition = QueryBuilder.partitionWhereCondition(request.getPartitionValue());
+		String whereCondition = QueryBuilder.partitionWhereCondition("ITEM_SYMIX");
 		 if(StringUtils.isBlank(whereCondition) ){
 			 return null;
 		 }
 		
 		 TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
-		  CloudTable table = azureStorage.getTable(request.getTableName());
+		 CloudTable table = azureStorage.getTable(request.getTableName());
        
 		// segmented query
        ResultSegment<DynamicTableEntity> response = table.executeSegmented(query, continuationToken) ;
@@ -77,19 +81,38 @@ public class ItemRepoImpl implements ItemRepo {
 		List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
 		DynamicTableEntity row;
 		EntityProperty ep;
-		
+		ObjectMapper mapper = new ObjectMapper(); 
 		Iterator<DynamicTableEntity> rows = response.getResults().iterator() ;
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
-
+			LOG.info("map--->"+map);
 			hashmap = new HashMap<String, Object>();
-			hashmap.put("id", row.getRowKey());
+				
+			
+			
 			for (String key : map.keySet()) {
+				LOG.info("key--->"+key);
+				
 				ep = map.get(key);
-				hashmap.put(key, ep.getValueAsString());
+				
+				if("ItemJsonString".equalsIgnoreCase(key)){					
+					try {
+						hashmap = mapper.readValue(ep.getValueAsString(), new TypeReference<HashMap<String, Object>>(){});
+						//hashmap.put(key, ep.getValueAsString());
+						
+						hashmap.put("id", row.getRowKey());
+						series.add(hashmap);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}				
+					
+				}				
+				
 			}
-			series.add(hashmap);
+			
+			//series.add(hashmap);
 		}
 		return new ResultSet(series,pagination) ;
    }

@@ -1,5 +1,7 @@
 package com.jci.job.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,8 @@ public class PoJobServiceImpl implements PoJobService{
 	private JobRepo repo;
 
 	@Override
-	public BatchInsertRes batchInsert(BatchInsertReq request) {
-		BatchInsertRes response = repo.batchInsert(request);
+	public List<String> batchInsert(BatchInsertReq request) {
+		List<String> response = repo.batchInsert(request);
 		return response;
 	}
 

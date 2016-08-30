@@ -30,7 +30,7 @@ public class ItemServiceImpl implements ItemService{
 	
 	@Override
 	public SegmentedDetailRes getItemResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException  {
-		LOG.info("### Starting Ending PoServiceImpl.getItemResultSet ### " );
+		LOG.info("### Starting Ending ItemServiceImpl.getItemResultSet ### " );
 		PaginationParam paginationParam = request.getPaginationParam();
 		
 		ScrollingParam param  = new ScrollingParam();
@@ -58,7 +58,7 @@ public class ItemServiceImpl implements ItemService{
 		response.setItemData(resultSetMap);
 		response.setMessage(Constants.JSON_OK);
 		
-		LOG.info("### Ending Ending PoServiceImpl.getItemResultSet ### " );
+		LOG.info("### Ending Ending ItemServiceImpl.getItemResultSet ### " );
 		
 		return response;
 	}

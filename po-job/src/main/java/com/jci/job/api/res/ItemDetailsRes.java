@@ -7,37 +7,58 @@ import com.jci.job.entity.ItemEntity;
 
 public class ItemDetailsRes {
 
-	private boolean isErrorInDataFetch;
-	private String errorMsg;
-	private Map<String, List<ItemEntity>> dsToItemList;
-	public boolean isErrorInDataFetch() {
-		return isErrorInDataFetch;
-	}
-	public void setErrorInDataFetch(boolean isErrorInDataFetch) {
-		this.isErrorInDataFetch = isErrorInDataFetch;
-	}
-	public String getErrorMsg() {
-		return errorMsg;
-	}
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
-	}
-	public Map<String, List<ItemEntity>> getDsToItemList() {
-		return dsToItemList;
-	}
-	public void setDsToItemList(Map<String, List<ItemEntity>> dsToItemList) {
-		this.dsToItemList = dsToItemList;
-	}
+	private int code;
+	private String status;
+	private String message;
+	private String date;
 	
-	
+	private List<Object> itemList;
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public List<Object> getItemList() {
+		return itemList;
+	}
+
+	public void setItemList(List<Object> itemList) {
+		this.itemList = itemList;
+	}
+
 	@Override
 	public String toString() {
-		return "ItemDetailsRes [isErrorInDataFetch=" + isErrorInDataFetch + ", errorMsg=" + errorMsg + ", dsToItemList="
-				+ dsToItemList + "]";
+		return "ItemDetailsRes [code=" + code + ", status=" + status + ", message=" + message + ", date=" + date
+				+ ", itemList=" + itemList + "]";
 	}
-	
-	
 
-	
 	
 }

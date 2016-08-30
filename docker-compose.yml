@@ -1,0 +1,53 @@
+configserver:
+  image: supplier-collaboration/config-server
+  restart: always
+
+eurekaserver:
+  image: supplier-collaboration/eureka-server
+  restart: always
+  ports:
+    - "8761:8761"
+  links:
+    - config-server
+    
+apigateway:
+  image: supplier-collaboration/api-gateway
+  restart: always
+  links:
+    - eureka-server
+    - config-server
+
+webportal:
+  image: supplier-collaboration/web-portal
+  restart: always
+  links:
+    - eureka-server
+    - config-server
+
+poservice:
+  image: supplier-collaboration/po-service
+  restart: always
+  links:
+    - eureka-server
+    - config-server
+
+pojob:
+  image: supplier-collaboration/po-job
+  restart: always
+  links:
+    - eureka-server
+    - config-server
+    
+supplierservice:
+  image: supplier-collaboration/supplier-service
+  restart: always
+  links:
+    - eureka-server
+    - config-server
+
+itemservice:
+  image: supplier-collaboration/item-service
+  restart: always
+  links:
+    - eureka-server
+    - config-server

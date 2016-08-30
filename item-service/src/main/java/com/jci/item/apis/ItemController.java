@@ -40,7 +40,7 @@ public class ItemController {
 		LOG.info("### Starting PoController.getSegmentedItemDetails ###"+request );
 		request.setTableName(Constants.TABLE_ITEM);
 		
-		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
+		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));//setting hardcoded in repo
 		request.setFirstRequest(false);
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		try {

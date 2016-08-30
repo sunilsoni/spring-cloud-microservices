@@ -24,43 +24,48 @@ public class PoEntity extends TableServiceEntity {
 	 */
 	private Date orderCreationDate;
    	private int status;
-   	private String sourceErpName;
+   	private String erpName;
    	private String description;
 	private String userName;
-	private String globalId;
+	private String globalId;	
+	private String comment;	
+	private String supplierType;
+	private String destSuppliers;
+	private String grNum ;	
+	private boolean poACK ;
+	private boolean asn ;
 	
-	private String comment;
-	private boolean e2openProcessed;
-	private boolean ediProcessed;
+	private String region;
+	private String plant;
 	
 	public Date getOrderCreationDate() {
 		return orderCreationDate;
 	}
-	
+
 	public void setOrderCreationDate(Date orderCreationDate) {
 		this.orderCreationDate = orderCreationDate;
 	}
-	
+
 	public int getStatus() {
 		return status;
 	}
-	
+
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	public String getSourceErpName() {
-		return sourceErpName;
+
+	public String getErpName() {
+		return erpName;
 	}
-	
-	public void setSourceErpName(String sourceErpName) {
-		this.sourceErpName = sourceErpName;
+
+	public void setErpName(String erpName) {
+		this.erpName = erpName;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -89,30 +94,72 @@ public class PoEntity extends TableServiceEntity {
 		this.comment = comment;
 	}
 
-	public boolean getE2openProcessed() {
-		return e2openProcessed;
+	public String getSupplierType() {
+		return supplierType;
 	}
 
-	public void setE2openProcessed(boolean e2openProcessed) {
-		this.e2openProcessed = e2openProcessed;
+	public void setSupplierType(String supplierType) {
+		this.supplierType = supplierType;
 	}
 
-	public boolean getEdiProcessed() {
-		return ediProcessed;
+	public String getDestSuppliers() {
+		return destSuppliers;
 	}
 
-	public void setEdiProcessed(boolean ediProcessed) {
-		this.ediProcessed = ediProcessed;
+	public void setDestSuppliers(String destSuppliers) {
+		this.destSuppliers = destSuppliers;
+	}
+
+	public String getGrNum() {
+		return grNum;
+	}
+
+	public void setGrNum(String grNum) {
+		this.grNum = grNum;
+	}
+
+	public boolean isPoACK() {
+		return poACK;
+	}
+
+	public void setPoACK(boolean poACK) {
+		this.poACK = poACK;
+	}
+
+	public boolean isAsn() {
+		return asn;
+	}
+
+	public void setAsn(boolean asn) {
+		this.asn = asn;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getPlant() {
+		return plant;
+	}
+
+	public void setPlant(String plant) {
+		this.plant = plant;
 	}
 
 	@Override
 	public String toString() {
-		return "PoEntity [orderCreationDate=" + orderCreationDate + ", status=" + status + ", sourceErpName="
-				+ sourceErpName + ", description=" + description + ", userName=" + userName + ", globalId=" + globalId
-				+ ", comment=" + comment + ", e2openProcessed=" + e2openProcessed + ", ediProcessed=" + ediProcessed
-				+ "]";
+		return "PoEntity [orderCreationDate=" + orderCreationDate + ", status=" + status + ", erpName=" + erpName
+				+ ", description=" + description + ", userName=" + userName + ", globalId=" + globalId + ", comment="
+				+ comment + ", supplierType=" + supplierType + ", destSuppliers=" + destSuppliers + ", grNum=" + grNum
+				+ ", poACK=" + poACK + ", asn=" + asn + ", region=" + region + ", plant=" + plant + "]";
 	}
 
-
+	
+	
+	
 
 }

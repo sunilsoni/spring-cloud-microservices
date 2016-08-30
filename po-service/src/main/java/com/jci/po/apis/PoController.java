@@ -96,13 +96,14 @@ public class PoController {
 			response.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
+		
+		
+		//Start time calculation
 		long endTime = System.nanoTime();
-		
 		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-		
 		double seconds = (double)duration / 1000000000.0;
 		LOG.info("seconds--->"+seconds);
-		
+		//End time calculation		
 		
 		LOG.info("### Ending PoController.processErrorPos ###"+response );
 		return response;
@@ -141,19 +142,4 @@ public class PoController {
 	}
 
 	
-	/**
-	 * Delete this method
-	 */
-	@RequestMapping(value = "/insertDummyData", method = RequestMethod.GET)
-	public  void insertDummyData(){
-		LOG.info("### Starting PoController.insertDummyData ###" );
-		
-		try {
-			poService.insertDummyData();
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-		}
-		
-		LOG.info("### Ending PoController.insertDummyData ###" );
-	}
-
 }

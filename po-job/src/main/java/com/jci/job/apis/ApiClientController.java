@@ -3,6 +3,8 @@
  */
 package com.jci.job.apis;
 
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ import com.jci.job.api.res.SupplierDetailsRes;
 import com.jci.job.azure.BatchInsertReq;
 import com.jci.job.entity.PoEntity;
 import com.jci.job.service.ApiClientService;
+import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.TableEntity;
 
 /**
@@ -39,20 +42,26 @@ public class ApiClientController {
 	private static final Logger LOG = LoggerFactory.getLogger(ApiClientController.class);
 
 	@RequestMapping(value = "/getPoDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public PoDetailsRes getPoDetails() {
+	public String getPoDetails() {
 		LOG.info("### Starting ApigeeClientController.getPoDetails ####");
 		//PoRequest request = new PoRequest();
-		PoDetailsRes response = service.getPoDetails();
+		String response=null;
+		try {
+			response = service.getPoDetails();
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		LOG.info("response-->"+response);
 		LOG.info("### Ending ApigeeClientController.getPoDetails ####");
 		return response;
 	}
 	
 	@RequestMapping(value = "/getSupplierDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public SupplierDetailsRes getSupplierDetails() {
+	public String getSupplierDetails() {
 		LOG.info("### Starting ApigeeClientController.getSupplierDetails ####");
 		//PoRequest request = new PoRequest();
-		SupplierDetailsRes response = service.getSupplierDetails();
+		String response = service.getSupplierDetails();
 		LOG.info("response-->"+response);
 		
 		LOG.info("### Ending ApigeeClientController.getSupplierDetails ####");
@@ -60,35 +69,31 @@ public class ApiClientController {
 	}
 	
 	@RequestMapping(value = "/getItemDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ItemDetailsRes getItemDetails() {
+	public String getItemDetails() {
 		LOG.info("### Starting ApigeeClientController.getItemDetails ####");
 		//PoRequest request = new PoRequest();
-		ItemDetailsRes response = service.getItemDetails();
+		String response = service.getItemDetails();
 		LOG.info("response-->"+response);
 		
 		LOG.info("### Ending ApigeeClientController.getItemDetails ####");
 		return response;
 	}
-	@RequestMapping(value = "/insertDummyData", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public void insertDummyData() {
-		LOG.info("### Starting ApigeeClientController.insertDummyData ####");
-		//ResponseEntity<PoItemsEntity> responseEntity = service.getPoItem();
-		
-		PoEntity entity = new PoEntity("SAP_PO", "1");
-		//entity.setOrderNumber("4765421");
-		BatchInsertReq req = new BatchInsertReq();
-		req.setErpName("SAP");
-
-		HashMap<String, List<TableEntity>> tableNameToEntityMap = new HashMap<String, List<TableEntity>>();
-		List<TableEntity> list = new ArrayList<TableEntity>();
-		list.add(entity);
-		
-		tableNameToEntityMap.put("PODETAILS", list);
-		req.setTableNameToEntityMap(tableNameToEntityMap);
-		
-		//BatchInsertRes res = service.batchInsert(req);
-		
-		LOG.info("### Ending ApigeeClientController.insertDummyData ####");
-
+	
+	
+	@RequestMapping(value = "/processFlatFile", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String processFlatFile() {
+		LOG.info("### Starting ApigeeClientController.processFlatFile ####");
+			
+		String response=null;
+		try {
+			response = service.processFlatFile();
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			e.printStackTrace();
+		}
+			
+		LOG.info("response-->"+response);
+		LOG.info("### Ending ApigeeClientController.processFlatFile ####");
+		return response;
 	}
+	
 }

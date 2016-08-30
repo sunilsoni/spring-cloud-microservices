@@ -12,11 +12,9 @@ import com.jci.po.azure.data.ResultSet;
 import com.jci.po.azure.query.ScrollingParam;
 import com.jci.po.dto.req.BatchInsertReq;
 import com.jci.po.dto.req.BatchUpdateReq;
-import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.res.BatchInsertResp;
 import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.entity.PoEntity;
-import com.jci.po.entity.PoItemsEntity;
 import com.microsoft.azure.storage.StorageException;
 
 

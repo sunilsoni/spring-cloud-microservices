@@ -11,7 +11,7 @@ import com.jci.po.dto.req.TempRequest;
 import com.jci.po.dto.res.TempResponse;
 
 
-@FeignClient(value = "e2open", url = "${e2open.url.staging}")
+@FeignClient(value = "e2open", url = "${e2open.staging.url}")
 public interface ApiClient {
 
 	

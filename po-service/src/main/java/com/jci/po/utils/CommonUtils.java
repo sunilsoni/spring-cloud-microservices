@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -44,39 +46,34 @@ public class CommonUtils {
 	}
 	
 	
-	public static String getGUID() throws Exception {
-
-		String guid = UUID.randomUUID().toString();
-		if(StringUtils.isBlank(guid)) {
-			throw new Exception("GUID generation error: null");
-		}
-		
-		// GUID width fixed at 36,left pad if less 
-		String token = StringUtils.leftPad(guid, 36, "0");
-		token = StringUtils.substring(guid,0,36);
-		return token ;
-	}
-	
-	
 	/*public static String fixedLengthString(String string, int length) {
 	    return String.format("%1$"+length+ "s", string);
 	}*/
 	
-	public static HashMap<Integer,String> getDestMapping(){
-
+	public HashMap<String,HashMap<Integer,String>> getDestMapping(String folderUrl){
+		HashMap<Integer, String> map=null;
 		ObjectMapper mapper = new ObjectMapper(); 
-	    File from = new File("C:/Apigee/micro-services/Work/supplier-collaboration-config-dev/e2open.json"); 
-	    System.out.println("from " + from.getName()); 
-	    TypeReference<HashMap<Integer,String>> typeRef  = new TypeReference<HashMap<Integer,String>>() {};
-	    HashMap<Integer, String> map=null;
-		try {
-			map = mapper.readValue(from, typeRef);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-	   
-		return map ;
+		
+		HashMap<String,HashMap<Integer,String>> mappingList = new HashMap<String,HashMap<Integer,String>>();
+		
+		File folder = new File(folderUrl);
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {//reading only 1 file need to make changes
+	      if (listOfFiles[i].isFile()) {
+		    TypeReference<HashMap<Integer,String>> typeRef  = new TypeReference<HashMap<Integer,String>>() {};
+			try {
+				map = mapper.readValue(listOfFiles[i], typeRef);
+				mappingList.put(FilenameUtils.removeExtension(listOfFiles[i].getName()), map);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+	      } else if (listOfFiles[i].isDirectory()) {
+	        System.out.println("Directory " + listOfFiles[i].getName());
+	      }
+		}
+		return mappingList ;
 	}
 	
-
+	
 }

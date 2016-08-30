@@ -6,4 +6,3 @@ cd api-gateway; ./gradlew clean build; cd ..
 cd web-portal; ./gradlew clean build; cd ..
 cd po-job; ./gradlew clean build; cd ..
 cd po-service; ./gradlew clean build; cd ..
-cd asn-service; ./gradlew clean build; cd ..
