@@ -57,7 +57,7 @@ public class PrepareFlatFile {
 	}
 	
 	
-	public StringBuilder fixedLengthString(HashMap<String, Object> po,HashMap<Integer,String> mapping){
+	private  StringBuilder fixedLengthString(HashMap<String, Object> po,HashMap<Integer,String> mapping){
 		
 		StringBuilder line = new StringBuilder();
 		int size = mapping.size();
@@ -82,7 +82,7 @@ public class PrepareFlatFile {
 		return line;
 		
 	}
-	public static boolean isBlank(String val){
+	private  static boolean isBlank(String val){
 		if("null".equals(val)){
 			return true;
 		}
@@ -93,7 +93,7 @@ public class PrepareFlatFile {
 		return false;
 	}
 	
-	public  String getFileName(String poNum,FlatFile ff) {
+	private   String getFileName(String poNum,FlatFile ff) {
 		
 		StringBuilder name = new StringBuilder();
 		
@@ -121,7 +121,7 @@ public class PrepareFlatFile {
 		
 	}
 	
-	public static String appendTab(Object value) {
+	private  static String appendTab(Object value) {
 		if(value==null || "".equals(value) || "null".equals(value)){
 			return "\t";
 		}else{

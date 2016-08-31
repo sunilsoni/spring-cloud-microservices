@@ -15,7 +15,7 @@ public class FlatFile {
 	  private  String dateFormat;
 	  private  String timeZone;
 	  
-	  public FlatFile(String e2openUrl, String poUrl, String itemUrl, String supplierUrl, String senderDuns,String receiverDuns, String messageType, String version,String siteId, String dateFormat, String timeZone,String regionUrl) {
+	  FlatFile(String e2openUrl, String poUrl, String itemUrl, String supplierUrl, String senderDuns,String receiverDuns, String messageType, String version,String siteId, String dateFormat, String timeZone,String regionUrl) {
 		  this.e2openUrl  = e2openUrl;
 		  this.poUrl  = poUrl;
 		this.itemUrl  = itemUrl;

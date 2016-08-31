@@ -42,11 +42,10 @@ public class PoController {
 	@Autowired  
 	private PoService  poService;
 	
-	
 	@RequestMapping(value = "/getSegmentedPoDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailRes getSegmentedPoDetails(@RequestBody SegmentedDetailReq request){
 		LOG.info("### Starting PoController.getSegmentedPoDetails ###"+request );
-		
+		long startTime = System.nanoTime();
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
 		request.setTableName(Constants.TABLE_PO_DETAILS);
@@ -58,7 +57,11 @@ public class PoController {
 			response.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		double seconds = (double)duration / 1000000000.0;
+		LOG.info("seconds--->"+seconds);
 		LOG.info("### Ending PoController.getSegmentedPoDetails ###" );
 		return response;
 	}
@@ -66,7 +69,7 @@ public class PoController {
 	@RequestMapping(value = "/getSegmentedErrorDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailRes getErrorDetails(@RequestBody SegmentedDetailReq request){
 		LOG.info("### Starting PoController.getSegmentedErrorDetails ###"+request );
-		
+		long startTime = System.nanoTime();
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
 		request.setTableName(Constants.TABLE_PO_DETAILS);
@@ -78,7 +81,11 @@ public class PoController {
 			response.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		double seconds = (double)duration / 1000000000.0;
+		LOG.info("seconds--->"+seconds);
 		LOG.info("### Ending PoController.getSegmentedErrorDetails ###" );
 		return response;
 	}
@@ -104,7 +111,7 @@ public class PoController {
 		double seconds = (double)duration / 1000000000.0;
 		LOG.info("seconds--->"+seconds);
 		//End time calculation		
-		
+
 		LOG.info("### Ending PoController.processErrorPos ###"+response );
 		return response;
 	}	
@@ -112,6 +119,7 @@ public class PoController {
 	@RequestMapping(value = "/getPoItemDetail", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  PoItemDetailRes getPoItemDetail(@RequestBody PoItemDetailReq request){
 		LOG.info("### Starting PoController.getPoItemDetail ###" +request);
+		long startTime = System.nanoTime();
 		PoItemDetailRes res = new PoItemDetailRes();
 		try {
 			res = poService.getPoItemDetail(request);
@@ -120,7 +128,11 @@ public class PoController {
 			res.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		double seconds = (double)duration / 1000000000.0;
+		LOG.info("seconds--->"+seconds);
 		LOG.info("### Ending PoController.getPoItemDetail ###"+res );
 		return res;
 	}

@@ -27,9 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class CommonUtils {
-	private static final Logger LOG = LoggerFactory.getLogger(CommonUtils.class);
+	//private static final Logger LOG = LoggerFactory.getLogger(CommonUtils.class);
 	
-	public static Date stringToDate(String dateStr){
+	static Date stringToDate(String dateStr){
 		
 		if(StringUtils.isBlank(dateStr) || "null".equals(dateStr)){
 			return null;
@@ -44,29 +44,6 @@ public class CommonUtils {
 			e.printStackTrace();
 		}
 	   return convertedCurrentDate;
-	}
-	
-	public static String appendTab(Object value) {
-		if(value==null || "".equals(value) || "null".equals(value)){
-			return "\t";
-		}else{
-			return value+"\t";
-		}
-	    
-	}
-	
-	
-	public static String getGUID() throws Exception {
-
-		String guid = UUID.randomUUID().toString();
-		if(StringUtils.isBlank(guid)) {
-			throw new Exception("GUID generation error: null");
-		}
-		
-		// GUID width fixed at 36,left pad if less 
-		String token = StringUtils.leftPad(guid, 36, "0");
-		token = StringUtils.substring(guid,0,36);
-		return token ;
 	}
 	
 	public static String getPartitionKey(String erpName){

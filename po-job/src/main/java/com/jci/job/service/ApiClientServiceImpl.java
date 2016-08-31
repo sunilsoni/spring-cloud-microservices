@@ -26,7 +26,6 @@ import com.jci.job.api.res.PoDetailsRes;
 import com.jci.job.api.res.PoSuccessRes;
 import com.jci.job.api.res.SupplierDetailsRes;
 import com.jci.job.api.res.SupplierSuccessRes;
-import com.jci.job.apis.ApiClient;
 import com.jci.job.apis.SupplierClient;
 import com.jci.job.azure.BatchInsertReq;
 import com.jci.job.azure.FlatFile;
@@ -37,16 +36,13 @@ import com.jci.job.utils.Constants;
 import com.jci.job.utils.PrepareBatchInsertReq;
 import com.jci.job.utils.PrepareFlatFile;
 import com.microsoft.azure.storage.StorageException;
-import com.netflix.hystrix.HystrixCommandProperties;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 /**
  * @author cdevdat
  *
  */
 @Service
-public class ApiClientServiceImpl implements ApiClientService {
+public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unused code)
 
 	private static final Logger LOG = LoggerFactory.getLogger(ApiClientServiceImpl.class);
 	@Autowired

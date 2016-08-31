@@ -38,7 +38,7 @@ import com.microsoft.azure.storage.table.TableQuery;
 
 
 @Repository
-public class JobRepoImpl implements JobRepo {
+public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JobRepoImpl.class);
 	private static int errorCount;
@@ -171,56 +171,6 @@ public class JobRepoImpl implements JobRepo {
 		
 		TableOperation insert = TableOperation.insertOrReplace(entity);
 		cloudTable.execute(insert);
-	}
-	
-	@Override
-	public Map<String,List<HashMap<String, Object>>> getPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("#### Starting JobRepoImpl.getPos ###" );
-		
-		String query = QueryBuilder.poQuery(partitionKey,poList);
-		LOG.info("query--->"+query);
-		
-		//List<PoItemsEntity> errorData = new ArrayList<PoItemsEntity>();
-		//TableQuery<PoItemsEntity> partitionQuery =  TableQuery.from(PoItemsEntity.class).where(query);
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
-		
-		OperationContext opContext = new OperationContext();
-		
-		TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);//Need to discuss this
-		
-		Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
-		DynamicTableEntity row;
-		EntityProperty ep;
-		HashMap<String, Object> hashmap;
-		//List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
-		
-		Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<String,List<HashMap<String, Object>>>();
-		
-		while(rows.hasNext()) {
-			row = rows.next() ;
-			HashMap<String, EntityProperty> map = row.getProperties();
-			
-			//row.getRowKey().split("_")[0]
-			hashmap = new HashMap<String, Object>();
-			for (String key : map.keySet()) {
-				ep = map.get(key);
-				hashmap.put(key, ep.getValueAsString());
-			}
-			//series.add(hashmap);
-			
-			if(poNumToItemListMap.containsKey(row.getRowKey().split("_")[0])){
-				List<HashMap<String, Object>> list =poNumToItemListMap.get(row.getRowKey().split("_")[0]);
-	    		list.add(hashmap);
-	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
-	    	}else{
-	    		List<HashMap<String, Object>> list = new  ArrayList<HashMap<String, Object>>();
-	    		list.add(hashmap);
-	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
-	    	}
-			
-		}		
-	    LOG.info("#### Ending JobRepoImpl.getPos ###" );
-		 return poNumToItemListMap;
 	}
 	
 	@Override
@@ -406,7 +356,7 @@ public class JobRepoImpl implements JobRepo {
 		return list;
 	}
 	
-	public Map<String,List<HashMap<String, Object>>> getffPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+	private Map<String,List<HashMap<String, Object>>> getffPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
 		String query = QueryBuilder.poQuery(partitionKey,poList);
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
 		OperationContext opContext = new OperationContext();

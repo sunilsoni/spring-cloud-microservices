@@ -14,10 +14,9 @@ import com.jci.job.apis.ApiClient;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-@Service
-public class ApiClientImpl {
+@Service class ApiClientImpl {
 	@Autowired
-	ApiClient apigeeClient;
+	private ApiClient apigeeClient;
 	
 	
 	@HystrixCommand(commandProperties = {
@@ -31,8 +30,7 @@ public class ApiClientImpl {
 			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "1000"),
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
-			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getPoDetailsFallback")
-	public ResponseEntity<PoDetailsRes> getPoDetails(String erpName, String region, String plant, String ordernumber,
+			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getPoDetailsFallback") ResponseEntity<PoDetailsRes> getPoDetails(String erpName, String region, String plant, String ordernumber,
 			String ordercreationdate) {
 		return  apigeeClient.getPoDetails(erpName,region,plant,ordernumber,ordercreationdate);
 	}
@@ -53,11 +51,10 @@ public class ApiClientImpl {
 			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "1000"),
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
-			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getPoDetailsResFallback")
-	public String getPoDetailsRes(PoSuccessRes poList, String erpName, String region, String plant) {
+			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getPoDetailsResFallback") String getPoDetailsRes(PoSuccessRes poList, String erpName, String region, String plant) {
 		return apigeeClient.getPoDetailsRes(poList,erpName,region,plant);
 	}
-	public String getPoDetailsResFallback(PoSuccessRes poList, String erpName, String region, String plant) {
+	public String getPoDetailsResFallback(PoSuccessRes poList, String erpName, String region, String plant) { // NO_UCD (unused code)
 		return "Fallback";
 	}
 
@@ -73,12 +70,11 @@ public class ApiClientImpl {
 			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "1000"),
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
-			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getItemsFallback")
-	public ResponseEntity<ItemDetailsRes> getItems(String erp, String region, String plant, String itemnumber) {
+			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getItemsFallback") ResponseEntity<ItemDetailsRes> getItems(String erp, String region, String plant, String itemnumber) {
 		return apigeeClient.getItems(erp, region, plant, itemnumber);
 	}
 
-	public ResponseEntity<ItemDetailsRes> getItemsFallback(String erp, String region, String plant, String itemnumber) {
+	ResponseEntity<ItemDetailsRes> getItemsFallback(String erp, String region, String plant, String itemnumber) { // NO_UCD (unused code)
 		return null;
 	}
 	
@@ -94,10 +90,10 @@ public class ApiClientImpl {
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
 			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getItemsResFallback")
-	public String getItemsRes(ItemSuccessRes poList, String erp, String region, String plant) {
+	public String getItemsRes(ItemSuccessRes poList, String erp, String region, String plant) { // NO_UCD (use default)
 		return apigeeClient.getItemsRes(poList, erp, region, plant);
 	}
-	public String getItemsResFallback(ItemSuccessRes poList, String erp, String region, String plant) {
+	public String getItemsResFallback(ItemSuccessRes poList, String erp, String region, String plant) { // NO_UCD (unused code)
 		return "Fallback";
 	}
 
@@ -112,12 +108,11 @@ public class ApiClientImpl {
 			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "1000"),
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
-			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getSuppliersFallback")
-	public ResponseEntity<SupplierDetailsRes> getSuppliers(String erp, String region, String plant,
+			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getSuppliersFallback") ResponseEntity<SupplierDetailsRes> getSuppliers(String erp, String region, String plant,
 			String suppliername) {
 		return apigeeClient.getSuppliers(erp, region, plant, suppliername);
 	}
-	public ResponseEntity<SupplierDetailsRes> getSuppliersFallback(String erp, String region, String plant,String suppliername) {
+	public ResponseEntity<SupplierDetailsRes> getSuppliersFallback(String erp, String region, String plant,String suppliername) { // NO_UCD (unused code)
 		return null;
 	}
 
@@ -132,12 +127,11 @@ public class ApiClientImpl {
 			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "1000"),
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
-			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getSuppliersResFallback")
-	public String getSuppliersRes(SupplierSuccessRes poList, String erp, String region, String plant) {
+			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getSuppliersResFallback") String getSuppliersRes(SupplierSuccessRes poList, String erp, String region, String plant) {
 		return apigeeClient.getSuppliersRes(poList, erp, region, plant);
 	}
 
-	public String getSuppliersResFallback(SupplierSuccessRes poList, String erp, String region, String plant) {
+	public String getSuppliersResFallback(SupplierSuccessRes poList, String erp, String region, String plant) { // NO_UCD (unused code)
 		return "Fallback";
 	}
 }

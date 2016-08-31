@@ -15,7 +15,7 @@ import com.microsoft.azure.storage.StorageException;
 
 public interface JobRepo {
 	List<String> batchInsert(BatchInsertReq request);
-	Map<String,List<HashMap<String, Object>>> getPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
+	//Map<String,List<HashMap<String, Object>>> getPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
 	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
 	BatchUpdateRes batchUpdate(BatchUpdateReq request) throws InvalidKeyException, URISyntaxException, StorageException;
 	List<Map<String,List<HashMap<String, Object>>>> getFlatFileData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException;

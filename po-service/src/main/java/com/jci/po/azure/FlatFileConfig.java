@@ -9,11 +9,21 @@ import org.springframework.context.annotation.Configuration;
 @RefreshScope
 public class FlatFileConfig {
 
-	  @Value("${flat.file.destination.mapping.folder.url}")
-	  private  String folderUrl;
 	  
-	  @Value("${flat.file.destination.supplier.url}")
+	  @Value("${flat.file.destination.e2open.url}")
+	  private  String e2open;
+	
+	  @Value("${flat.file.destination.po.folder.url}")
+	  private  String poUrl;
+	  
+	  @Value("${flat.file.destination.item.folder.url}")
+	  private  String itemUrl;
+	  
+	  @Value("${flat.file.destination.supplier.folder.url}")
 	  private  String supplierUrl;
+	  
+	  @Value("${flat.file.destination.region.url}")
+	  private  String regionUrl;
 	 
 	  @Value("${flat.file.name.sender.duns}")
 	  private  String senderDuns;
@@ -38,7 +48,7 @@ public class FlatFileConfig {
 
 	  @Bean
 	  public FlatFile flatFile() {
-		  FlatFile ff = new FlatFile(folderUrl, supplierUrl, senderDuns,receiverDuns,messageType,version,siteId,dateFormat,timeZone);
+		  FlatFile ff = new FlatFile(e2open, poUrl,itemUrl,supplierUrl, senderDuns,receiverDuns,messageType,version,siteId,dateFormat,timeZone,regionUrl);
 		  return ff;
 	  }
 	  

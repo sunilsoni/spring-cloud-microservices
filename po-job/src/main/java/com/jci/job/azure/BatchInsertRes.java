@@ -2,7 +2,7 @@ package com.jci.job.azure;
 
 import java.util.List;
 
-public class BatchInsertRes {
+public class BatchInsertRes { // NO_UCD (unused code)
 	
 	private boolean isError;
 	private  List<String> successList;

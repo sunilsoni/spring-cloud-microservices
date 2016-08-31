@@ -13,14 +13,14 @@ import com.microsoft.azure.storage.table.CloudTableClient;
 
 public class AzureStorage {
 	
-  private static final Logger LOG = LoggerFactory.getLogger(AzureStorage.class);
+ // private static final Logger LOG = LoggerFactory.getLogger(AzureStorage.class);
   private static final String FORMAT = "DefaultEndpointsProtocol=%s;AccountName=%s;AccountKey=%s";
 
   private String protocol;
   private String accountName;
   private String accountKey;
   
-  public AzureStorage(String protocol, String accountName, String accountKey) {
+  AzureStorage(String protocol, String accountName, String accountKey) {
 	this.protocol  = protocol;
 	this.accountName  = accountName;
 	this.accountKey  = accountKey;

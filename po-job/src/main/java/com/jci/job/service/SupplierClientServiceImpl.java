@@ -12,7 +12,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 @Service
-public class SupplierClientServiceImpl implements  SupplierClientService{
+public class SupplierClientServiceImpl implements  SupplierClientService{ // NO_UCD (unused code)
 	private static final Logger LOG = LoggerFactory.getLogger(SupplierClientServiceImpl.class);
 	
 	@Autowired

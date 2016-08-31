@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class InMemoryMultipartFile implements MultipartFile {
+public class InMemoryMultipartFile implements MultipartFile { // NO_UCD (unused code)
 
     private final String name;
     private final String originalFileName;

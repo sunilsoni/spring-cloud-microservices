@@ -7,7 +7,7 @@ import com.jci.job.entity.PoEntity;
 
 public class BatchUpdateReq {
 
-	HashMap<String,List<PoEntity>> tableNameToEntityMap;
+	private  HashMap<String,List<PoEntity>> tableNameToEntityMap;
 	private String erpName;
 	private boolean isSuccess;
 	

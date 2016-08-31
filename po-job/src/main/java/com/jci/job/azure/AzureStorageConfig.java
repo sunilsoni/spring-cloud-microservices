@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-public class AzureStorageConfig {
+public class AzureStorageConfig { // NO_UCD (unused code)
   //private static final Logger LOG = LoggerFactory.getLogger(AzureStorageConfig.class);
 	
   @Value("${azure.storage.connection.protocol}")

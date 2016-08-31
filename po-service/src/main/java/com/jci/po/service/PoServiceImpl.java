@@ -235,7 +235,7 @@ public class PoServiceImpl implements PoService{
 		
 		CommonUtils utils = new CommonUtils();
 		//Starting JAVA Code to process flat file
-		HashMap<String,HashMap<Integer,String>>  supplierNameToMapping = utils.getDestMapping(config.getFolderUrl());
+		HashMap<String,HashMap<Integer,String>>  supplierNameToMapping = utils.getDestMapping(config.getPoUrl());
 		LOG.info(" supplierNameToMapping--->"+ supplierNameToMapping);
 		
 		PrepareFlatFile file = new PrepareFlatFile();

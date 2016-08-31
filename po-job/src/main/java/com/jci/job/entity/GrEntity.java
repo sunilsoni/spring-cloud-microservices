@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
-public class GrEntity extends TableServiceEntity {
+public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 
 	public GrEntity(String partitionKey, String rowKey) {
 		this.partitionKey = partitionKey;

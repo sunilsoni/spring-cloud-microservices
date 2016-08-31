@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RefreshScope
-public class FlatFileConfig {
+public class FlatFileConfig { // NO_UCD (unused code)
 
 	  
 	  @Value("${flat.file.destination.e2open.url}")
