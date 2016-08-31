@@ -1,9 +1,6 @@
 package com.jci.job.api.res;
 
 import java.util.List;
-import java.util.Map;
-
-import com.jci.job.entity.ItemEntity;
 
 public class ItemDetailsRes {
 

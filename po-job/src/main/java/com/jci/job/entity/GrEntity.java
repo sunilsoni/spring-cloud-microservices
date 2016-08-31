@@ -4,14 +4,14 @@ import java.util.Date;
 
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
-public class PoEntity extends TableServiceEntity {
+public class GrEntity extends TableServiceEntity {
 
-	public PoEntity(String partitionKey, String rowKey) {
+	public GrEntity(String partitionKey, String rowKey) {
 		this.partitionKey = partitionKey;
-		this.rowKey = rowKey;
+		this.rowKey = rowKey;//orderNumber
 	}
 
-	public PoEntity() {
+	public GrEntity() {
 	}
 
 	/**

@@ -8,14 +8,14 @@ public class PoItemsEntity extends TableServiceEntity {
 
 	public PoItemsEntity(String partitionKey, String rowKey) {
 		this.partitionKey = partitionKey;
-		this.rowKey = rowKey;
+		this.rowKey = rowKey;//orderNumber_lineID"_"requestID
 	}
 
 	public PoItemsEntity() {
 	}
 
 	private String orderNumber;
-	private String itemJsonString;
+	private String jsonString;
 	
 	public String getOrderNumber() {
 		return orderNumber;
@@ -25,19 +25,20 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.orderNumber = orderNumber;
 	}
 
-	public String getItemJsonString() {
-		return itemJsonString;
+	public String getJsonString() {
+		return jsonString;
 	}
 
-	public void setItemJsonString(String itemJsonString) {
-		this.itemJsonString = itemJsonString;
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
 	}
 
 	@Override
 	public String toString() {
-		return "PoItemsEntity [orderNumber=" + orderNumber + ", itemJsonString=" + itemJsonString + "]";
+		return "PoItemsEntity [orderNumber=" + orderNumber + ", jsonString=" + jsonString + "]";
 	}
 
+	
 	
 	
 }

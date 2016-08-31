@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  *
  * @author cdevdat, csonisk
  */
-@FeignClient(value = "suppliers", url = "${e2open.staging.url}")
+@FeignClient(value = "suppliers", url = "${e2open.staging.url}")//
 public interface SupplierClient {
 
 	/**

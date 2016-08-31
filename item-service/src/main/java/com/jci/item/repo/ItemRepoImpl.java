@@ -24,6 +24,7 @@ import com.jci.item.azure.data.DataUtil;
 import com.jci.item.azure.data.ResultSet;
 import com.jci.item.azure.query.PaginationParam;
 import com.jci.item.azure.query.ScrollingParam;
+import com.jci.item.utils.Constants;
 import com.jci.item.utils.QueryBuilder;
 import com.microsoft.azure.storage.ResultContinuation;
 import com.microsoft.azure.storage.ResultSegment;
@@ -96,7 +97,7 @@ public class ItemRepoImpl implements ItemRepo {
 				
 				ep = map.get(key);
 				
-				if("ItemJsonString".equalsIgnoreCase(key)){					
+				if(Constants.JSON_STRING.equalsIgnoreCase(key)){					
 					try {
 						hashmap = mapper.readValue(ep.getValueAsString(), new TypeReference<HashMap<String, Object>>(){});
 						//hashmap.put(key, ep.getValueAsString());

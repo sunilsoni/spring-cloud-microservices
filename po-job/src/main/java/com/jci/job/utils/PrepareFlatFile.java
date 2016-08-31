@@ -1,5 +1,10 @@
 package com.jci.job.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,9 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.jci.job.azure.FlatFile;
 
@@ -118,5 +129,57 @@ public class PrepareFlatFile {
 		}
 	    
 	}
+	
+	public static boolean processFile(File toFile,String url) {
+		boolean isSuccess=false;
+		LOG.info(" url--->"+ url);
+		 InputStream input =null; 
+		 try{
+			 LOG.info(" getAbsolutePath--->"+ toFile.getAbsolutePath());
+			 
+			 String mimeType= URLConnection.guessContentTypeFromName(toFile.getName());
+			 RestTemplate template = new RestTemplate();
+
+			 MultiValueMap<String, Object> requestMap = new LinkedMultiValueMap<String, Object>();
+			 requestMap.add("name", toFile.getName());
+			 requestMap.add("filename", toFile.getName());
+			 requestMap.set("Content-Type",mimeType);
+			 requestMap.set("Content-Length",(int)toFile.length());			 
+			 
+			 input = new FileInputStream(toFile);
+			 ByteArrayResource contentsAsResource = new ByteArrayResource(IOUtils.toByteArray(input)){
+			             @Override
+			             public String getFilename(){
+			                 return toFile.getName();
+			             }
+			 };
+			// requestMap.add("file",  entry.getValue());
+			 requestMap.add("file", contentsAsResource);
+			// map.add("file", res.getLines());
+			 
+			// ResponseEntity<String> result =  suppClient.sendFlatFile(requestMap);
+			 String result = template.postForObject((url+"?filename="+toFile.getName()), requestMap, String.class);
+			LOG.info(" result--->"+ result);
+			 isSuccess=true;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				input.close();
+				//FileUtils.forceDelete(toFile);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		return isSuccess ;
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }

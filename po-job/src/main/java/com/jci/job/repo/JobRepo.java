@@ -19,4 +19,5 @@ public interface JobRepo {
 	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
 	BatchUpdateRes batchUpdate(BatchUpdateReq request) throws InvalidKeyException, URISyntaxException, StorageException;
 	List<Map<String,List<HashMap<String, Object>>>> getFlatFileData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException;
+	List<HashMap<String, Object>> getFlatFileData(String partitionKey,String tableName) throws InvalidKeyException, URISyntaxException, StorageException;
 }

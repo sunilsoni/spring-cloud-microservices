@@ -1,6 +1,5 @@
 package com.jci.job.api.res;
 
-import java.util.Date;
 import java.util.List;
 
 public class PoDetailsRes {

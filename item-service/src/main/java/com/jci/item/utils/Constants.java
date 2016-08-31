@@ -23,7 +23,7 @@ public class Constants {
 //	public static final String JSON_TEMPLATE = "{ \"returning\" : \"%s\" }";
 	public static final String JSON_OK = "OK";
 //	public static final String JSON_NG = "NG";//String.format(JSON_TEMPLATE, returning)));
-	
+	public static final String JSON_STRING = "JsonString";
 	
 	public static final String PARTITION_KEY_SYMIX ="SYMIX_PO";
 	public static final String PARTITION_KEY_MISCDATA ="STATUS_COUNT";

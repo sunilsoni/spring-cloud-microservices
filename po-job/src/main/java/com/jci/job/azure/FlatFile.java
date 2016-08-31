@@ -2,7 +2,9 @@ package com.jci.job.azure;
 
 public class FlatFile {
 	
-	  private  String folderUrl;
+	 private  String e2openUrl;
+	  private  String poUrl;
+	  private  String itemUrl;
 	  private  String supplierUrl;
 	  private  String regionUrl;
 	  private  String senderDuns;
@@ -13,9 +15,12 @@ public class FlatFile {
 	  private  String dateFormat;
 	  private  String timeZone;
 	  
-	  public FlatFile(String folderUrl, String supplierUrl, String senderDuns,String receiverDuns, String messageType, String version,String siteId, String dateFormat, String timeZone,String regionUrl) {
-		this.folderUrl  = folderUrl;
+	  public FlatFile(String e2openUrl, String poUrl, String itemUrl, String supplierUrl, String senderDuns,String receiverDuns, String messageType, String version,String siteId, String dateFormat, String timeZone,String regionUrl) {
+		  this.e2openUrl  = e2openUrl;
+		  this.poUrl  = poUrl;
+		this.itemUrl  = itemUrl;
 		this.supplierUrl  = supplierUrl;
+		
 		this.senderDuns  = senderDuns;
 		this.receiverDuns  = receiverDuns;
 		this.messageType  = messageType;
@@ -26,13 +31,29 @@ public class FlatFile {
 		this.regionUrl  = regionUrl;
 	  }
 	  
-		public String getFolderUrl() {
-			return folderUrl;
+		public String getPoUrl() {
+		return poUrl;
+	}
+
+	public String getE2openUrl() {
+			return e2openUrl;
 		}
 
-		public void setFolderUrl(String folderUrl) {
-			this.folderUrl = folderUrl;
+		public void setE2openUrl(String e2openUrl) {
+			this.e2openUrl = e2openUrl;
 		}
+
+	public void setPoUrl(String poUrl) {
+		this.poUrl = poUrl;
+	}
+
+	public String getItemUrl() {
+		return itemUrl;
+	}
+
+	public void setItemUrl(String itemUrl) {
+		this.itemUrl = itemUrl;
+	}
 
 		public String getSupplierUrl() {
 			return supplierUrl;

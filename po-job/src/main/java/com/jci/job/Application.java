@@ -8,17 +8,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
-
-import com.github.jmnarloch.spring.cloud.feign.EnableFeignAcceptGzipEncoding;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@EnableCircuitBreaker
-//@EnableHypermediaSupport(type = { EnableHypermediaSupport.HypermediaType.HAL })
-@EnableHystrixDashboard
+//@EnableCircuitBreaker
+@EnableHystrix
+//@EnableHystrixDashboard
 //@EnableFeignAcceptGzipEncoding
-//@EnableFeignContentGzipEncoding
-@EnableFeignAcceptGzipEncoding
 @EnableFeignClients
 @EnableEurekaClient
 public class Application {
@@ -26,5 +24,9 @@ public class Application {
 
 		SpringApplication.run(Application.class, args);
 
+	}
+	@Bean
+	public feign.Logger.Level feignLoggerLevel() {
+	    return feign.Logger.Level.FULL;
 	}
 }

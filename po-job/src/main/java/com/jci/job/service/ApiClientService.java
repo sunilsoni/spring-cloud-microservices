@@ -8,9 +8,12 @@ import com.microsoft.azure.storage.StorageException;
 public interface ApiClientService {
 	
 	String getPoDetails()  throws InvalidKeyException, URISyntaxException, StorageException ;
-	String processFlatFile () throws InvalidKeyException, URISyntaxException, StorageException;
+	String processPoFlatFile () throws InvalidKeyException, URISyntaxException, StorageException;
 	
-	String getItemDetails() ;
-	String getSupplierDetails() ;
+	String processSupplierFlatFile () throws InvalidKeyException, URISyntaxException, StorageException;
+	String processItemFlatFile () throws InvalidKeyException, URISyntaxException, StorageException;
+	
+	String getItemDetails() throws InvalidKeyException, URISyntaxException, StorageException ;
+	String getSupplierDetails() throws InvalidKeyException, URISyntaxException, StorageException  ;
 
 }

@@ -1,5 +1,6 @@
 package com.jci.job.repo;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
@@ -8,21 +9,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jci.job.api.req.BatchUpdateReq;
 import com.jci.job.api.res.BatchUpdateRes;
 import com.jci.job.azure.AzureStorage;
 import com.jci.job.azure.BatchInsertReq;
-import com.jci.job.azure.BatchInsertRes;
 import com.jci.job.entity.ItemEntity;
 import com.jci.job.entity.MiscDataEntity;
 import com.jci.job.entity.PoEntity;
-import com.jci.job.entity.PoItemsEntity;
 import com.jci.job.entity.SupplierEntity;
 import com.jci.job.utils.Constants;
 import com.jci.job.utils.QueryBuilder;
@@ -273,17 +273,11 @@ public class JobRepoImpl implements JobRepo {
 			    
 			    for (int i = 0; i < value.size(); i++) {
 			    	entity = value.get(i) ;
-			    	counter= counter+1;
+			    	//counter= counter+1;
 			    	
 			    	entity.setGlobalId(request.getGlobalId());
 			    	entity.setUserName(request.getUserName());
 			    	entity.setComment(request.getComment());
-			    	
-			    	if(StringUtils.isBlank(entity.getDestSuppliers())){
-			    		entity.setDestSuppliers(request.getDestination());
-			    	}else{
-			    		entity.setDestSuppliers(entity.getDestSuppliers()+","+request.getDestination());
-			    	}
 			    	
 			    	if(request.isSuccess()){//Means we are updating(success) status for pos which has been successfully processed to e2open
 			    		entity.setStatus(Constants.STATUS_SUCCESS);
@@ -301,11 +295,11 @@ public class JobRepoImpl implements JobRepo {
 			    		try {
 							cloudTable.execute(batchOperation);
 							batchOperation.clear();
-							counter = 0;
+							//counter = 0;
 						} catch (Exception e) {
 							response.setError(true);
 							response.setMessage("The Application has encountered an error!");
-							counter = 0;
+							//counter = 0;
 							if(request.isSuccess()){
 					    		successCount = successCount-1;
 					    	}else{
@@ -318,18 +312,15 @@ public class JobRepoImpl implements JobRepo {
 			    	 }
 			    }
 			    
-			    LOG.info("batchOperation.size()-->"+batchOperation.size());
-			    
 			    if(batchOperation.size()>0){
-			    	
 			    	try {
 						cloudTable.execute(batchOperation);
-						counter = 0;
+					//	counter = 0;
 					} catch (Exception e) {
 						//errorList.add(entity.getRowKey());
 						response.setError(true);
 						response.setMessage("The Application has encountered an error!");
-						counter = 0;
+						//counter = 0;
 						if(request.isSuccess()){
 				    		successCount = successCount-1;
 				    	}else{
@@ -341,12 +332,11 @@ public class JobRepoImpl implements JobRepo {
 					}
 			    }
 		 }	
-		 
 		 response.setErrorList(errorList);
 		 response.setSuccessList(successList);
 		 
-		  LOG.info("errorCount-->"+errorCount);
-		  LOG.info("successCount-->"+successCount);
+		 LOG.info("errorCount-->"+errorCount);
+		 LOG.info("successCount-->"+successCount);
 		   
 		//Insert MIsc data: need to make sure only for podetails
 		MiscDataEntity miscEntity=null;
@@ -358,26 +348,30 @@ public class JobRepoImpl implements JobRepo {
 			e.printStackTrace();
 		}
 		
+		int totalCount=0;
 		if(errorCount>0){
 			  int sum1 = miscEntity.getErrorCount()+errorCount;
 			  miscEntity.setErrorCount((sum1));
-			  int sum2 = miscEntity.getIntransitCount()-errorCount;
-			  miscEntity.setIntransitCount(sum2);
+			  totalCount=errorCount;
 		}
-		
 		if(successCount>0){
 			 int sum1 = miscEntity.getProcessedCount()+successCount;
-			 int sum2 = miscEntity.getErrorCount()-successCount;
 			 miscEntity.setProcessedCount((sum1));
-			 miscEntity.setErrorCount((sum2));
+			 totalCount=totalCount+successCount;
+		}
+		if(totalCount>0){
+			int sum2 = miscEntity.getIntransitCount()-totalCount;
+			miscEntity.setIntransitCount(sum2);
 		}
 		
-		try {
-			updateStatusCountEntity(miscEntity);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			response.setError(true);
-			response.setMessage("The Application has encountered an error!");
-			e.printStackTrace();
+		if(totalCount>0){
+			try {
+				updateStatusCountEntity(miscEntity);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				response.setError(true);
+				response.setMessage("The Application has encountered an error!");
+				e.printStackTrace();
+			}
 		}
 		LOG.info("#### Ending PoRepoImpl.batchUpdate ###" );
 		return response;
@@ -388,20 +382,12 @@ public class JobRepoImpl implements JobRepo {
 	@Override
 	public List<Map<String,List<HashMap<String, Object>>>> getFlatFileData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException{
 		
-		String query = QueryBuilder.intransitWhereCond(partitionKey);
-		LOG.info("query--->"+query);
-		
-		List<PoEntity> intransitData = new ArrayList<PoEntity>();
+		String query = QueryBuilder.ffQuery(partitionKey);
 		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 		Map<String,List<String>> pkToRowkeyList = new HashMap<String,List<String>>();
-		LOG.info("partitionQuery--->"+partitionQuery.getFilterString());
-		
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+		
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
-	    	LOG.info("entity--->"+entity);
-	    	
-	    	intransitData.add(entity);
-	    	
 	    	if(pkToRowkeyList.containsKey(entity.getPartitionKey())){
 				List<String> list = pkToRowkeyList.get(entity.getPartitionKey());
 				list.add(entity.getRowKey());
@@ -412,12 +398,91 @@ public class JobRepoImpl implements JobRepo {
 				pkToRowkeyList.put(entity.getPartitionKey(), list);
 			}
 	    }
-		
+	    
 		List<Map<String,List<HashMap<String, Object>>>> list = new ArrayList<Map<String,List<HashMap<String, Object>>>>();
 		for (Map.Entry<String,List<String>> entry : pkToRowkeyList.entrySet()){	
-			list.add(getPos(entry.getKey(),entry.getValue()));
+			list.add(getffPos(entry.getKey(),entry.getValue()));
 		}
-		LOG.info("list--->"+list);
 		return list;
+	}
+	
+	public Map<String,List<HashMap<String, Object>>> getffPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+		String query = QueryBuilder.poQuery(partitionKey,poList);
+		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+		OperationContext opContext = new OperationContext();
+		
+		TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);//Need to discuss this
+		Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
+		DynamicTableEntity row;
+		EntityProperty ep;
+		HashMap<String, Object> hashmap;
+		ObjectMapper mapper = new ObjectMapper(); 
+		Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<String,List<HashMap<String, Object>>>();
+		
+		while(rows.hasNext()) {
+			row = rows.next() ;
+			HashMap<String, EntityProperty> map = row.getProperties();
+			hashmap = new HashMap<String, Object>();
+			
+			for (String key : map.keySet()) {
+				ep = map.get(key);
+				if(Constants.JSON_STRING.equals(key)){
+					TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
+					try {
+						hashmap = mapper.readValue(ep.getValueAsString(), typeRef);
+					} catch (IOException e) {
+						e.printStackTrace();
+					} 
+				}
+			}
+			if(poNumToItemListMap.containsKey(row.getRowKey().split("_")[0])){
+				List<HashMap<String, Object>> list =poNumToItemListMap.get(row.getRowKey().split("_")[0]);
+	    		list.add(hashmap);
+	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+	    	}else{
+	    		List<HashMap<String, Object>> list = new  ArrayList<HashMap<String, Object>>();
+	    		list.add(hashmap);
+	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+	    	}
+			
+		}		
+		 return poNumToItemListMap;
+	}
+	
+	@Override
+	public List<HashMap<String, Object>> getFlatFileData(String partitionKey,String tableName) throws InvalidKeyException, URISyntaxException, StorageException {
+		String query = QueryBuilder.ffQuery(partitionKey);
+		
+		CloudTable cloudTable = azureStorage.getTable(tableName);
+		OperationContext opContext = new OperationContext();
+		
+		TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);
+		Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
+		DynamicTableEntity row;
+		EntityProperty ep;
+		HashMap<String, Object> hashmap;
+		ObjectMapper mapper = new ObjectMapper(); 
+		
+		List<HashMap<String, Object>> list  = new ArrayList<HashMap<String, Object>>();
+		
+		while(rows.hasNext()) {
+			row = rows.next() ;
+			HashMap<String, EntityProperty> map = row.getProperties();
+			hashmap = new HashMap<String, Object>();
+			
+			for (String key : map.keySet()) {
+				ep = map.get(key);
+				if(Constants.JSON_STRING.equals(key)){
+					TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
+					try {
+						hashmap = mapper.readValue(ep.getValueAsString(), typeRef);
+						list.add(hashmap);
+					} catch (IOException e) {
+						e.printStackTrace();
+					} 
+				}
+			}
+		}		
+		 return list;
 	}
 }

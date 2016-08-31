@@ -6,26 +6,64 @@ public class SupplierEntity extends TableServiceEntity {
 
 	public SupplierEntity(String partitionKey, String rowKey) {
 		this.partitionKey = partitionKey;
-		this.rowKey = rowKey; 
+		this.rowKey = rowKey; //supplierID
 	}
 
 	public SupplierEntity() {
 	}
 
-	private String supplierJsonString;
+	private String jsonString;
+	private int status;
+	private String erpName;
+	private String region;
+	private String plant;
 
-	public String getSupplierJsonString() {
-		return supplierJsonString;
+
+	public String getErpName() {
+		return erpName;
 	}
 
-	public void setSupplierJsonString(String supplierJsonString) {
-		this.supplierJsonString = supplierJsonString;
+	public void setErpName(String erpName) {
+		this.erpName = erpName;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getPlant() {
+		return plant;
+	}
+
+	public void setPlant(String plant) {
+		this.plant = plant;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getJsonString() {
+		return jsonString;
+	}
+
+	public void setJsonString(String jsonString) {
+		this.jsonString = jsonString;
 	}
 
 	@Override
 	public String toString() {
-		return "SupplierEntity [supplierJsonString=" + supplierJsonString + "]";
-	}	
-	
+		return "SupplierEntity [jsonString=" + jsonString + ", status=" + status + ", erpName=" + erpName + ", region="
+				+ region + ", plant=" + plant + "]";
+	}
+
 	
 }

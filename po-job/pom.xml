@@ -89,17 +89,21 @@
         	<groupId>org.springframework.cloud</groupId>
         	<artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
-		<dependency>
+        <dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-ribbon</artifactId>
+		</dependency> 
+		<!-- <dependency>
 		    <groupId>com.netflix.feign</groupId>
 		    <artifactId>feign-httpclient</artifactId>
-		</dependency>
+		</dependency> -->
         
 	     <!-- https://mvnrepository.com/artifact/com.github.jmnarloch/feign-encoding-spring-cloud-starter -->
-	<dependency>
+	<!-- <dependency>
 	    <groupId>com.github.jmnarloch</groupId>
 	    <artifactId>feign-encoding-spring-cloud-starter</artifactId>
 	    <version>1.1.1</version>
-	</dependency> 
+	</dependency>  -->
 		    
 	    <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 		<dependency>

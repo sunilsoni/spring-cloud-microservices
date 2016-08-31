@@ -19,6 +19,10 @@ public class Constants {
 	public static final String ROWKEY = "RowKey";	
 	public static final String ORDER_NUMBER = "OrderNumber";
 	
+	public static final String JSON_STRING = "JsonString";
+	public static final String SUPPLIER_JSON_STRING = "SupplierJsonString";
+	
+	
 	//public static final int ERP_INT_SYMIX =1;
 	//public static final int ERP_INT_SAP =2;
 	

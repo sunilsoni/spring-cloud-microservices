@@ -17,12 +17,12 @@ import com.jci.job.api.res.SupplierSuccessRes;
 
 /**
  * <p>
- * <strong>Rest Client for fetching Purchase Orders, Suppliers and Items details data from Apigee(APIs).</strong>
+ * <strong>Rest Client for fetching Purchase Orders, Suppliers and Items detail data from Apigee(APIs).</strong>
  * <p>
  *
  * @author cdevdat, csonisk
  */
-@FeignClient(value = "apigee", url = "${apigee.staging.url}")
+@FeignClient(name = "apigee", url = "http://apidev1.jci.com:9055/v1/an/suppliercollaboration", decode404 = true)
 public interface ApiClient {
 
 	/**
@@ -39,7 +39,6 @@ public interface ApiClient {
 
 	@RequestMapping(value = "/pologupdate", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String getPoDetailsRes(@RequestBody PoSuccessRes poList,@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant);
-
 	
 	/**
 	 * Get Item master Data
@@ -49,13 +48,13 @@ public interface ApiClient {
 	 * @param itemnumber
 	 * @return ItemDetailsRes
 	 */
-	@RequestMapping(value = "/items", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public  ResponseEntity<ItemDetailsRes> getItems(@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant,@RequestParam("itemnumber") String itemnumber);
-
+	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<ItemDetailsRes> getItems(@RequestParam("erp") String erp,@RequestParam("region") String region, @RequestParam("plant") String plant,@RequestParam("itemnumber") String itemnumber);
 
 	@RequestMapping(value = "/itemsUpdate", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String getItemsRes(@RequestBody ItemSuccessRes poList,@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant);
 
+	
 	/**
 	 * Get Supplier master Data
 	 * @param erp

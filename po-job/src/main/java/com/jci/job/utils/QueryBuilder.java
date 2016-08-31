@@ -21,7 +21,7 @@ public class QueryBuilder {
 	}
 	
 	public static String intransitWhereCond(String partitionKey){
-		return String.format("(PartitionKey eq '%s') and  (Status eq '%s') ",partitionKey,String.valueOf(Constants.STATUS_IN_TRANSIT));//Sunil: Please check this should not work 
+		return String.format("(PartitionKey eq '%s') and  (Status eq '%s') ",partitionKey,Constants.STATUS_IN_TRANSIT); 
 	}
 	
 	public static String poQuery(String partitionKey, List<String> poList){
@@ -74,6 +74,17 @@ public class QueryBuilder {
 	   rowKeyFilter = builder.toString();
 	   combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter);
 		return rowKeyFilter;
+	}
+	
+	public static String ffQuery(String partitionKey){
+		
+		// Create filters to limit the data
+	   String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
+	   
+	   String rowKeyFilter = TableQuery.generateFilterCondition(Constants.STATUS_KEY, QueryComparisons.EQUAL, Constants.STATUS_IN_TRANSIT);
+	   String   combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter); 
+	     
+		return combinedFilter;
 	}
 	
 }

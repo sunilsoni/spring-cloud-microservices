@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +23,7 @@ import com.microsoft.azure.storage.table.TableEntity;
 
 public class PrepareBatchInsertReq {
 	
-	private static final Logger LOG = LoggerFactory.getLogger(PrepareBatchInsertReq.class);
+	//private static final Logger LOG = LoggerFactory.getLogger(PrepareBatchInsertReq.class);
 	
 	public static BatchInsertReq prepareReq(PoDetailsRes responseBody,String erpName, String region, String plant,String lineID,String requestID) {
 		List<TableEntity> poDetailsList = new ArrayList<TableEntity>();
@@ -51,7 +49,7 @@ public class PrepareBatchInsertReq {
 			poEntity.setAsn( po.isAsn());
 
 			//Sunil: Need to discuss this 
-			poEntity.setDestSuppliers("");			
+			//poEntity.setDestSuppliers("");			
 			
 			poEntity.setErpName(erpName);
 			poEntity.setRegion(region);
@@ -66,11 +64,12 @@ public class PrepareBatchInsertReq {
 			PoItemsEntity itemEntity = null;
 			
 					
-			for (Object itemJsonString : itemList) {
+			for (Object jsonString : itemList) {
 				try {
-					JsonNode actualObj = mapper.readTree(mapper.writeValueAsString(itemJsonString));
+					JsonNode actualObj = mapper.readTree(mapper.writeValueAsString(jsonString));
 					itemEntity = new PoItemsEntity(partitionKey,(orderNumber+"_"+actualObj.get(lineID)+"_"+actualObj.get(requestID)));
-					itemEntity.setItemJsonString(mapper.writeValueAsString(itemJsonString));
+					itemEntity.setJsonString(mapper.writeValueAsString(jsonString));
+					itemEntity.setOrderNumber(orderNumber);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -94,7 +93,7 @@ public class PrepareBatchInsertReq {
 		return res;
 	}
 	
-	public static BatchInsertReq prepareSupplierReq(SupplierDetailsRes responseBody,String erpName,String supplierID) {
+	public static BatchInsertReq prepareSupplierReq(SupplierDetailsRes responseBody,String erpName, String region, String plant,String supplierID) {
 		ObjectMapper mapper = new ObjectMapper();
 		List<Object>  supplierList =  responseBody.getSupplierList();
 		String partitionKey = CommonUtils.getPartitionKey(erpName);
@@ -107,14 +106,16 @@ public class PrepareBatchInsertReq {
 				actualObj = mapper.readTree(mapper.writeValueAsString(supplierVal));
 				entity = new SupplierEntity(partitionKey,(actualObj.get(supplierID).asText()));
 				
-				entity.setSupplierJsonString(mapper.writeValueAsString(supplierVal));
+				entity.setJsonString(mapper.writeValueAsString(supplierVal));
+				entity.setStatus(Constants.STATUS_IN_TRANSIT);
+				entity.setRegion(region);
+				entity.setPlant(plant);
 				supplierDetailsList.add(entity);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		}
+		
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = new HashMap<String,List<TableEntity>>();
 		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, supplierDetailsList);
 		
@@ -125,7 +126,7 @@ public class PrepareBatchInsertReq {
 		return res;
 	}
 	
-	public static BatchInsertReq prepareItemReq(ItemDetailsRes responseBody,String erpName, String customerItemID,String supplierID) {
+	public static BatchInsertReq prepareItemReq(ItemDetailsRes responseBody,String erpName, String region, String plant, String customerItemID,String supplierID) {
 		ObjectMapper mapper = new ObjectMapper();
 		List<Object>  itemList =  responseBody.getItemList();
 		String partitionKey = CommonUtils.getPartitionKey(erpName);
@@ -137,7 +138,10 @@ public class PrepareBatchInsertReq {
 			try {
 				actualObj = mapper.readTree(mapper.writeValueAsString(itemVal));
 				entity = new ItemEntity(partitionKey,(actualObj.get(customerItemID).asText()+"_"+actualObj.get(supplierID).asText()));
-				entity.setItemJsonString(mapper.writeValueAsString(itemVal));
+				entity.setJsonString(mapper.writeValueAsString(itemVal));
+				entity.setStatus(Constants.STATUS_IN_TRANSIT);
+				entity.setRegion(region);
+				entity.setPlant(plant);
 				itemDetailsList.add(entity);
 			} catch (IOException e) {
 				e.printStackTrace();
