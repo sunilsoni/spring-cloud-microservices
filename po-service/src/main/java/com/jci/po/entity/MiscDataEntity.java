@@ -13,36 +13,21 @@ public class MiscDataEntity   extends TableServiceEntity {
 		
 	}
 	
-	private int intransitCount;//1
-	private int processedCount;//2
-	private int errorCount;//3
+	private int poIntransitCount;//1
+	private int poProcessedCount;//2
+	private int poErrorCount;//3
+	
+	private int itemIntransitCount;//1
+	private int itemProcessedCount;//2
+	private int itemErrorCount;//3
+	
+	private int suppIntransitCount;//1
+	private int suppProcessedCount;//2
+	private int suppErrorCount;//3
 	
 	private String orderNumber;
 	private String comment;
 	
-	public int getIntransitCount() {
-		return intransitCount;
-	}
-
-	public void setIntransitCount(int intransitCount) {
-		this.intransitCount = intransitCount;
-	}
-
-	public int getProcessedCount() {
-		return processedCount;
-	}
-
-	public void setProcessedCount(int processedCount) {
-		this.processedCount = processedCount;
-	}
-
-	public int getErrorCount() {
-		return errorCount;
-	}
-
-	public void setErrorCount(int errorCount) {
-		this.errorCount = errorCount;
-	}
 
 	public String getOrderNumber() {
 		return orderNumber;
@@ -60,11 +45,85 @@ public class MiscDataEntity   extends TableServiceEntity {
 		this.comment = comment;
 	}
 
+	public int getPoIntransitCount() {
+		return poIntransitCount;
+	}
+
+	public void setPoIntransitCount(int poIntransitCount) {
+		this.poIntransitCount = poIntransitCount;
+	}
+
+	public int getPoProcessedCount() {
+		return poProcessedCount;
+	}
+
+	public void setPoProcessedCount(int poProcessedCount) {
+		this.poProcessedCount = poProcessedCount;
+	}
+
+	public int getPoErrorCount() {
+		return poErrorCount;
+	}
+
+	public void setPoErrorCount(int poErrorCount) {
+		this.poErrorCount = poErrorCount;
+	}
+
+	public int getItemIntransitCount() {
+		return itemIntransitCount;
+	}
+
+	public void setItemIntransitCount(int itemIntransitCount) {
+		this.itemIntransitCount = itemIntransitCount;
+	}
+
+	public int getItemProcessedCount() {
+		return itemProcessedCount;
+	}
+
+	public void setItemProcessedCount(int itemProcessedCount) {
+		this.itemProcessedCount = itemProcessedCount;
+	}
+
+	public int getItemErrorCount() {
+		return itemErrorCount;
+	}
+
+	public void setItemErrorCount(int itemErrorCount) {
+		this.itemErrorCount = itemErrorCount;
+	}
+
+	public int getSuppIntransitCount() {
+		return suppIntransitCount;
+	}
+
+	public void setSuppIntransitCount(int suppIntransitCount) {
+		this.suppIntransitCount = suppIntransitCount;
+	}
+
+	public int getSuppProcessedCount() {
+		return suppProcessedCount;
+	}
+
+	public void setSuppProcessedCount(int suppProcessedCount) {
+		this.suppProcessedCount = suppProcessedCount;
+	}
+
+	public int getSuppErrorCount() {
+		return suppErrorCount;
+	}
+
+	public void setSuppErrorCount(int suppErrorCount) {
+		this.suppErrorCount = suppErrorCount;
+	}
+
 	@Override
 	public String toString() {
-		return "MiscDataEntity [intransitCount=" + intransitCount + ", processedCount=" + processedCount
-				+ ", errorCount=" + errorCount + ", orderNumber=" + orderNumber + ", comment=" + comment + "]";
+		return "MiscDataEntity [poIntransitCount=" + poIntransitCount + ", poProcessedCount=" + poProcessedCount
+				+ ", poErrorCount=" + poErrorCount + ", itemIntransitCount=" + itemIntransitCount
+				+ ", itemProcessedCount=" + itemProcessedCount + ", itemErrorCount=" + itemErrorCount
+				+ ", suppIntransitCount=" + suppIntransitCount + ", suppProcessedCount=" + suppProcessedCount
+				+ ", suppErrorCount=" + suppErrorCount + ", orderNumber=" + orderNumber + ", comment=" + comment + "]";
 	}
-	
-	
+
 }

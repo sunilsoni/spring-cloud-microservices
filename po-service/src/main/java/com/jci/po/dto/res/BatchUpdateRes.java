@@ -8,7 +8,7 @@ public class BatchUpdateRes {
 	
 	private List<String> errorList;
 	private List<String> successList;
-	HashMap<String, ArrayList<Integer>> graphData;
+	private HashMap<String, ArrayList<Integer>> graphData;
 	private boolean isError;
 	private String message;
 	

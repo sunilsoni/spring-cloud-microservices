@@ -49,7 +49,7 @@ public class ApiClientController { // NO_UCD (unused code)
 			response = service.getPoDetails();
 			
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.info("### Exception in ApigeeClientController.getPoDetails ####");
+			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
 			e.printStackTrace();
 		}
 		long endTime = System.nanoTime();
@@ -65,14 +65,14 @@ public class ApiClientController { // NO_UCD (unused code)
 	 * Get Supplier Details scheduler
 	 * @return
 	 */
-	@RequestMapping(value = "/getSupplierDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getSupplierDetails() {
+	@RequestMapping(value = "/getSuppDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String getSuppDetails() {
 		long startTime = System.nanoTime();
 		String response=null;
 		try {
-			response = service.getSupplierDetails();
+			response = service.getSuppDetails();
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.info("### Exception in ApigeeClientController.getSupplierDetails ####");
+			LOG.error("### Exception in ApigeeClientController.getSuppDetails ####",e);
 			e.printStackTrace();
 		}
 		
@@ -95,7 +95,7 @@ public class ApiClientController { // NO_UCD (unused code)
 			response = service.getItemDetails();
 			
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.info("### Exception in ApigeeClientController.getPoDetails ####");
+			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
 			e.printStackTrace();
 		}
 
@@ -117,7 +117,7 @@ public class ApiClientController { // NO_UCD (unused code)
 		try {
 			response = service.processPoFlatFile();
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.info("### Exception in ApigeeClientController.processFlatFile ####");
+			LOG.error("### Exception in ApigeeClientController.processFlatFile ####",e);
 			e.printStackTrace();
 		}
 
@@ -132,14 +132,14 @@ public class ApiClientController { // NO_UCD (unused code)
 	 * Process Flat File scheduler for Suppliers
 	 * @return
 	 */
-	@RequestMapping(value = "/processSupplierFlatFile", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String processSupplierFlatFile() {
+	@RequestMapping(value = "/processSuppFlatFile", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String processSuppFlatFile() {
 		long startTime = System.nanoTime();
 		String response=null;
 		try {
-			response = service.processSupplierFlatFile();
+			response = service.processSuppFlatFile();
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.info("### Exception in ApigeeClientController.processFlatFile ####");
+			LOG.error("### Exception in ApigeeClientController.processFlatFile ####",e);
 			e.printStackTrace();
 		}
 
@@ -161,7 +161,7 @@ public class ApiClientController { // NO_UCD (unused code)
 		try {
 			response = service.processItemFlatFile();
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.info("### Exception in ApigeeClientController.processFlatFile ####");
+			LOG.error("### Exception in ApigeeClientController.processFlatFile ####",e);
 			e.printStackTrace();
 		}
 

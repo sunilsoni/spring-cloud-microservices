@@ -3,9 +3,6 @@ package com.jci.job.azure;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.CloudTable;

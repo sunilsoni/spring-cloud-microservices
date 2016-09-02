@@ -5,7 +5,7 @@ public class FlatFile {
 	 private  String e2openUrl;
 	  private  String poUrl;
 	  private  String itemUrl;
-	  private  String supplierUrl;
+	  private  String suppUrl;
 	  private  String regionUrl;
 	  private  String senderDuns;
 	  private  String receiverDuns;
@@ -15,11 +15,11 @@ public class FlatFile {
 	  private  String dateFormat;
 	  private  String timeZone;
 	  
-	  FlatFile(String e2openUrl, String poUrl, String itemUrl, String supplierUrl, String senderDuns,String receiverDuns, String messageType, String version,String siteId, String dateFormat, String timeZone,String regionUrl) {
+	  FlatFile(String e2openUrl, String poUrl, String itemUrl, String suppUrl, String senderDuns,String receiverDuns, String messageType, String version,String siteId, String dateFormat, String timeZone,String regionUrl) {
 		  this.e2openUrl  = e2openUrl;
 		  this.poUrl  = poUrl;
 		this.itemUrl  = itemUrl;
-		this.supplierUrl  = supplierUrl;
+		this.suppUrl  = suppUrl;
 		
 		this.senderDuns  = senderDuns;
 		this.receiverDuns  = receiverDuns;
@@ -55,14 +55,7 @@ public class FlatFile {
 		this.itemUrl = itemUrl;
 	}
 
-		public String getSupplierUrl() {
-			return supplierUrl;
-		}
-
-		public void setSupplierUrl(String supplierUrl) {
-			this.supplierUrl = supplierUrl;
-		}
-
+		
 		public String getSenderDuns() {
 			return senderDuns;
 		}
@@ -125,6 +118,22 @@ public class FlatFile {
 
 		public void setRegionUrl(String regionUrl) {
 			this.regionUrl = regionUrl;
+		}
+
+		public String getSuppUrl() {
+			return suppUrl;
+		}
+
+		public void setSuppUrl(String suppUrl) {
+			this.suppUrl = suppUrl;
+		}
+
+		@Override
+		public String toString() {
+			return "FlatFile [e2openUrl=" + e2openUrl + ", poUrl=" + poUrl + ", itemUrl=" + itemUrl + ", suppUrl="
+					+ suppUrl + ", regionUrl=" + regionUrl + ", senderDuns=" + senderDuns + ", receiverDuns="
+					+ receiverDuns + ", messageType=" + messageType + ", version=" + version + ", siteId=" + siteId
+					+ ", dateFormat=" + dateFormat + ", timeZone=" + timeZone + "]";
 		}
 		
 		

@@ -8,9 +8,10 @@ import com.jci.item.azure.query.PaginationParam;
 
 public class ResultSet {
 	
-	List<HashMap<String, Object>> series ;
-	List<HashMap<String, String>> errorData = new ArrayList<HashMap<String, String>>() ;
-	PaginationParam pagination ;
+	private List<HashMap<String, Object>> series ;
+	private List<HashMap<String, String>> errorData = new ArrayList<HashMap<String, String>>() ;
+	private PaginationParam pagination ;
+	
 	public ResultSet() {
 		
 	}
@@ -18,12 +19,6 @@ public class ResultSet {
 	public ResultSet(List<HashMap<String, Object>> series1, PaginationParam pagination1) {
 		this.series = series1 ;
 		this.pagination = pagination1 ;
-	}
-	
-	public ResultSet(List<HashMap<String, Object>> series2,List<HashMap<String, String>> errorData2, PaginationParam pagination2) {
-		this.series = series2 ;
-		this.pagination = pagination2 ;
-		this.errorData = errorData2 ;
 	}
 	
 	public List<HashMap<String, Object>> getSeries() {

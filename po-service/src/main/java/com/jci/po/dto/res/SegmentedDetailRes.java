@@ -9,16 +9,12 @@ public class SegmentedDetailRes {
 
 	private boolean isError;
 	private String message;//OK
-	
 	private HashMap<String, ResultSet>  resultSet;
-	
-	HashMap<String, ArrayList<Integer>> graphData;
-
-	HashMap<String, ResultSet>  supplierData;
-	HashMap<String, ResultSet>  itemData;
-	HashMap<String, ResultSet>  errorData;
-	
-	HashMap<String, String>  userData;
+	private HashMap<String, ArrayList<Integer>> graphData;
+	private HashMap<String, ResultSet>  suppData;
+	private HashMap<String, ResultSet>  itemData;
+	private HashMap<String, ResultSet>  errorData;
+	private HashMap<String, String>  userData;
 	
 	public boolean isError() {
 		return isError;
@@ -52,13 +48,7 @@ public class SegmentedDetailRes {
 		this.graphData = graphData;
 	}
 
-	public HashMap<String, ResultSet> getSupplierData() {
-		return supplierData;
-	}
-
-	public void setSupplierData(HashMap<String, ResultSet> supplierData) {
-		this.supplierData = supplierData;
-	}
+	
 
 	public HashMap<String, ResultSet> getItemData() {
 		return itemData;
@@ -84,11 +74,18 @@ public class SegmentedDetailRes {
 		this.userData = userData;
 	}
 
+	public HashMap<String, ResultSet> getSuppData() {
+		return suppData;
+	}
+
+	public void setSuppData(HashMap<String, ResultSet> suppData) {
+		this.suppData = suppData;
+	}
+
 	@Override
 	public String toString() {
 		return "SegmentedDetailRes [isError=" + isError + ", message=" + message + ", resultSet=" + resultSet
-				+ ", graphData=" + graphData + ", supplierData=" + supplierData + ", itemData=" + itemData
-				+ ", errorData=" + errorData + ", userData=" + userData + "]";
+				+ ", graphData=" + graphData + ", suppData=" + suppData + ", itemData=" + itemData + ", errorData="
+				+ errorData + ", userData=" + userData + "]";
 	}
-
 }

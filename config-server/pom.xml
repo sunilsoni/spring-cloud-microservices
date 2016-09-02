@@ -17,6 +17,7 @@
         <docker.plugin.version>0.4.11</docker.plugin.version>
         <start-class>com.jci.config.Application</start-class>
         <docker.image.prefix>supplier-collaboration</docker.image.prefix>
+        <sonar.language>java</sonar.language>
     </properties>
   <licenses>
     <license>
@@ -49,6 +50,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+          <dependency>
+		    <groupId>org.codehaus.sonar</groupId>
+		    <artifactId>sonar-maven-plugin</artifactId>
+		    <version>5.1</version>
+		    </dependency>
   </dependencies>
   
   <build>

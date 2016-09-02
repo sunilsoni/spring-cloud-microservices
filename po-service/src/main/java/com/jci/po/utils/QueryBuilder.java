@@ -2,8 +2,6 @@ package com.jci.po.utils;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.jci.po.azure.data.DataHelper;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
@@ -15,43 +13,8 @@ public class QueryBuilder {
 
 	public static String partitionWhereCondition(String partitionKey){
 		return String.format("(PartitionKey eq '%s')",partitionKey);//(PartitionKey eq 'SYMIX_PO_2016');
-	}
-	
-	public static String geWhereCondition(String partitionKey,String startRowKey){
-		return String.format("(PartitionKey eq '%s') and (RowKey ge '%s') ",partitionKey,startRowKey);
-	}
-	
-	public static String leWhereCondition(String partitionKey,String endRowKey){
-		return String.format("(PartitionKey eq '%s') and  (RowKey le '%s') ",partitionKey,endRowKey);
-	}
-	
-	public static String multiplePartitionWhereCondition(String partitionKey1,String partitionKey2){
-		return String.format("(PartitionKey eq '%s') or  (PartitionKey eq '%s') ",partitionKey1,partitionKey2);
-	}
-	
-	
-	public static String partitionWhereCondition(String partitionKey,String startRowKey,String endRowKey){
-		 String whereCondition=null;
-		 
-		 if(StringUtils.isBlank(partitionKey) ){
-			 return whereCondition;
-		 }
-		
-		String startRowKey1 = startRowKey + ";" ;
-		String  endRowKey1 = endRowKey + "=" ;
-		 
-		if(StringUtils.isBlank(startRowKey) && StringUtils.isBlank(endRowKey)){
-			whereCondition = partitionWhereCondition(partitionKey);
-		}else if(StringUtils.isBlank(endRowKey)){
-			whereCondition = geWhereCondition(partitionKey,startRowKey1); 
-		}else if(StringUtils.isBlank(startRowKey)){
-			whereCondition = geWhereCondition(partitionKey,endRowKey1); 
-		}else{
-			whereCondition = String.format("(PartitionKey eq '%s') and (RowKey ge '%s') and (RowKey le '%s') ",partitionKey,startRowKey1,endRowKey1);
-		}
-		
-		return whereCondition;
-	}
+	} 
+	 
 	
 	public static String errorDataQuery(String partitionKey){
 		 String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
@@ -166,22 +129,6 @@ public class QueryBuilder {
 	   rowKeyFilter = builder.toString();
 	   combinedFilter = TableQuery.combineFilters(combinedFilter, Operators.AND, rowKeyFilter);
 		return rowKeyFilter;
-	}
-	
-	//Need to delete
-	public static String poQuery(DataHelper request){
-		 // Create filters to limit the data
-	   String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, request.getPartitionValue());
-	      
-	   String timestampFilter = null;// TableQuery.generateFilterCondition(Constants.TIMESTAMP, QueryComparisons.GREATER_THAN_OR_EQUAL,request.getTimestamp());
-     //  String timestampFilter = TableQuery.generateFilterCondition(TIMESTAMP, QueryComparisons.LESS_THAN_OR_EQUAL,request.getTimestamp());
-      
-       String partitionAndTimestampFilter = TableQuery.combineFilters( partitionFilter, Operators.AND, timestampFilter);
-       String statusFilter = null;//TableQuery.generateFilterCondition(Constants.STATUS_KEY,QueryComparisons.EQUAL, request.getStatus());
-       
-		 // Combine all the filters
-       String combinedFilter = TableQuery.combineFilters(partitionAndTimestampFilter, Operators.AND, statusFilter);
-		return combinedFilter;
 	}
 	
 	public static String poItemDetailQuery(DataHelper request){

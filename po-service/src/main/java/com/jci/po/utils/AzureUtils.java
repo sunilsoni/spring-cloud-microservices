@@ -2,19 +2,11 @@ package com.jci.po.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Calendar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.table.CloudTable;
-import com.microsoft.azure.storage.table.CloudTableClient;
 
 public class AzureUtils {
-	protected static CloudTableClient tableClient = null;
-	private static final Logger LOG = LoggerFactory.getLogger(AzureUtils.class);
-	protected static CloudTable poDetailsTable = null;
+	//private static final Logger LOG = LoggerFactory.getLogger(AzureUtils.class);
 	 
 	public static String getPartitionKey(String erpName){
 		//String partitionKey = erpName+"_"+"PO"+"_"+Calendar.getInstance().get(Calendar.YEAR);
@@ -27,7 +19,7 @@ public class AzureUtils {
      *
      * @param ex Exception to be printed
      */
-    public static void printException(Throwable t) {
+    public static void printException(Throwable t) { // NO_UCD (unused code)
 
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);

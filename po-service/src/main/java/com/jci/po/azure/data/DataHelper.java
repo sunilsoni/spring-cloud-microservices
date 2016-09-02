@@ -1,7 +1,5 @@
 package com.jci.po.azure.data;
 
-import java.util.Date;
-
 public class DataHelper {
 	
     private String partitionValue;

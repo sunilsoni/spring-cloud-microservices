@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.jci-po</groupId>
   <artifactId>po-service</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<!-- <version>0.1.0-SNAPSHOT</version> -->
    <inceptionYear>2016</inceptionYear>
     <parent>
   	<groupId>com.jci</groupId>

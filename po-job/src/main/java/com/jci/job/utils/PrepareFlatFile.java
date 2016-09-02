@@ -30,16 +30,13 @@ public class PrepareFlatFile {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PrepareFlatFile.class);
 	
-	public  Map<String,List<String>>  prepareSupplierData(HashMap<Integer,String> mapping,Map<String,List<HashMap<String, Object>>>  poNumToItemsMap,FlatFile config){
-		LOG.info("### Starting PrepareFlatFile.prepareSupplierData");
+	public  Map<String,List<String>>  prepareSuppData(HashMap<Integer,String> mapping,Map<String,List<HashMap<String, Object>>>  poNumToItemsMap,FlatFile config){
+		LOG.info("### Starting PrepareFlatFile.prepareSuppData");
 		
 		Map<String,List<String>> fileNameToRowsMap = new HashMap<String,List<String>>();
-		
 		List<String> lines = null;
 		
 		for (Map.Entry<String,List<HashMap<String, Object>>> entry : poNumToItemsMap.entrySet()){
-			//LOG.info(entry.getKey() + "/" + entry.getValue());
-		    
 			lines = new ArrayList<String>();
 			List<HashMap<String, Object>> list =  entry.getValue();
 			int size = list.size();
@@ -52,7 +49,7 @@ public class PrepareFlatFile {
 		    fileNameToRowsMap.put(fileName, lines);
 		}
 		
-		LOG.info("### Ending PrepareFlatFile.prepareSupplierData");
+		LOG.info("### Ending PrepareFlatFile.prepareSuppData");
 		return fileNameToRowsMap;
 	}
 	
@@ -116,7 +113,7 @@ public class PrepareFlatFile {
 		String timestamp =isoFormat.format(new Date());
 		
 		name.append(timestamp);
-		//name.append(".txt");  //Commented as we are using tempfile creation
+		name.append(".txt");  //Commented as we are using tempfile creation
 		return name.toString();
 		
 	}
@@ -159,14 +156,17 @@ public class PrepareFlatFile {
 			 
 			// ResponseEntity<String> result =  suppClient.sendFlatFile(requestMap);
 			 String result = template.postForObject((url+"?filename="+toFile.getName()), requestMap, String.class);
+			 /*if("success".equalsIgnoreCase(result)){  Sunil: Fix this issue
+				 isSuccess=true;
+			 }*/
 			LOG.info(" result--->"+ result);
-			 isSuccess=true;
+			 isSuccess=true;//Sunil: Fix this issue
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally{
 			try {
 				input.close();
-				//FileUtils.forceDelete(toFile);
+				FileUtils.forceDelete(toFile);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

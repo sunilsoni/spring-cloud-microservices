@@ -13,7 +13,7 @@ import com.microsoft.azure.storage.StorageException;
 
 public interface PoService {
 
-	String getLastPo() throws InvalidKeyException, URISyntaxException, StorageException ;
+	//String getLastPo() throws InvalidKeyException, URISyntaxException, StorageException ;
 	SegmentedDetailRes getSegmentedResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException;
 	SegmentedDetailRes getErrorResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException;
 	

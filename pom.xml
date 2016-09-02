@@ -33,6 +33,7 @@
         <java.version>1.8</java.version>
          <docker.plugin.version>0.4.11</docker.plugin.version>
          <docker.image.prefix>supplier-collaboration</docker.image.prefix>
+         <sonar.language>java</sonar.language>
     </properties>
 
     <dependencies>
@@ -60,6 +61,12 @@
 	        <artifactId>spring-cloud-starter-eureka</artifactId>
 	    </dependency>
 	    
+	    <dependency>
+		    <groupId>org.codehaus.sonar</groupId>
+		    <artifactId>sonar-maven-plugin</artifactId>
+		    <version>5.1</version>
+		</dependency>
+		
 	    </dependencies>
 
 	    <dependencyManagement>

@@ -7,9 +7,9 @@ import com.jci.po.azure.query.PaginationParam;
 
 public class ResultSet {
 	
-	List<HashMap<String, Object>> series ;
+	private List<HashMap<String, Object>> series ;
 	//List<HashMap<String, String>> errorData = new ArrayList<HashMap<String, String>>() ;
-	PaginationParam pagination ;
+	private PaginationParam pagination ;
 	public ResultSet() {
 		
 	}

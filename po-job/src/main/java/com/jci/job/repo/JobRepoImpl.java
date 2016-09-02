@@ -16,14 +16,12 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.BatchUpdateReq;
 import com.jci.job.api.res.BatchUpdateRes;
 import com.jci.job.azure.AzureStorage;
-import com.jci.job.azure.BatchInsertReq;
-import com.jci.job.entity.ItemEntity;
 import com.jci.job.entity.MiscDataEntity;
 import com.jci.job.entity.PoEntity;
-import com.jci.job.entity.SupplierEntity;
 import com.jci.job.utils.Constants;
 import com.jci.job.utils.QueryBuilder;
 import com.microsoft.azure.storage.OperationContext;
@@ -41,10 +39,6 @@ import com.microsoft.azure.storage.table.TableQuery;
 public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JobRepoImpl.class);
-	private static int errorCount;
-	private static int successCount;
-	private static int intransitCount;
-	static int counter=0;
 	final int batchSize = 20;
 	
 	@Autowired
@@ -58,8 +52,11 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 
 	@Override
 	public List<String> batchInsert(BatchInsertReq request){
-		LOG.info("#### Starting JobRepoImpl.batchInsert ###" +request);
-		boolean isMiscData=false;
+		LOG.info("#### Starting JobRepoImpl.batchInsert ###" );
+		int intransitCount=0;
+		int counter=0;
+		String tableName=null;
+		
 		String erpName = request.getErpName();
 		LOG.error("erpName--->"+erpName);
 		
@@ -69,8 +66,10 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		CloudTable cloudTable=null;
 		 
 		 for (Map.Entry<String, List<TableEntity>> entry : tableNameToEntityMap.entrySet()){
+			 
 		     try {
 					cloudTable = azureStorage.getTable(entry.getKey());
+					tableName=entry.getKey();
 				} catch (Exception e) {
 					//errorMap.put(entry.getKey(), entry.getValue());
 					LOG.error("### Exception in JobRepoImpl.batchInsert.getTable ###"+e);
@@ -78,23 +77,15 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					continue;
 				}
 		     LOG.error("Table Name--->"+cloudTable.getName());
-		  // Define a batch operation.
 			    TableBatchOperation batchOperation = new TableBatchOperation();
 			    List<TableEntity> value = entry.getValue();
-			    //LOG.error("value.size()--->"+value.size());
-			   // LOG.error("value.toString()--->"+value.toString());
-			    
 			    
 			    for (int i = 0; i < value.size(); i++) {
 			    	TableEntity entity = value.get(i) ;
-			    	if(entity instanceof PoEntity ){
-			    		counter= counter+1;
-			    		isMiscData=true;
-			    		poSuccessList.add(entity.getRowKey());
-			    	}else if(entity instanceof ItemEntity || entity instanceof SupplierEntity){
-			    		poSuccessList.add(entity.getRowKey());
-			    	}
+			    	counter= counter+1;
+			    	poSuccessList.add(entity.getRowKey());
 			    	batchOperation.insertOrReplace(entity);
+			    	
 			    	if (i!=0 && i % batchSize == 0) {
 			    		try {
 							cloudTable.execute(batchOperation);
@@ -114,7 +105,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			    if(batchOperation.size()>0){
 			    	try {
 						cloudTable.execute(batchOperation);
-						//successMap.put(entry.getKey(), entry.getValue());
 						intransitCount = intransitCount+counter;
 						counter = 0;
 					} catch (Exception e) {
@@ -125,40 +115,46 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					}
 			    }
 		 }	
-		 
-		 HashMap<String,List<String>> successMap = null;
-		 if(poSuccessList.size()>0){
-			 successMap =  new HashMap<String,List<String>>();;
-			 successMap.put(Constants.TABLE_PO_DETAILS, poSuccessList);
-			// response.setSuccessMap(successMap);
-		 }
-		 
-
 		//Insert MIsc data
-		 if(isMiscData){
-			 MiscDataEntity miscEntity=null;
-				try {
-					miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-					e.printStackTrace();
-				}
-				if(miscEntity!=null){
-					miscEntity.setIntransitCount((miscEntity.getIntransitCount()+intransitCount));
-				}else{
-					miscEntity = new MiscDataEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-					miscEntity.setIntransitCount(intransitCount);
-				}
-				
-				try {
-					updateStatusCountEntity(miscEntity);
-				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-					e.printStackTrace();
-				}
+		 if(intransitCount>0){
+			 addMiscEntity(erpName,tableName,intransitCount);
 		 }
 		
 		LOG.info("#### Ending JobRepoImpl.batchInsert ###"+poSuccessList );
 		return poSuccessList;		
 	}
+	
+	private void addMiscEntity(String erpName,String tableName,int intransitCount){
+		MiscDataEntity miscEntity=null;
+		
+		try {
+			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
+			e.printStackTrace();
+		}
+		
+		if(miscEntity==null){
+			miscEntity = new MiscDataEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
+		}
+		
+		if(Constants.TABLE_PO_DETAILS.equals(tableName)){
+			 miscEntity.setPoIntransitCount((miscEntity.getPoIntransitCount()+intransitCount));
+		}else if (Constants.TABLE_SUPPLIER.equals(tableName)){
+			 miscEntity.setSuppIntransitCount((miscEntity.getSuppIntransitCount()+intransitCount));
+		}else if(Constants.TABLE_ITEM.equals(tableName)){
+			 miscEntity.setItemIntransitCount((miscEntity.getItemIntransitCount()+intransitCount));
+		}
+		 
+		try {
+			updateStatusCountEntity(miscEntity);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
+			e.printStackTrace();
+		}
+	 
+	}
+	
 	
 	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws InvalidKeyException, URISyntaxException, StorageException {
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
@@ -194,7 +190,10 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	
 	@Override
 	public BatchUpdateRes batchUpdate(BatchUpdateReq request){		
-		LOG.info("#### Starting PoRepoImpl.batchUpdate ###" +request);
+		int errorCount=0;
+		int successCount=0;
+		
+		LOG.info("#### Starting JobRepoImpl.batchUpdate ###" +request);
 		BatchUpdateRes response = new BatchUpdateRes();
 		
 		String erpName = request.getErpName();
@@ -205,12 +204,14 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		
 		 CloudTable cloudTable=null;
 		 PoEntity entity = null;
+		 String tableName=null;
 		 
 		 for (Map.Entry<String, List<PoEntity>> entry : tableNameToEntityMap.entrySet()){
 		     try {
 					cloudTable = azureStorage.getTable(entry.getKey());
+					tableName=entry.getKey();
 				} catch (Exception e) {
-					LOG.error("### Exception in PoRepoImpl.batchUpdate.getTable ###"+e);
+					LOG.error("### Exception in JobRepoImpl.batchUpdate.getTable ###"+e);
 					e.printStackTrace();
 					response.setError(true);
 					response.setMessage("The Application has encountered an error! Table  does not exist !");
@@ -255,7 +256,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					    	}else{
 					    		errorCount = errorCount-1;
 					    	}
-							LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
+							LOG.error("### Exception in JobRepoImpl.batchUpdate.execute ###"+e);
 							e.printStackTrace();
 							continue;
 						}
@@ -267,16 +268,14 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 						cloudTable.execute(batchOperation);
 					//	counter = 0;
 					} catch (Exception e) {
-						//errorList.add(entity.getRowKey());
 						response.setError(true);
 						response.setMessage("The Application has encountered an error!");
-						//counter = 0;
 						if(request.isSuccess()){
 				    		successCount = successCount-1;
 				    	}else{
 				    		errorCount = errorCount-1;
 				    	}
-						LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
+						LOG.error("### Exception in JobRepoImpl.batchUpdate.execute ###"+e);
 						e.printStackTrace();
 						continue;
 					}
@@ -287,45 +286,84 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		 
 		 LOG.info("errorCount-->"+errorCount);
 		 LOG.info("successCount-->"+successCount);
-		   
-		//Insert MIsc data: need to make sure only for podetails
+		 updateMiscEntity(erpName,tableName,successCount,errorCount);
+		 
+		LOG.info("#### Ending JobRepoImpl.batchUpdate ###" );
+		return response;
+		
+	}//batchUpdate
+	
+	private void updateMiscEntity(String erpName,String tableName,int successCount,int errorCount){
 		MiscDataEntity miscEntity=null;
+		
 		try {
 			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			response.setError(true);
-			response.setMessage("The Application has encountered an error!");
+			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
 			e.printStackTrace();
 		}
 		
-		int totalCount=0;
-		if(errorCount>0){
-			  int sum1 = miscEntity.getErrorCount()+errorCount;
-			  miscEntity.setErrorCount((sum1));
-			  totalCount=errorCount;
-		}
-		if(successCount>0){
-			 int sum1 = miscEntity.getProcessedCount()+successCount;
-			 miscEntity.setProcessedCount((sum1));
-			 totalCount=totalCount+successCount;
-		}
-		if(totalCount>0){
-			int sum2 = miscEntity.getIntransitCount()-totalCount;
-			miscEntity.setIntransitCount(sum2);
+		if(miscEntity==null){
+			miscEntity = new MiscDataEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
 		}
 		
+		int totalCount=0;
+		if(Constants.TABLE_PO_DETAILS.equals(tableName)){
+			if(errorCount>0){
+				int sum1 = miscEntity.getPoErrorCount()+errorCount;
+				miscEntity.setPoErrorCount((sum1));
+				totalCount=errorCount;
+			}
+			if(successCount>0){
+				int sum1 = miscEntity.getPoProcessedCount()+successCount;
+				miscEntity.setPoProcessedCount((sum1));
+				totalCount=totalCount+successCount;
+			}
+			if(totalCount>0){
+				int sum2 = miscEntity.getPoIntransitCount()-totalCount;
+				miscEntity.setPoIntransitCount(sum2);
+			}
+		}else if (Constants.TABLE_SUPPLIER.equals(tableName)){
+			if(errorCount>0){
+				 int sum1 = miscEntity.getSuppErrorCount()+errorCount;
+				 miscEntity.setSuppErrorCount((sum1));
+				 totalCount=errorCount;
+			}
+			if(successCount>0){
+				 int sum1 = miscEntity.getSuppProcessedCount()+successCount;
+				 miscEntity.setSuppProcessedCount((sum1));
+				 totalCount=totalCount+successCount;
+			}
+			if(totalCount>0){
+				int sum2 = miscEntity.getSuppIntransitCount()-totalCount;
+				miscEntity.setSuppIntransitCount(sum2);
+			}
+			 
+		}else if(Constants.TABLE_ITEM.equals(tableName)){			 
+			if(errorCount>0){
+				 int sum1 = miscEntity.getItemErrorCount()+errorCount;
+				 miscEntity.setItemErrorCount((sum1));
+				 totalCount=errorCount;
+			}
+			if(successCount>0){
+				 int sum1 = miscEntity.getItemProcessedCount()+successCount;
+				 miscEntity.setItemProcessedCount((sum1));
+				 totalCount=totalCount+successCount;
+			}
+			if(totalCount>0){
+				int sum2 = miscEntity.getItemIntransitCount()-totalCount;
+				miscEntity.setItemIntransitCount(sum2);
+			}
+		}
+		 
 		if(totalCount>0){
 			try {
 				updateStatusCountEntity(miscEntity);
 			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-				response.setError(true);
-				response.setMessage("The Application has encountered an error!");
+				LOG.error("### Exception in JobRepoImpl.updateMiscEntity ####",e);
 				e.printStackTrace();
 			}
 		}
-		LOG.info("#### Ending PoRepoImpl.batchUpdate ###" );
-		return response;
-		
 	}
 
    

@@ -2,11 +2,11 @@ package com.jci.item.azure.query;
 
 public class PaginationParam {
 	
-	String lastPartition ;
-	String lastRow ;
+	private String lastPartition ;
+	private String lastRow ;
 	
-	String nextPartition ;
-	String nextRow ;
+	private String nextPartition ;
+	private String nextRow ;
 	
 	public String getLastPartition() {
 		return lastPartition;

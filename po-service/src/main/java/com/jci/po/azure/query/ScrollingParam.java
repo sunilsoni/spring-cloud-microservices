@@ -10,7 +10,7 @@ public class ScrollingParam {
 	private int size ;
 	
 	public ScrollingParam() {
-		this.size = 2 ;//Need to change
+		this.size = 100 ;//Need to change
 	}
 	
 	public String getPartition() {

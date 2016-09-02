@@ -8,9 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
-
 @EnableZuulProxy
-@EnableEurekaClient
+@EnableEurekaClient  
 @SpringBootApplication
 public class Application {
 
@@ -21,9 +20,7 @@ public class Application {
 	 *            the arguments
 	 */
 	public static void main(String[] args) {
-		System.out.println("### Starting Application.main ####");
 		SpringApplication.run(Application.class, args);
-		System.out.println("### Ending Application.main ####");
 	}
 
 }

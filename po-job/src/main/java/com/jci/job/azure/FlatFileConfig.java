@@ -20,7 +20,7 @@ public class FlatFileConfig { // NO_UCD (unused code)
 	  private  String itemUrl;
 	  
 	  @Value("${flat.file.destination.supplier.folder.url}")
-	  private  String supplierUrl;
+	  private  String suppUrl;
 	  
 	  @Value("${flat.file.destination.region.url}")
 	  private  String regionUrl;
@@ -48,7 +48,7 @@ public class FlatFileConfig { // NO_UCD (unused code)
 
 	  @Bean
 	  public FlatFile flatFile() {
-		  FlatFile ff = new FlatFile(e2open, poUrl,itemUrl,supplierUrl, senderDuns,receiverDuns,messageType,version,siteId,dateFormat,timeZone,regionUrl);
+		  FlatFile ff = new FlatFile(e2open, poUrl,itemUrl,suppUrl, senderDuns,receiverDuns,messageType,version,siteId,dateFormat,timeZone,regionUrl);
 		  return ff;
 	  }
 	  

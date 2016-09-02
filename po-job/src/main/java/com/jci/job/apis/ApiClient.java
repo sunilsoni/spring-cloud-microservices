@@ -12,8 +12,8 @@ import com.jci.job.api.res.ItemDetailsRes;
 import com.jci.job.api.res.ItemSuccessRes;
 import com.jci.job.api.res.PoDetailsRes;
 import com.jci.job.api.res.PoSuccessRes;
-import com.jci.job.api.res.SupplierDetailsRes;
-import com.jci.job.api.res.SupplierSuccessRes;
+import com.jci.job.api.res.SuppDetailsRes;
+import com.jci.job.api.res.SuppSuccessRes;
 
 /**
  * <p>
@@ -22,7 +22,7 @@ import com.jci.job.api.res.SupplierSuccessRes;
  *
  * @author cdevdat, csonisk
  */
-@FeignClient(name = "apigee", url = "http://apidev1.jci.com:9055/v1/an/suppliercollaboration", decode404 = true)
+@FeignClient(value = "apigee", url = "${apigee.staging.url}")
 public interface ApiClient {
 
 	/**
@@ -64,11 +64,11 @@ public interface ApiClient {
 	 * @return SupplierDetailsRes
 	 */
 	@RequestMapping(value = "/suppliers", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<SupplierDetailsRes> getSuppliers(@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant,@RequestParam("suppliername") String suppliername);
+	public ResponseEntity<SuppDetailsRes> getSupp(@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant,@RequestParam("suppname") String suppname);
 
 
 	@RequestMapping(value = "/suppliersUpdate", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getSuppliersRes(@RequestBody SupplierSuccessRes poList,@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant);
+	public String getSuppRes(@RequestBody SuppSuccessRes poList,@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant);
 
 	
 }

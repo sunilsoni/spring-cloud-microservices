@@ -29,7 +29,7 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	private String userName;
 	private String globalId;	
 	private String comment;	
-	private String supplierType;
+	private String suppType;
 	private String grNum ;	
 	private boolean poACK ;
 	private boolean asn ;
@@ -93,15 +93,6 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 		this.comment = comment;
 	}
 
-	public String getSupplierType() {
-		return supplierType;
-	}
-
-	public void setSupplierType(String supplierType) {
-		this.supplierType = supplierType;
-	}
-
-
 	public String getGrNum() {
 		return grNum;
 	}
@@ -142,11 +133,19 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 		this.plant = plant;
 	}
 
+	public String getSuppType() {
+		return suppType;
+	}
+
+	public void setSuppType(String suppType) {
+		this.suppType = suppType;
+	}
+
 	@Override
 	public String toString() {
-		return "PoEntity [orderCreationDate=" + orderCreationDate + ", status=" + status + ", erpName=" + erpName
+		return "GrEntity [orderCreationDate=" + orderCreationDate + ", status=" + status + ", erpName=" + erpName
 				+ ", description=" + description + ", userName=" + userName + ", globalId=" + globalId + ", comment="
-				+ comment + ", supplierType=" + supplierType + ", grNum=" + grNum + ", poACK=" + poACK + ", asn=" + asn
+				+ comment + ", suppType=" + suppType + ", grNum=" + grNum + ", poACK=" + poACK + ", asn=" + asn
 				+ ", region=" + region + ", plant=" + plant + "]";
 	}
 

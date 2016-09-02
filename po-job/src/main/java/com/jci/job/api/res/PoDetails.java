@@ -5,7 +5,7 @@ import java.util.List;
 public class PoDetails {
 
 	private String orderNumber;
-	private String supplierType;
+	private String suppType;
 	private boolean poACK;
 	private boolean asn;
 	private String grNumber;
@@ -23,14 +23,6 @@ public class PoDetails {
 	}
 
 
-	public String getSupplierType() {
-		return supplierType;
-	}
-
-
-	public void setSupplierType(String supplierType) {
-		this.supplierType = supplierType;
-	}
 
 
 	public boolean isPoACK() {
@@ -83,13 +75,24 @@ public class PoDetails {
 	}
 
 
-	@Override
-	public String toString() {
-		return "PoDetails [orderNumber=" + orderNumber + ", supplierType=" + supplierType + ", poACK=" + poACK
-				+ ", asn=" + asn + ", grNumber=" + grNumber + ", orderCreationDate=" + orderCreationDate + ", itemList="
-				+ itemList + "]";
+	public String getSuppType() {
+		return suppType;
 	}
 
 
+	public void setSuppType(String suppType) {
+		this.suppType = suppType;
+	}
+
+
+	@Override
+	public String toString() {
+		return "PoDetails [orderNumber=" + orderNumber + ", suppType=" + suppType + ", poACK=" + poACK + ", asn=" + asn
+				+ ", grNumber=" + grNumber + ", orderCreationDate=" + orderCreationDate + ", itemList=" + itemList
+				+ "]";
+	}
+
+
+	
 	
 }

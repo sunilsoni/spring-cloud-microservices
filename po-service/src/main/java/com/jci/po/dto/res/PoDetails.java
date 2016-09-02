@@ -1,6 +1,6 @@
 package com.jci.po.dto.res;
 
-public class PoDetails {
+class PoDetails {
 
 	private String key;
 	private String poNo;

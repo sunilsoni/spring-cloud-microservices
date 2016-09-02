@@ -28,7 +28,7 @@ import com.microsoft.azure.storage.StorageException;
  */
 
 @RestController 
-public class ItemController {
+public class ItemController {// NO_UCD (unused code)
 	
 	private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 	
@@ -48,6 +48,7 @@ public class ItemController {
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			response.setError(true);
 			response.setMessage(e.getMessage());
+			LOG.error("### Exception in PoController.getSegmentedItemDetails ###",e);
 			e.printStackTrace();
 		}
 		LOG.info("### Ending PoController.getSegmentedItemDetails ###" +response);

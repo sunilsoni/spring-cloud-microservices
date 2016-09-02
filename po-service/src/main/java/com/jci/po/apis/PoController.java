@@ -33,9 +33,9 @@ import com.microsoft.azure.storage.StorageException;
  * @author csonisk
  */      
 
-@RestController 
+@RestController  
 @RefreshScope
-public class PoController {
+public class PoController { // NO_UCD (unused code)
 	
 	private static final Logger LOG = LoggerFactory.getLogger(PoController.class);
 	
@@ -53,6 +53,7 @@ public class PoController {
 		try {
 			response = poService.getSegmentedResultSet(request);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			LOG.error("### Exception in   ####",e);
 			response.setError(true);
 			response.setMessage(e.getMessage());
 			e.printStackTrace();
@@ -77,6 +78,7 @@ public class PoController {
 		try {
 			response = poService.getErrorResultSet(request);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			LOG.error("### Exception in   ####",e);
 			response.setError(true);
 			response.setMessage(e.getMessage());
 			e.printStackTrace();
@@ -99,6 +101,7 @@ public class PoController {
 		try {
 			response = poService.processErrorPos(request);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			LOG.error("### Exception in   ####",e);
 			response.setError(true);
 			response.setMessage(e.getMessage());
 			e.printStackTrace();
@@ -127,6 +130,7 @@ public class PoController {
 			res.setError(true);
 			res.setMessage(e.getMessage());
 			e.printStackTrace();
+			LOG.error("### Exception in   ####",e);
 		}
 
 		long endTime = System.nanoTime();

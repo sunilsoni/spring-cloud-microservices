@@ -5,20 +5,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.res.ItemDetailsRes;
 import com.jci.job.api.res.PoDetails;
 import com.jci.job.api.res.PoDetailsRes;
-import com.jci.job.api.res.SupplierDetailsRes;
-import com.jci.job.azure.BatchInsertReq;
+import com.jci.job.api.res.SuppDetailsRes;
 import com.jci.job.entity.ItemEntity;
 import com.jci.job.entity.PoEntity;
 import com.jci.job.entity.PoItemsEntity;
-import com.jci.job.entity.SupplierEntity;
+import com.jci.job.entity.SuppEntity;
 import com.microsoft.azure.storage.table.TableEntity;
 
 public class PrepareBatchInsertReq {
@@ -49,7 +46,7 @@ public class PrepareBatchInsertReq {
 			poEntity.setAsn( po.isAsn());
 
 			//Sunil: Need to discuss this 
-			//poEntity.setDestSuppliers("");			
+			//poEntity.setDestSupp("");			
 			
 			poEntity.setErpName(erpName);
 			poEntity.setRegion(region);
@@ -59,7 +56,7 @@ public class PrepareBatchInsertReq {
 			poEntity.setOrderCreationDate(CommonUtils.stringToDate(orderCreationDate));
 			poEntity.setPoACK(po.isPoACK());
 			poEntity.setStatus(Constants.STATUS_IN_TRANSIT);
-			poEntity.setSupplierType( po.getSupplierType());
+			poEntity.setSuppType( po.getSuppType());
 			List<Object> itemList= po.getItemList();
 			PoItemsEntity itemEntity = null;
 			
@@ -93,31 +90,31 @@ public class PrepareBatchInsertReq {
 		return res;
 	}
 	
-	public static BatchInsertReq prepareSupplierReq(SupplierDetailsRes responseBody,String erpName, String region, String plant,String supplierID) {
+	public static BatchInsertReq prepareSuppReq(SuppDetailsRes responseBody,String erpName, String region, String plant,String suppID) {
 		ObjectMapper mapper = new ObjectMapper();
-		List<Object>  supplierList =  responseBody.getSupplierList();
+		List<Object>  suppList =  responseBody.getSuppList();
 		String partitionKey = CommonUtils.getPartitionKey(erpName);
-		List<TableEntity> supplierDetailsList =  new ArrayList<TableEntity>();
+		List<TableEntity> suppDetailsList =  new ArrayList<TableEntity>();
 		
-		SupplierEntity entity=null;
-		for (Object supplierVal : supplierList) {
+		SuppEntity entity=null;
+		for (Object suppVal : suppList) {
 			JsonNode actualObj;
 			try {
-				actualObj = mapper.readTree(mapper.writeValueAsString(supplierVal));
-				entity = new SupplierEntity(partitionKey,(actualObj.get(supplierID).asText()));
+				actualObj = mapper.readTree(mapper.writeValueAsString(suppVal));
+				entity = new SuppEntity(partitionKey,(actualObj.get(suppID).asText()));
 				
-				entity.setJsonString(mapper.writeValueAsString(supplierVal));
+				entity.setJsonString(mapper.writeValueAsString(suppVal));
 				entity.setStatus(Constants.STATUS_IN_TRANSIT);
 				entity.setRegion(region);
 				entity.setPlant(plant);
-				supplierDetailsList.add(entity);
+				suppDetailsList.add(entity);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = new HashMap<String,List<TableEntity>>();
-		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, supplierDetailsList);
+		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, suppDetailsList);
 		
 		BatchInsertReq res = new BatchInsertReq();
 		res.setErpName(erpName);
@@ -126,7 +123,7 @@ public class PrepareBatchInsertReq {
 		return res;
 	}
 	
-	public static BatchInsertReq prepareItemReq(ItemDetailsRes responseBody,String erpName, String region, String plant, String customerItemID,String supplierID) {
+	public static BatchInsertReq prepareItemReq(ItemDetailsRes responseBody,String erpName, String region, String plant, String customerItemID,String suppID) {
 		ObjectMapper mapper = new ObjectMapper();
 		List<Object>  itemList =  responseBody.getItemList();
 		String partitionKey = CommonUtils.getPartitionKey(erpName);
@@ -137,7 +134,7 @@ public class PrepareBatchInsertReq {
 			JsonNode actualObj;
 			try {
 				actualObj = mapper.readTree(mapper.writeValueAsString(itemVal));
-				entity = new ItemEntity(partitionKey,(actualObj.get(customerItemID).asText()+"_"+actualObj.get(supplierID).asText()));
+				entity = new ItemEntity(partitionKey,(actualObj.get(customerItemID).asText()+"_"+actualObj.get(suppID).asText()));
 				entity.setJsonString(mapper.writeValueAsString(itemVal));
 				entity.setStatus(Constants.STATUS_IN_TRANSIT);
 				entity.setRegion(region);

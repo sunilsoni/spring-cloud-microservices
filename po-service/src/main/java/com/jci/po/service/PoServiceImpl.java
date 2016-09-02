@@ -1,29 +1,22 @@
 package com.jci.po.service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URLConnection;
 import java.security.InvalidKeyException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import com.jci.po.azure.FlatFile;
 import com.jci.po.azure.data.DataHelper;
@@ -47,7 +40,7 @@ import com.microsoft.azure.storage.StorageException;
 
 @Service
 @RefreshScope
-public class PoServiceImpl implements PoService{
+public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 
 	private static final Logger LOG = LoggerFactory.getLogger(PoServiceImpl.class);
 	
@@ -57,24 +50,9 @@ public class PoServiceImpl implements PoService{
     @Value("${all.erp.names}")
     private String allErps;
     
-    @Value("${all.supplier.names}")
-    private String allSuppliers;
-	
-	@Autowired
-	private ApiClientService apiService;
 	
 	@Autowired
 	private FlatFile config;
-	
-	 @Override
-	 public String getLastPo() throws InvalidKeyException, URISyntaxException, StorageException {
-		 /*LOG.info("### Starting Ending PoServiceImpl.getLastPo ### " );
-		 
-		 return repo.selectPos().stream()
-        .sorted(Comparator.comparing(PoEntity::getTimestamp).reversed())
-        .map(PoEntity::getOrderNumber).findFirst().orElseThrow(() -> new NullPointerException("No Data"));*/
-		 return null;
-	 }
 
 	
 	@Override
@@ -97,7 +75,7 @@ public class PoServiceImpl implements PoService{
 		
 		SegmentedDetailRes response = new SegmentedDetailRes(); 
 		HashMap<String, ResultSet>  resultSetMap = new HashMap<String, ResultSet>();
-		HashMap<String, ResultSet>  supplierMap = new HashMap<String, ResultSet>();
+		HashMap<String, ResultSet>  suppMap = new HashMap<String, ResultSet>();
 		HashMap<String, ResultSet>  itemMap = new HashMap<String, ResultSet>();
 		HashMap<String, ResultSet>  errorMap = new HashMap<String, ResultSet>();
 		
@@ -115,15 +93,6 @@ public class PoServiceImpl implements PoService{
 				resultSet = repo.getSegmentedResultSet(param, azureRequest);
 				resultSetMap.put(erpArr[i], resultSet);
 				
-				azureRequest.setErrorDataRequired(false);
-				azureRequest.setTableName(Constants.TABLE_SUPPLIER);
-				resultSet = repo.getSegmentedResultSet(param, azureRequest);
-				supplierMap.put(erpArr[i], resultSet);
-				
-				azureRequest.setTableName(Constants.TABLE_ITEM);
-				resultSet = repo.getSegmentedResultSet(param, azureRequest);
-				itemMap.put(erpArr[i], resultSet);
-				
 				azureRequest.setTableName(Constants.TABLE_PO_DETAILS); 
 				azureRequest.setErrorDataRequired(true);
 				resultSet = repo.getSegmentedResultSet(param, azureRequest);
@@ -134,7 +103,7 @@ public class PoServiceImpl implements PoService{
 			response.setResultSet(resultSetMap);
 			response.setErrorData(errorMap);
 			
-			response.setSupplierData(supplierMap);
+			response.setSuppData(suppMap);
 			response.setItemData(itemMap);			
 		}else{
 			azureRequest = new DataHelper();
@@ -148,7 +117,7 @@ public class PoServiceImpl implements PoService{
 		response.setMessage(Constants.JSON_OK);
 		
 		//Remove this
-		HashMap userData = new HashMap();
+		HashMap<String,String> userData = new HashMap<String,String>();
 		userData.put("UserName", "Sunil Soni");
 		userData.put("GlobalId", "csonisk");
 		userData.put("Role", "Admin");
@@ -221,36 +190,27 @@ public class PoServiceImpl implements PoService{
 		Map<String,List<HashMap<String, Object>>>  poNumToItemsMap = repo.getErrorPos(partitionKey,poList);
 		LOG.info(" poNumToItemsMap--->"+ poNumToItemsMap);
 		
-		//Starting JS poc Code
-		/*TempRequest tempReq = new TempRequest();
-		tempReq.setPoNumToItemsMap(poNumToItemsMap);
-		TempResponse flatFileRes  = apiService.postSupplierData(tempReq);
-		LOG.info(" flatFileRes--->"+ flatFileRes);		
-		if(true){//Sunil: Remove below if condition 
-			return response;
-		}*/
-		//Ending JS poc CODE
-		
-		
-		
 		CommonUtils utils = new CommonUtils();
 		//Starting JAVA Code to process flat file
-		HashMap<String,HashMap<Integer,String>>  supplierNameToMapping = utils.getDestMapping(config.getPoUrl());
-		LOG.info(" supplierNameToMapping--->"+ supplierNameToMapping);
+		HashMap<String,HashMap<Integer,String>>  suppNameToMapping = utils.getDestMapping(config.getPoUrl());
+		
+		
+		LOG.info(" suppNameToMapping--->"+ suppNameToMapping);
 		
 		PrepareFlatFile file = new PrepareFlatFile();
 		Map<String,List<String>> fileNameToRowsMap = null;
 		
-		
-		String supplierName=null;
+		List<String> successList = new ArrayList<String>();
+		List<String> errorList = new ArrayList<String>();
+		Map<String,List<String>> pkToSuccessList = new HashMap<String,List<String>>();
 		
 		 /**
 		  * Loop: No of  Supplier mapping files present in directory  
 		  */
-		for (Map.Entry<String,HashMap<Integer,String>> mapping : supplierNameToMapping.entrySet()){
-			supplierName = mapping.getKey();
+		for (Map.Entry<String,HashMap<Integer,String>> mapping : suppNameToMapping.entrySet()){
+		//	suppName = mapping.getKey();
 			
-			fileNameToRowsMap = file.prepareSupplierData(mapping.getValue(),poNumToItemsMap,config);
+			fileNameToRowsMap = file.prepareSuppData(mapping.getValue(),poNumToItemsMap,config);
 			
 			/**
 			 * Code to process  flat files for  suppliers
@@ -262,94 +222,74 @@ public class PoServiceImpl implements PoService{
 				 
 				 try {
 				    	FileUtils.writeLines(toFile,"UTF-8", entry.getValue(),false);
+				    	//toFile = File.createTempFile(entry.getKey(), ".txt");
 					} catch (IOException e) {
 						e.printStackTrace();
-						//finalRes.setError(true);
-						//return finalRes;
 					}
-				// nameToFileMap.put(entry.getKey(), toFile);
-				 
-				 String mimeType= URLConnection.guessContentTypeFromName(toFile.getName());
-				 LOG.info(" mimeType--->"+ mimeType);
-				 
-				 //start
-				 try{
-					 RestTemplate template = new RestTemplate();
-
-					 MultiValueMap<String, Object> requestMap = new LinkedMultiValueMap<String, Object>();
-					 requestMap.add("name", toFile.getName());
-					 requestMap.add("filename", toFile.getName());
-					 requestMap.set("Content-Type",mimeType);
-					 requestMap.set("Content-Length",(int)toFile.length());			 
-					 
-					 InputStream input = new FileInputStream(toFile);
-					 ByteArrayResource contentsAsResource = new ByteArrayResource(IOUtils.toByteArray(input)){
-					             @Override
-					             public String getFilename(){
-					                 return entry.getKey();
-					             }
-					 };
-					 requestMap.add("file", contentsAsResource);
-					// map.add("file", res.getLines());
-					 
-					 String result = template.postForObject((config.getSupplierUrl()+"?filename="+toFile.getName()), requestMap, String.class);
-					 
-					 LOG.info(" result--->"+ result);
-					 
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
-				 //end
-			}
-			//Ending JAVA Code to process flat file
-			
-			/*FlatFileReq flatFileReq = new FlatFileReq();
-			flatFileReq.setNameToFileMap(nameToFileMap);
-			
-			
-			FlatFileRes flatFileRes  = apiService.processFlatFile(flatFileReq);
-			LOG.info("flatFileRes--->"+flatFileRes);
-			*/
-			BatchUpdateReq req = new  BatchUpdateReq ();
-			
-			//if data processing is success than update status success in db
-			req.setSuccess(true);//Sunil: Where are we setting this false? 
-			
-			//if data processing is not successful than update status error in db
-			//req.setSuccess(false);
-			
-			//dynamic based on supplier mapping file name
-			req.setDestination(supplierName);
-			
-			
-			req.setErpName(request.getErpName().toUpperCase());
-			
-			List<PoEntity>  poEntity = repo.getPoDetails(partitionKey,poList);
-			HashMap<String,List<PoEntity>> tableNameToEntityMap = new HashMap<String,List<PoEntity>>();
-			tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, poEntity);
-			
-			
-			req.setTableNameToEntityMap(tableNameToEntityMap);
-			req.setGlobalId(request.getGlobalId());
-			req.setUserName(request.getUserName());
-			
-			req.setComment(request.getComment());
+				    boolean isSuccess =  PrepareFlatFile.processFile(toFile,config.getE2openUrl());
+					LOG.info(" isSuccess--->"+ isSuccess);
 					
-			response =  repo.batchUpdate(req);
-			response.setGraphData(repo.getGraphData());
+					LOG.info(" entry.getKey()--->"+ entry.getKey());
+					if(isSuccess){
+						successList.add(entry.getKey().split("\\.")[0]);
+					}else{
+						errorList.add(entry.getKey().split("\\.")[0]);
+					}
+			}
 		}
 		
+		
+		if(successList.size()>0){
+			pkToSuccessList.put(request.getErpName(), successList);
+		}
+		/*if(errorList.size()>0){
+			pkToErrorList.put(request.getErpName(), errorList);
+		}*/
+
+		//Update status in DB
+		boolean isUpdated  = updateStatus(pkToSuccessList,request.getGlobalId(),request.getUserName(),request.getComment());		
+		 response = new BatchUpdateRes();
+		 response.setGraphData(repo.getGraphData());
+		 if(isUpdated){
+			 response.setSuccessList(successList);
+		 }
+		 response.setErrorList(errorList);
 		LOG.info("### Ending PoServiceImpl.processErrorPos ###"+response );
 		return response;
 	}
 
+	private boolean updateStatus(Map<String,List<String>> pkToSuccessList,String globalId,String userName,String comment) {
+		boolean isUpdated=false;
+		BatchUpdateReq updateReq =null;
+		for (Map.Entry<String,List<String>> entry : pkToSuccessList.entrySet()){
+			updateReq = new  BatchUpdateReq ();
+			updateReq.setSuccess(true);
+			updateReq.setErpName(entry.getKey().toUpperCase());
+			 
+			String partitionKey = CommonUtils.getPartitionKey(entry.getKey().toUpperCase());
+			try {
+				List<PoEntity> poEntity = repo.getPoDetails(partitionKey,entry.getValue());
+				HashMap<String,List<PoEntity>> tableNameToEntityMap = new HashMap<String,List<PoEntity>>();
+				tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, poEntity);
+				updateReq.setTableNameToEntityMap(tableNameToEntityMap);
+				
+				updateReq.setComment(comment);
+				updateReq.setUserName(userName);
+				updateReq.setGlobalId(globalId);
+				repo.batchUpdate(updateReq);
+				isUpdated=true;
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				LOG.error("### Exception in   ####",e);
+				e.printStackTrace();
+			}
+		}
+		return isUpdated;
+	} 
+	
 	@Override
 	public PoItemDetailRes getPoItemDetail(PoItemDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("### Starting PoServiceImpl.getPoItemDetail ###"+request );
-
-		
 		PaginationParam paginationParam = request.getPaginationParam();
-		
 		ScrollingParam param  = new ScrollingParam();
 		
 		if(paginationParam!=null){
@@ -364,13 +304,9 @@ public class PoServiceImpl implements PoService{
 		azureRequest.setErpName(request.getErpName());
 		azureRequest.setPoNum(request.getPoNum());
 		azureRequest.setPartitionValue(AzureUtils.getPartitionKey(request.getErpName()));
-		
 		azureRequest.setTableName(Constants.TABLE_PO_ITEM_DETAILS);
-		
 		ResultSet resultSet = repo.getPoItemDetail(param, azureRequest);
-		
 		PoItemDetailRes response = new PoItemDetailRes();
-		
 		response.setResultSet(resultSet);
 		response.setMessage(Constants.JSON_OK);
 		

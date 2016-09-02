@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.BatchUpdateReq;
 import com.jci.job.api.res.BatchUpdateRes;
-import com.jci.job.azure.BatchInsertReq;
 import com.jci.job.entity.PoEntity;
 import com.microsoft.azure.storage.StorageException;
 
