@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.supp.apis;
 
 import java.net.URISyntaxException;
@@ -19,6 +24,7 @@ import com.jci.supp.utils.AzureUtils;
 import com.jci.supp.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
+
 /**
  * <p>
  * <strong>REST layer for managing Supplier data.</strong>
@@ -30,14 +36,21 @@ import com.microsoft.azure.storage.StorageException;
 @RestController 
 public class SuppController { // NO_UCD (unused code)
 	
-	private static final Logger LOG = LoggerFactory.getLogger(SuppController.class);
+	/** The Constant LOG. */
+ private static final Logger LOG = LoggerFactory.getLogger(SuppController.class);
 	
+	/** The po service. */
 	@Autowired
 	private SuppService  poService;	
 	
+	/**
+	 * Gets the supplier details.
+	 *
+	 * @param request the request
+	 * @return the supplier details
+	 */
 	@RequestMapping(value = "/getSegmentedSupplierDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailRes getSupplierDetails(@RequestBody SegmentedDetailReq request){
-		LOG.info("### Starting PoController.getSupplierDetails ###"+request );
 		request.setTableName(Constants.TABLE_SUPPLIER);
 		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
 		request.setFirstRequest(false);
@@ -48,10 +61,9 @@ public class SuppController { // NO_UCD (unused code)
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			response.setError(true);
 			response.setMessage(e.getMessage());
-			e.printStackTrace();
+			
 			LOG.error("### Exception in   ####",e);
 		}
-		LOG.info("### Ending PoController.getSupplierDetails ###" +response);
 		return response;
 	}	
 

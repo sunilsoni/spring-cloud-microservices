@@ -15,7 +15,7 @@
   
     <properties>
         <docker.plugin.version>0.4.11</docker.plugin.version>
-        <start-class>com.jci.supplier.Application</start-class>
+        <start-class>com.jci.supp.Application</start-class>
         <docker.image.prefix>supplier-collaboration</docker.image.prefix>
     </properties>
     

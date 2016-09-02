@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.item.repo;
 
 import java.io.IOException;
@@ -9,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 //import org.springframework.transaction.annotation.Transactional;
@@ -32,15 +39,28 @@ import com.microsoft.azure.storage.table.EntityProperty;
 import com.microsoft.azure.storage.table.TableQuery;
 
 
+/**
+ * The Class ItemRepoImpl.
+ */
 @Repository
-public class ItemRepoImpl implements ItemRepo { // NO_UCD (unused code)
+public class ItemRepoImpl implements ItemRepo { 
+ /** The Constant LOG. */
+ // NO_UCD (unused code)
+	private static final Logger LOG = LoggerFactory.getLogger(ItemRepoImpl.class);
 	
+	/** The counter. */
 	static int counter=0;
+	
+	/** The batch size. */
 	final int batchSize = 15;
 	
+	/** The azure storage. */
 	@Autowired
 	private AzureStorage azureStorage;
 
+   /* (non-Javadoc)
+    * @see com.jci.item.repo.ItemRepo#getSegmentedResultSet(com.jci.item.azure.query.ScrollingParam, com.jci.item.azure.data.DataHelper)
+    */
    @Override
 	public ResultSet getSegmentedResultSet(ScrollingParam param,DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException  {
 		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
@@ -71,7 +91,7 @@ public class ItemRepoImpl implements ItemRepo { // NO_UCD (unused code)
 		
 		HashMap<String, Object> hashmap;
 		
-		List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
+		List<HashMap<String, Object>> series = new ArrayList<>();
 		DynamicTableEntity row;
 		EntityProperty ep;
 		ObjectMapper mapper = new ObjectMapper(); 
@@ -81,7 +101,7 @@ public class ItemRepoImpl implements ItemRepo { // NO_UCD (unused code)
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
-			hashmap = new HashMap<String, Object>();
+			hashmap = new HashMap<>();
 			for (String key : map.keySet()) {
 				ep = map.get(key);
 				if(Constants.JSON_STRING.equalsIgnoreCase(key)){					
@@ -90,7 +110,7 @@ public class ItemRepoImpl implements ItemRepo { // NO_UCD (unused code)
 						hashmap.put("id", row.getRowKey());
 						series.add(hashmap);
 					} catch (IOException e) {
-						e.printStackTrace();
+						LOG.error("### Exception in   ####",e);
 					}				
 				}				
 			}

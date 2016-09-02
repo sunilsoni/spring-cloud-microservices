@@ -1,11 +1,14 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.supp.service;
 
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,17 +22,22 @@ import com.jci.supp.repo.SuppRepo;
 import com.jci.supp.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
+
+/**
+ * The Class SuppServiceImpl.
+ */
 @Service
 public class SuppServiceImpl implements SuppService{ // NO_UCD (unused code)
 
-	private static final Logger LOG = LoggerFactory.getLogger(SuppServiceImpl.class);
-	
-	@Autowired
+	/** The repo. */
+ @Autowired
 	private SuppRepo repo;
 	
+	/* (non-Javadoc)
+	 * @see com.jci.supp.service.SuppService#getSupplierResultSet(com.jci.supp.dto.SegmentedDetailReq)
+	 */
 	@Override
 	public SegmentedDetailRes getSupplierResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException  {
-		LOG.info("### Starting Ending PoServiceImpl.getSupplierResultSet ### " );
 		PaginationParam paginationParam = request.getPaginationParam();
 		
 		ScrollingParam param  = new ScrollingParam();
@@ -46,7 +54,7 @@ public class SuppServiceImpl implements SuppService{ // NO_UCD (unused code)
 		ResultSet resultSet = null;
 		
 		SegmentedDetailRes response = new SegmentedDetailRes(); 
-		HashMap<String, ResultSet>  resultSetMap = new HashMap<String, ResultSet>();
+		HashMap<String, ResultSet>  resultSetMap = new HashMap<>();
 		
 		azureRequest = new DataHelper();
 		azureRequest.setErpName(request.getErpName());
@@ -54,12 +62,9 @@ public class SuppServiceImpl implements SuppService{ // NO_UCD (unused code)
 		azureRequest.setTableName(request.getTableName());
 		resultSet = repo.getSegmentedResultSet(param, azureRequest);
 		
-		
 		resultSetMap.put(request.getErpName(), resultSet);			
 		response.setSupplierData(resultSetMap);
 		response.setMessage(Constants.JSON_OK);
-		
-		LOG.info("### Ending Ending PoServiceImpl.getSupplierResultSet ### " );
 		
 		return response;
 	}

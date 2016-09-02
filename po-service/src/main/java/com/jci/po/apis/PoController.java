@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.po.apis;
 
 import java.net.URISyntaxException;
@@ -25,6 +30,7 @@ import com.jci.po.utils.AzureUtils;
 import com.jci.po.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
+
 /**
  * <p>
  * <strong>REST layer for managing PO,  graph and Error data.</strong>
@@ -37,14 +43,21 @@ import com.microsoft.azure.storage.StorageException;
 @RefreshScope
 public class PoController { // NO_UCD (unused code)
 	
-	private static final Logger LOG = LoggerFactory.getLogger(PoController.class);
+	/** The Constant LOG. */
+ private static final Logger LOG = LoggerFactory.getLogger(PoController.class);
 	
+	/** The po service. */
 	@Autowired  
 	private PoService  poService;
 	
+	/**
+	 * Gets the segmented po details.
+	 *
+	 * @param request the request
+	 * @return the segmented po details
+	 */
 	@RequestMapping(value = "/getSegmentedPoDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailRes getSegmentedPoDetails(@RequestBody SegmentedDetailReq request){
-		LOG.info("### Starting PoController.getSegmentedPoDetails ###"+request );
 		long startTime = System.nanoTime();
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
@@ -56,20 +69,24 @@ public class PoController { // NO_UCD (unused code)
 			LOG.error("### Exception in   ####",e);
 			response.setError(true);
 			response.setMessage(e.getMessage());
-			e.printStackTrace();
+			
 		}
 
 		long endTime = System.nanoTime();
 		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 		double seconds = (double)duration / 1000000000.0;
 		LOG.info("seconds--->"+seconds);
-		LOG.info("### Ending PoController.getSegmentedPoDetails ###" );
 		return response;
 	}
 	
+	/**
+	 * Gets the error details.
+	 *
+	 * @param request the request
+	 * @return the error details
+	 */
 	@RequestMapping(value = "/getSegmentedErrorDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailRes getErrorDetails(@RequestBody SegmentedDetailReq request){
-		LOG.info("### Starting PoController.getSegmentedErrorDetails ###"+request );
 		long startTime = System.nanoTime();
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
@@ -81,21 +98,25 @@ public class PoController { // NO_UCD (unused code)
 			LOG.error("### Exception in   ####",e);
 			response.setError(true);
 			response.setMessage(e.getMessage());
-			e.printStackTrace();
+			
 		}
 
 		long endTime = System.nanoTime();
 		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 		double seconds = (double)duration / 1000000000.0;
 		LOG.info("seconds--->"+seconds);
-		LOG.info("### Ending PoController.getSegmentedErrorDetails ###" );
 		return response;
 	}
 	
+	/**
+	 * Process error pos.
+	 *
+	 * @param request the request
+	 * @return the batch update res
+	 */
 	@RequestMapping(value = "/processErrorPos", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  BatchUpdateRes processErrorPos(@RequestBody final PoDetailsReq request){
 		long startTime = System.nanoTime();
-		LOG.info("### Starting PoController.processErrorPos ###" +request);
 		BatchUpdateRes response = new BatchUpdateRes();
 		
 		try {
@@ -104,24 +125,25 @@ public class PoController { // NO_UCD (unused code)
 			LOG.error("### Exception in   ####",e);
 			response.setError(true);
 			response.setMessage(e.getMessage());
-			e.printStackTrace();
+			
 		}
-		
 		
 		//Start time calculation
 		long endTime = System.nanoTime();
 		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 		double seconds = (double)duration / 1000000000.0;
 		LOG.info("seconds--->"+seconds);
-		//End time calculation		
-
-		LOG.info("### Ending PoController.processErrorPos ###"+response );
 		return response;
 	}	
 	
+	/**
+	 * Gets the po item detail.
+	 *
+	 * @param request the request
+	 * @return the po item detail
+	 */
 	@RequestMapping(value = "/getPoItemDetail", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  PoItemDetailRes getPoItemDetail(@RequestBody PoItemDetailReq request){
-		LOG.info("### Starting PoController.getPoItemDetail ###" +request);
 		long startTime = System.nanoTime();
 		PoItemDetailRes res = new PoItemDetailRes();
 		try {
@@ -129,7 +151,7 @@ public class PoController { // NO_UCD (unused code)
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			res.setError(true);
 			res.setMessage(e.getMessage());
-			e.printStackTrace();
+			
 			LOG.error("### Exception in   ####",e);
 		}
 
@@ -137,25 +159,6 @@ public class PoController { // NO_UCD (unused code)
 		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 		double seconds = (double)duration / 1000000000.0;
 		LOG.info("seconds--->"+seconds);
-		LOG.info("### Ending PoController.getPoItemDetail ###"+res );
 		return res;
 	}
-	
-	@RequestMapping(value = "/processPos", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public  PoDetailsRes processPoData(@RequestBody final PoDetailsReq request){
-		
-		LOG.info("### Starting PoController.processPoDetails ###" +request);
-		//PoDetailsRes response = new PoDetailsRes();
-		
-		/*try {
-			response = poService.getPos(request);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			response.setError(true);
-			e.printStackTrace();
-		}*/  
-		LOG.info("### Ending PoController.processPoDetails ###" );
-		return null;
-	}
-
-	
 }

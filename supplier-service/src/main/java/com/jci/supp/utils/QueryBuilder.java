@@ -1,15 +1,23 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.supp.utils;
 
+
+/**
+ * The Class QueryBuilder.
+ */
 public class QueryBuilder {
 	
-/*	private static final String PARTITION_KEY = "PartitionKey";
-	private static final String STATUS_KEY = "Status";
-	private static final String TIMESTAMP = "Timestamp";*/
-	//private static final String ROWKEY = "RowKey";
-	
+	/**
+	 * Partition where condition.
+	 *
+	 * @param partitionKey the partition key
+	 * @return the string
+	 */
 	public static String partitionWhereCondition(String partitionKey){
-		return String.format("(PartitionKey eq '%s')",partitionKey);//(PartitionKey eq 'SYMIX_PO_2016');
+		return String.format("(PartitionKey eq '%s')",partitionKey);
 	}
-	
-	
 }

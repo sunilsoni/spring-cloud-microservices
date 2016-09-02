@@ -39,34 +39,47 @@ import com.jci.job.utils.PrepareFlatFile;
 import com.microsoft.azure.storage.StorageException;
 
 /**
- * @author cdevdat
+ * The Class ApiClientServiceImpl.
  *
+ * @author cdevdat
  */
 @Service
 @RefreshScope
 public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unused code)
 
-	private static final Logger LOG = LoggerFactory.getLogger(ApiClientServiceImpl.class);
+	/** The Constant LOG. */
+ private static final Logger LOG = LoggerFactory.getLogger(ApiClientServiceImpl.class);
+	
+	/** The apigee client. */
 	@Autowired
 	ApiClientImpl apigeeClient;
 	
+	/** The repo. */
 	@Autowired
 	private JobRepo repo;
 	
+    /** The all erps. */
     @Value("${all.erp.names}")
     private String allErps;
     
+	/** The config. */
 	@Autowired
 	private FlatFile config;
 
+	/** The erp name. */
 	String erpName;
+	
+	/** The region. */
 	String region;
+	
+	/** The plant. */
 	String plant;
 	
+	/* (non-Javadoc)
+	 * @see com.jci.job.service.ApiClientService#getPoDetails()
+	 */
 	@Override
 	public String getPoDetails()  throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting ApigeeClientService.getPoDetails ####");
-		
 		PoDetailsRes responseBody=null;
 		CommonUtils utils = new CommonUtils();
 		
@@ -74,7 +87,6 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		 * Get Region mapping file
 		 */
 		HashMap<String,HashMap<String,String>>  regionsMapping = utils.getRegionMapping(config.getRegionUrl());
-		LOG.info("regionsMapping--->"+regionsMapping);
 		
 		ResponseEntity<PoDetailsRes> apigeeResponse =null;
 		
@@ -90,26 +102,19 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			 /**
 			  * Starting apigee call
 			 */
-			 LOG.info("===========Starting apigee call===>");
 			 apigeeResponse =  apigeeClient.getPoDetails(erpName,region,plant,"**","**");
-			 LOG.info("<===========Ending apigee call====");
-			 
-			 
 			 responseBody = apigeeResponse.getBody();
-			LOG.info("responseBody-1->"+responseBody);
 				
 			//Make it dynamic
 			String lineID="lineID";
 			String requestID="requestID";
 			
 			BatchInsertReq  req = PrepareBatchInsertReq.prepareReq(responseBody,erpName,region,plant,lineID,requestID);
-			LOG.info("req-->"+req);
 			 
 			/**
 			 * Start Storing data in Azure tables
 			 */
 			List<String> successList = repo.batchInsert(req);
-			LOG.info("successList-->"+successList);
 			
 			 //End Storing data in Azure tables 
 			
@@ -117,35 +122,29 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			 * Starting apigee call for successList of POs
 			 */
 			PoSuccessRes PoSuccessRes = new PoSuccessRes();
-			List<HashMap<String,String>> poList = new ArrayList<HashMap<String,String>>();
+			List<HashMap<String,String>> poList = new ArrayList<>();
 			for (String po : successList) {
-				HashMap<String,String> map = new HashMap<String,String>();
+				HashMap<String,String> map = new HashMap<>();
 				map.put("orderNumber", po);
 				poList.add(map);
 			}
 			PoSuccessRes.setPoList(poList);
 			
-			LOG.info("===========Starting apigee call for status update===>"+PoSuccessRes);
 			responseStatus =  apigeeClient.getPoDetailsRes(PoSuccessRes,erpName,region,plant);
-			LOG.info("responseStatus-->"+responseStatus);
-			LOG.info("<===========Enduing apigee call for status update===");
-			 
 		 }
-		LOG.info("### Ending ApigeeClientService.getPoDetails ####");
 		return responseStatus;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.jci.job.service.ApiClientService#getItemDetails()
+	 */
 	@Override
 	public String getItemDetails() throws InvalidKeyException, URISyntaxException, StorageException {
-		
-		LOG.info("### Starting ApigeeClientService.getItemDetails ####");
 		/**
 		 * Get Region mapping file
 		 */
 		CommonUtils utils = new CommonUtils();
 		HashMap<String,HashMap<String,String>>  regionsMapping = utils.getRegionMapping(config.getRegionUrl());
-		LOG.info("regionsMapping--->"+regionsMapping);
-		
 		
 		//Make it dynamic
 		String customerItemID="customerItemID";
@@ -161,37 +160,32 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			 /**
 			  * Starting apigee call
 			 */
-			 LOG.info("====Starting Apigee Item Call===>");
-			 ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(erpName,region,plant,"**");
-			LOG.info("<====Ending Apigee Item Call===");
-			
+			ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(erpName,region,plant,"**");
 			ItemDetailsRes responseBody = response.getBody();
-			 
 			BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody,erpName,region, plant,customerItemID,suppID);
-			
 			List<String> successList = repo.batchInsert(req);
 			
 			/**
 			 * Starting apigee call for successList of Items
 			 */
 			ItemSuccessRes itemSuccessRes = new ItemSuccessRes();
-			List<HashMap<String,String>> itemList = new ArrayList<HashMap<String,String>>();
+			List<HashMap<String,String>> itemList = new ArrayList<>();
 			for (String itemKey : successList) {
 				String[] arr = itemKey.split("_");
-				HashMap<String,String> map = new HashMap<String,String>();
+				HashMap<String,String> map = new HashMap<>();
 				map.put("customerItemID", arr[0]);
 				map.put("supplierID", arr[1]);
 				itemList.add(map);
 			}
 			itemSuccessRes.setItemList(itemList);
 			responseStatus =  apigeeClient.getItemsRes(itemSuccessRes, erpName,region, plant);
-			LOG.info("responseStatus-->"+responseStatus);
 		}
-		
-		LOG.info("### Ending ApigeeClientService.getItemDetails ####");
 		return responseStatus;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jci.job.service.ApiClientService#getSuppDetails()
+	 */
 	@Override
 	public String getSuppDetails() throws InvalidKeyException, URISyntaxException, StorageException {
 		/**
@@ -212,44 +206,36 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			/**
 			  * Starting apigee call
 			 */
-			LOG.info("====Starting Apigee Supplier Call===>");
 			ResponseEntity<SuppDetailsRes> response = apigeeClient.getSupp(erpName,region,plant,"**");
-			LOG.info("<====Ending Apigee Supplier Call===");
-			
 			SuppDetailsRes responseBody = response.getBody();
-			
 			BatchInsertReq  req = PrepareBatchInsertReq.prepareSuppReq(responseBody,erpName,region, plant,suppID);
-			
 			List<String> res = repo.batchInsert(req);
 			
 			/**
 			 * Starting apigee call for successList of Suppliers
 			 */
 			SuppSuccessRes itemSuccessRes = new SuppSuccessRes();
-			List<HashMap<String,String>> suppList = new ArrayList<HashMap<String,String>>();
+			List<HashMap<String,String>> suppList = new ArrayList<>();
 			for (String id : res) {
-				HashMap<String,String> map = new HashMap<String,String>();
+				HashMap<String,String> map = new HashMap<>();
 				map.put("customerItemID",id);
 				suppList.add(map);
 			}
 			itemSuccessRes.setSuppList(suppList);
-			
 			responseStatus =  apigeeClient.getSuppRes(itemSuccessRes, erpName,region, plant);
-			LOG.info("responseStatus--->"+responseStatus);
-			
 		}
 		return responseStatus;
 	}
 	
+/* (non-Javadoc)
+ * @see com.jci.job.service.ApiClientService#processPoFlatFile()
+ */
 /*
  * Processing flat files for all erps which have po number status as in transit
  */
 	@Override
 	public String processPoFlatFile() throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting ApigeeClientService.processFlatFile ####");
-		
 		CommonUtils utils = new CommonUtils();
-		//HashMap<String,HashMap<String,String>>  regionsMapping = utils.getRegionMapping(config.getRegionUrl());
 		
 		//Flat file format should be in this format. Destination(e.g. e2open ) flat file format 
 		HashMap<String,HashMap<Integer,String>>  suppNameToMapping = utils.getDestMapping(config.getPoUrl());
@@ -257,11 +243,11 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		PrepareFlatFile file = new PrepareFlatFile();
 		Map<String,List<String>> fileNameToRowsMap = null;
 		
-		List<String> successList = new ArrayList<String>();
-		List<String> errorList = new ArrayList<String>();
+		List<String> successList = new ArrayList<>();
+		List<String> errorList = new ArrayList<>();
 		
-		Map<String,List<String>> pkToSuccessList = new HashMap<String,List<String>>();
-		Map<String,List<String>> pkToErrorList = new HashMap<String,List<String>>();
+		Map<String,List<String>> pkToSuccessList = new HashMap<>();
+		Map<String,List<String>> pkToErrorList = new HashMap<>();
 		
 		String[] erpArr  = allErps.split(",");
 		for (int i=0;i<erpArr.length;i++){
@@ -275,9 +261,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 				 /**
 				  * Loop: No of  Supplier mapping files present in directory  
 				  */
-					//String suppName=null;
 					for (Map.Entry<String,HashMap<Integer,String>> mapping : suppNameToMapping.entrySet()){
-						//suppName = mapping.getKey();						
 						fileNameToRowsMap = file.prepareSuppData(mapping.getValue(),poNumToItemListMap,config);
 						
 						/**
@@ -288,12 +272,11 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 							 try {
 							    	FileUtils.writeLines(toFile,"UTF-8", entry.getValue(),false);
 								} catch (IOException e) {
-									e.printStackTrace();
+									LOG.error("### Exception in   ####",e);
+									
 								}
 							boolean isSuccess =  PrepareFlatFile.processFile(toFile,config.getE2openUrl());
 							LOG.info(" isSuccess--->"+ isSuccess);
-							
-							LOG.info(" entry.getKey()--->"+ entry.getKey());
 							if(isSuccess){
 								successList.add(entry.getKey().split("\\.")[0]);
 							}else{
@@ -313,37 +296,36 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		}
 		//Update status in DB
 		updateStatus(pkToSuccessList,pkToErrorList);		
-		LOG.info("### Ending ApigeeClientService.processFlatFile ####");
-		return null;
+		return "Success";
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see com.jci.job.service.ApiClientService#processSuppFlatFile()
+	 */
 	/*
 	 * Processing flat files for all erps which have supplier status as in transit
 	 */
 	@Override
 	public String processSuppFlatFile() throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting ApigeeClientService.processSuppFlatFile ####");
-		
 		CommonUtils utils = new CommonUtils();
 		HashMap<String,HashMap<Integer,String>>  suppNameToMapping = utils.getDestMapping(config.getSuppUrl());
 		
 		PrepareFlatFile file = new PrepareFlatFile();
 		Map<String,List<String>> fileNameToRowsMap = null;
 		
-		List<String> successList = new ArrayList<String>();
-		List<String> errorList = new ArrayList<String>();
+		List<String> successList = new ArrayList<>();
+		List<String> errorList = new ArrayList<>();
 		
-		Map<String,List<String>> pkToSuccessList = new HashMap<String,List<String>>();
-		Map<String,List<String>> pkToErrorList = new HashMap<String,List<String>>();
-		 
+		Map<String,List<String>> pkToSuccessList = new HashMap<>();
+		Map<String,List<String>> pkToErrorList = new HashMap<>();
 		
 		String[] erpArr  = allErps.split(",");
 		for (int i=0;i<erpArr.length;i++){		 
 			String partitionKey = CommonUtils.getPartitionKey(erpArr[i]);
 			
 			List<HashMap<String, Object>>  list = repo.getFlatFileData(partitionKey,Constants.TABLE_SUPPLIER);
-			Map<String,List<HashMap<String, Object>>> map = new HashMap<String,List<HashMap<String, Object>>>();
+			Map<String,List<HashMap<String, Object>>> map = new HashMap<>();
 			map.put("SupplierFile", list);
 			
 				 
@@ -363,13 +345,15 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 							try {
 								toFile = File.createTempFile(entry.getKey(), ".txt");
 							} catch (IOException e1) {
+								LOG.error("### Exception in   ####",e1);
 								e1.printStackTrace();
 							}
 							 
 							 try {
 							    	FileUtils.writeLines(toFile,"UTF-8", entry.getValue(),false);
 								} catch (IOException e) {
-									e.printStackTrace();
+									LOG.error("### Exception in   ####",e);
+									
 								}
 							boolean isSuccess =  PrepareFlatFile.processFile(toFile,config.getE2openUrl());
 							LOG.info(" isSuccess--->"+ isSuccess);
@@ -391,28 +375,28 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		
 		//Update status in DB
 		updateStatus(pkToSuccessList,pkToErrorList);		
-		LOG.info("### Ending ApigeeClientService.processSuppFlatFile ####");
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jci.job.service.ApiClientService#processItemFlatFile()
+	 */
 	/*
 	 * Processing flat files for all erps which have Items status as in transit
 	 */
 	@Override
 	public String processItemFlatFile() throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("### Starting ApigeeClientService.processItemFlatFile ####");
-		
 		CommonUtils utils = new CommonUtils();
 		HashMap<String,HashMap<Integer,String>>  suppNameToMapping = utils.getDestMapping(config.getItemUrl());
 		
 		PrepareFlatFile file = new PrepareFlatFile();
 		Map<String,List<String>> fileNameToRowsMap = null;
 		
-		List<String> successList = new ArrayList<String>();
-		List<String> errorList = new ArrayList<String>();
+		List<String> successList = new ArrayList<>();
+		List<String> errorList = new ArrayList<>();
 		
-		Map<String,List<String>> pkToSuccessList = new HashMap<String,List<String>>();
-		Map<String,List<String>> pkToErrorList = new HashMap<String,List<String>>();
+		Map<String,List<String>> pkToSuccessList = new HashMap<>();
+		Map<String,List<String>> pkToErrorList = new HashMap<>();
 		 
 		
 		String[] erpArr  = allErps.split(",");
@@ -420,9 +404,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			String partitionKey = CommonUtils.getPartitionKey(erpArr[i]);
 			
 			List<HashMap<String, Object>>  list = repo.getFlatFileData(partitionKey,Constants.TABLE_ITEM);
-			LOG.info(" list--->"+ list);
-			
-			Map<String,List<HashMap<String, Object>>> map = new HashMap<String,List<HashMap<String, Object>>>();
+			Map<String,List<HashMap<String, Object>>> map = new HashMap<>();
 			map.put("ItemFile", list);
 			
 				 
@@ -432,7 +414,6 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 				for (Map.Entry<String,HashMap<Integer,String>> mapping : suppNameToMapping.entrySet()){
 						//supplierName = mapping.getKey();						
 						fileNameToRowsMap = file.prepareSuppData(mapping.getValue(),map,config);
-						LOG.info(" fileNameToRowsMap--->"+ fileNameToRowsMap);
 						/**
 						 * Code to process flat files for supplier(e.g.e2open):
 						 */
@@ -448,12 +429,11 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 							 try {
 							    	FileUtils.writeLines(toFile,"UTF-8", entry.getValue(),false);
 								} catch (IOException e) {
-									e.printStackTrace();
+									LOG.error("### Exception in   ####",e);
+									
 								}
 							boolean isSuccess =  PrepareFlatFile.processFile(toFile,config.getE2openUrl());
 							LOG.info(" isSuccess--->"+ isSuccess);
-							
-							LOG.info(" entry.getKey()--->"+ entry.getKey());
 							if(isSuccess){
 								successList.add(entry.getKey().split("\\.")[0]);
 							}else{
@@ -468,17 +448,18 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 				pkToErrorList.put(erpArr[i], errorList);
 			}
 		}
-		
-		
 		//Update status in DB
 		updateStatus(pkToSuccessList,pkToErrorList);		
-		//END
-		
-		LOG.info("### Ending ApigeeClientService.processItemFlatFile ####");
-		return null;
+		return "Success";
 	
 	}
 	
+	/**
+	 * Update status.
+	 *
+	 * @param pkToSuccessList the pk to success list
+	 * @param pkToErrorList the pk to error list
+	 */
 	private void updateStatus(Map<String,List<String>> pkToSuccessList,Map<String,List<String>> pkToErrorList) {
 		BatchUpdateReq updateReq =null;
 		for (Map.Entry<String,List<String>> entry : pkToSuccessList.entrySet()){
@@ -489,15 +470,14 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			String partitionKey = CommonUtils.getPartitionKey(entry.getKey().toUpperCase());
 			try {
 				List<PoEntity> poEntity = repo.getPoDetails(partitionKey,entry.getValue());
-				HashMap<String,List<PoEntity>> tableNameToEntityMap = new HashMap<String,List<PoEntity>>();
+				HashMap<String,List<PoEntity>> tableNameToEntityMap = new HashMap<>();
 				tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, poEntity);
 				updateReq.setTableNameToEntityMap(tableNameToEntityMap);		
 				repo.batchUpdate(updateReq);	
 			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 				LOG.error("### Exception in   ####",e);
-				e.printStackTrace();
+				
 			}
-			
 		}
 		
 		for (Map.Entry<String,List<String>> entry : pkToErrorList.entrySet()){
@@ -507,13 +487,13 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			String partitionKey = CommonUtils.getPartitionKey(entry.getKey().toUpperCase());
 			try {
 				List<PoEntity>  poEntity = repo.getPoDetails(partitionKey,entry.getValue());
-				HashMap<String,List<PoEntity>> tableNameToEntityMap = new HashMap<String,List<PoEntity>>();
+				HashMap<String,List<PoEntity>> tableNameToEntityMap = new HashMap<>();
 				tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, poEntity);
 				updateReq.setTableNameToEntityMap(tableNameToEntityMap);
 				repo.batchUpdate(updateReq);
 			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 				LOG.error("### Exception in   ####",e);
-				e.printStackTrace();
+				
 			}
 		}
 	} 

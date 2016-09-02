@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.item.azure;
 
 import java.net.URISyntaxException;
@@ -10,11 +15,12 @@ import com.microsoft.azure.storage.table.CloudTableClient;
 
 public class AzureStorage {
 	
-  //private static final Logger LOG = LoggerFactory.getLogger(AzureStorage.class);
   private static final String FORMAT = "DefaultEndpointsProtocol=%s;AccountName=%s;AccountKey=%s";
 
   private String protocol;
   private String accountName;
+  
+  /** The account key. */
   private String accountKey;
   
   AzureStorage(String protocol, String accountName, String accountKey) {
@@ -24,12 +30,19 @@ public class AzureStorage {
   }
 
   public final String getStoregeConnectionString() {
-	// LOG.info(" ### Starting Ending AzureStorage.getStoregeConnectionString ###");
     return String.format(FORMAT, protocol, accountName, accountKey);
   }
   
+  /**
+   * Gets the table.
+   *
+   * @param tableName the table name
+   * @return the table
+   * @throws InvalidKeyException the invalid key exception
+   * @throws URISyntaxException the URI syntax exception
+   * @throws StorageException the storage exception
+   */
   public CloudTable getTable(String tableName) throws InvalidKeyException, URISyntaxException, StorageException {
-	  //LOG.info(" ### Starting Ending AzureStorage.getTable ### "+tableName);
     return CloudStorageAccount.parse(getStoregeConnectionString()).createCloudTableClient().getTableReference(tableName);
   }
   

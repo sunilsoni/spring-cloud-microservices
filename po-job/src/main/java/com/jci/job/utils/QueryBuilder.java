@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.job.utils;
 
 import java.util.List;
@@ -6,13 +11,21 @@ import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
 import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
 
+/**
+ * The Class QueryBuilder.
+ */
 public class QueryBuilder {
 	
+	/**
+	 * Po query.
+	 *
+	 * @param partitionKey the partition key
+	 * @param poList the po list
+	 * @return the string
+	 */
 	public static String poQuery(String partitionKey, List<String> poList){
-		
 		// Create filters to limit the data
 	   String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
-	      
 	   String combinedFilter = null;
 	   String rowKeyFilter = null;
 	   
@@ -34,8 +47,14 @@ public class QueryBuilder {
 		return rowKeyFilter;
 	}
 	
+	/**
+	 * Process pos query.
+	 *
+	 * @param partitionKey the partition key
+	 * @param poList the po list
+	 * @return the string
+	 */
 	public static String processPosQuery(String partitionKey, List<String> poList){
-		
 		// Create filters to limit the data
 	   String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
 	      
@@ -60,15 +79,18 @@ public class QueryBuilder {
 		return rowKeyFilter;
 	}
 	
+	/**
+	 * Ff query.
+	 *
+	 * @param partitionKey the partition key
+	 * @return the string
+	 */
 	public static String ffQuery(String partitionKey){
-		
 		// Create filters to limit the data
 	   String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
 	   
 	   String rowKeyFilter = TableQuery.generateFilterCondition(Constants.STATUS_KEY, QueryComparisons.EQUAL, Constants.STATUS_IN_TRANSIT);
 	   String   combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter); 
-	     
-		return combinedFilter;
+	 return combinedFilter;
 	}
-	
 }

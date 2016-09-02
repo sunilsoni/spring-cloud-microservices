@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.item.service;
 
 import java.net.URISyntaxException;
@@ -17,14 +22,21 @@ import com.jci.item.repo.ItemRepo;
 import com.jci.item.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
+/**
+ * The Class ItemServiceImpl.
+ */
 @Service
 public class ItemServiceImpl implements ItemService{ // NO_UCD (unused code)
 
 	
-	@Autowired
+	/** The repo. */
+ @Autowired
 	private ItemRepo repo;
 	
 	
+	/* (non-Javadoc)
+	 * @see com.jci.item.service.ItemService#getItemResultSet(com.jci.item.dto.SegmentedDetailReq)
+	 */
 	@Override
 	public SegmentedDetailRes getItemResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException  {
 		PaginationParam paginationParam = request.getPaginationParam();
@@ -43,7 +55,7 @@ public class ItemServiceImpl implements ItemService{ // NO_UCD (unused code)
 		ResultSet resultSet = null;
 		
 		SegmentedDetailRes response = new SegmentedDetailRes(); 
-		HashMap<String, ResultSet>  resultSetMap = new HashMap<String, ResultSet>();
+		HashMap<String, ResultSet>  resultSetMap = new HashMap<>();
 		
 		azureRequest = new DataHelper();
 		azureRequest.setErpName(request.getErpName());

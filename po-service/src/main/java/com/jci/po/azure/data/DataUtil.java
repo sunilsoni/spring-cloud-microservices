@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.po.azure.data;
 
 import org.apache.commons.lang3.StringUtils;
@@ -6,8 +11,18 @@ import com.jci.po.azure.query.ScrollingParam;
 import com.microsoft.azure.storage.ResultContinuation;
 import com.microsoft.azure.storage.ResultContinuationType;
 
+
+/**
+ * The Class DataUtil.
+ */
 public class DataUtil {
 	
+	/**
+	 * Gets the continuation token.
+	 *
+	 * @param param the param
+	 * @return the continuation token
+	 */
 	public static ResultContinuation getContinuationToken(ScrollingParam param) {
 		ResultContinuation token = null ;
 		if(param == null ) {

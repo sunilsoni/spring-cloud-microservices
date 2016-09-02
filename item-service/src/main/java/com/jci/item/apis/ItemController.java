@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.item.apis;
 
 import java.net.URISyntaxException;
@@ -30,16 +35,22 @@ import com.microsoft.azure.storage.StorageException;
 @RestController 
 public class ItemController {// NO_UCD (unused code)
 	
-	private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
+	/** The Constant LOG. */
+private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 	
+	/** The po service. */
 	@Autowired
 	private ItemService  poService;	
 	
+	/**
+	 * Gets the segmented item details.
+	 *
+	 * @param request the request
+	 * @return the segmented item details
+	 */
 	@RequestMapping(value = "/getSegmentedItemDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailRes getSegmentedItemDetails(@RequestBody SegmentedDetailReq request){
-		LOG.info("### Starting PoController.getSegmentedItemDetails ###"+request );
 		request.setTableName(Constants.TABLE_ITEM);
-		
 		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));//setting hardcoded in repo
 		request.setFirstRequest(false);
 		SegmentedDetailRes response = new SegmentedDetailRes();
@@ -49,9 +60,7 @@ public class ItemController {// NO_UCD (unused code)
 			response.setError(true);
 			response.setMessage(e.getMessage());
 			LOG.error("### Exception in PoController.getSegmentedItemDetails ###",e);
-			e.printStackTrace();
 		}
-		LOG.info("### Ending PoController.getSegmentedItemDetails ###" +response);
 		return response;
 	}
 	

@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.po.repo;
 
 import java.io.IOException;
@@ -44,39 +49,55 @@ import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 
 
+/**
+ * The Class PoRepoImpl.
+ */
 @Repository
 @RefreshScope
 public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	
-	private static final Logger LOG = LoggerFactory.getLogger(PoRepoImpl.class);
+	/** The Constant LOG. */
+ private static final Logger LOG = LoggerFactory.getLogger(PoRepoImpl.class);
+	
+    /** The all erps. */
     @Value("${all.erp.names}")
     private String allErps;
     
+	/** The batch size. */
 	final int batchSize = 15;
 	
+	/** The azure storage. */
 	@Autowired   
 	private AzureStorage azureStorage;
 
+	/**
+	 * Creates the table.
+	 *
+	 * @param tableName the table name
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws StorageException the storage exception
+	 * @throws URISyntaxException the URI syntax exception
+	 */
 	public void createTable(String tableName) throws InvalidKeyException, StorageException, URISyntaxException {
 	    if (azureStorage.getTable(tableName).createIfNotExists()) {
 	    	LOG.info("table is created : " + tableName);
 	    }
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.jci.po.repo.PoRepo#getGraphData()
+	 */
 	@Override
 	public HashMap<String, ArrayList<Integer>> getGraphData() throws InvalidKeyException, URISyntaxException, StorageException {
-		
 		String query = QueryBuilder.graphQuery(Constants.PARTITION_KEY_MISCDATA,allErps);
-		LOG.info("query : " + query);
-		
 		TableQuery<MiscDataEntity> partitionQuery =  TableQuery.from(MiscDataEntity.class).where(query);
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
 		
-		HashMap<String, ArrayList<Integer>> graphData = new HashMap<String, ArrayList<Integer>>();
+		HashMap<String, ArrayList<Integer>> graphData = new HashMap<>();
 		ArrayList<Integer> list = null;
 		
 	    for (MiscDataEntity entity : cloudTable.execute(partitionQuery)) {
-	    	list = new ArrayList<Integer>();
+	    	list = new ArrayList<>();
 	    	list.add(entity.getPoIntransitCount());
 	    	list.add(entity.getPoProcessedCount());
 	    	list.add(entity.getPoErrorCount());
@@ -85,114 +106,121 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		 return graphData;
 	}
 	
+	/**
+	 * Gets the status count entity.
+	 *
+	 * @param partitionKey the partition key
+	 * @param rowKey the row key
+	 * @return the status count entity
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws InvalidKeyException, URISyntaxException, StorageException {
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
 	    TableOperation entity =   TableOperation.retrieve(partitionKey, rowKey, MiscDataEntity.class);
 		return cloudTable.execute(entity).getResultAsType();
 	}
 	
+	/**
+	 * Update status count entity.
+	 *
+	 * @param entity the entity
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	public void updateStatusCountEntity(MiscDataEntity entity) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("entity-->"+entity);
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
-		
 		TableOperation insert = TableOperation.insertOrReplace(entity);
 		cloudTable.execute(insert);
 	}
 
+	/**
+	 * Gets the error data.
+	 *
+	 * @param partitionKey the partition key
+	 * @return the error data
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	public List<HashMap<String, String>> getErrorData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("#### Starting PoRepoImpl.getErrorData ###" );
-		List<HashMap<String, String>> errorData = new ArrayList<HashMap<String, String>>();
-		
+		List<HashMap<String, String>> errorData = new ArrayList<>();
 		String query = QueryBuilder.errorQuery(partitionKey,allErps);
-		LOG.info("query-->"+query);
 		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 		
 		//multiplePartitionWhereCondition
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
-	    	HashMap<String, String> map = new HashMap<String, String>();
+	    	HashMap<String, String> map = new HashMap<>();
 	    	map.put("Status",String.valueOf(entity.getStatus()));
 	    	map.put("Description",String.valueOf(entity.getDescription()));
 	    	map.put("OrderNumber",String.valueOf(entity.getRowKey()));
 	    	map.put("SourceErpName",String.valueOf(entity.getErpName()));
 	    	errorData.add(map);
 	   }
-	    LOG.info("#### Ending PoRepoImpl.getErrorData ###" );
 		 return errorData;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.jci.po.repo.PoRepo#getErrorPos(java.lang.String, java.util.List)
+	 */
 	@Override
 	public Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("#### Starting PoRepoImpl.getErrorPos ###" );
-		
 		String query = QueryBuilder.getErrorPosQuery(partitionKey,poList);
-		LOG.info("query--->"+query);
-		
-		//List<PoItemsEntity> errorData = new ArrayList<PoItemsEntity>();
-		//TableQuery<PoItemsEntity> partitionQuery =  TableQuery.from(PoItemsEntity.class).where(query);
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
-		
 		OperationContext opContext = new OperationContext();
-		
 		TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);//Need to discuss this
 		
 		Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
 		DynamicTableEntity row;
 		EntityProperty ep;
 		HashMap<String, Object> hashmap;
-		//List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
-		
-		Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<String,List<HashMap<String, Object>>>();
+		Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<>();
 		
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
-			
-			//row.getRowKey().split("_")[0]
-			hashmap = new HashMap<String, Object>();
+			hashmap = new HashMap<>();
 			for (String key : map.keySet()) {
 				ep = map.get(key);
 				hashmap.put(key, ep.getValueAsString());
 			}
-			//series.add(hashmap);
-			
 			if(poNumToItemListMap.containsKey(row.getRowKey().split("_")[0])){
 				List<HashMap<String, Object>> list =poNumToItemListMap.get(row.getRowKey().split("_")[0]);
 	    		list.add(hashmap);
 	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
 	    	}else{
-	    		List<HashMap<String, Object>> list = new  ArrayList<HashMap<String, Object>>();
+	    		List<HashMap<String, Object>> list = new  ArrayList<>();
 	    		list.add(hashmap);
 	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
 	    	}
-			
 		}		
-	    LOG.info("#### Ending PoRepoImpl.getErrorPos ###" );
 		 return poNumToItemListMap;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.jci.po.repo.PoRepo#getPoDetails(java.lang.String, java.util.List)
+	 */
 	@Override
 	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("#### Starting PoRepoImpl.getErrorPos ###" );
-		
 		String query = QueryBuilder.processPosQuery(partitionKey,poList);
-		LOG.info("query--->"+query);
-		
-		
-		List<PoEntity> errorData = new ArrayList<PoEntity>();
+		List<PoEntity> errorData = new ArrayList<>();
 		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 		
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 	    	errorData.add(entity);
 	    }
-	    LOG.info("#### Ending PoRepoImpl.getErrorPos ###" );
 		 return errorData;
 	}
 	
+   /* (non-Javadoc)
+    * @see com.jci.po.repo.PoRepo#getSegmentedResultSet(com.jci.po.azure.query.ScrollingParam, com.jci.po.azure.data.DataHelper)
+    */
    @Override
 	public ResultSet getSegmentedResultSet(ScrollingParam param,DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException  {
-		LOG.info("#### Starting PoRepoImpl.getSegmentedResultSet ###" );
 		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
 		PaginationParam pagination = new PaginationParam();
 		if(continuationToken != null) {
@@ -226,7 +254,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		}
 		    
 		HashMap<String, Object> hashmap;
-		List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
+		List<HashMap<String, Object>> series = new ArrayList<>();
 		DynamicTableEntity row;
 		EntityProperty ep;
 		
@@ -234,7 +262,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
-			hashmap = new HashMap<String, Object>();
+			hashmap = new HashMap<>();
 			hashmap.put("id", row.getRowKey());  
 			hashmap.put("OrderNumber", row.getRowKey());
 			for (String key : map.keySet()) {
@@ -245,31 +273,30 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 			}
 			series.add(hashmap);
 		}
-		//LOG.info("#### Ending TableStorageRepositoryImpl.getSegmentedResultSet ###" );
-		//ResultSet(series,getErrorData(request.getPartitionValue()),pagination)
-		
 		return new ResultSet(series,pagination) ;
    }
    
+	/* (non-Javadoc)
+	 * @see com.jci.po.repo.PoRepo#batchUpdate(com.jci.po.dto.req.BatchUpdateReq)
+	 */
 	public BatchUpdateRes batchUpdate(BatchUpdateReq request){
 		BatchUpdateRes response = new BatchUpdateRes();
-		
 		String erpName = request.getErpName();
 		HashMap<String,List<PoEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
 		
-		 List<String> errorList = new ArrayList<String>();
-		 List<String> successList = new ArrayList<String>();
+		List<String> errorList = new ArrayList<>();
+		List<String> successList = new ArrayList<>();
 		
 		 CloudTable cloudTable=null;
 		 PoEntity entity = null;
-		  int successCount=0;
+		 int successCount=0;
 		 
 		 for (Map.Entry<String, List<PoEntity>> entry : tableNameToEntityMap.entrySet()){
 		     try {
 					cloudTable = azureStorage.getTable(entry.getKey());
 				} catch (Exception e) {
 					LOG.error("### Exception in PoRepoImpl.batchUpdate.getTable ###"+e);
-					e.printStackTrace();
+					
 					response.setError(true);
 					response.setMessage("The Application has encountered an error! Table  does not exist !");
 					continue;
@@ -300,7 +327,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 							response.setMessage("The Application has encountered an error!");
 					    	successCount = successCount-1;
 							LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
-							e.printStackTrace();
+							
 							continue;
 						}
 			    	 }
@@ -314,7 +341,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 						response.setMessage("The Application has encountered an error!");
 				    	successCount = successCount-1;
 						LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
-						e.printStackTrace();
+						
 						continue;
 					}
 			    }
@@ -330,7 +357,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 			LOG.error("### Exception in PoRepoImpl.batchUpdate ####",e);
 			response.setError(true);
 			response.setMessage("The Application has encountered an error!");
-			e.printStackTrace();
+			
 		}
 		
 		if(successCount>0){
@@ -345,13 +372,16 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 					LOG.error("### Exception in PoRepoImpl.batchUpdate ####",e);
 					response.setError(true);
 					response.setMessage("The Application has encountered an error!");
-					e.printStackTrace();
+					
 				}
 		}
 		return response;
 		
 	}//Ending batchUpdate
 
+	/* (non-Javadoc)
+	 * @see com.jci.po.repo.PoRepo#getPoItemDetail(com.jci.po.azure.query.ScrollingParam, com.jci.po.azure.data.DataHelper)
+	 */
 	@Override
 	public ResultSet getPoItemDetail(ScrollingParam param,DataHelper request)	throws InvalidKeyException, URISyntaxException, StorageException {
 		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
@@ -382,7 +412,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		    
 		HashMap<String, Object> hashmap;
 		
-		List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
+		List<HashMap<String, Object>> series = new ArrayList<>();
 		DynamicTableEntity row;
 		EntityProperty ep;
 		ObjectMapper mapper = new ObjectMapper(); 
@@ -391,7 +421,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
-			hashmap = new HashMap<String, Object>();
+			hashmap = new HashMap<>();
 			
 			for (String key : map.keySet()) {
 				ep = map.get(key);
@@ -400,14 +430,13 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 						hashmap = mapper.readValue(ep.getValueAsString(), typeRef);
 						hashmap.put("id", row.getRowKey());  
 					} catch (IOException e) {
-						e.printStackTrace();
+						LOG.error("### Exception in   ####",e);
+						
 					} 
 				}
 			}
 			series.add(hashmap);
 		}
-
-		
 		return new ResultSet(series,pagination) ;
 	}
 }

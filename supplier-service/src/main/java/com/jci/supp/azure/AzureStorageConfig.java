@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.supp.azure;
 
 
@@ -6,19 +11,30 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
+
+/**
+ * The Class AzureStorageConfig.
+ */
 @Configuration
 public class AzureStorageConfig { // NO_UCD (unused code)
-  //private static final Logger LOG = LoggerFactory.getLogger(AzureStorageConfig.class);
 	
-  @Value("${azure.storage.connection.protocol}")
+  /** The protocol. */
+ @Value("${azure.storage.connection.protocol}")
   private String protocol;
 
+  /** The account name. */
   @Value("${azure.storage.connection.accountname}")
   private String accountName;
 
+  /** The account key. */
   @Value("${azure.storage.connection.accountkey}")
   private String accountKey;
   
+  /**
+   * Azure storege.
+   *
+   * @return the azure storage
+   */
   @Bean
   public AzureStorage azureStorege() {
 	AzureStorage as = new AzureStorage(protocol, accountName, accountKey);

@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.job.repo;
 
 import java.io.IOException;
@@ -35,34 +40,48 @@ import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 
 
+/**
+ * The Class JobRepoImpl.
+ */
 @Repository
 public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	
-	private static final Logger LOG = LoggerFactory.getLogger(JobRepoImpl.class);
+	/** The Constant LOG. */
+ private static final Logger LOG = LoggerFactory.getLogger(JobRepoImpl.class);
+	
+	/** The batch size. */
 	final int batchSize = 20;
 	
+	/** The azure storage. */
 	@Autowired
 	private AzureStorage azureStorage;
 
-	public void createTable(String tableName) throws InvalidKeyException, StorageException, URISyntaxException {
+	/* (non-Javadoc)
+	 * @see com.jci.job.repo.JobRepo#createTable(java.lang.String)
+	 */
+	@Override
+	public boolean createTable(String tableName) throws InvalidKeyException, StorageException, URISyntaxException {
+		boolean isSuccess=false;
 	    if (azureStorage.getTable(tableName).createIfNotExists()) {
 	    	LOG.info("table is created : " + tableName);
+	    	 isSuccess=true;
 	    }
+	    return isSuccess;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jci.job.repo.JobRepo#batchInsert(com.jci.job.api.req.BatchInsertReq)
+	 */
 	@Override
 	public List<String> batchInsert(BatchInsertReq request){
-		LOG.info("#### Starting JobRepoImpl.batchInsert ###" );
 		int intransitCount=0;
 		int counter=0;
 		String tableName=null;
 		
 		String erpName = request.getErpName();
-		LOG.error("erpName--->"+erpName);
-		
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
 	
-		List<String> poSuccessList =  new ArrayList<String>();
+		List<String> poSuccessList =  new ArrayList<>();
 		CloudTable cloudTable=null;
 		 
 		 for (Map.Entry<String, List<TableEntity>> entry : tableNameToEntityMap.entrySet()){
@@ -71,15 +90,12 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					cloudTable = azureStorage.getTable(entry.getKey());
 					tableName=entry.getKey();
 				} catch (Exception e) {
-					//errorMap.put(entry.getKey(), entry.getValue());
 					LOG.error("### Exception in JobRepoImpl.batchInsert.getTable ###"+e);
-					e.printStackTrace();
+					
 					continue;
 				}
-		     LOG.error("Table Name--->"+cloudTable.getName());
 			    TableBatchOperation batchOperation = new TableBatchOperation();
 			    List<TableEntity> value = entry.getValue();
-			    
 			    for (int i = 0; i < value.size(); i++) {
 			    	TableEntity entity = value.get(i) ;
 			    	counter= counter+1;
@@ -95,13 +111,12 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 						} catch (Exception e) {
 							counter = 0;
 							LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
-							e.printStackTrace();
+							
 							continue;
 						}
 			    	 }
 			    }
 			    
-			   // LOG.error("batchOperation.size()--->"+batchOperation.size());
 			    if(batchOperation.size()>0){
 			    	try {
 						cloudTable.execute(batchOperation);
@@ -110,7 +125,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					} catch (Exception e) {
 						counter = 0;
 						LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
-						e.printStackTrace();
+						
 						continue;
 					}
 			    }
@@ -119,11 +134,16 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		 if(intransitCount>0){
 			 addMiscEntity(erpName,tableName,intransitCount);
 		 }
-		
-		LOG.info("#### Ending JobRepoImpl.batchInsert ###"+poSuccessList );
 		return poSuccessList;		
 	}
 	
+	/**
+	 * Adds the misc entity.
+	 *
+	 * @param erpName the erp name
+	 * @param tableName the table name
+	 * @param intransitCount the intransit count
+	 */
 	private void addMiscEntity(String erpName,String tableName,int intransitCount){
 		MiscDataEntity miscEntity=null;
 		
@@ -131,7 +151,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
-			e.printStackTrace();
+			
 		}
 		
 		if(miscEntity==null){
@@ -150,18 +170,36 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			updateStatusCountEntity(miscEntity);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
-			e.printStackTrace();
+			
 		}
 	 
 	}
 	
 	
+	/**
+	 * Gets the status count entity.
+	 *
+	 * @param partitionKey the partition key
+	 * @param rowKey the row key
+	 * @return the status count entity
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws InvalidKeyException, URISyntaxException, StorageException {
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
 	    TableOperation entity =   TableOperation.retrieve(partitionKey, rowKey, MiscDataEntity.class);
 		return cloudTable.execute(entity).getResultAsType();
 	}
 	
+	/**
+	 * Update status count entity.
+	 *
+	 * @param entity the entity
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	public void updateStatusCountEntity(MiscDataEntity entity) throws InvalidKeyException, URISyntaxException, StorageException {
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
 		
@@ -169,38 +207,36 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		cloudTable.execute(insert);
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.jci.job.repo.JobRepo#getPoDetails(java.lang.String, java.util.List)
+	 */
 	@Override
 	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
-		LOG.info("#### Starting JobRepoImpl.getPoDetails ###" );
-		
 		String query = QueryBuilder.processPosQuery(partitionKey,poList);
-		LOG.info("query--->"+query);
-		
-		
-		List<PoEntity> errorData = new ArrayList<PoEntity>();
+		List<PoEntity> errorData = new ArrayList<>();
 		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 		
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 	    	errorData.add(entity);
 	    }
-	    LOG.info("#### Ending JobRepoImpl.getPoDetails ###" );
 		 return errorData;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.jci.job.repo.JobRepo#batchUpdate(com.jci.job.api.req.BatchUpdateReq)
+	 */
 	@Override
 	public BatchUpdateRes batchUpdate(BatchUpdateReq request){		
 		int errorCount=0;
 		int successCount=0;
-		
-		LOG.info("#### Starting JobRepoImpl.batchUpdate ###" +request);
 		BatchUpdateRes response = new BatchUpdateRes();
 		
 		String erpName = request.getErpName();
 		HashMap<String,List<PoEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
 		
-		 List<String> errorList = new ArrayList<String>();
-		 List<String> successList = new ArrayList<String>();
+		 List<String> errorList = new ArrayList<>();
+		 List<String> successList = new ArrayList<>();
 		
 		 CloudTable cloudTable=null;
 		 PoEntity entity = null;
@@ -212,7 +248,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					tableName=entry.getKey();
 				} catch (Exception e) {
 					LOG.error("### Exception in JobRepoImpl.batchUpdate.getTable ###"+e);
-					e.printStackTrace();
+					
 					response.setError(true);
 					response.setMessage("The Application has encountered an error! Table  does not exist !");
 					continue;
@@ -240,24 +276,21 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			    		errorList.add(entity.getRowKey());
 			    	}
 			    	
-			    	
 			    	batchOperation.insertOrReplace(entity);
 			    	if (i!=0 && (i % batchSize) == 0) {
 			    		try {
 							cloudTable.execute(batchOperation);
 							batchOperation.clear();
-							//counter = 0;
 						} catch (Exception e) {
 							response.setError(true);
 							response.setMessage("The Application has encountered an error!");
-							//counter = 0;
 							if(request.isSuccess()){
 					    		successCount = successCount-1;
 					    	}else{
 					    		errorCount = errorCount-1;
 					    	}
 							LOG.error("### Exception in JobRepoImpl.batchUpdate.execute ###"+e);
-							e.printStackTrace();
+							
 							continue;
 						}
 			    	 }
@@ -266,7 +299,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			    if(batchOperation.size()>0){
 			    	try {
 						cloudTable.execute(batchOperation);
-					//	counter = 0;
 					} catch (Exception e) {
 						response.setError(true);
 						response.setMessage("The Application has encountered an error!");
@@ -276,23 +308,26 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 				    		errorCount = errorCount-1;
 				    	}
 						LOG.error("### Exception in JobRepoImpl.batchUpdate.execute ###"+e);
-						e.printStackTrace();
+						
 						continue;
 					}
 			    }
 		 }	
 		 response.setErrorList(errorList);
 		 response.setSuccessList(successList);
-		 
-		 LOG.info("errorCount-->"+errorCount);
-		 LOG.info("successCount-->"+successCount);
 		 updateMiscEntity(erpName,tableName,successCount,errorCount);
-		 
-		LOG.info("#### Ending JobRepoImpl.batchUpdate ###" );
 		return response;
 		
 	}//batchUpdate
 	
+	/**
+	 * Update misc entity.
+	 *
+	 * @param erpName the erp name
+	 * @param tableName the table name
+	 * @param successCount the success count
+	 * @param errorCount the error count
+	 */
 	private void updateMiscEntity(String erpName,String tableName,int successCount,int errorCount){
 		MiscDataEntity miscEntity=null;
 		
@@ -300,7 +335,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
-			e.printStackTrace();
+			
 		}
 		
 		if(miscEntity==null){
@@ -361,18 +396,21 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 				updateStatusCountEntity(miscEntity);
 			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 				LOG.error("### Exception in JobRepoImpl.updateMiscEntity ####",e);
-				e.printStackTrace();
+				
 			}
 		}
 	}
 
    
+	/* (non-Javadoc)
+	 * @see com.jci.job.repo.JobRepo#getFlatFileData(java.lang.String)
+	 */
 	@Override
 	public List<Map<String,List<HashMap<String, Object>>>> getFlatFileData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException{
 		
 		String query = QueryBuilder.ffQuery(partitionKey);
 		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
-		Map<String,List<String>> pkToRowkeyList = new HashMap<String,List<String>>();
+		Map<String,List<String>> pkToRowkeyList = new HashMap<>();
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
 		
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
@@ -381,19 +419,29 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 				list.add(entity.getRowKey());
 				pkToRowkeyList.put(entity.getPartitionKey(), list);
 			}else{
-				List<String> list = new ArrayList<String>();
+				List<String> list = new ArrayList<>();
 				list.add(entity.getRowKey());
 				pkToRowkeyList.put(entity.getPartitionKey(), list);
 			}
 	    }
 	    
-		List<Map<String,List<HashMap<String, Object>>>> list = new ArrayList<Map<String,List<HashMap<String, Object>>>>();
+		List<Map<String,List<HashMap<String, Object>>>> list = new ArrayList<>();
 		for (Map.Entry<String,List<String>> entry : pkToRowkeyList.entrySet()){	
 			list.add(getffPos(entry.getKey(),entry.getValue()));
 		}
 		return list;
 	}
 	
+	/**
+	 * Gets the ff pos.
+	 *
+	 * @param partitionKey the partition key
+	 * @param poList the po list
+	 * @return the ff pos
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	private Map<String,List<HashMap<String, Object>>> getffPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
 		String query = QueryBuilder.poQuery(partitionKey,poList);
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
@@ -405,12 +453,12 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		EntityProperty ep;
 		HashMap<String, Object> hashmap;
 		ObjectMapper mapper = new ObjectMapper(); 
-		Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<String,List<HashMap<String, Object>>>();
+		Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<>();
 		
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
-			hashmap = new HashMap<String, Object>();
+			hashmap = new HashMap<>();
 			
 			for (String key : map.keySet()) {
 				ep = map.get(key);
@@ -419,7 +467,8 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					try {
 						hashmap = mapper.readValue(ep.getValueAsString(), typeRef);
 					} catch (IOException e) {
-						e.printStackTrace();
+						LOG.error("### Exception in   ####",e);
+						
 					} 
 				}
 			}
@@ -428,7 +477,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	    		list.add(hashmap);
 	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
 	    	}else{
-	    		List<HashMap<String, Object>> list = new  ArrayList<HashMap<String, Object>>();
+	    		List<HashMap<String, Object>> list = new  ArrayList<>();
 	    		list.add(hashmap);
 	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
 	    	}
@@ -437,6 +486,9 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		 return poNumToItemListMap;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.jci.job.repo.JobRepo#getFlatFileData(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public List<HashMap<String, Object>> getFlatFileData(String partitionKey,String tableName) throws InvalidKeyException, URISyntaxException, StorageException {
 		String query = QueryBuilder.ffQuery(partitionKey);
@@ -451,12 +503,12 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		HashMap<String, Object> hashmap;
 		ObjectMapper mapper = new ObjectMapper(); 
 		
-		List<HashMap<String, Object>> list  = new ArrayList<HashMap<String, Object>>();
+		List<HashMap<String, Object>> list  = new ArrayList<>();
 		
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
-			hashmap = new HashMap<String, Object>();
+			hashmap = new HashMap<>();
 			
 			for (String key : map.keySet()) {
 				ep = map.get(key);
@@ -466,7 +518,8 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 						hashmap = mapper.readValue(ep.getValueAsString(), typeRef);
 						list.add(hashmap);
 					} catch (IOException e) {
-						e.printStackTrace();
+						LOG.error("### Exception in   ####",e);
+						
 					} 
 				}
 			}

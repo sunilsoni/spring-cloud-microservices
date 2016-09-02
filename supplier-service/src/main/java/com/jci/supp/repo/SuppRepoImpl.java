@@ -1,3 +1,8 @@
+/**
+ * (C) Copyright 2016 Johnson Controls, Inc
+ * Use or Copying of all or any part of this program, except as
+ * permitted by License Agreement, is prohibited.
+ */
 package com.jci.supp.repo;
 
 import java.io.IOException;
@@ -32,19 +37,27 @@ import com.microsoft.azure.storage.table.DynamicTableEntity;
 import com.microsoft.azure.storage.table.EntityProperty;
 import com.microsoft.azure.storage.table.TableQuery;
 
+
+/**
+ * The Class SuppRepoImpl.
+ */
 @Repository
 public class SuppRepoImpl implements SuppRepo { // NO_UCD (unused code)
 	
-	private static final Logger LOG = LoggerFactory.getLogger(SuppRepoImpl.class);
+	/** The Constant LOG. */
+ private static final Logger LOG = LoggerFactory.getLogger(SuppRepoImpl.class);
 	
+	/** The azure storage. */
 	@Autowired
 	private AzureStorage azureStorage;
 
 
+	/* (non-Javadoc)
+	 * @see com.jci.supp.repo.SuppRepo#getSegmentedResultSet(com.jci.supp.azure.query.ScrollingParam, com.jci.supp.azure.data.DataHelper)
+	 */
 	//Final 
    @Override
 	public ResultSet getSegmentedResultSet(ScrollingParam param,DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException  {
-		LOG.info("#### Starting TableStorageRepositoryImpl.getSegmentedResultSet ###" );
 		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
 		PaginationParam pagination = new PaginationParam();
 		if(continuationToken != null) {
@@ -59,9 +72,6 @@ public class SuppRepoImpl implements SuppRepo { // NO_UCD (unused code)
 		 }
 		 TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
 		  CloudTable table = azureStorage.getTable(request.getTableName());
-		  LOG.info("request.getTableName()--->"+request.getTableName());
-		// segmented query
-		  
        ResultSegment<DynamicTableEntity> response = table.executeSegmented(query, continuationToken) ;
        
 		// next continuation token
@@ -72,7 +82,7 @@ public class SuppRepoImpl implements SuppRepo { // NO_UCD (unused code)
 		}
 		HashMap<String, Object> hashmap;
 		ObjectMapper mapper = new ObjectMapper(); 
-		List<HashMap<String, Object>> series = new ArrayList<HashMap<String, Object>>();
+		List<HashMap<String, Object>> series = new ArrayList<>();
 		DynamicTableEntity row;
 		EntityProperty ep;
 		TypeReference<HashMap<String,Object>> typeRef  = new TypeReference<HashMap<String,Object>>() {};
@@ -81,7 +91,7 @@ public class SuppRepoImpl implements SuppRepo { // NO_UCD (unused code)
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
-			hashmap = new HashMap<String, Object>();
+			hashmap = new HashMap<>();
 			for (String key : map.keySet()) {
 				ep = map.get(key);
 				if(Constants.JSON_STRING.equalsIgnoreCase(key)){					
@@ -90,7 +100,8 @@ public class SuppRepoImpl implements SuppRepo { // NO_UCD (unused code)
 						hashmap.put("id", row.getRowKey());
 						series.add(hashmap);
 					} catch (IOException e) {
-						e.printStackTrace();
+						
+						LOG.error("### Exception in   ####",e);
 					}				
 				}	
 				

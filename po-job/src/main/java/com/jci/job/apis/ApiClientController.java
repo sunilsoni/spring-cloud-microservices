@@ -33,8 +33,6 @@ public class ApiClientController { // NO_UCD (unused code)
 
 	@Autowired
 	ApiClientService service;
-	
-	
 	private static final Logger LOG = LoggerFactory.getLogger(ApiClientController.class);
 	
 	/**
@@ -47,17 +45,14 @@ public class ApiClientController { // NO_UCD (unused code)
 		String response=null;
 		try {
 			response = service.getPoDetails();
-			
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
-			e.printStackTrace();
 		}
 		long endTime = System.nanoTime();
 		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 		
 		double seconds = (double)duration / 1000000000.0;
 		LOG.info("seconds--->"+seconds);
-		
 		return response;
 	}
 	
@@ -73,7 +68,6 @@ public class ApiClientController { // NO_UCD (unused code)
 			response = service.getSuppDetails();
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.getSuppDetails ####",e);
-			e.printStackTrace();
 		}
 		
 		long endTime = System.nanoTime();
@@ -93,10 +87,8 @@ public class ApiClientController { // NO_UCD (unused code)
 		String response =null;
 		try {
 			response = service.getItemDetails();
-			
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
-			e.printStackTrace();
 		}
 
 		long endTime = System.nanoTime();
@@ -118,9 +110,8 @@ public class ApiClientController { // NO_UCD (unused code)
 			response = service.processPoFlatFile();
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.processFlatFile ####",e);
-			e.printStackTrace();
+			
 		}
-
 		long endTime = System.nanoTime();
 		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 		double seconds = (double)duration / 1000000000.0;
@@ -140,7 +131,7 @@ public class ApiClientController { // NO_UCD (unused code)
 			response = service.processSuppFlatFile();
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.processFlatFile ####",e);
-			e.printStackTrace();
+			
 		}
 
 		long endTime = System.nanoTime();
@@ -162,7 +153,7 @@ public class ApiClientController { // NO_UCD (unused code)
 			response = service.processItemFlatFile();
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.processFlatFile ####",e);
-			e.printStackTrace();
+			
 		}
 
 		long endTime = System.nanoTime();
