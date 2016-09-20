@@ -12,7 +12,11 @@ import com.microsoft.azure.storage.ResultContinuation;
 import com.microsoft.azure.storage.ResultContinuationType;
 
 /**
- * The Class DataUtil.
+ * <p>
+ * <strong> The Class DataUtil for managing Azure pagination.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class DataUtil {
 	

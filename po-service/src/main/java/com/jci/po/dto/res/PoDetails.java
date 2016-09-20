@@ -7,7 +7,11 @@ package com.jci.po.dto.res;
 
 
 /**
- * The Class PoDetails.
+ * <p>
+ * <strong> The Class PoDetails.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 class PoDetails {
 

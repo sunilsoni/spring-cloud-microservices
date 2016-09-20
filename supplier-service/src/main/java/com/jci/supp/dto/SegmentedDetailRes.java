@@ -12,7 +12,11 @@ import com.jci.supp.azure.data.ResultSet;
 
 
 /**
- * The Class SegmentedDetailRes.
+ * <p>
+ * <strong>The Class SegmentedDetailRes.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class SegmentedDetailRes {
 

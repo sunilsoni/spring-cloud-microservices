@@ -7,7 +7,11 @@ package com.jci.po.azure.data;
 
 
 /**
- * The Class DataHelper.
+ * <p>
+ * <strong>The Class DataHelper for Azure.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class DataHelper {
 	

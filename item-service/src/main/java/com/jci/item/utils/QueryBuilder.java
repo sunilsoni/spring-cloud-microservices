@@ -6,7 +6,11 @@
 package com.jci.item.utils;
 
 /**
- * The Class QueryBuilder.
+ * <p>
+ * <strong>The Class QueryBuilder for Azure Tables.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class QueryBuilder {
 	

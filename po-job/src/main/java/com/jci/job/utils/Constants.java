@@ -14,6 +14,8 @@ public class Constants {
 	//Azure Table names 
 	public static final String TABLE_PO_DETAILS ="DEVPODETAILS";
 	
+	public static final String TABLE_GR_DETAILS ="DEVGRDETAILS";
+	
 	/** The Constant TABLE_PO_ITEM_DETAILS. */
 	public static final String TABLE_PO_ITEM_DETAILS ="DEVPOITEMDETAILS";
 	

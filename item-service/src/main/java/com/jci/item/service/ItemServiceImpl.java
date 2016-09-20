@@ -23,7 +23,11 @@ import com.jci.item.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
 /**
- * The Class ItemServiceImpl.
+ * <p>
+ * <strong>The Class ItemServiceImpl.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Service
 public class ItemServiceImpl implements ItemService{ // NO_UCD (unused code)

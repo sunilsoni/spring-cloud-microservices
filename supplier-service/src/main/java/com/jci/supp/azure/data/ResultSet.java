@@ -11,9 +11,12 @@ import java.util.List;
 
 import com.jci.supp.azure.query.PaginationParam;
 
-
 /**
- * The Class ResultSet.
+ * <p>
+ * <strong>The Class ResultSet for managing Azure Table Data.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class ResultSet {
 	

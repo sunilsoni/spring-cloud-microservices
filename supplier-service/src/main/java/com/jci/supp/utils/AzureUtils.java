@@ -7,17 +7,15 @@ package com.jci.supp.utils;
 
 
 /**
- * The Class AzureUtils.
+ * <p>
+ * <strong> The Class AzureUtils.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class AzureUtils {
-	 
-	/**
-	 * Gets the partition key.
-	 *
-	 * @param erpName the erp name
-	 * @return the partition key
-	 */
+	
 	public static String getPartitionKey(String erpName){
-		return erpName+"_"+"PO";	
+		return "SUPPLIER"+"_"+erpName.toUpperCase();	
 	}
 }

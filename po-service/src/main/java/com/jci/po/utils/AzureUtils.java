@@ -7,7 +7,11 @@ package com.jci.po.utils;
 
 
 /**
- * The Class AzureUtils.
+ * <p>
+ * <strong> The Class AzureUtils.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class AzureUtils {
 	
@@ -17,9 +21,11 @@ public class AzureUtils {
 	 * @param erpName the erp name
 	 * @return the partition key
 	 */
-	public static String getPartitionKey(String erpName){
-		//String partitionKey = erpName+"_"+"PO"+"_"+Calendar.getInstance().get(Calendar.YEAR);
-		String partitionKey = erpName.toUpperCase()+"_"+"PO";	
-		return partitionKey;
+	public static String getPoPartitionKey(String erpName){
+		return "PO"+"_"+erpName.toUpperCase();	
+	}
+	
+	public static String getPoItemPartitionKey(String erpName){
+		return "PO_ITEM"+"_"+erpName.toUpperCase();	
 	}
 }

@@ -9,9 +9,12 @@ import java.util.Date;
 
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
-
 /**
- * The Class PoEntity.
+ * <p>
+ * <strong> The Class PoEntity.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PoEntity extends TableServiceEntity {
 
@@ -35,14 +38,14 @@ public class PoEntity extends TableServiceEntity {
 	/** The order creation date. */
 	private Date orderCreationDate;
    	
-	   /** The status. */
-	   private int status;
-   	
-	   /** The erp name. */
-	   private String erpName;
-   	
-	   /** The description. */
-	   private String description;
+    /** The status. */
+    private int supplierDeliveryState;
+ 
+    /** The erp name. */
+    private String erpName;
+
+    /** The description. */
+    private String description;
 	
 	/** The user name. */
 	private String userName;
@@ -89,22 +92,14 @@ public class PoEntity extends TableServiceEntity {
 		this.orderCreationDate = orderCreationDate;
 	}
 
-	/**
-	 * Gets the status.
-	 *
-	 * @return the status
-	 */
-	public int getStatus() {
-		return status;
+	
+
+	public int getSupplierDeliveryState() {
+		return supplierDeliveryState;
 	}
 
-	/**
-	 * Sets the status.
-	 *
-	 * @param status the new status
-	 */
-	public void setStatus(int status) {
-		this.status = status;
+	public void setSupplierDeliveryState(int supplierDeliveryState) {
+		this.supplierDeliveryState = supplierDeliveryState;
 	}
 
 	/**
@@ -307,16 +302,15 @@ public class PoEntity extends TableServiceEntity {
 		this.suppType = suppType;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "PoEntity [orderCreationDate=" + orderCreationDate + ", status=" + status + ", erpName=" + erpName
-				+ ", description=" + description + ", userName=" + userName + ", globalId=" + globalId + ", comment="
-				+ comment + ", suppType=" + suppType + ", grNum=" + grNum + ", poACK=" + poACK + ", asn=" + asn
-				+ ", region=" + region + ", plant=" + plant + "]";
+		return "PoEntity [orderCreationDate=" + orderCreationDate + ", supplierDeliveryState=" + supplierDeliveryState
+				+ ", erpName=" + erpName + ", description=" + description + ", userName=" + userName + ", globalId="
+				+ globalId + ", comment=" + comment + ", suppType=" + suppType + ", grNum=" + grNum + ", poACK=" + poACK
+				+ ", asn=" + asn + ", region=" + region + ", plant=" + plant + "]";
 	}
+
+	
 
 	
 }

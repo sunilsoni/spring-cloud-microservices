@@ -32,7 +32,11 @@ import com.jci.po.azure.FlatFile;
 
 
 /**
- * The Class PrepareFlatFile.
+ * <p>
+ * <strong> The Class PrepareFlatFile.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PrepareFlatFile {
 

@@ -9,7 +9,11 @@ import com.jci.supp.azure.query.PaginationParam;
 
 
 /**
- * The Class SegmentedDetailReq.
+ * <p>
+ * <strong>The Class SegmentedDetailReq.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class SegmentedDetailReq {
 

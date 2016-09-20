@@ -16,7 +16,11 @@ import com.microsoft.azure.storage.StorageException;
 
 
 /**
- * The Interface SuppRepo.
+ * <p>
+ * <strong>The Class SuppRepo.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public interface SuppRepo {
 	

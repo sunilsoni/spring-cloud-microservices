@@ -50,7 +50,11 @@ import com.microsoft.azure.storage.table.TableQuery;
 
 
 /**
- * The Class PoRepoImpl.
+ * <p>
+ * <strong> The Class PoRepoImpl.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Repository
 @RefreshScope
@@ -64,7 +68,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
     private String allErps;
     
 	/** The batch size. */
-	final int batchSize = 15;
+	final int batchSize = 10;
 	
 	/** The azure storage. */
 	@Autowired   
@@ -98,9 +102,9 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		
 	    for (MiscDataEntity entity : cloudTable.execute(partitionQuery)) {
 	    	list = new ArrayList<>();
-	    	list.add(entity.getPoIntransitCount());
-	    	list.add(entity.getPoProcessedCount());
-	    	list.add(entity.getPoErrorCount());
+	    	list.add(entity.getIntransitCount());
+	    	list.add(entity.getProcessedCount());
+	    	list.add(entity.getErrorCount());
 	    	graphData.put(entity.getRowKey(), list);
 	   }
 		 return graphData;
@@ -154,7 +158,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 	    	HashMap<String, String> map = new HashMap<>();
-	    	map.put("Status",String.valueOf(entity.getStatus()));
+	    	map.put("Status",String.valueOf(entity.getSupplierDeliveryState()));
 	    	map.put("Description",String.valueOf(entity.getDescription()));
 	    	map.put("OrderNumber",String.valueOf(entity.getRowKey()));
 	    	map.put("SourceErpName",String.valueOf(entity.getErpName()));
@@ -242,7 +246,8 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		 
 		TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
 		 CloudTable table = azureStorage.getTable(request.getTableName());
-       
+		 LOG.info("rows.hasNext()-->"+table.getName());
+		 
 		// segmented query
        ResultSegment<DynamicTableEntity> response = table.executeSegmented(query, continuationToken) ;
        
@@ -259,6 +264,8 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		EntityProperty ep;
 		
 		Iterator<DynamicTableEntity> rows = response.getResults().iterator() ;
+		LOG.info("rows.hasNext()-->"+rows.hasNext());
+		
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
@@ -273,6 +280,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 			}
 			series.add(hashmap);
 		}
+		LOG.info("series-->"+series);
 		return new ResultSet(series,pagination) ;
    }
    
@@ -313,7 +321,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 			    	entity.setUserName(request.getUserName());
 			    	entity.setComment(request.getComment());
 			    	
-		    		entity.setStatus(Constants.STATUS_SUCCESS);
+		    		entity.setSupplierDeliveryState(Constants.STATUS_SUCCESS);
 		    		successCount = successCount+1;
 		    		successList.add(entity.getRowKey());
 			    	
@@ -361,10 +369,10 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		}
 		
 		if(successCount>0){
-			 int sum1 = miscEntity.getPoProcessedCount()+successCount;
-			 miscEntity.setPoProcessedCount(sum1);
-			 int sum2 = miscEntity.getPoErrorCount()-successCount;
-			 miscEntity.setPoErrorCount(sum2);
+			 int sum1 = miscEntity.getProcessedCount()+successCount;
+			 miscEntity.setProcessedCount(sum1);
+			 int sum2 = miscEntity.getErrorCount()-successCount;
+			 miscEntity.setErrorCount(sum2);
 			 
 			 try {
 					updateStatusCountEntity(miscEntity);
@@ -418,6 +426,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		ObjectMapper mapper = new ObjectMapper(); 
 		TypeReference<HashMap<String,Object>> typeRef  = new TypeReference<HashMap<String,Object>>() {};
 		Iterator<DynamicTableEntity> rows = response.getResults().iterator() ;
+		
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
@@ -431,7 +440,6 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 						hashmap.put("id", row.getRowKey());  
 					} catch (IOException e) {
 						LOG.error("### Exception in   ####",e);
-						
 					} 
 				}
 			}

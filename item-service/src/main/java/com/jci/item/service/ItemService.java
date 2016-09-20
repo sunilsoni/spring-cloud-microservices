@@ -12,8 +12,13 @@ import com.jci.item.dto.SegmentedDetailReq;
 import com.jci.item.dto.SegmentedDetailRes;
 import com.microsoft.azure.storage.StorageException;
 
+
 /**
- * The Interface ItemService.
+ * <p>
+ * <strong>The Interface ItemService.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public interface ItemService {
 	

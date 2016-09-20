@@ -15,7 +15,11 @@ import com.microsoft.azure.storage.table.CloudTableClient;
 
 
 /**
- * The Class AzureStorage.
+ * <p>
+ * <strong>Azure Account Details for managing connection.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class AzureStorage {
 	

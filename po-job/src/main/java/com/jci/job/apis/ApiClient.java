@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.jci.job.api.req.SuccessReq;
+import com.jci.job.api.res.GrDetailsRes;
 import com.jci.job.api.res.ItemDetailsRes;
 import com.jci.job.api.res.ItemSuccessRes;
 import com.jci.job.api.res.PoDetailsRes;
-import com.jci.job.api.res.PoSuccessRes;
 import com.jci.job.api.res.SuppDetailsRes;
 import com.jci.job.api.res.SuppSuccessRes;
 
@@ -42,8 +43,8 @@ public interface ApiClient {
 	@RequestMapping(value = "/purchaseorders", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<PoDetailsRes> getPoDetails(@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant,@RequestParam("ordernumber") String ordernumber,@RequestParam("ordercreationdate") String ordercreationdate);
 
-	@RequestMapping(value = "/pologupdate", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getPoDetailsRes(@RequestBody PoSuccessRes poList,@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant);
+	@RequestMapping(value = "/purchaseorders", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String getPoDetailsRes(@RequestBody SuccessReq poList);
 	
 	/**
 	 * Get Item master Data
@@ -56,8 +57,8 @@ public interface ApiClient {
 	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ItemDetailsRes> getItems(@RequestParam("erp") String erp,@RequestParam("region") String region, @RequestParam("plant") String plant,@RequestParam("itemnumber") String itemnumber);
 
-	@RequestMapping(value = "/itemsUpdate", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getItemsRes(@RequestBody ItemSuccessRes poList,@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant);
+	@RequestMapping(value = "/items", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String getItemsRes(@RequestBody SuccessReq itemList);
 
 	
 	/**
@@ -69,11 +70,17 @@ public interface ApiClient {
 	 * @return SupplierDetailsRes
 	 */
 	@RequestMapping(value = "/suppliers", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<SuppDetailsRes> getSupp(@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant,@RequestParam("suppname") String suppname);
+	public ResponseEntity<SuppDetailsRes> getSupp(@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant,@RequestParam("suppliername") String suppname);
 
+	@RequestMapping(value = "/suppliers", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String getSuppRes(@RequestBody SuccessReq supplierList);
 
-	@RequestMapping(value = "/suppliersUpdate", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getSuppRes(@RequestBody SuppSuccessRes poList,@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant);
+	
+	@RequestMapping(value = "/receiptcon", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<GrDetailsRes> getGrDetails(@RequestParam("erp") String erp,@RequestParam("region") String region,@RequestParam("plant") String plant,@RequestParam("ordernumber") String ordernumber,@RequestParam("ordercreationdate") String ordercreationdate);
+	
 
+	@RequestMapping(value = "/receiptcon", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String getGrDetailsRes(@RequestBody SuccessReq poList);
 	
 }

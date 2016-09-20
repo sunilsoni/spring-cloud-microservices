@@ -25,6 +25,8 @@ public interface ApiClientService {
 	 */
 	String getPoDetails()  throws InvalidKeyException, URISyntaxException, StorageException ;
 	
+	String getGrDetails()  throws InvalidKeyException, URISyntaxException, StorageException ;
+	
 	/**
 	 * Process po flat file.
 	 *

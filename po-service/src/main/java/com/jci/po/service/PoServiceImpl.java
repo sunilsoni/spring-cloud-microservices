@@ -45,7 +45,11 @@ import com.microsoft.azure.storage.StorageException;
 
 
 /**
- * The Class PoServiceImpl.
+ * <p>
+ * <strong> The Class PoServiceImpl.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Service
 @RefreshScope
@@ -100,7 +104,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 				azureRequest = new DataHelper();
 				azureRequest.setErrorDataRequired(false);
 				azureRequest.setErpName(erpArr[i]);
-				azureRequest.setPartitionValue(AzureUtils.getPartitionKey(erpArr[i]));
+				azureRequest.setPartitionValue(AzureUtils.getPoPartitionKey(erpArr[i]));
 				azureRequest.setTableName(Constants.TABLE_PO_DETAILS);
 				
 				resultSet = repo.getSegmentedResultSet(param, azureRequest);
@@ -182,7 +186,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 	@Override
 	public BatchUpdateRes processErrorPos(PoDetailsReq request)  throws InvalidKeyException, URISyntaxException, StorageException {
 		BatchUpdateRes res = new BatchUpdateRes();
-		String partitionKey = AzureUtils.getPartitionKey(request.getErpName());
+		String partitionKey = AzureUtils.getPoPartitionKey(request.getErpName());
 		
 		if(StringUtils.isBlank(partitionKey)){
 			res.setError(true);
@@ -310,7 +314,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 		DataHelper azureRequest = new DataHelper();
 		azureRequest.setErpName(request.getErpName());
 		azureRequest.setPoNum(request.getPoNum());
-		azureRequest.setPartitionValue(AzureUtils.getPartitionKey(request.getErpName()));
+		azureRequest.setPartitionValue(AzureUtils.getPoItemPartitionKey(request.getErpName()));
 		azureRequest.setTableName(Constants.TABLE_PO_ITEM_DETAILS);
 		ResultSet resultSet = repo.getPoItemDetail(param, azureRequest);
 		PoItemDetailRes response = new PoItemDetailRes();

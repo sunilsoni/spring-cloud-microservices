@@ -24,7 +24,11 @@ import com.microsoft.azure.storage.StorageException;
 
 
 /**
- * The Class SuppServiceImpl.
+ * <p>
+ * <strong>The Class SuppServiceImpl.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Service
 public class SuppServiceImpl implements SuppService{ // NO_UCD (unused code)

@@ -9,7 +9,11 @@ import java.util.List;
 
 
 /**
- * The Class PoDetailsReq.
+ * <p>
+ * <strong> The Class PoDetailsReq.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PoDetailsReq {
 	

@@ -11,9 +11,12 @@ import com.jci.po.azure.query.ScrollingParam;
 import com.microsoft.azure.storage.ResultContinuation;
 import com.microsoft.azure.storage.ResultContinuationType;
 
-
 /**
- * The Class DataUtil.
+ * <p>
+ * <strong>The Class DataUtil for Azure.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class DataUtil {
 	

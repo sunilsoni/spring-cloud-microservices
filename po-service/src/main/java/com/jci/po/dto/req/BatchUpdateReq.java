@@ -11,9 +11,12 @@ import java.util.List;
 import com.jci.po.entity.PoEntity;
 
 
-
 /**
- * The Class BatchUpdateReq.
+ * <p>
+ * <strong> The Class BatchUpdateReq.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class BatchUpdateReq {
 

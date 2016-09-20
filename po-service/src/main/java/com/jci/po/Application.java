@@ -8,9 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 
-
 /**
- * The Class Application.
+ * <p>
+ * <strong>The Class Application.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @EnableEurekaClient
 @SpringBootApplication

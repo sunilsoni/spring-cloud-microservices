@@ -9,7 +9,11 @@ import java.util.Date;
 
 
 /**
- * The Class DataHelper.
+ * <p>
+ * <strong>The Class DataHelper.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class DataHelper {
 	

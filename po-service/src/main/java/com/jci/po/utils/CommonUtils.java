@@ -19,7 +19,11 @@ import com.jci.po.service.PoServiceImpl;
 
 
 /**
- * The Class CommonUtils.
+ * <p>
+ * <strong> The Class CommonUtils.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class CommonUtils {
 	
@@ -37,7 +41,7 @@ public class CommonUtils {
 	}
 	
 	/**
-	 * Gets the dest mapping.
+	 * Gets the destination mapping.
 	 *
 	 * @param folderUrl the folder url
 	 * @return the dest mapping

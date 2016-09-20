@@ -13,6 +13,8 @@ import java.util.Map;
 
 import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.BatchUpdateReq;
+import com.jci.job.api.req.PoBody;
+import com.jci.job.api.req.SuccessReq;
 import com.jci.job.api.res.BatchUpdateRes;
 import com.jci.job.entity.PoEntity;
 import com.microsoft.azure.storage.StorageException;
@@ -40,7 +42,9 @@ public interface JobRepo {
 	 * @param request the request
 	 * @return the list
 	 */
-	List<String> batchInsert(BatchInsertReq request);
+	//List<String> batchInsert(BatchInsertReq request);
+	
+	List<Object> batchInsert(BatchInsertReq request);
 	
 	/**
 	 * Gets the po details.

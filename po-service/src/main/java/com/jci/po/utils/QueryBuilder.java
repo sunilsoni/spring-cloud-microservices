@@ -14,7 +14,11 @@ import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
 
 
 /**
- * The Class QueryBuilder.
+ * <p>
+ * <strong> The Class QueryBuilder.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class QueryBuilder {
 

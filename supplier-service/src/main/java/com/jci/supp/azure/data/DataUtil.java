@@ -13,7 +13,11 @@ import com.microsoft.azure.storage.ResultContinuationType;
 
 
 /**
- * The Class DataUtil.
+ * <p>
+ * <strong>The Class DataUtil.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class DataUtil {
 	

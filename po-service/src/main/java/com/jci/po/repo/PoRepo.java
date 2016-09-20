@@ -23,7 +23,11 @@ import com.microsoft.azure.storage.StorageException;
 
 
 /**
- * The Interface PoRepo.
+ * <p>
+ * <strong> The interface PoRepo.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public interface PoRepo {
 	

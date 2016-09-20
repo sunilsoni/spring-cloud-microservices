@@ -11,179 +11,85 @@ import java.util.List;
  * The Class PoDetails.
  */
 public class PoDetails {
-
-	/** The order number. */
+	
+	
+	private String erp;
+	private String plant;
+	private String region;
 	private String orderNumber;
-	
-	/** The supp type. */
-	private String suppType;
-	
-	/** The po ACK. */
-	private boolean poACK;
-	
-	/** The asn. */
-	private boolean asn;
-	
-	/** The gr number. */
+	private String orderCreationDate;
+	private Boolean poACK;
+	private Boolean asn;
 	private String grNumber;
+	private String supplierType;
+	private List<PoItem> itemList;
 	
-	/** The order creation date. */
-	private String orderCreationDate;	
-	
-	/** The item list. */
-	private List<Object> itemList;
-
-
-	/**
-	 * Gets the order number.
-	 *
-	 * @return the order number
-	 */
+	public String getErp() {
+		return erp;
+	}
+	public void setErp(String erp) {
+		this.erp = erp;
+	}
+	public String getPlant() {
+		return plant;
+	}
+	public void setPlant(String plant) {
+		this.plant = plant;
+	}
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
 	public String getOrderNumber() {
 		return orderNumber;
 	}
-
-
-	/**
-	 * Sets the order number.
-	 *
-	 * @param orderNumber the new order number
-	 */
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
 	}
-
-
-
-
-	/**
-	 * Checks if is po ACK.
-	 *
-	 * @return true, if is po ACK
-	 */
-	public boolean isPoACK() {
-		return poACK;
-	}
-
-
-	/**
-	 * Sets the po ACK.
-	 *
-	 * @param poACK the new po ACK
-	 */
-	public void setPoACK(boolean poACK) {
-		this.poACK = poACK;
-	}
-
-
-	/**
-	 * Checks if is asn.
-	 *
-	 * @return true, if is asn
-	 */
-	public boolean isAsn() {
-		return asn;
-	}
-
-
-	/**
-	 * Sets the asn.
-	 *
-	 * @param asn the new asn
-	 */
-	public void setAsn(boolean asn) {
-		this.asn = asn;
-	}
-
-
-	/**
-	 * Gets the gr number.
-	 *
-	 * @return the gr number
-	 */
-	public String getGrNumber() {
-		return grNumber;
-	}
-
-
-	/**
-	 * Sets the gr number.
-	 *
-	 * @param grNumber the new gr number
-	 */
-	public void setGrNumber(String grNumber) {
-		this.grNumber = grNumber;
-	}
-
-
-	/**
-	 * Gets the order creation date.
-	 *
-	 * @return the order creation date
-	 */
 	public String getOrderCreationDate() {
 		return orderCreationDate;
 	}
-
-
-	/**
-	 * Sets the order creation date.
-	 *
-	 * @param orderCreationDate the new order creation date
-	 */
 	public void setOrderCreationDate(String orderCreationDate) {
 		this.orderCreationDate = orderCreationDate;
 	}
-
-
-	/**
-	 * Gets the item list.
-	 *
-	 * @return the item list
-	 */
-	public List<Object> getItemList() {
+	public Boolean getPoACK() {
+		return poACK;
+	}
+	public void setPoACK(Boolean poACK) {
+		this.poACK = poACK;
+	}
+	public Boolean getAsn() {
+		return asn;
+	}
+	public void setAsn(Boolean asn) {
+		this.asn = asn;
+	}
+	public String getGrNumber() {
+		return grNumber;
+	}
+	public void setGrNumber(String grNumber) {
+		this.grNumber = grNumber;
+	}
+	public String getSupplierType() {
+		return supplierType;
+	}
+	public void setSupplierType(String supplierType) {
+		this.supplierType = supplierType;
+	}
+	public List<PoItem> getItemList() {
 		return itemList;
 	}
-
-
-	/**
-	 * Sets the item list.
-	 *
-	 * @param itemList the new item list
-	 */
-	public void setItemList(List<Object> itemList) {
+	public void setItemList(List<PoItem> itemList) {
 		this.itemList = itemList;
 	}
-
-
-	/**
-	 * Gets the supp type.
-	 *
-	 * @return the supp type
-	 */
-	public String getSuppType() {
-		return suppType;
-	}
-
-
-	/**
-	 * Sets the supp type.
-	 *
-	 * @param suppType the new supp type
-	 */
-	public void setSuppType(String suppType) {
-		this.suppType = suppType;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	
 	@Override
 	public String toString() {
-		return "PoDetails [orderNumber=" + orderNumber + ", suppType=" + suppType + ", poACK=" + poACK + ", asn=" + asn
-				+ ", grNumber=" + grNumber + ", orderCreationDate=" + orderCreationDate + ", itemList=" + itemList
-				+ "]";
+		return "PoDetails [erp=" + erp + ", plant=" + plant + ", region=" + region + ", orderNumber=" + orderNumber
+				+ ", orderCreationDate=" + orderCreationDate + ", poACK=" + poACK + ", asn=" + asn + ", grNumber="
+				+ grNumber + ", supplierType=" + supplierType + ", itemList=" + itemList + "]";
 	}
 
 

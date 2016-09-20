@@ -18,7 +18,11 @@ import com.microsoft.azure.storage.StorageException;
 
 
 /**
- * The Interface PoService.
+ * <p>
+ * <strong> The interface PoService.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public interface PoService {
 	

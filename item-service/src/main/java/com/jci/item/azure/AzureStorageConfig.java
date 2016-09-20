@@ -10,22 +10,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 /**
- * The Class AzureStorageConfig.
+ * <p>
+ * <strong>The Class Azure Storage Configuration.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Configuration
 public class AzureStorageConfig { // NO_UCD (unused code)
 	
-  /** The protocol. */
+  /** The Azure protocol. */
  @Value("${azure.storage.connection.protocol}")
   private String protocol;
 
-  /** The account name. */
+  /** The Azure account name. */
   @Value("${azure.storage.connection.accountname}")
   private String accountName;
 
-  /** The account key. */
+  /** The Azure account key. */
   @Value("${azure.storage.connection.accountkey}")
   private String accountKey;
   

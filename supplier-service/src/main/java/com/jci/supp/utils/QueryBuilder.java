@@ -7,7 +7,11 @@ package com.jci.supp.utils;
 
 
 /**
- * The Class QueryBuilder.
+ * <p>
+ * <strong> The Class QueryBuilder.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class QueryBuilder {
 	

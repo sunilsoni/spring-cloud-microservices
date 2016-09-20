@@ -12,7 +12,13 @@ import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.CloudTableClient;
-
+/**
+ * <p>
+ * <strong>Azure Account Details for managing connection.</strong>
+ * <p>
+ *
+ * @author csonisk
+ */
 public class AzureStorage {
 	
   private static final String FORMAT = "DefaultEndpointsProtocol=%s;AccountName=%s;AccountKey=%s";

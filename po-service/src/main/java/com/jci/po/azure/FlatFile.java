@@ -7,7 +7,11 @@ package com.jci.po.azure;
 
 
 /**
- * The Class FlatFile.
+ * <p>
+ * <strong>The Class FlatFile.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class FlatFile {
 	

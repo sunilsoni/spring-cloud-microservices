@@ -43,106 +43,94 @@ public class SuppEntity extends TableServiceEntity {
 	
 	/** The plant. */
 	private String plant;
+	
+	private String suppType;
 
-
-	/**
-	 * Gets the erp name.
-	 *
-	 * @return the erp name
-	 */
-	public String getErpName() {
-		return erpName;
-	}
-
-	/**
-	 * Sets the erp name.
-	 *
-	 * @param erpName the new erp name
-	 */
-	public void setErpName(String erpName) {
-		this.erpName = erpName;
-	}
-
-	/**
-	 * Gets the region.
-	 *
-	 * @return the region
-	 */
-	public String getRegion() {
-		return region;
-	}
-
-	/**
-	 * Sets the region.
-	 *
-	 * @param region the new region
-	 */
-	public void setRegion(String region) {
-		this.region = region;
-	}
-
-	/**
-	 * Gets the plant.
-	 *
-	 * @return the plant
-	 */
-	public String getPlant() {
-		return plant;
-	}
-
-	/**
-	 * Sets the plant.
-	 *
-	 * @param plant the new plant
-	 */
-	public void setPlant(String plant) {
-		this.plant = plant;
-	}
-
-	/**
-	 * Gets the status.
-	 *
-	 * @return the status
-	 */
-	public int getStatus() {
-		return status;
-	}
-
-	/**
-	 * Sets the status.
-	 *
-	 * @param status the new status
-	 */
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	/**
-	 * Gets the json string.
-	 *
-	 * @return the json string
-	 */
 	public String getJsonString() {
 		return jsonString;
 	}
 
-	/**
-	 * Sets the json string.
-	 *
-	 * @param jsonString the new json string
-	 */
 	public void setJsonString(String jsonString) {
 		this.jsonString = jsonString;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getErpName() {
+		return erpName;
+	}
+
+	public void setErpName(String erpName) {
+		this.erpName = erpName;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getPlant() {
+		return plant;
+	}
+
+	public void setPlant(String plant) {
+		this.plant = plant;
+	}
+
+	public String getSuppType() {
+		return suppType;
+	}
+
+	public void setSuppType(String suppType) {
+		this.suppType = suppType;
+	}
+
 	@Override
 	public String toString() {
 		return "SuppEntity [jsonString=" + jsonString + ", status=" + status + ", erpName=" + erpName + ", region="
-				+ region + ", plant=" + plant + "]";
+				+ region + ", plant=" + plant + ", suppType=" + suppType + "]";
 	}
 
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((partitionKey == null) ? 0 : partitionKey.hashCode());
+		result = prime * result + ((rowKey == null) ? 0 : rowKey.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SuppEntity other = (SuppEntity) obj;
+		if (partitionKey == null) {
+			if (other.partitionKey != null)
+				return false;
+		} else if (!partitionKey.equals(other.partitionKey))
+			return false;
+		if (rowKey == null) {
+			if (other.rowKey != null)
+				return false;
+		} else if (!rowKey.equals(other.rowKey))
+			return false;
+		return true;
+	}
+	
+
 }

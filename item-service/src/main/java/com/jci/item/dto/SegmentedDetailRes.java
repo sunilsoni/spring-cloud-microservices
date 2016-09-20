@@ -11,7 +11,11 @@ import java.util.HashMap;
 import com.jci.item.azure.data.ResultSet;
 
 /**
- * The Class SegmentedDetailRes.
+ * <p>
+ * <strong>The Class SegmentedDetailRes for managing UI Pagination.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class SegmentedDetailRes {
 

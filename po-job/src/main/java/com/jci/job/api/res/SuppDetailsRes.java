@@ -12,118 +12,49 @@ import java.util.List;
  */
 public class SuppDetailsRes {
 
-	/** The code. */
-	private int code;
-	
-	/** The status. */
-	private String status;
-	
-	/** The message. */
-	private String message;
-	
-	/** The date. */
 	private String date;
+	private String message;
+	private String status;
+	private int code;
+	private List<Supplier> supplierList;
 	
-	/** The supp list. */
-	private List<Object> suppList;
-
-	/**
-	 * Gets the code.
-	 *
-	 * @return the code
-	 */
-	public int getCode() {
-		return code;
-	}
-
-	/**
-	 * Sets the code.
-	 *
-	 * @param code the new code
-	 */
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	/**
-	 * Gets the status.
-	 *
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-
-	/**
-	 * Sets the status.
-	 *
-	 * @param status the new status
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	/**
-	 * Gets the message.
-	 *
-	 * @return the message
-	 */
-	public String getMessage() {
-		return message;
-	}
-
-	/**
-	 * Sets the message.
-	 *
-	 * @param message the new message
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	/**
-	 * Gets the date.
-	 *
-	 * @return the date
-	 */
 	public String getDate() {
 		return date;
 	}
-
-	/**
-	 * Sets the date.
-	 *
-	 * @param date the new date
-	 */
 	public void setDate(String date) {
 		this.date = date;
 	}
-
-	/**
-	 * Gets the supp list.
-	 *
-	 * @return the supp list
-	 */
-	public List<Object> getSuppList() {
-		return suppList;
+	public String getMessage() {
+		return message;
 	}
-
-	/**
-	 * Sets the supp list.
-	 *
-	 * @param suppList the new supp list
-	 */
-	public void setSuppList(List<Object> suppList) {
-		this.suppList = suppList;
+	public void setMessage(String message) {
+		this.message = message;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public int getCode() {
+		return code;
+	}
+	public void setCode(int code) {
+		this.code = code;
+	}
+	public List<Supplier> getSupplierList() {
+		return supplierList;
+	}
+	public void setSupplierList(List<Supplier> supplierList) {
+		this.supplierList = supplierList;
+	}
+	
+	
 	@Override
 	public String toString() {
-		return "SuppDetailsRes [code=" + code + ", status=" + status + ", message=" + message + ", date=" + date
-				+ ", suppList=" + suppList + "]";
+		return "SuppDetailsRes [date=" + date + ", message=" + message + ", status=" + status + ", code=" + code
+				+ ", supplierList=" + supplierList + "]";
 	}
-
+	
+	
 }

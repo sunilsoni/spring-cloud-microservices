@@ -13,7 +13,11 @@ import org.springframework.context.annotation.Configuration;
 
 
 /**
- * The Class AzureStorageConfig.
+ * <p>
+ * <strong>The Class Azure Storage Configuration.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Configuration
 public class AzureStorageConfig { // NO_UCD (unused code)

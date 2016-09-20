@@ -60,7 +60,7 @@ public class PoController { // NO_UCD (unused code)
 	public  SegmentedDetailRes getSegmentedPoDetails(@RequestBody SegmentedDetailReq request){
 		long startTime = System.nanoTime();
 		SegmentedDetailRes response = new SegmentedDetailRes();
-		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
+		request.setPartition(AzureUtils.getPoPartitionKey(request.getErpName().toUpperCase()));
 		request.setTableName(Constants.TABLE_PO_DETAILS);
 		
 		try {
@@ -89,7 +89,7 @@ public class PoController { // NO_UCD (unused code)
 	public  SegmentedDetailRes getErrorDetails(@RequestBody SegmentedDetailReq request){
 		long startTime = System.nanoTime();
 		SegmentedDetailRes response = new SegmentedDetailRes();
-		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
+		request.setPartition(AzureUtils.getPoPartitionKey(request.getErpName().toUpperCase()));
 		request.setTableName(Constants.TABLE_PO_DETAILS);
 		
 		try {

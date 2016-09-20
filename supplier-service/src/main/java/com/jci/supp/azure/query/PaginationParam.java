@@ -7,7 +7,11 @@ package com.jci.supp.azure.query;
 
 
 /**
- * The Class PaginationParam.
+ * <p>
+ * <strong>The Class PaginationParam for managing UI Pagination.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PaginationParam {
 	

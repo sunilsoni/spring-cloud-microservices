@@ -9,7 +9,11 @@ import com.jci.po.azure.data.ResultSet;
 
 
 /**
- * The Class PoItemDetailRes.
+ * <p>
+ * <strong> The Class PoItemDetailRes.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PoItemDetailRes {
 	

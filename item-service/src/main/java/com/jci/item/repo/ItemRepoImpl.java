@@ -38,9 +38,12 @@ import com.microsoft.azure.storage.table.DynamicTableEntity;
 import com.microsoft.azure.storage.table.EntityProperty;
 import com.microsoft.azure.storage.table.TableQuery;
 
-
 /**
- * The Class ItemRepoImpl.
+ * <p>
+ * <strong> The  Item Repository Implementation Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Repository
 public class ItemRepoImpl implements ItemRepo { 
@@ -72,6 +75,7 @@ public class ItemRepoImpl implements ItemRepo {
 		 
 		// Create the query
 		String whereCondition = QueryBuilder.partitionWhereCondition(request.getPartitionValue());
+		
 		 if(StringUtils.isBlank(whereCondition) ){
 			 return null;
 		 }

@@ -8,7 +8,11 @@ package com.jci.item.azure.data;
 import java.util.Date;
 
 /**
- * The Class DataHelper.
+ * <p>
+ * <strong>The Class DataHelper for Azure.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class DataHelper {
 	

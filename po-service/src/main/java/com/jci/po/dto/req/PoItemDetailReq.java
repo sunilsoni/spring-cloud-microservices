@@ -9,7 +9,11 @@ import com.jci.po.azure.query.PaginationParam;
 
 
 /**
- * The Class PoItemDetailReq.
+ * <p>
+ * <strong> The Class PoItemDetailReq.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PoItemDetailReq {
 

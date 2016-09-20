@@ -7,9 +7,12 @@ package com.jci.po.entity;
 
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
-
 /**
- * The Class MiscDataEntity.
+ * <p>
+ * <strong> The Class MiscDataEntity.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class MiscDataEntity   extends TableServiceEntity {
 
@@ -32,13 +35,13 @@ public class MiscDataEntity   extends TableServiceEntity {
 	}
 	
 	/** The po intransit count. */
-	private int poIntransitCount;//1
+	private int intransitCount;//1
 	
 	/** The po processed count. */
-	private int poProcessedCount;//2
+	private int processedCount;//2
 	
 	/** The po error count. */
-	private int poErrorCount;//3
+	private int errorCount;//3
 	
 	/** The item intransit count. */
 	private int itemIntransitCount;//1
@@ -101,59 +104,6 @@ public class MiscDataEntity   extends TableServiceEntity {
 		this.comment = comment;
 	}
 
-	/**
-	 * Gets the po intransit count.
-	 *
-	 * @return the po intransit count
-	 */
-	public int getPoIntransitCount() {
-		return poIntransitCount;
-	}
-
-	/**
-	 * Sets the po intransit count.
-	 *
-	 * @param poIntransitCount the new po intransit count
-	 */
-	public void setPoIntransitCount(int poIntransitCount) {
-		this.poIntransitCount = poIntransitCount;
-	}
-
-	/**
-	 * Gets the po processed count.
-	 *
-	 * @return the po processed count
-	 */
-	public int getPoProcessedCount() {
-		return poProcessedCount;
-	}
-
-	/**
-	 * Sets the po processed count.
-	 *
-	 * @param poProcessedCount the new po processed count
-	 */
-	public void setPoProcessedCount(int poProcessedCount) {
-		this.poProcessedCount = poProcessedCount;
-	}
-
-	/**
-	 * Gets the po error count.
-	 *
-	 * @return the po error count
-	 */
-	public int getPoErrorCount() {
-		return poErrorCount;
-	}
-
-	/**
-	 * Sets the po error count.
-	 *
-	 * @param poErrorCount the new po error count
-	 */
-	public void setPoErrorCount(int poErrorCount) {
-		this.poErrorCount = poErrorCount;
-	}
 
 	/**
 	 * Gets the item intransit count.
@@ -263,16 +213,38 @@ public class MiscDataEntity   extends TableServiceEntity {
 		this.suppErrorCount = suppErrorCount;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	public int getIntransitCount() {
+		return intransitCount;
+	}
+
+	public void setIntransitCount(int intransitCount) {
+		this.intransitCount = intransitCount;
+	}
+
+	public int getProcessedCount() {
+		return processedCount;
+	}
+
+	public void setProcessedCount(int processedCount) {
+		this.processedCount = processedCount;
+	}
+
+	public int getErrorCount() {
+		return errorCount;
+	}
+
+	public void setErrorCount(int errorCount) {
+		this.errorCount = errorCount;
+	}
+
 	@Override
 	public String toString() {
-		return "MiscDataEntity [poIntransitCount=" + poIntransitCount + ", poProcessedCount=" + poProcessedCount
-				+ ", poErrorCount=" + poErrorCount + ", itemIntransitCount=" + itemIntransitCount
-				+ ", itemProcessedCount=" + itemProcessedCount + ", itemErrorCount=" + itemErrorCount
-				+ ", suppIntransitCount=" + suppIntransitCount + ", suppProcessedCount=" + suppProcessedCount
-				+ ", suppErrorCount=" + suppErrorCount + ", orderNumber=" + orderNumber + ", comment=" + comment + "]";
+		return "MiscDataEntity [intransitCount=" + intransitCount + ", processedCount=" + processedCount
+				+ ", errorCount=" + errorCount + ", itemIntransitCount=" + itemIntransitCount + ", itemProcessedCount="
+				+ itemProcessedCount + ", itemErrorCount=" + itemErrorCount + ", suppIntransitCount="
+				+ suppIntransitCount + ", suppProcessedCount=" + suppProcessedCount + ", suppErrorCount="
+				+ suppErrorCount + ", orderNumber=" + orderNumber + ", comment=" + comment + "]";
 	}
+
 
 }

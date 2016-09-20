@@ -37,9 +37,12 @@ import com.microsoft.azure.storage.table.DynamicTableEntity;
 import com.microsoft.azure.storage.table.EntityProperty;
 import com.microsoft.azure.storage.table.TableQuery;
 
-
 /**
- * The Class SuppRepoImpl.
+ * <p>
+ * <strong>The Class SuppRepoImpl.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Repository
 public class SuppRepoImpl implements SuppRepo { // NO_UCD (unused code)
@@ -88,6 +91,8 @@ public class SuppRepoImpl implements SuppRepo { // NO_UCD (unused code)
 		TypeReference<HashMap<String,Object>> typeRef  = new TypeReference<HashMap<String,Object>>() {};
 		
 		Iterator<DynamicTableEntity> rows = response.getResults().iterator() ;
+		LOG.error("hasNext--->"+rows.hasNext());
+		
 		while(rows.hasNext()) {
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
@@ -107,6 +112,8 @@ public class SuppRepoImpl implements SuppRepo { // NO_UCD (unused code)
 				
 			}
 		}
+		LOG.error("hasNext--->"+series);
+		
 		return new ResultSet(series,pagination) ;
    }
  

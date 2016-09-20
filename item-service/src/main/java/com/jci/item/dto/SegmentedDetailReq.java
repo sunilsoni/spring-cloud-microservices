@@ -8,7 +8,11 @@ package com.jci.item.dto;
 import com.jci.item.azure.query.PaginationParam;
 
 /**
- * The Class SegmentedDetailReq.
+ * <p>
+ * <strong> The Class SegmentedDetailReq  for managing UI Pagination.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class SegmentedDetailReq {
 

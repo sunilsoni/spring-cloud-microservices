@@ -7,16 +7,20 @@ package com.jci.supp.utils;
 
 
 /**
- * The Class Constants.
+ * <p>
+ * <strong> The Class Constants.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class Constants {
 	
 	/** The Constant TABLE_SUPPLIER. */
-	public static final String TABLE_SUPPLIER ="DEVSUPPLIER";
+	public static final String TABLE_SUPPLIER ="SUPPLIER";
 	
 	/** The Constant JSON_OK. */
 	public static final String JSON_OK = "OK";
 	
 	/** The Constant JSON_STRING. */
-	public static final String JSON_STRING = "JsonString";
+	public static final String JSON_STRING = "SupplierJsonString";
 }

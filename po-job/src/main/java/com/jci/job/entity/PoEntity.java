@@ -34,14 +34,14 @@ public class PoEntity extends TableServiceEntity {
 	/** The order creation date. */
 	private Date orderCreationDate;
    	
-	   /** The status. */
-	   private int status;
-   	
-	   /** The erp name. */
-	   private String erpName;
-   	
-	   /** The description. */
-	   private String description;
+   /** The status. */
+   private int status;
+
+   /** The erp name. */
+   private String erpName;
+
+   /** The description. */
+   private String description;
 	
 	/** The user name. */
 	private String userName;
@@ -315,5 +315,38 @@ public class PoEntity extends TableServiceEntity {
 				+ comment + ", suppType=" + suppType + ", grNum=" + grNum + ", poACK=" + poACK + ", asn=" + asn
 				+ ", region=" + region + ", plant=" + plant + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((partitionKey == null) ? 0 : partitionKey.hashCode());
+		result = prime * result + ((rowKey == null) ? 0 : rowKey.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PoEntity other = (PoEntity) obj;
+		if (partitionKey == null) {
+			if (other.partitionKey != null)
+				return false;
+		} else if (!partitionKey.equals(other.partitionKey))
+			return false;
+		if (rowKey == null) {
+			if (other.rowKey != null)
+				return false;
+		} else if (!rowKey.equals(other.rowKey))
+			return false;
+		return true;
+	}
+	
+	
 
 }

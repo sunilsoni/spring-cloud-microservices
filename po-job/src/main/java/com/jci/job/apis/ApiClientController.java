@@ -98,6 +98,23 @@ public class ApiClientController { // NO_UCD (unused code)
 		return response;
 	}
 	
+	@RequestMapping(value = "/getGrDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String getGrDetails() {
+		long startTime = System.nanoTime();
+		String response =null;
+		try {
+			response = service.getGrDetails();
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
+		}
+
+		long endTime = System.nanoTime();
+		long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		double seconds = (double)duration / 1000000000.0;
+		LOG.info("seconds--->"+seconds);
+		return response;
+	}
+	
 	/**
 	 * Process Flat File scheduler for PO details
 	 * @return

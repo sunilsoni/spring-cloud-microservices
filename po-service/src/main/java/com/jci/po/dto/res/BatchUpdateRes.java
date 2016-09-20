@@ -11,7 +11,11 @@ import java.util.List;
 
 
 /**
- * The Class BatchUpdateRes.
+ * <p>
+ * <strong> The Class BatchUpdateRes.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class BatchUpdateRes {
 	

@@ -14,8 +14,13 @@ import com.jci.item.azure.query.ScrollingParam;
 import com.microsoft.azure.storage.StorageException;
 
 
+
 /**
- * The Interface ItemRepo.
+ * <p>
+ *  * The Interface ItemRepo.
+ * <p>
+ *
+ * @author csonisk
  */
 public interface ItemRepo {
 	

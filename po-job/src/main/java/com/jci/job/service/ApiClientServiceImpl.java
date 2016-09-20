@@ -23,12 +23,11 @@ import org.springframework.stereotype.Service;
 
 import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.BatchUpdateReq;
+import com.jci.job.api.req.SuccessReq;
+import com.jci.job.api.res.GrDetailsRes;
 import com.jci.job.api.res.ItemDetailsRes;
-import com.jci.job.api.res.ItemSuccessRes;
 import com.jci.job.api.res.PoDetailsRes;
-import com.jci.job.api.res.PoSuccessRes;
 import com.jci.job.api.res.SuppDetailsRes;
-import com.jci.job.api.res.SuppSuccessRes;
 import com.jci.job.azure.FlatFile;
 import com.jci.job.entity.PoEntity;
 import com.jci.job.repo.JobRepo;
@@ -81,105 +80,97 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	@Override
 	public String getPoDetails()  throws InvalidKeyException, URISyntaxException, StorageException {
 		PoDetailsRes responseBody=null;
-		CommonUtils utils = new CommonUtils();
-		
-		/**
-		 * Get Region mapping file
-		 */
-		HashMap<String,HashMap<String,String>>  regionsMapping = utils.getRegionMapping(config.getRegionUrl());
-		
 		ResponseEntity<PoDetailsRes> apigeeResponse =null;
 		
 		//Asumming only one erps for now with 1 file only
 		String responseStatus = null;
-		 for (Map.Entry<String,HashMap<String,String>> regions : regionsMapping.entrySet()){
 			 
-			 HashMap<String,String> val = regions.getValue();
-			 erpName =  val.get("erp");//Define in property file
-			 region =  val.get("region");
-			 plant =  val.get("plant");
-			  
-			 /**
-			  * Starting apigee call
-			 */
-			 apigeeResponse =  apigeeClient.getPoDetails(erpName,region,plant,"**","**");
-			 responseBody = apigeeResponse.getBody();
-				
-			//Make it dynamic
-			String lineID="lineID";
-			String requestID="requestID";
+		 /**
+		  * Starting apigee call
+		 */
+		apigeeResponse =  apigeeClient.getPoDetails("**","**","**","**","**");
+		responseBody = apigeeResponse.getBody();
 			
-			BatchInsertReq  req = PrepareBatchInsertReq.prepareReq(responseBody,erpName,region,plant,lineID,requestID);
-			 
-			/**
-			 * Start Storing data in Azure tables
-			 */
-			List<String> successList = repo.batchInsert(req);
-			
-			 //End Storing data in Azure tables 
-			
-			/**
-			 * Starting apigee call for successList of POs
-			 */
-			PoSuccessRes PoSuccessRes = new PoSuccessRes();
-			List<HashMap<String,String>> poList = new ArrayList<>();
-			for (String po : successList) {
-				HashMap<String,String> map = new HashMap<>();
-				map.put("orderNumber", po);
-				poList.add(map);
-			}
-			PoSuccessRes.setPoList(poList);
-			
-			responseStatus =  apigeeClient.getPoDetailsRes(PoSuccessRes,erpName,region,plant);
-		 }
+		BatchInsertReq  req = PrepareBatchInsertReq.preparePoReq(responseBody);
+		 
+		/**
+		 * Start Storing data in Azure tables
+		 */
+		List<Object> successList = repo.batchInsert(req);
+		
+		 //End Storing data in Azure tables 
+		
+		SuccessReq req1 = new SuccessReq();
+		req1.setPoList(successList);
+		
+		responseStatus =  apigeeClient.getPoDetailsRes(req1);//Sunil: method body is wrong
 		return responseStatus;
 	}
+	
+	
+	@Override
+	public String getGrDetails() throws InvalidKeyException, URISyntaxException, StorageException {
+		GrDetailsRes responseBody=null;
+		ResponseEntity<GrDetailsRes> apigeeResponse =null;
+		
+		//Asumming only one erps for now with 1 file only
+		String responseStatus = null;
+			 
+		 /**
+		  * Starting apigee call
+		 */
+		apigeeResponse =  apigeeClient.getGrDetails("**","**","**","**","**");
+		responseBody = apigeeResponse.getBody();
+			
+		BatchInsertReq  req = PrepareBatchInsertReq.prepareGrReq(responseBody);
+		 
+		/**
+		 * Start Storing data in Azure tables
+		 */
+		List<Object> successList = repo.batchInsert(req);
+		
+		 //End Storing data in Azure tables 
+		
+		SuccessReq req1 = new SuccessReq();
+		req1.setPoList(successList);
+		
+		responseStatus =  apigeeClient.getGrDetailsRes(req1);
+		return responseStatus;
+	} 
+	
 	
 	/* (non-Javadoc)
 	 * @see com.jci.job.service.ApiClientService#getItemDetails()
 	 */
 	@Override
 	public String getItemDetails() throws InvalidKeyException, URISyntaxException, StorageException {
-		/**
-		 * Get Region mapping file
-		 */
-		CommonUtils utils = new CommonUtils();
-		HashMap<String,HashMap<String,String>>  regionsMapping = utils.getRegionMapping(config.getRegionUrl());
-		
-		//Make it dynamic
-		String customerItemID="customerItemID";
-		String suppID="supplierID";
 		String responseStatus=null;
-		for (Map.Entry<String,HashMap<String,String>> regions : regionsMapping.entrySet()){
 			 
-			 HashMap<String,String> val = regions.getValue();
-			 erpName =  val.get("erp");//Define in property file
-			 region =  val.get("region");
-			 plant =  val.get("plant");
-			 
-			 /**
-			  * Starting apigee call
-			 */
-			ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(erpName,region,plant,"**");
-			ItemDetailsRes responseBody = response.getBody();
-			BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody,erpName,region, plant,customerItemID,suppID);
-			List<String> successList = repo.batchInsert(req);
-			
-			/**
-			 * Starting apigee call for successList of Items
-			 */
-			ItemSuccessRes itemSuccessRes = new ItemSuccessRes();
-			List<HashMap<String,String>> itemList = new ArrayList<>();
-			for (String itemKey : successList) {
-				String[] arr = itemKey.split("_");
-				HashMap<String,String> map = new HashMap<>();
-				map.put("customerItemID", arr[0]);
-				map.put("supplierID", arr[1]);
-				itemList.add(map);
-			}
-			itemSuccessRes.setItemList(itemList);
-			responseStatus =  apigeeClient.getItemsRes(itemSuccessRes, erpName,region, plant);
+		 /**
+		  * Starting apigee call
+		 */
+		ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems("**","**","**","**");
+		if(response==null){
+			return null;
 		}
+		LOG.info("response-->"+response);
+		
+		ItemDetailsRes responseBody = response.getBody();
+		if(responseBody==null){
+			return null;
+		}
+		
+		BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody);
+		if(req==null){
+			return null;
+		}
+		
+		List<Object> successList = repo.batchInsert(req);
+		
+		SuccessReq req1 = new SuccessReq();
+		req1.setItemList(successList);
+		
+		responseStatus =  apigeeClient.getItemsRes(req1);//Need to change
 		return responseStatus;
 	}
 
@@ -188,42 +179,35 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 */
 	@Override
 	public String getSuppDetails() throws InvalidKeyException, URISyntaxException, StorageException {
-		/**
-		 * Get Region mapping file
-		 */
-		CommonUtils utils = new CommonUtils();
-		HashMap<String,HashMap<String,String>>  regionsMapping = utils.getRegionMapping(config.getRegionUrl());
 		
-		//Make it dynamic
-		String suppID="supplierID";
 		String responseStatus=null;
-		for (Map.Entry<String,HashMap<String,String>> regions : regionsMapping.entrySet()){			 
-			HashMap<String,String> val = regions.getValue();
-			erpName =  val.get("erp");//Define in property file
-			region =  val.get("region");
-			plant =  val.get("plant");
 
-			/**
-			  * Starting apigee call
-			 */
-			ResponseEntity<SuppDetailsRes> response = apigeeClient.getSupp(erpName,region,plant,"**");
-			SuppDetailsRes responseBody = response.getBody();
-			BatchInsertReq  req = PrepareBatchInsertReq.prepareSuppReq(responseBody,erpName,region, plant,suppID);
-			List<String> res = repo.batchInsert(req);
-			
-			/**
-			 * Starting apigee call for successList of Suppliers
-			 */
-			SuppSuccessRes itemSuccessRes = new SuppSuccessRes();
-			List<HashMap<String,String>> suppList = new ArrayList<>();
-			for (String id : res) {
-				HashMap<String,String> map = new HashMap<>();
-				map.put("customerItemID",id);
-				suppList.add(map);
-			}
-			itemSuccessRes.setSuppList(suppList);
-			responseStatus =  apigeeClient.getSuppRes(itemSuccessRes, erpName,region, plant);
+		/**
+		  * Starting Apigee call
+		 */
+		ResponseEntity<SuppDetailsRes> response = apigeeClient.getSupp("**","**","**","**");
+		LOG.info("response-->"+response);
+		if(response==null){
+			return null;
 		}
+		
+		SuppDetailsRes responseBody = response.getBody();
+		if(responseBody==null){
+			return null;
+		}
+		
+		BatchInsertReq  req = PrepareBatchInsertReq.prepareSuppReq(responseBody);
+		if(req==null){
+			return null;
+		}
+		
+		List<Object> successList = repo.batchInsert(req);
+		
+		SuccessReq req1 = new SuccessReq();
+		req1.setPoList(successList);
+		
+		req1.setSupplierList(successList);
+		responseStatus =  apigeeClient.getSuppRes(req1);//Need to change
 		return responseStatus;
 	}
 	
@@ -496,6 +480,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 				
 			}
 		}
-	} 
+	}
+
+
 	
 }

@@ -21,6 +21,18 @@ public class BatchInsertReq {
 	
 	/** The table name to entity map. */
 	private HashMap<String,List<TableEntity>> tableNameToEntityMap;
+	
+	
+	private List<Object> req;
+	
+
+	public List<Object> getReq() {
+		return req;
+	}
+
+	public void setReq(List<Object> req) {
+		this.req = req;
+	}
 
 	/**
 	 * Gets the erp name.
@@ -58,12 +70,10 @@ public class BatchInsertReq {
 		this.tableNameToEntityMap = tableNameToEntityMap;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "BatchInsertRequest [erpName=" + erpName + ", tableNameToEntityMap=" + tableNameToEntityMap + "]";
+		return "BatchInsertReq [erpName=" + erpName + ", tableNameToEntityMap=" + tableNameToEntityMap + ", req=" + req
+				+ "]";
 	}
 
 

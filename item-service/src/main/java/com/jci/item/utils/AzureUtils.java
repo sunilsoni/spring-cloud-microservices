@@ -6,7 +6,11 @@
 package com.jci.item.utils;
 
 /**
- * The Class AzureUtils.
+ * <p>
+ * <strong>The Class AzureUtils.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class AzureUtils {
 	
@@ -17,6 +21,6 @@ public class AzureUtils {
 	 * @return the partition key
 	 */
 	public static String getPartitionKey(String erpName){
-		return erpName+"_"+"PO";	
+		return "ITEM"+"_"+erpName.toUpperCase();	
 	}
 }

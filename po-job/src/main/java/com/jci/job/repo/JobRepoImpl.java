@@ -69,9 +69,9 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	    return isSuccess;
 	}
 
-	/* (non-Javadoc)
+/*	 (non-Javadoc)
 	 * @see com.jci.job.repo.JobRepo#batchInsert(com.jci.job.api.req.BatchInsertReq)
-	 */
+	 
 	@Override
 	public List<String> batchInsert(BatchInsertReq request){
 		int intransitCount=0;
@@ -91,7 +91,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					tableName=entry.getKey();
 				} catch (Exception e) {
 					LOG.error("### Exception in JobRepoImpl.batchInsert.getTable ###"+e);
-					
 					continue;
 				}
 			    TableBatchOperation batchOperation = new TableBatchOperation();
@@ -111,7 +110,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 						} catch (Exception e) {
 							counter = 0;
 							LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
-							
 							continue;
 						}
 			    	 }
@@ -125,7 +123,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					} catch (Exception e) {
 						counter = 0;
 						LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
-						
 						continue;
 					}
 			    }
@@ -135,6 +132,72 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			 addMiscEntity(erpName,tableName,intransitCount);
 		 }
 		return poSuccessList;		
+	}
+	*/
+	/* (non-Javadoc)
+	 * @see com.jci.job.repo.JobRepo#batchInsert(com.jci.job.api.req.BatchInsertReq)
+	 */
+	@Override
+	public List<Object> batchInsert(BatchInsertReq request){//Temp Method
+		int intransitCount=0;
+		int counter=0;
+		String tableName=null;
+		
+		String erpName = request.getErpName();
+		HashMap<String,List<TableEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
+	
+		List<String> poSuccessList =  new ArrayList<>();
+		CloudTable cloudTable=null;
+		 
+		 for (Map.Entry<String, List<TableEntity>> entry : tableNameToEntityMap.entrySet()){
+			 LOG.info("tablename===>"+entry.getKey());
+		     try {
+					cloudTable = azureStorage.getTable(entry.getKey());
+					tableName=entry.getKey();
+				} catch (Exception e) {
+					LOG.error("### Exception in JobRepoImpl.batchInsert.getTable ###"+e);
+					continue;
+				}
+			    TableBatchOperation batchOperation = new TableBatchOperation();
+			    List<TableEntity> value = entry.getValue();
+			    for (int i = 0; i < value.size(); i++) {
+			    	TableEntity entity = value.get(i) ;
+			    	counter= counter+1;
+			    	poSuccessList.add(entity.getRowKey());
+			    	batchOperation.insertOrReplace(entity);
+			    	if (i!=0 && i % batchSize == 0) {
+			    		try {
+							cloudTable.execute(batchOperation);
+							batchOperation.clear();
+							intransitCount = intransitCount+counter;
+							counter = 0;
+						} catch (Exception e) {
+							counter = 0;
+							LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
+							e.printStackTrace();
+							continue;
+						}
+			    	 }
+			    }
+			    
+			    if(batchOperation.size()>0){
+			    	try {
+						cloudTable.execute(batchOperation);
+						intransitCount = intransitCount+counter;
+						counter = 0;
+					} catch (Exception e) {
+						counter = 0;
+						LOG.error("### Exception in JobRepoImpl.batchInsert.execute ###"+e);
+						e.printStackTrace();
+						continue;
+					}
+			    }
+		 }	
+		//Insert MIsc data
+		 if(intransitCount>0){
+			 addMiscEntity(erpName,tableName,intransitCount);
+		 }
+		return request.getReq();		
 	}
 	
 	/**

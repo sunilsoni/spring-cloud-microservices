@@ -6,16 +6,20 @@
 package com.jci.item.utils;
 
 /**
- * The Class Constants.
+ * <p>
+ * <strong>The Class Constants.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class Constants {
 	
 	/** The Constant TABLE_ITEM. */
-	public static final String TABLE_ITEM ="DEVITEM";
+	public static final String TABLE_ITEM ="ITEM";
 	
 	/** The Constant JSON_OK. */
 	public static final String JSON_OK = "OK";
 	
 	/** The Constant JSON_STRING. */
-	public static final String JSON_STRING = "JsonString";
+	public static final String JSON_STRING = "ItemJsonString";
 }

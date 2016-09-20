@@ -10,9 +10,12 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 /**
- * The Class FlatFileConfig.
+ * <p>
+ * <strong>The Class FlatFileConfig.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Configuration
 @RefreshScope

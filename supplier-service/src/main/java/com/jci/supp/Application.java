@@ -9,7 +9,11 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 
 /**
- * The Class Application.
+ * <p>
+ * <strong>The Class Application.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @EnableEurekaClient
 @SpringBootApplication

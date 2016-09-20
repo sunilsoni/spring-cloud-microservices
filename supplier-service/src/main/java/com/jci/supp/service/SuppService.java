@@ -12,9 +12,12 @@ import com.jci.supp.dto.SegmentedDetailReq;
 import com.jci.supp.dto.SegmentedDetailRes;
 import com.microsoft.azure.storage.StorageException;
 
-
 /**
- * The Interface SuppService.
+ * <p>
+ * <strong>The interface SuppService.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public interface SuppService {
 	

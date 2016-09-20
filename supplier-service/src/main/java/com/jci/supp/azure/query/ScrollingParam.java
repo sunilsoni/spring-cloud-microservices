@@ -7,7 +7,11 @@ package com.jci.supp.azure.query;
 
 
 /**
- * The Class ScrollingParam.
+ * <p>
+ * <strong> The Class ScrollingParam  for managing UI Pagination.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class ScrollingParam {
 	
