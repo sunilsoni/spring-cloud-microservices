@@ -3,7 +3,7 @@ spring:
     config:
       server:
         git:
-          uri: file://C:/Apigee/micro-services/Work/supplier-collaboration-config-dev
+          uri: file://C:/Apigee/micro-services/Work/backup-plan/supplier-collaboration-config-dev
       #refresh: true
 #      delay: 5000
 #username: sunilsoni@live.in

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jci.item.dto.SegmentedDetailReq;
 import com.jci.item.dto.SegmentedDetailRes;
 import com.jci.item.service.ItemService;
-import com.jci.item.utils.AzureUtils;
 import com.jci.item.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
@@ -29,7 +28,7 @@ import com.microsoft.azure.storage.StorageException;
  * <p>
  * <strong>REST layer for managing Item data.</strong>
  * <p>
- *
+ * 
  * @author csonisk
  */
 
@@ -52,7 +51,7 @@ private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 	@RequestMapping(value = "/getSegmentedItemDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailRes getSegmentedItemDetails(@RequestBody SegmentedDetailReq request){
 		request.setTableName(Constants.TABLE_ITEM);
-		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));//setting hardcoded in repo
+		request.setPartition(request.getErpName().toUpperCase());
 		request.setFirstRequest(false);
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		try {

@@ -71,7 +71,7 @@ public interface PoRepo {
 	 * @throws URISyntaxException the URI syntax exception
 	 * @throws StorageException the storage exception
 	 */
-	Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
+	Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException; // NO_UCD (unused code)
 	
 	/**
 	 * Gets the po details.

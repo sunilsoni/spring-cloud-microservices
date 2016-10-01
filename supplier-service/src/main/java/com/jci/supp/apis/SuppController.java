@@ -8,7 +8,7 @@ package com.jci.supp.apis;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
-import org.slf4j.Logger;  
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jci.supp.dto.SegmentedDetailReq;
 import com.jci.supp.dto.SegmentedDetailRes;
 import com.jci.supp.service.SuppService;
-import com.jci.supp.utils.AzureUtils;
 import com.jci.supp.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
@@ -52,7 +51,7 @@ public class SuppController { // NO_UCD (unused code)
 	@RequestMapping(value = "/getSegmentedSupplierDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public  SegmentedDetailRes getSupplierDetails(@RequestBody SegmentedDetailReq request){
 		request.setTableName(Constants.TABLE_SUPPLIER);
-		request.setPartition(AzureUtils.getPartitionKey(request.getErpName().toUpperCase()));
+		request.setPartition(request.getErpName().toUpperCase());
 		request.setFirstRequest(false);
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		

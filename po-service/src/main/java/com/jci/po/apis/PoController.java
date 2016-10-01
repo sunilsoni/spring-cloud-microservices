@@ -22,7 +22,6 @@ import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.req.SegmentedDetailReq;
 import com.jci.po.dto.res.BatchUpdateRes;
-import com.jci.po.dto.res.PoDetailsRes;
 import com.jci.po.dto.res.PoItemDetailRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.service.PoService;

@@ -136,7 +136,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	 */
 	public void updateStatusCountEntity(MiscDataEntity entity) throws InvalidKeyException, URISyntaxException, StorageException {
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
-		TableOperation insert = TableOperation.insertOrReplace(entity);
+		TableOperation insert = TableOperation.insertOrMerge(entity);
 		cloudTable.execute(insert);
 	}
 
@@ -246,7 +246,6 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		 
 		TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
 		 CloudTable table = azureStorage.getTable(request.getTableName());
-		 LOG.info("rows.hasNext()-->"+table.getName());
 		 
 		// segmented query
        ResultSegment<DynamicTableEntity> response = table.executeSegmented(query, continuationToken) ;
@@ -264,7 +263,6 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		EntityProperty ep;
 		
 		Iterator<DynamicTableEntity> rows = response.getResults().iterator() ;
-		LOG.info("rows.hasNext()-->"+rows.hasNext());
 		
 		while(rows.hasNext()) {
 			row = rows.next() ;
@@ -275,12 +273,11 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 			for (String key : map.keySet()) {
 				ep = map.get(key);				
 				if(key.equals(Constants.STATUS)){
-					hashmap.put(key, ep.getValueAsString());
+					hashmap.put("Status", ep.getValueAsString());
 				}
 			}
 			series.add(hashmap);
 		}
-		LOG.info("series-->"+series);
 		return new ResultSet(series,pagination) ;
    }
    
@@ -325,7 +322,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		    		successCount = successCount+1;
 		    		successList.add(entity.getRowKey());
 			    	
-			    	batchOperation.insertOrReplace(entity);
+			    	batchOperation.insertOrMerge(entity);
 			    	if (i!=0 && (i % batchSize) == 0) {
 			    		try {
 							cloudTable.execute(batchOperation);

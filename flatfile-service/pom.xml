@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.jci-flatfile</groupId>
+  <artifactId>flatfile-service</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <inceptionYear>2016</inceptionYear>
+  
+   <parent>
+  	<groupId>com.jci</groupId>
+  	<version>0.1.0-SNAPSHOT</version>
+  	<artifactId>supplier-collaboration</artifactId>
+  </parent>
+  
+    <properties>
+        <docker.plugin.version>0.4.11</docker.plugin.version>
+        <start-class>com.jci.flatfile.Application</start-class>
+        <docker.image.prefix>suppliercollaboration</docker.image.prefix>
+    </properties>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <dependencies>
+    
+	<dependency>
+	  <groupId>com.hierynomus</groupId>
+	  <artifactId>sshj</artifactId>
+	  <version>0.17.2</version>
+	</dependency>
+	
+	 <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+         <dependency>
+	      <groupId>org.springframework.cloud</groupId>
+	      <artifactId>spring-cloud-config-client</artifactId>
+	    </dependency>
+	    
+	     <dependency>
+        	<groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-starter-eureka</artifactId>
+	    </dependency>
+	      <dependency>
+        	<groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-starter-hystrix</artifactId>
+	    </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        
+        <dependency>
+	      <groupId>com.microsoft.azure</groupId>
+	      <artifactId>azure-storage</artifactId>
+	      <version>4.3.0</version>
+	    </dependency>
+
+        <dependency>
+        	<groupId>org.springframework.cloud</groupId>
+	        <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+	    </dependency>
+	    
+	<!--     https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.3.2</version>
+		</dependency> -->
+	         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-ribbon</artifactId>
+        </dependency> 
+        
+           <dependency>
+        <groupId>org.apache.commons</groupId> 
+        <artifactId>commons-lang3</artifactId>
+        <version>3.4</version>
+        </dependency>
+                <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+	           <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+        
+        <dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+					
+  </dependencies>
+   <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>

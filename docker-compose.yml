@@ -32,7 +32,7 @@ poservice:
     - config-server
 
 pojob:
-  image: supplier-collaboration/po-job
+  image: supplier-collaboration/job-service
   restart: always
   links:
     - eureka-server

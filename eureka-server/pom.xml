@@ -16,7 +16,7 @@
     <properties>
         <docker.plugin.version>0.4.11</docker.plugin.version>
         <start-class>com.jci.registry.Application</start-class>
-        <docker.image.prefix>supplier-collaboration</docker.image.prefix>
+        <docker.image.prefix>suppliercollaboration</docker.image.prefix>
     </properties> 
   
   <licenses>
@@ -49,6 +49,16 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+                <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
   </dependencies>
   
    <build>
@@ -64,21 +74,18 @@
                     </execution>
                 </executions>
             </plugin> -->
+           <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- tag::plugin[] -->
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-               <!--  <version>${docker.plugin.version}</version> -->
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>0.4.11</version>
                 <configuration>
                     <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
-                    <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
@@ -88,6 +95,7 @@
                     </resources>
                 </configuration>
             </plugin>
+            <!-- end::plugin[] -->
         </plugins>
     </build>
   

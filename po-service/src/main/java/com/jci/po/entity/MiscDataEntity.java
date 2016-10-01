@@ -16,16 +16,7 @@ import com.microsoft.azure.storage.table.TableServiceEntity;
  */
 public class MiscDataEntity   extends TableServiceEntity {
 
-	/**
-	 * Instantiates a new misc data entity.
-	 *
-	 * @param partitionKey the partition key
-	 * @param rowKey the row key
-	 */
-	public MiscDataEntity(String partitionKey, String rowKey) {
-		this.partitionKey = partitionKey;
-		this.rowKey = rowKey; 
-	}
+	
 
 	/**
 	 * Instantiates a new misc data entity.

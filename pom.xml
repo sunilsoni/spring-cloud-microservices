@@ -16,7 +16,8 @@
         <module>po-service</module> 
 		<module>item-service</module> 
 		<module>supplier-service</module>
-        <module>po-job</module>  
+        <module>job-service</module>
+		<module>flatfile-service</module> 
     </modules>
 
 	 <parent>
@@ -32,7 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
          <docker.plugin.version>0.4.11</docker.plugin.version>
-         <docker.image.prefix>supplier-collaboration</docker.image.prefix>
+         <docker.image.prefix>suppliercollaboration</docker.image.prefix>
          <sonar.language>java</sonar.language>
     </properties>
 
@@ -67,6 +68,22 @@
 		    <version>5.1</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
+		<dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
+			<dependency>
+			    <groupId>org.springframework.boot</groupId>
+			    <artifactId>spring-boot-starter-actuator</artifactId>
+			</dependency>
+					
 	    </dependencies>
 
 	    <dependencyManagement>
@@ -82,26 +99,32 @@
 	    </dependencies>
 	</dependencyManagement>
 
-<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>com.spotify</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<version>${docker.plugin.version}</version>
-					<configuration>
-						<skipDockerBuild>true</skipDockerBuild>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- tag::plugin[] -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.11</version>
+                <configuration>
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+            <!-- end::plugin[] -->
+        </plugins>
+    </build>
 	
 	
     <repositories>
