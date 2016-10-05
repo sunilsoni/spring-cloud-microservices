@@ -35,7 +35,16 @@ public class BatchUpdateReq {
 	/** The comment. */
 	private String comment;
 	
+	boolean isErrorReq ;
 	
+	public boolean isErrorReq() {
+		return isErrorReq;
+	}
+
+	public void setErrorReq(boolean isErrorReq) {
+		this.isErrorReq = isErrorReq;
+	}
+
 	/**
 	 * Gets the table name to entity map.
 	 *
@@ -145,13 +154,11 @@ public class BatchUpdateReq {
 		this.comment = comment;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "BatchUpdateReq [tableNameToEntityMap=" + tableNameToEntityMap + ", erpName=" + erpName + ", isSuccess="
-				+ isSuccess + ", userName=" + userName + ", globalId=" + globalId + ", comment=" + comment + "]";
+				+ isSuccess + ", userName=" + userName + ", globalId=" + globalId + ", comment=" + comment
+				+ ", isErrorReq=" + isErrorReq + "]";
 	}
 	
 	

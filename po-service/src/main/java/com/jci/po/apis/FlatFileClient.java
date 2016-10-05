@@ -26,21 +26,6 @@ import com.jci.po.dto.res.ProcessErrorRes;
 @FeignClient("flatfile-service")
 public interface FlatFileClient {
 
-	/**
-	 * Processing intransit flat files
-	 */
-	@RequestMapping(value = "/processPoFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> processPoFlatFiles();
-
-	@RequestMapping(value = "/processSuppFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> processSuppFlatFiles();
-	
-	@RequestMapping(value = "/processItemFlatFiles", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> processItemFlatFiles();
-
-	@RequestMapping(value = "/processGrFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> processGrFlatFiles();
-
 	
 	/**
 	 * Processing error flat files

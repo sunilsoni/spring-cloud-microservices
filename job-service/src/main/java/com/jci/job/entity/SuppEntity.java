@@ -36,7 +36,45 @@ public class SuppEntity extends TableServiceEntity {
 	/** The supplier delivery state. */
 	private int supplierDeliveryState;
 	
+	/** The user name. */
+	private String userName;
 	
+	/** The global id. */
+	private String globalId;	
+	
+	/** The comment. */
+	private String comment;	
+	
+	public String getUserName() {
+		return userName;
+	}
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+	public String getGlobalId() {
+		return globalId;
+	}
+
+
+	public void setGlobalId(String globalId) {
+		this.globalId = globalId;
+	}
+
+
+	public String getComment() {
+		return comment;
+	}
+
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+
 	/**
 	 * Gets the supplier delivery state.
 	 *
@@ -173,6 +211,14 @@ public class SuppEntity extends TableServiceEntity {
 		} else if (!rowKey.equals(other.rowKey))
 			return false;
 		return true;
+	}
+
+
+	@Override
+	public String toString() {
+		return "SuppEntity [jsonString=" + jsonString + ", supplierDeliveryState=" + supplierDeliveryState
+				+ ", userName=" + userName + ", globalId=" + globalId + ", comment=" + comment + ", region=" + region
+				+ ", plant=" + plant + ", suppType=" + suppType + "]";
 	}
 	
 

@@ -64,8 +64,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
     		query = QueryBuilder.ffQuery(partitionKey);
     	}
     	
-    	LOG.info("query--->"+query);
-
     	TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
         Map<String,List<String>> pkToRowkeyList = new HashMap<>();
         CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
@@ -74,9 +72,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
         Map<String, String> rowKeyToSupptypeMap  = new  HashMap<>();
         
         for (PoEntity entity : cloudTable.execute(partitionQuery)) {
-        	 LOG.info("entity--->"+entity);
-        	 LOG.info("pkToRowkeyList--->"+pkToRowkeyList);
-        	 LOG.info("pk--->"+pkToRowkeyList.containsKey(entity.getPartitionKey()));
             if(pkToRowkeyList.containsKey(entity.getPartitionKey())){
                 List<String> list = pkToRowkeyList.get(entity.getPartitionKey());
                 list.add(entity.getRowKey());
@@ -89,8 +84,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
             rowKeyToPlantMap.put(entity.getRowKey(), entity.getPlant());
             rowKeyToSupptypeMap.put(entity.getRowKey(), entity.getSuppType());
         }
-        LOG.info("pkToRowkeyList--->"+pkToRowkeyList);
-        
         ArrayList<Map<String,List<HashMap<String, Object>>>> list = new ArrayList<>();
         for (Map.Entry<String,List<String>> entry : pkToRowkeyList.entrySet()){ 
             list.add(getPos(entry.getKey(),entry.getValue()));
@@ -140,7 +133,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
                 poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
             }
         }       
-        LOG.info("poNumToItemListMap--->"+poNumToItemListMap);
          return poNumToItemListMap;
     }
 
@@ -154,41 +146,52 @@ public class FlatFileRepoImpl implements FlatFileRepo {
         TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);
         Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
         DynamicTableEntity row;
-        EntityProperty ep;
         HashMap<String, Object> hashmap;
         ObjectMapper mapper = new ObjectMapper(); 
         
         List<HashMap<String, Object>> list  = new ArrayList<>();
         Map<String, String> rowKeyToPlantMap = new  HashMap<>();
         
-       // Map<String, List<HashMap<String, Object>>> rowKeyToRowsMap = new  HashMap<>();
-        Map<String, String> rowKeyToSupptypeMap  = new  HashMap<>();
        
-      //  Map<String,List<HashMap<String, Object>>> plantToMap  = new  HashMap<>();
+        Map<String,List<HashMap<String, Object>>> plantToRowsMap  = new  HashMap<>();
         TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
+        Map<String, String> plantToSupptypeMap = new HashMap<>();
+        
         while(rows.hasNext()) {
             row = rows.next() ;
+            
             HashMap<String, EntityProperty> map = row.getProperties();
             hashmap = new HashMap<>();
-            for (String key : map.keySet()) {
-                ep = map.get(key);
-                if(Constants.JSON_STRING.equals(key)){
-                    
-                    try {
-                        hashmap = mapper.readValue(ep.getValueAsString(), typeRef);
-                        list.add(hashmap);
-                    } catch (IOException e) {
-                        LOG.error("### Exception in   ####",e);
-                    }
-                }else if(Constants.PLANT.equals(key)){
-                    rowKeyToPlantMap.put(row.getRowKey(), ep.getValueAsString());
-                	
-                }else if(Constants.SUPP_TYPE.equals(key)){
-                    rowKeyToSupptypeMap.put(row.getRowKey(), ep.getValueAsString());
+           
+            String plant = map.get(Constants.PLANT).getValueAsString();
+            if(plantToRowsMap.containsKey(plant)){
+            	list = plantToRowsMap.get(plant);
+            	try {
+                    hashmap = mapper.readValue(map.get(Constants.JSON_STRING).getValueAsString(), typeRef);
+                    list.add(hashmap);
+                } catch (IOException e) {
+                    LOG.error("### Exception in FlatFileRepoImpl.getFlatFileData  ####",e);
                 }
-            }
-        }       
-         return new  FlatFileRes(rowKeyToPlantMap, rowKeyToSupptypeMap,list);
+            	plantToRowsMap.put(plant, list);
+            }else{
+            	  list  = new ArrayList<>();
+            	  try {
+                      hashmap = mapper.readValue(map.get(Constants.JSON_STRING).getValueAsString(), typeRef);
+                      list.add(hashmap);
+                  } catch (IOException e) {
+                      LOG.error("### Exception in FlatFileRepoImpl.getFlatFileData  ####",e);
+                  }
+            	  plantToRowsMap.put(plant, list);
+            	  plantToSupptypeMap.put(plant, map.get(Constants.SUPP_TYPE).getValueAsString());
+            }            
+            rowKeyToPlantMap.put(row.getRowKey(), plant);
+        }     
+        
+        FlatFileRes res = new  FlatFileRes();
+        res.setRowKeyToPlantMap(rowKeyToPlantMap);
+        res.setPlantToRowsMap(plantToRowsMap);
+        res.setPlantToSupptypeMap(plantToSupptypeMap);
+        return res;
     }
     
     
@@ -202,7 +205,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		
 		 CloudTable cloudTable=null;
 		 TableEntity entity = null;
-		 
 		 for (Map.Entry<String, List<TableEntity>> entry : tableNameToEntityMap.entrySet()){
 		     try {
 					cloudTable = azureStorage.getTable(entry.getKey());
@@ -213,7 +215,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		     
 		  // Define a batch operation.
 			    TableBatchOperation batchOperation = new TableBatchOperation();
-			    
 			    
 			    List<TableEntity> value = entry.getValue();
 			    
@@ -229,16 +230,14 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 				    		en.setSupplierDeliveryState(Constants.STATUS_ERROR);
 				    		errorCount = errorCount+1;
 				    	}
-			    		if(request.getUserName()!=null){
+			    		if(request.getGlobalId()!=null){
 			    			en.setComment(request.getComment());
 			    			en.setUserName(request.getUserName());
 			    			en.setGlobalId(request.getGlobalId());
 		            	}
 			    		batchOperation.insertOrMerge(en);
-			    		
-			    		 LOG.info("successCount-->"+successCount);
-			    		 LOG.info("errorCount-->"+errorCount);
 			    	}else if(entity instanceof SuppEntity){
+			    		 LOG.info("instanceof  SuppEntity-->");
 			    		SuppEntity en = (SuppEntity) entity;
 			    		if(request.isSuccess()){
 				    		en.setSupplierDeliveryState(Constants.STATUS_SUCCESS);
@@ -247,7 +246,7 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 				    		en.setSupplierDeliveryState(Constants.STATUS_ERROR);
 				    		errorCount = errorCount+1;
 				    	}
-			    		if(request.getUserName()!=null){
+			    		if(request.getGlobalId()!=null){
 			    			en.setComment(request.getComment());
 			    			en.setUserName(request.getUserName());
 			    			en.setGlobalId(request.getGlobalId());
@@ -262,7 +261,7 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 				    		en.setSupplierDeliveryState(Constants.STATUS_ERROR);
 				    		errorCount = errorCount+1;
 				    	}
-			    		if(request.getUserName()!=null){
+			    		if(request.getGlobalId()!=null){
 			    			en.setComment(request.getComment());
 			    			en.setUserName(request.getUserName());
 			    			en.setGlobalId(request.getGlobalId());
@@ -277,14 +276,13 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 				    		en.setSupplierDeliveryState(Constants.STATUS_ERROR);
 				    		errorCount = errorCount+1;
 				    	}
-			    		if(request.getUserName()!=null){
+			    		if(request.getGlobalId()!=null){
 			    			en.setComment(request.getComment());
 			    			en.setUserName(request.getUserName());
 			    			en.setGlobalId(request.getGlobalId());
 		            	}
 			    		batchOperation.insertOrMerge(en);
 			    	}
-			    	
 			    	
 			    	if (i!=0 && (i % batchSize) == 0) {
 			    		try {
@@ -307,7 +305,10 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 			    LOG.info("successCount-->"+successCount);
 			    LOG.info("errorCount-->"+errorCount);
 			    
-			    updateMiscEntity(request.getErpName(),entry.getKey(),successCount,errorCount);
+			    if(successCount>0 || errorCount>0){
+			    	updateMiscEntity(request.getErpName(),entry.getKey(),successCount,errorCount,request.isErrorReq());
+			    }
+			    
 		 }	
 		 
 		 
@@ -391,9 +392,8 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		}
 	}
 	
-	private synchronized void updateMiscEntity(String erpName,String tableName,int successCount,int errorCount){
+	private synchronized void updateMiscEntity(String erpName,String tableName,int successCount,int errorCount,boolean isErrorReq){
 		MiscDataEntity miscEntity=null;
-		LOG.error("tableName-->"+tableName);
 		try {
 			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
@@ -404,7 +404,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		if(miscEntity==null){
 			miscEntity = new MiscDataEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
 		}
-		LOG.error("miscEntity-->"+miscEntity);
 		int totalCount=0;
 		int sum1 = 0;
 		if(Constants.TABLE_PO_DETAILS.equals(tableName)){
@@ -429,10 +428,47 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 				totalCount=totalCount+successCount;
 			}
 			if(totalCount>0){
-				int sum2 = miscEntity.getPoErrorCount()-totalCount;
-				miscEntity.setPoErrorCount(sum2);
+				int sum2 = 0;
+				if(isErrorReq){
+					sum2 = miscEntity.getPoErrorCount()-totalCount;
+					miscEntity.setPoErrorCount(sum2);
+				}else{
+					sum2 = miscEntity.getPoIntransitCount()-totalCount;
+					miscEntity.setPoIntransitCount(sum2);
+				}
 			}
-			LOG.error("miscEntity2-->"+miscEntity);
+		}else if (Constants.TABLE_GR_DETAILS.equals(tableName)){
+			if(errorCount>0){
+				if( miscEntity.getGrErrorCount()==null){
+					sum1 = errorCount;
+				}else{
+					sum1 = miscEntity.getGrErrorCount()+errorCount;
+				}
+				
+				miscEntity.setGrErrorCount((sum1));
+				totalCount=errorCount;
+			}
+			if(successCount>0){
+				
+				if(miscEntity.getGrProcessedCount()==null){
+					sum1 = successCount;
+				}else{
+					sum1 = miscEntity.getGrProcessedCount()+successCount;
+				}
+				miscEntity.setGrProcessedCount((sum1));
+				totalCount=totalCount+successCount;
+			}
+			if(totalCount>0){
+				int sum2 = 0;
+				if(isErrorReq){
+					sum2 = miscEntity.getGrErrorCount()-totalCount;
+					miscEntity.setGrErrorCount(sum2);
+				}else{
+					sum2 = miscEntity.getGrIntransitCount()-totalCount;
+					miscEntity.setGrIntransitCount(sum2);
+				}
+			}
+		
 		}else if (Constants.TABLE_SUPPLIER.equals(tableName)){
 			if(errorCount>0){
 				if(miscEntity.getSuppErrorCount()==null){
@@ -453,8 +489,15 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 				 totalCount=totalCount+successCount;
 			}
 			if(totalCount>0){
-				int sum2 = miscEntity.getSuppErrorCount()-totalCount;
-				miscEntity.setSuppErrorCount(sum2);
+				int sum2 = 0;
+				if(isErrorReq){
+					sum2 = miscEntity.getSuppErrorCount()-totalCount;
+					miscEntity.setSuppErrorCount(sum2);
+				}else{
+					sum2 = miscEntity.getSuppIntransitCount()-totalCount;
+					miscEntity.setSuppIntransitCount(sum2);
+				}
+				
 			}
 			 
 		}else if(Constants.TABLE_ITEM.equals(tableName)){			 
@@ -468,7 +511,7 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 				 totalCount=errorCount;
 			}
 			if(successCount>0){
-				if(miscEntity.getSuppProcessedCount()==null){
+				if(miscEntity.getItemProcessedCount()==null){
 					sum1 = successCount;
 				}else{
 					sum1 = miscEntity.getItemProcessedCount()+successCount;
@@ -477,8 +520,14 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 				 totalCount=totalCount+successCount;
 			}
 			if(totalCount>0){
-				int sum2 = miscEntity.getItemErrorCount()-totalCount;
-				miscEntity.setItemErrorCount(sum2);
+				int sum2 = 0;
+				if(isErrorReq){
+					sum2 = miscEntity.getItemErrorCount()-totalCount;
+					miscEntity.setItemErrorCount(sum2);
+				}else{
+					sum2 = miscEntity.getItemIntransitCount()-totalCount;
+					miscEntity.setItemIntransitCount(sum2);
+				}
 			}
 		}
 		 

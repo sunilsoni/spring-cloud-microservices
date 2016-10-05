@@ -101,7 +101,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
             SuccessReq req1 = new SuccessReq();
             req1.setPoList(successList);
             
-            responseStatus =  apigeeClient.getPoDetailsRes(req1,config.getPoKey(), erpArr[i]);//Sunil: method body is wrong
+          responseStatus =  apigeeClient.getPoDetailsRes(req1,config.getPoKey(), erpArr[i]);//Sunil: method body is wrong
              
         }
         
@@ -153,6 +153,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		
     		responseStatus =  apigeeClient.getGrDetailsRes(req1, config.getGrKey(), erpArr[i]);
         }
+        
+        processGrFlatFile() ;
 		return responseStatus;
 	} 
 	
@@ -162,6 +164,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 */
 	@Override
 	public String getItemDetails() throws InvalidKeyException, URISyntaxException, StorageException {
+		LOG.info("### Starting in ApigeeClientServiceImpl.getItemDetails ####");
 		String responseStatus=null;
 			 
 		 /**
@@ -171,7 +174,6 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
         for (int i=0;i<erpArr.length;i++){
            
     		ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(config.getItemKey(), erpArr[i]);
-    		
     		if(response==null || response.getBody()==null){
                 continue;
             }   
@@ -183,7 +185,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody);
     		if(req==null){
-    			return null;
+    			 continue;
     		}
     		
     		List<Object> successList = repo.batchInsert(req);
@@ -193,7 +195,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		
     		responseStatus =  apigeeClient.getItemsRes(req1,config.getItemKey(), erpArr[i]);//Need to change
         }
-        
+        processItemFlatFile() ;
+    	LOG.info("### Ending in ApigeeClientServiceImpl.getItemDetails ####");
 		return responseStatus;
 	}
 
@@ -234,6 +237,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		req1.setSupplierList(successList);
     		responseStatus =  apigeeClient.getSuppRes(req1,config.getSuppKey(), erpArr[i]);//Need to change
         }
+        
+        processSuppFlatFile() ;
 		return responseStatus;
 	}
 	
@@ -258,7 +263,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	    if(ffResponse!=null && ffResponse.getBody()!=null){
 	    	ffPos = ffResponse.getBody();
 	    }
-	    LOG.info("ffPos--->"+ffPos);
+	    LOG.info("ffPos Supp--->"+ffPos);
 	    LOG.info("### Ending in ApigeeClientServiceImpl.processSuppFlatFile ####");  
 	}
 
@@ -270,7 +275,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	    if(ffResponse!=null && ffResponse.getBody()!=null){
 	    	ffPos = ffResponse.getBody();
 	    }
-	    LOG.info("ffPos--->"+ffPos);
+	    LOG.info("ffPos Item--->"+ffPos);
 	    LOG.info("### Ending in ApigeeClientServiceImpl.processItemFlatFile ####");  
 	}
 
@@ -282,7 +287,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
         if(ffResponse!=null && ffResponse.getBody()!=null){
 	    	ffPos = ffResponse.getBody();
 	    }
-	    LOG.info("ffPos--->"+ffPos);
+	    LOG.info("ffPos GR--->"+ffPos);
 	    LOG.info("### Ending in ApigeeClientServiceImpl.processGrFlatFile ####");  
     }
     

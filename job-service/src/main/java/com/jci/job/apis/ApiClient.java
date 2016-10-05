@@ -58,7 +58,7 @@ public interface ApiClient {
 	 * @param erp the erp
 	 * @return the items
 	 */
-	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = "/parts", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ItemDetailsRes> getItems(@RequestParam("apikey") String apikey,@RequestParam("erp") String erp);
 
 	/**

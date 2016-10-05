@@ -49,6 +49,24 @@ public class MiscDataEntity   extends TableServiceEntity {
     /** The gr error count. */
     private Integer grErrorCount;
 	
+    /** The item intransit count. */
+  	private Integer itemIntransitCount;//1
+  	
+  	/** The item processed count. */
+  	private Integer itemProcessedCount;//2
+  	
+  	/** The item error count. */
+  	private Integer itemErrorCount;//3
+  	
+  	/** The supp intransit count. */
+  	private Integer suppIntransitCount;//1
+  	
+  	/** The supp processed count. */
+  	private Integer suppProcessedCount;//2
+  	
+  	/** The supp error count. */
+  	private Integer suppErrorCount;//3
+  	
 	/**
 	 * Gets the gr intransit count.
 	 *
@@ -103,24 +121,6 @@ public class MiscDataEntity   extends TableServiceEntity {
         this.grErrorCount = grErrorCount;
     }
 
-    /** The item intransit count. */
-	private Integer itemIntransitCount;//1
-	
-	/** The item processed count. */
-	private Integer itemProcessedCount;//2
-	
-	/** The item error count. */
-	private Integer itemErrorCount;//3
-	
-	/** The supp intransit count. */
-	private Integer suppIntransitCount;//1
-	
-	/** The supp processed count. */
-	private Integer suppProcessedCount;//2
-	
-	/** The supp error count. */
-	private Integer suppErrorCount;//3
-	
 
 	/**
 	 * Gets the po intransit count.

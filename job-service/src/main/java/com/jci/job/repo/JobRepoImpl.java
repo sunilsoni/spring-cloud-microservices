@@ -69,6 +69,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	 */
 	@Override
 	public List<Object> batchInsert(BatchInsertReq request){ 
+		LOG.info("### Starting in JobRepoImpl.batchInsert ###");
 		String tableName=null;
 		
 		String erpName = request.getErpName();
@@ -135,6 +136,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					LOG.error("### Exception in JobRepoImpl.addMiscEntity ####",e);
 				}
 		 }
+		 LOG.info("### Ending in JobRepoImpl.batchInsert ###");
 		return request.getReq();
 	}
 	

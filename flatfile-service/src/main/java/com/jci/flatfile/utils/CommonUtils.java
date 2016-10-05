@@ -92,6 +92,7 @@ public class CommonUtils {
 			} 
 	      } 
 		}
+		LOG.error("mappingList--->"+mappingList);
 		return mappingList ;
 	}
 	
@@ -130,15 +131,12 @@ public class CommonUtils {
 	}
 	
 	public  Map<String,List<String>>  prepareSuppData(String poNum, HashMap<Integer,String> mapping,List<HashMap<String, Object>> rowList,String plantName,String msgType){
-		Map<String,List<String>> fileNameToRowsMap = new HashMap<>();
-		List<String> lines = new ArrayList<>();
-		
+			Map<String,List<String>> fileNameToRowsMap = new HashMap<>();
+			List<String> lines = new ArrayList<>();
 			int size = rowList.size();
-			
 			for(int i=0;i<size;i++){
 				lines.add(fixedLengthString((rowList.get(i)),mapping).toString());
 			}
-		    
 		    String fileName = getFileName(poNum,plantName,msgType);
 		    
 		    fileNameToRowsMap.put(fileName, lines);
@@ -205,16 +203,17 @@ public class CommonUtils {
 		name.append("_");
 		
 		SimpleDateFormat isoFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
+		isoFormat.setTimeZone(TimeZone.getTimeZone(Constants.TIME_ZONE));
+		String timestamp =isoFormat.format(new Date());
 		
 		if(Constants.MESSAGE_TYPE_SUPP.equals(msgType) || Constants.MESSAGE_TYPE_ITEM.equals(msgType)){
 			 isoFormat = new SimpleDateFormat(Constants.DATE_FORMAT_SUPP); 
+			 name.append(timestamp);
+			 name.append("0000000");
 		}else{
 			isoFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
+			name.append(timestamp);
 		}
-		
-		isoFormat.setTimeZone(TimeZone.getTimeZone(Constants.TIME_ZONE));
-		String timestamp =isoFormat.format(new Date());
-		name.append(timestamp);
 		name.append(".txt");  
 		return name.toString();
 	}

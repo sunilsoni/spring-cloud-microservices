@@ -46,8 +46,39 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	/** The json string. */
     private String jsonString;
 
+	/** The user name. */
+	private String userName;
+	
+	/** The global id. */
+	private String globalId;	
+	
+	/** The comment. */
+	private String comment;	
+    public String getUserName() {
+		return userName;
+	}
 
-    /**
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getGlobalId() {
+		return globalId;
+	}
+
+	public void setGlobalId(String globalId) {
+		this.globalId = globalId;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	/**
      * Gets the supplier delivery state.
      *
      * @return the supplier delivery state
@@ -177,7 +208,8 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	@Override
 	public String toString() {
 		return "GrEntity [supplierDeliveryState=" + supplierDeliveryState + ", suppType=" + suppType + ", region="
-				+ region + ", plant=" + plant + ", jsonString=" + jsonString + "]";
+				+ region + ", plant=" + plant + ", jsonString=" + jsonString + ", userName=" + userName + ", globalId="
+				+ globalId + ", comment=" + comment + "]";
 	}
     
 

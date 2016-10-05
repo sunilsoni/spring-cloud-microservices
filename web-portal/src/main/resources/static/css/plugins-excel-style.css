@@ -1,4 +1,4 @@
-﻿
+
 
 body {
     margin: 0;
@@ -34,7 +34,7 @@ body, BUTTON {
     text-transform: uppercase;
     margin-right: 14px;
     display: block;
-    text-align: center;
+    text-align: left;
 }
 
 .header-overlay {

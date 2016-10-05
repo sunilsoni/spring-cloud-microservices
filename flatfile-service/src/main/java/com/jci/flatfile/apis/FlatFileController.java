@@ -27,7 +27,7 @@ public class FlatFileController {
 	 
 	 private static final Logger LOG = LoggerFactory.getLogger(FlatFileController.class);
 	 
-	@RequestMapping(value = "/processPoFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = "/processPoFlatFiles", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public String processPoFlatFiles() {
 		LOG.info("### Starting  FlatFileController.processPoFlatFiles ####");
 			Executor executor = Executors.newSingleThreadExecutor();
@@ -45,7 +45,7 @@ public class FlatFileController {
 		return "SUCCESS";
 	}
 	
-	@RequestMapping(value = "/processGrFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = "/processGrFlatFiles",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public String processGrFlatFiles() {
 		LOG.info("### Starting  FlatFileController.processGrFlatFiles ####");
 		Executor executor = Executors.newSingleThreadExecutor();
@@ -63,7 +63,7 @@ public class FlatFileController {
 	return "SUCCESS";
 }
 	
-	@RequestMapping(value = "/processSuppFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = "/processSuppFlatFiles",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public String processSuppFlatFiles() {
 		LOG.info("### Starting  FlatFileController.processSuppFlatFiles ####");
 		Executor executor = Executors.newSingleThreadExecutor();
@@ -81,7 +81,7 @@ public class FlatFileController {
 	return "SUCCESS";
    }
 	
-	@RequestMapping(value = "/processItemFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = "/processItemFlatFiles",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public String processItemFlatFiles() {
 		LOG.info("### Starting  FlatFileController.processItemFlatFiles ####");
 		Executor executor = Executors.newSingleThreadExecutor();
@@ -102,12 +102,6 @@ public class FlatFileController {
 	@RequestMapping(value = "/processErrorPosFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ProcessErrorRes processErrorPosFlatFiles(@RequestBody ProcessErrorReq req)   {
 		LOG.info("### Starting  Ending FlatFileController.processErrorPosFlatFiles ####"+req);
-		try {
-			service.processItemFlatFiles();
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return service.processErrorPosFlatFiles(req);
 	}
 	

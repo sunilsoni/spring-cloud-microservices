@@ -1,0 +1,228 @@
+{
+    "message": "OK",
+    "resultSet": {
+        "SYMIX": {
+            "series": [
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "SS .500 ROD",
+                    "OrderNumber": "3712513",
+                    "id": "3712513",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                },
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "LEVER BUSHING",
+                    "OrderNumber": "4367712",
+                    "id": "4367712",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                },
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "NICKEL PLATE",
+                    "OrderNumber": "4367891",
+                    "id": "4367891",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                },
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "POWER ELEMENT SHELL",
+                    "OrderNumber": "4368948",
+                    "id": "4368948",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                },
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "COPPER TUBE ROUND SEAMLESS .125 X .062",
+                    "OrderNumber": "4369086",
+                    "id": "4369086",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                },
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "CAPILLARY COPPER TUBE-PED CERTIFIED PART",
+                    "OrderNumber": "4369103",
+                    "id": "4369103",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                },
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "CAPILLARY COPPER TUBE",
+                    "OrderNumber": "4369326",
+                    "id": "4369326",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                },
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "CAPILLARY COPPER TUBE",
+                    "OrderNumber": "4369492",
+                    "id": "4369492",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                },
+                {
+                    "Status": "2",
+                    "OrderNumber": "4369560",
+                    "id": "4369560"
+                },
+                {
+                    "E2openProcessed": "false",
+                    "OrderCreationDate": "2016-08-11T09:49:33.492Z",
+                    "Status": "1",
+                    "Description": "CAPILLARY (COPPER TUBE)",
+                    "OrderNumber": "4370000",
+                    "id": "4370000",
+                    "EdiProcessed": "false",
+                    "SourceErpName": "SYMIX"
+                }
+            ],
+            "pagination": {
+                "lastPartition": null,
+                "lastRow": null,
+                "nextPartition": "1!12!U1lNSVhfUE8-",
+                "nextRow": "1!12!NDM3MDA1NQ--"
+            }
+        }
+    },
+    "graphData": {
+        "SYMIX": [
+            48,
+            1,
+            2
+        ]
+    },
+    "supplierData": {
+        "SYMIX": {
+            "series": [
+                {
+                    "Status": "Active",
+                    "TransitLeadTime": "0",
+                    "SupplierZip": "55485",
+                    "OrderNumber": "4300000",
+                    "SupplierCity": "MINNEAPOLIS",
+                    "SupplierDescription": "4304860",
+                    "SupplierID": "4300000",
+                    "SupplierCounty": "",
+                    "SupplierCountry": "USA",
+                    "id": "4300000",
+                    "SupplierAddress1": "NW 5022  P.O. BOX 1450",
+                    "EnterpriseCode": "JCI-BE",
+                    "SupplierState": "MN",
+                    "SupplierAddress2": ""
+                },
+                {
+                    "Status": "Active",
+                    "TransitLeadTime": "0",
+                    "SupplierZip": "91761",
+                    "OrderNumber": "4304890",
+                    "SupplierCity": "ONTARIO",
+                    "SupplierDescription": "METRIC MACHINING",
+                    "SupplierID": "4304890",
+                    "SupplierCounty": "",
+                    "SupplierCountry": "USA",
+                    "id": "4304890",
+                    "SupplierAddress1": "1425 S. VINEYARD AVENUE",
+                    "EnterpriseCode": "JCI-BE",
+                    "SupplierState": "CA",
+                    "SupplierAddress2": ""
+                }
+            ],
+            "pagination": {
+                "lastPartition": null,
+                "lastRow": null,
+                "nextPartition": null,
+                "nextRow": null
+            }
+        }
+    },
+    "itemData": {
+        "SYMIX": {
+            "series": [
+                {
+                    "MinToleranceRequestOrInvoicedQuantity": "0.0",
+                    "TargetDOS": "0.0",
+                    "CriticalItem": "5",
+                    "SiteName": "5061",
+                    "LateDeliveriesTolerance": "0.0",
+                    "BlanketExpiryTolerance": "0",
+                    "OrderNumber": "01-10-247",
+                    "MinToleranceRequestOrReceivedQuantity": "0.0",
+                    "MinToleranceRequestOrShippedQuantity": "0.0",
+                    "CommitQuantityToleranceMin": "0.0",
+                    "CommitQuantityToleranceMax": "0.0",
+                    "SupplierID": "4304860",
+                    "MaxToleranceRequestOrReceivedQuantity": "0.0",
+                    "CustomerItemID": "01-10-247",
+                    "RequestOrPromiseDateTolrance": "0",
+                    "Currency": "EA",
+                    "MaxDOS": "0.0",
+                    "MinToleranceReceivedOrInvoicedQuantity": "0.0",
+                    "id": "01-10-247",
+                    "EnterpriseCode": "JCI-BE",
+                    "MinToleranceInvoicePriceMismatch": "0.0",
+                    "MaxToleranceRequestOrPromiseQuantity": "0.0",
+                    "OrderGracePeriod": "0",
+                    "MaxToleranceInvoicePriceMismatch": "0.0",
+                    "SupplierItemID": "LUCAS-MILHAUPT, INC",
+                    "SupplierShipmentSize": "0.0",
+                    "LeadTimeDays": "0",
+                    "MinDOS": "0.0",
+                    "LateShipmentsTolerance": "0.0",
+                    "MinToleranceRequestOrPromiseQuantity": "0.0",
+                    "CustomerItemDescription": "BRAZE 560 O.D 0.032",
+                    "ItemHierarchyLevel1": "0.0",
+                    "ItemHierarchyLevel3": "0.0",
+                    "ItemHierarchyLevel2": "0.0",
+                    "ItemHierarchyLevel5": "0.0",
+                    "ItemHierarchyLevel4": "0.0",
+                    "MaxToleranceRequestOrShippedQuantity": "0.0",
+                    "ForecastGracePeriod": "0",
+                    "CustomerMOQ": "0.0",
+                    "MaxToleranceReceivedOrInvoicedQuantity": "0.0",
+                    "MaxToleranceRequestOrInvoicedQuantity": "0.0"
+                }
+            ],
+            "pagination": {
+                "lastPartition": null,
+                "lastRow": null,
+                "nextPartition": null,
+                "nextRow": null
+            }
+        }
+    },
+    "errorData": {
+        "SYMIX": {
+            "series": [],
+            "pagination": {
+                "lastPartition": null,
+                "lastRow": null,
+                "nextPartition": null,
+                "nextRow": null
+            }
+        }
+    },
+    "error": false
+}

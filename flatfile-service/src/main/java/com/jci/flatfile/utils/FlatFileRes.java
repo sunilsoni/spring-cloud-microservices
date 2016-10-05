@@ -7,29 +7,36 @@ import java.util.Map;
 
 public class FlatFileRes {
 
+	List<HashMap<String, Object>> rowList;
     private Map<String, String> rowKeyToPlantMap;
-    private List<HashMap<String, Object>> rowList;
-    private Map<String, String> rowKeyToSupptypeMap;
     private ArrayList<Map<String,List<HashMap<String, Object>>>> poList;
+    private Map<String,List<HashMap<String, Object>>> plantToRowsMap ;
+    Map<String, String> plantToSupptypeMap;
+    Map<String, String> rowKeyToSupptypeMap;
     
-    public Map<String, String> getRowKeyToPlantMap() {
+    public List<HashMap<String, Object>> getRowList() {
+		return rowList;
+	}
+	public void setRowList(List<HashMap<String, Object>> rowList) {
+		this.rowList = rowList;
+	}
+	public Map<String, String> getPlantToSupptypeMap() {
+		return plantToSupptypeMap;
+	}
+	public void setPlantToSupptypeMap(Map<String, String> plantToSupptypeMap) {
+		this.plantToSupptypeMap = plantToSupptypeMap;
+	}
+	public Map<String, List<HashMap<String, Object>>> getPlantToRowsMap() {
+		return plantToRowsMap;
+	}
+	public void setPlantToRowsMap(Map<String, List<HashMap<String, Object>>> plantToRowsMap) {
+		this.plantToRowsMap = plantToRowsMap;
+	}
+	public Map<String, String> getRowKeyToPlantMap() {
         return rowKeyToPlantMap;
     }
     public void setRowKeyToPlantMap(Map<String, String> rowKeyToPlantMap) {
         this.rowKeyToPlantMap = rowKeyToPlantMap;
-    }
-    public List<HashMap<String, Object>> getList() {
-        return rowList;
-    }
-    public void setList(List<HashMap<String, Object>> rowList) {
-        this.rowList = rowList;
-    }
-    
-    public List<HashMap<String, Object>> getRowList() {
-        return rowList;
-    }
-    public void setRowList(List<HashMap<String, Object>> rowList) {
-        this.rowList = rowList;
     }
     public ArrayList<Map<String, List<HashMap<String, Object>>>> getPoList() {
         return poList;
@@ -41,11 +48,6 @@ public class FlatFileRes {
         
     }
     
-    public FlatFileRes(Map<String, String> rowKeyToPlantMap,Map<String, String> rowKeyToSupptypeMap, List<HashMap<String, Object>> rowList) {
-        super();
-        this.rowKeyToPlantMap = rowKeyToPlantMap;
-        this.rowList = rowList;
-    }
     
     public FlatFileRes(Map<String, String> rowKeyToPlantMap, Map<String, String> rowKeyToSupptypeMap,
             ArrayList<Map<String, List<HashMap<String, Object>>>> poList) {
@@ -62,10 +64,15 @@ public class FlatFileRes {
     public void setRowKeyToSupptypeMap(Map<String, String> rowKeyToSupptypeMap) {
         this.rowKeyToSupptypeMap = rowKeyToSupptypeMap;
     }
-    @Override
-    public String toString() {
-        return "FlatFileRes [rowKeyToPlantMap=" + rowKeyToPlantMap + ", rowList=" + rowList + ", rowKeyToSupptypeMap="
-                + rowKeyToSupptypeMap + ", poList=" + poList + "]";
-    }
+	@Override
+	public String toString() {
+		return "FlatFileRes [rowList=" + rowList + ", rowKeyToPlantMap=" + rowKeyToPlantMap + ", poList=" + poList
+				+ ", plantToRowsMap=" + plantToRowsMap + ", plantToSupptypeMap=" + plantToSupptypeMap
+				+ ", rowKeyToSupptypeMap=" + rowKeyToSupptypeMap + "]";
+	}
+    
+    
+
+
     
 }

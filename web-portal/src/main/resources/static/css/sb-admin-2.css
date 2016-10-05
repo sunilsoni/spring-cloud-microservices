@@ -110,7 +110,7 @@ body {
 }
 
 .sidebar .fa.arrow:before {
-    content: "\f104";
+    content: "\f105";
 }
 
 .sidebar .active>a>.fa.arrow:before {

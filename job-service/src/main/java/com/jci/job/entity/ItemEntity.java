@@ -43,9 +43,40 @@ public class ItemEntity extends TableServiceEntity {
 	private String plant;
 	
 	private String customerItemID;
-	
-
 	private String suppType;
+	
+	/** The user name. */
+	private String userName;
+	
+	/** The global id. */
+	private String globalId;	
+	
+	/** The comment. */
+	private String comment;	
+
+    public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getGlobalId() {
+		return globalId;
+	}
+
+	public void setGlobalId(String globalId) {
+		this.globalId = globalId;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
     public String getSuppType() {
         return suppType;
@@ -177,7 +208,8 @@ public class ItemEntity extends TableServiceEntity {
 	@Override
 	public String toString() {
 		return "ItemEntity [jsonString=" + jsonString + ", supplierDeliveryState=" + supplierDeliveryState + ", region="
-				+ region + ", plant=" + plant + ", customerItemID=" + customerItemID + ", suppType=" + suppType + "]";
+				+ region + ", plant=" + plant + ", customerItemID=" + customerItemID + ", suppType=" + suppType
+				+ ", userName=" + userName + ", globalId=" + globalId + ", comment=" + comment + "]";
 	}
 
 }

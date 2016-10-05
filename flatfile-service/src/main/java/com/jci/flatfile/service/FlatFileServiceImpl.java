@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.jci.flatfile.config.FlatFile;
@@ -44,9 +45,26 @@ public class FlatFileServiceImpl implements FlatFileService{
     @Autowired
     private FlatFile config;
     
+    @Autowired
+    private GithubClientImpl github;
+    
     @Override
     public String processPoFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
     	LOG.info("### Starting  FlatFileServiceImpl.processPoFlatFile ####");
+    	
+    	
+    	try{
+    		LOG.info("===========---");
+    		File githubRes =github.getPoJson();
+        	LOG.info("githubRes---"+githubRes);
+        	//LOG.info("getBody---"+githubRes.getBody());
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	
+    	
+    	
+    	
         String tempDir = System.getProperty("java.io.tmpdir");
         
         CommonUtils utils = new CommonUtils();
@@ -81,13 +99,16 @@ public class FlatFileServiceImpl implements FlatFileService{
                                     files.add(toFile.getAbsolutePath());
                                     tempFiles.add(toFile);
                                 } catch (IOException e) {
-                                    LOG.error("### Exception in   ####",e);
+                                    LOG.error("### Exception in FlatFileServiceImpl.processPoFlatFile  ####",e);
                                 }
                         }
                     }
                 }
             }
             
+        if(files.size()==0){
+        	return "No files !";
+        }
         SSHConnection conn =  new SSHConnection(config.getHostname(),config.getPort(),config.getUsername(), config.getPassword());
         List<List<String>> finalList = new ArrayList<>();  
         
@@ -108,9 +129,8 @@ public class FlatFileServiceImpl implements FlatFileService{
             }
             
             //Update status in PODETAILS Table
-            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,null,null,null); 
+            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,null,null,null,false); 
         }
-            
            
         
         //Need to delete TEMP Files.
@@ -122,24 +142,12 @@ public class FlatFileServiceImpl implements FlatFileService{
 
     @Override
     public String processGrFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
-    	LOG.info("### Starting  FlatFileServiceImpl.processGrFlatFiles ####");
-    	
-    	
-    	LOG.info("### Ending  FlatFileServiceImpl.processGrFlatFiles ####");
-        return "Success";
-    }
-
-    @Override
-    public String processSuppFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
-    	LOG.info("### Starting  FlatFileServiceImpl.processSuppFlatFiles ####");
+    	LOG.info("####### Starting  FlatFileServiceImpl.processGrFlatFiles #########");
         String tempDir = System.getProperty("java.io.tmpdir");
         
         CommonUtils utils = new CommonUtils();
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getSuppMappingFileUrl());
-        
-        Map<String,List<String>> pkToSuccessList = new HashMap<>();
-        Map<String,List<String>> pkToErrorList = new HashMap<>();
-        
+        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getGrMappingFileUrl());
+
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
         
@@ -147,49 +155,19 @@ public class FlatFileServiceImpl implements FlatFileService{
         for (int i=0;i<erpArr.length;i++){
             String partitionKey = erpArr[i].toUpperCase();
             
-            FlatFileRes res = repo.getFlatFileData(partitionKey,Constants.TABLE_SUPPLIER);
-            
+            FlatFileRes res = repo.getFlatFileData(partitionKey,Constants.TABLE_GR_DETAILS);
             
             //plant name to total records map
             
             Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
-            Map<String, String> rowKeyToSupptypeMap = res.getRowKeyToSupptypeMap();
-            List<HashMap<String, Object>> rowList = res.getList();
+            Map<String,List<HashMap<String, Object>>> plantToRowsMap = res.getPlantToRowsMap();
+            Map<String, String> plantToSupptypeMap = res.getPlantToSupptypeMap();
             
-            Map<String, List<HashMap<String, Object>>> plantToRowsMap = new HashMap<>();
-            
-            List<HashMap<String, Object>> list = null;
-            
-            for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
-            	
-            	if(plantToRowsMap.containsKey(entry.getValue())){
-            		list = plantToRowsMap.get(entry.getValue());
-            		
-                	for (HashMap<String, Object> rowkeyToVal : rowList) {
-                     	
-                     	if(rowkeyToVal.containsValue(entry.getKey())){
-                     		list.add(rowkeyToVal);
-                     	}
-                     }
-                	 plantToRowsMap.put(entry.getValue(),list);
-            	}else{
-            		list = new ArrayList<>();
-            		for (HashMap<String, Object> rowkeyToVal : rowList) {
-                     	
-                     	if(rowkeyToVal.containsValue(entry.getKey())){
-                     		list.add(rowkeyToVal);
-                     	}
-                     }
-            		plantToRowsMap.put(entry.getValue(),list);
-            	}
-            }
-            
-                
             for (Map.Entry<String,List<HashMap<String, Object>>> entry : plantToRowsMap.entrySet()){
-                
-                String suppType = rowKeyToSupptypeMap.get(entry.getKey());
-                if(mappingList.containsKey(suppType)){
-                    Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(null, mappingList.get(suppType),entry.getValue(),rowKeyToPlantMap.get(entry.getKey()),Constants.MESSAGE_TYPE_SUPP);
+            	String suppType = plantToSupptypeMap.get(entry.getKey());
+            	
+            	if(mappingList.containsKey(suppType) && entry.getValue().size()>0){
+                    Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(null, mappingList.get(suppType),entry.getValue(),entry.getKey(),Constants.MESSAGE_TYPE_GR);
                     
                     for (Map.Entry<String,List<String>> entry1 : fileNameToRowsMap.entrySet()){
                         File toFile = new File(tempDir+entry1.getKey());
@@ -204,6 +182,10 @@ public class FlatFileServiceImpl implements FlatFileService{
                 }
             }
             
+        if(files.size()==0){
+        	return "No files !";
+        }
+            
         SSHConnection conn =  new SSHConnection(config.getHostname(),config.getPort(),config.getUsername(), config.getPassword());
         List<List<String>> finalList = new ArrayList<>();  
         
@@ -212,22 +194,148 @@ public class FlatFileServiceImpl implements FlatFileService{
         } catch (ClassNotFoundException | IOException e) {
         	e.printStackTrace();
         }
+        LOG.info("finalList--->"+finalList);
         
-        LOG.info("finalList===>"+finalList);
+        Map<String,List<String>> pkToSuccessList = new HashMap<>();
+        Map<String,List<String>> pkToErrorList = new HashMap<>();
         
         if(finalList!=null ){
+        	List<String> successStatus = new ArrayList<>();  
             if(finalList.get(0).size()>0){
-                pkToSuccessList.put(erpArr[i], finalList.get(0));
+            	List<String> list1 = finalList.get(0);
+            	for (String val : list1) {
+            		String[] splitVal = val.split("_");
+            		String plantName = splitVal[4]; //Sunil: Need to verify this.
+            		for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
+            			if(entry.getValue().equalsIgnoreCase(plantName)){
+            				successStatus.add(entry.getKey());
+            			}
+            		}
+            	}
+            	
+                pkToSuccessList.put(erpArr[i], successStatus);
             }
             if(finalList.get(1).size()>0){
-                pkToErrorList.put(erpArr[i], finalList.get(1));
+            	List<String> errorStatus = new ArrayList<>();
+            	List<String> list1 = finalList.get(0);
+            	for (String val : list1) {
+            		String[] splitVal = val.split("_");
+            		String plantName = splitVal[4]; //Sunil: Need to verify this.
+            		for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
+            			if(entry.getValue().equalsIgnoreCase(plantName)){
+            				successStatus.add(entry.getKey());
+            			}
+            		}
+            	}
+                pkToErrorList.put(erpArr[i], errorStatus);
             }
             
           //Update status in PODETAILS Table
-            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_SUPPLIER,null,null,null);
+            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_GR_DETAILS,null,null,null,false);
+        }
+        
+        //Need to delete TEMP Files.
+        CommonUtils.deleteTempFiles(tempFiles);
+        }
+        LOG.info("### Ending  FlatFileServiceImpl.processGrFlatFiles ####");
+        return "Success";
+    
+    }
+
+    @Override
+    public String processSuppFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
+    	LOG.info("### Starting  FlatFileServiceImpl.processSuppFlatFiles ####");
+        String tempDir = System.getProperty("java.io.tmpdir");
+        
+        CommonUtils utils = new CommonUtils();
+        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getSuppMappingFileUrl());
+        
+        
+        ArrayList<String> files = new ArrayList<>();
+        String[] erpArr  = allErps.split(",");
+        
+        List<File> tempFiles = new ArrayList<>();
+        for (int i=0;i<erpArr.length;i++){
+            String partitionKey = erpArr[i].toUpperCase();
+            
+            FlatFileRes res = repo.getFlatFileData(partitionKey,Constants.TABLE_SUPPLIER);
+            
+            //plant name to total records map
+            
+            Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
+            Map<String,List<HashMap<String, Object>>> plantToRowsMap = res.getPlantToRowsMap();
+            Map<String, String> plantToSupptypeMap = res.getPlantToSupptypeMap();
+            
+            for (Map.Entry<String,List<HashMap<String, Object>>> entry : plantToRowsMap.entrySet()){
+            	String suppType = plantToSupptypeMap.get(entry.getKey());
+            	
+            	if(mappingList.containsKey(suppType) && entry.getValue().size()>0){
+                    Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(null, mappingList.get(suppType),entry.getValue(),entry.getKey(),Constants.MESSAGE_TYPE_SUPP);
+                    
+                    for (Map.Entry<String,List<String>> entry1 : fileNameToRowsMap.entrySet()){
+                        File toFile = new File(tempDir+entry1.getKey());
+                         try {
+                                FileUtils.writeLines(toFile,"UTF-8", entry1.getValue(),false);
+                                files.add(toFile.getAbsolutePath());
+                                tempFiles.add(toFile);
+                            } catch (IOException e) {
+                                LOG.error("### Exception in   ####",e);
+                            }
+                    }
+                }
+            }
+            
+        if(files.size()==0){
+        	return "No files !";
         }
             
-              
+        SSHConnection conn =  new SSHConnection(config.getHostname(),config.getPort(),config.getUsername(), config.getPassword());
+        List<List<String>> finalList = new ArrayList<>();  
+        
+        try {
+            finalList = conn.sftpUpload(files, Constants.TARGET_DIR);
+        } catch (ClassNotFoundException | IOException e) {
+        	e.printStackTrace();
+        }
+        LOG.info("finalList--->"+finalList);
+        
+        Map<String,List<String>> pkToSuccessList = new HashMap<>();
+        Map<String,List<String>> pkToErrorList = new HashMap<>();
+        
+        if(finalList!=null ){
+        	List<String> successStatus = new ArrayList<>();  
+            if(finalList.get(0).size()>0){
+            	List<String> list1 = finalList.get(0);
+            	for (String val : list1) {
+            		String[] splitVal = val.split("_");
+            		String plantName = splitVal[4]; //Sunil: Need to verify this.
+            		for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
+            			if(entry.getValue().equalsIgnoreCase(plantName)){
+            				successStatus.add(entry.getKey());
+            			}
+            		}
+            	}
+            	
+                pkToSuccessList.put(erpArr[i], successStatus);
+            }
+            if(finalList.get(1).size()>0){
+            	List<String> errorStatus = new ArrayList<>();
+            	List<String> list1 = finalList.get(0);
+            	for (String val : list1) {
+            		String[] splitVal = val.split("_");
+            		String plantName = splitVal[4]; //Sunil: Need to verify this.
+            		for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
+            			if(entry.getValue().equalsIgnoreCase(plantName)){
+            				successStatus.add(entry.getKey());
+            			}
+            		}
+            	}
+                pkToErrorList.put(erpArr[i], errorStatus);
+            }
+            
+          //Update status in PODETAILS Table
+            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_SUPPLIER,null,null,null,false);
+        }
         
         //Need to delete TEMP Files.
         CommonUtils.deleteTempFiles(tempFiles);
@@ -245,9 +353,6 @@ public class FlatFileServiceImpl implements FlatFileService{
         CommonUtils utils = new CommonUtils();
         TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getItemMappingFileUrl());
         
-        Map<String,List<String>> pkToSuccessList = new HashMap<>();
-        Map<String,List<String>> pkToErrorList = new HashMap<>();
-        
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
         
@@ -257,47 +362,15 @@ public class FlatFileServiceImpl implements FlatFileService{
             
             FlatFileRes res = repo.getFlatFileData(partitionKey,Constants.TABLE_ITEM);
             
-            
-            //plant name to total records map
-            
             Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
-            Map<String, String> rowKeyToSupptypeMap = res.getRowKeyToSupptypeMap();
-            List<HashMap<String, Object>> rowList = res.getList();
+            Map<String,List<HashMap<String, Object>>> plantToRowsMap = res.getPlantToRowsMap();
+            Map<String, String> plantToSupptypeMap = res.getPlantToSupptypeMap();
             
-            Map<String, List<HashMap<String, Object>>> plantToRowsMap = new HashMap<>();
-            
-            List<HashMap<String, Object>> list = null;
-            
-            for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
-            	
-            	if(plantToRowsMap.containsKey(entry.getValue())){
-            		list = plantToRowsMap.get(entry.getValue());
-            		
-                	for (HashMap<String, Object> rowkeyToVal : rowList) {
-                     	
-                     	if(rowkeyToVal.containsValue(entry.getKey())){
-                     		list.add(rowkeyToVal);
-                     	}
-                     }
-                	 plantToRowsMap.put(entry.getValue(),list);
-            	}else{
-            		list = new ArrayList<>();
-            		for (HashMap<String, Object> rowkeyToVal : rowList) {
-                     	
-                     	if(rowkeyToVal.containsValue(entry.getKey())){
-                     		list.add(rowkeyToVal);
-                     	}
-                     }
-            		plantToRowsMap.put(entry.getValue(),list);
-            	}
-            }
-            
-                
             for (Map.Entry<String,List<HashMap<String, Object>>> entry : plantToRowsMap.entrySet()){
                 
-                String suppType = rowKeyToSupptypeMap.get(entry.getKey());
-                if(mappingList.containsKey(suppType)){
-                    Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(null, mappingList.get(suppType),entry.getValue(),rowKeyToPlantMap.get(entry.getKey()),Constants.MESSAGE_TYPE_ITEM);
+            	String suppType = plantToSupptypeMap.get(entry.getKey());
+                if(mappingList.containsKey(suppType) && entry.getValue().size()>0){
+                    Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(null, mappingList.get(suppType),entry.getValue(),entry.getKey(),Constants.MESSAGE_TYPE_ITEM);
                     
                     for (Map.Entry<String,List<String>> entry1 : fileNameToRowsMap.entrySet()){
                         File toFile = new File(tempDir+entry1.getKey());
@@ -312,6 +385,10 @@ public class FlatFileServiceImpl implements FlatFileService{
                 }
             }
             
+            if(files.size()==0){
+            	return "No files !";
+            }
+            
         SSHConnection conn =  new SSHConnection(config.getHostname(),config.getPort(),config.getUsername(), config.getPassword());
         List<List<String>> finalList = new ArrayList<>();  
         
@@ -324,15 +401,40 @@ public class FlatFileServiceImpl implements FlatFileService{
         LOG.info("finalList===>"+finalList);
         
         if(finalList!=null ){
+        	Map<String,List<String>> pkToSuccessList = new HashMap<>();
+            Map<String,List<String>> pkToErrorList = new HashMap<>();
+            
+        	List<String> successStatus = new ArrayList<>();  
             if(finalList.get(0).size()>0){
-                pkToSuccessList.put(erpArr[i], finalList.get(0));
+            	List<String> list1 = finalList.get(0);
+            	for (String val : list1) {
+            		String[] splitVal = val.split("_");
+            		String plantName = splitVal[4]; //Sunil: Need to verify this.
+            		for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
+            			if(entry.getValue().equalsIgnoreCase(plantName)){
+            				successStatus.add(entry.getKey());
+            			}
+            		}
+            	}
+            	
+                pkToSuccessList.put(erpArr[i], successStatus);
             }
             if(finalList.get(1).size()>0){
-                pkToErrorList.put(erpArr[i], finalList.get(1));
+            	List<String> errorStatus = new ArrayList<>();
+            	List<String> list1 = finalList.get(0);
+            	for (String val : list1) {
+            		String[] splitVal = val.split("_");
+            		String plantName = splitVal[4]; 
+            		for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
+            			if(entry.getValue().equalsIgnoreCase(plantName)){
+            				successStatus.add(entry.getKey());
+            			}
+            		}
+            	}
+                pkToErrorList.put(erpArr[i], errorStatus);
             }
-            
             //Update status in PODETAILS Table
-            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_ITEM,null,null,null);
+            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_ITEM,null,null,null,false);
         }
             
         //Need to delete TEMP Files.
@@ -346,7 +448,7 @@ public class FlatFileServiceImpl implements FlatFileService{
     
 //PO Table status update
     @SuppressWarnings("unchecked")
-	private synchronized void updatePoStatus(Map<String,List<String>> pkToSuccessList,Map<String,List<String>> pkToErrorList,String tableName,String globalId,String userName,String comment) {
+	private synchronized void updatePoStatus(Map<String,List<String>> pkToSuccessList,Map<String,List<String>> pkToErrorList,String tableName,String globalId,String userName,String comment,boolean isErrorReq) {
     	LOG.info("### Starting in FlatFileServiceImpl.updateStatus ###");
         BatchUpdateReq updateReq =null;
         for (Map.Entry<String,List<String>> entry : pkToSuccessList.entrySet()){
@@ -374,7 +476,10 @@ public class FlatFileServiceImpl implements FlatFileService{
             		updateReq.setComment(comment);
     				updateReq.setUserName(userName);
     				updateReq.setGlobalId(globalId);
+    				
             	}
+            	
+            	updateReq.setErrorReq(isErrorReq);
                 repo.batchUpdate(updateReq);    
             } catch (Exception e) {
                 LOG.error("### Exception in  FlatFileServiceImpl.updateStatus ####",e);                
@@ -407,6 +512,7 @@ public class FlatFileServiceImpl implements FlatFileService{
     				updateReq.setUserName(userName);
     				updateReq.setGlobalId(globalId);
             	}
+                updateReq.setErrorReq(isErrorReq);
                 repo.batchUpdate(updateReq);
             } catch (Exception e) {
                 LOG.error("### Exception in  FlatFileServiceImpl.updateStatus ####",e);
@@ -436,7 +542,6 @@ public class FlatFileServiceImpl implements FlatFileService{
 				LOG.error("### Exception in   ####",e1);
 			}
 			
-			LOG.info("res===>"+res);
             Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
             Map<String, String> rowKeyToSupptypeMap = res.getRowKeyToSupptypeMap();
             
@@ -498,7 +603,7 @@ public class FlatFileServiceImpl implements FlatFileService{
 	            }
 	        
 	            //Update status in PODETAILS Table
-		        updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,req.getGlobalId(),req.getUserName(),req.getComment());
+		        updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,req.getGlobalId(),req.getUserName(),req.getComment(),true);
 	        }
 	            
 	        //Need to delete TEMP Files.

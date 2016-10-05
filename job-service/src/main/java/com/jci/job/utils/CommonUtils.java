@@ -264,6 +264,8 @@ public class CommonUtils {
 			    	successCount = miscEntity.getItemProcessedCount()-successCount;
 			    	miscEntity.setItemProcessedCount(successCount);
 			    }
+			    LOG.info("newRowkeyToStatusMapSize--->"+newRowkeyToStatusMapSize);
+				LOG.info("inTransitCount--->"+inTransitCount);
 			    miscEntity.setItemIntransitCount(inTransitCount);  
 		    }
 			 
@@ -298,7 +300,7 @@ public class CommonUtils {
 			    miscEntity.setGrIntransitCount(inTransitCount);  
 		    }
        }
-		LOG.info("### Ending  CommonUtils.getMiscEntity ####");
+		LOG.info("### Ending  CommonUtils.getMiscEntity ####"+miscEntity);
 	 return miscEntity;
 	}
 

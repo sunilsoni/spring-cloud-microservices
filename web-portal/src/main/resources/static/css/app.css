@@ -354,6 +354,18 @@ hr {
     margin-top: 10px;
 }
 
+#wipContainer {
+   /*  margin-top: 10px;
+    font-size: 67px;
+	line-height: 70px;
+	letter-spacing: -1.4px;
+	font-weight: 300; */
+	margin: auto;
+    width: 50%;
+    
+    padding: 10px;
+}
+
 .max-height{
 	min-height:492px;
 }
@@ -541,19 +553,37 @@ hr {
 }
 
 .slick-cell-checkboxsel  input[type="checkbox"]{
-	margin-left:7px;
+	margin-left:0px;
 }
 
 .slick-row.odd .slick-cell{
 	background-color:rgb(233,245,254);
 }
 
-.slick-row .slick-cell{
+/* .slick-row .slick-cell{
 	border:none !important;
-}
+} */
 
+.slick-row .slick-cell{
+	/* border:none !important; */
+}
+/* .slick-cell, .slick-headerrow-column {
+  position: absolute;
+  border: 1px solid transparent;
+  border-right: 1px dotted silver;
+  border-bottom-color: silver;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  z-index: 1;
+  padding: 1px 2px 2px 1px;
+  margin: 0;
+  white-space: nowrap;
+  cursor: default;
+} */
 .slick-header-column.hide-arrow-btn  input[type="checkbox"]{
-	margin-left:10px !important;
+	margin-left:1px !important;
 	margin-top:4px !important;
 }
 
@@ -566,11 +596,16 @@ hr {
 	
 }*/
 
-.slick-header-column.ui-state-default{
-	/*border-right:1px solid white !important;*/
+/* .slick-header-column.ui-state-default{
+	border-right:1px solid white !important;
 	border-right:none !important;
-}
+} */
 
+.slick-header-column.ui-state-default{
+	/* border-right: 1px solid rgb(240, 175, 78) !important; */
+	border-right: 1px solid #ccc !important;
+	/* border-right:none !important; */
+}
 .slick-header-menubutton{
 	/*border-left:1px solid white !important;*/
 	border-left:none !important;
@@ -692,4 +727,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#42a5f5', end
                 max-width: 50% !important;
 }
 
-
+.ui-widget-content a{
+	color: #250ce6 !important;
+	text-decoration:underline; 
+}
