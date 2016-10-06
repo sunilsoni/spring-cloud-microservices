@@ -93,6 +93,8 @@ public class Constants {
 	/** The Constant TIME_ZONE. */
 	static final String TIME_ZONE = "UTC";
 	
+	public static final String SUPPLIER_TYPE_E2OPEN = "e2open";
+	
 	/** The Constant TARGET_DIR. */
 	//flat.file.name.site.id=JUA
 	public static final String TARGET_DIR = "/send";///send

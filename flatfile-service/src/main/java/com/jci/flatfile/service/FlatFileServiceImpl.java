@@ -68,7 +68,7 @@ public class FlatFileServiceImpl implements FlatFileService{
         
         CommonUtils utils = new CommonUtils();
        // TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping("e2open",githubRes.getBody());
+        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
         
         Map<String,List<String>> pkToSuccessList = new HashMap<>();
         Map<String,List<String>> pkToErrorList = new HashMap<>();
@@ -152,7 +152,7 @@ public class FlatFileServiceImpl implements FlatFileService{
 		
         CommonUtils utils = new CommonUtils();
         //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getGrMappingFileUrl());
-        TreeMap<String,HashMap<Integer,String>> mappingList =utils. getGitJsonMapping("e2open",githubRes.getBody());
+        TreeMap<String,HashMap<Integer,String>> mappingList =utils. getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
 
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
@@ -259,7 +259,7 @@ public class FlatFileServiceImpl implements FlatFileService{
         CommonUtils utils = new CommonUtils();
         ResponseEntity<String>  githubRes = git.getSuppJson();
         //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getSuppMappingFileUrl());
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping("e2open",githubRes.getBody());
+        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
         
         
         ArrayList<String> files = new ArrayList<>();
@@ -367,7 +367,7 @@ public class FlatFileServiceImpl implements FlatFileService{
         CommonUtils utils = new CommonUtils();
         ResponseEntity<String>  githubRes = git.getItemJson();
         //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getItemMappingFileUrl());
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping("e2open",githubRes.getBody());
+        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
         
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
@@ -561,7 +561,7 @@ public class FlatFileServiceImpl implements FlatFileService{
 	        
 	        ResponseEntity<String>  githubRes = git.getPoJson();
 	       // TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
-	        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping("e2open",githubRes.getBody());
+	        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
 	        
 	        
 	        Map<String,List<String>> pkToSuccessList = new HashMap<>();
