@@ -46,29 +46,18 @@ public class FlatFileServiceImpl implements FlatFileService{
     private FlatFile config;
     
     @Autowired
-    private GithubClientImpl github;
+    private GitClientImpl git;
     
     @Override
     public String processPoFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
     	LOG.info("### Starting  FlatFileServiceImpl.processPoFlatFile ####");
     	
-    	
-    	try{
-    		LOG.info("===========---");
-    		File githubRes =github.getPoJson();
-        	LOG.info("githubRes---"+githubRes);
-        	//LOG.info("getBody---"+githubRes.getBody());
-    	}catch(Exception e){
-    		e.printStackTrace();
-    	}
-    	
-    	
-    	
-    	
         String tempDir = System.getProperty("java.io.tmpdir");
+		ResponseEntity<String>  githubRes = git.getPoJson();
         
         CommonUtils utils = new CommonUtils();
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
+       // TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
+        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping("e2open",githubRes.getBody());
         
         Map<String,List<String>> pkToSuccessList = new HashMap<>();
         Map<String,List<String>> pkToErrorList = new HashMap<>();
@@ -118,7 +107,7 @@ public class FlatFileServiceImpl implements FlatFileService{
         	e.printStackTrace();
         }
         
-        LOG.info("finalList===>"+finalList);
+        LOG.info("processPoFlatFiles finalList===>"+finalList);
         
         if(finalList!=null ){
             if(finalList.get(0).size()>0){
@@ -145,8 +134,11 @@ public class FlatFileServiceImpl implements FlatFileService{
     	LOG.info("####### Starting  FlatFileServiceImpl.processGrFlatFiles #########");
         String tempDir = System.getProperty("java.io.tmpdir");
         
+		ResponseEntity<String>  githubRes = git.getGrJson();
+		
         CommonUtils utils = new CommonUtils();
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getGrMappingFileUrl());
+        //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getGrMappingFileUrl());
+        TreeMap<String,HashMap<Integer,String>> mappingList =utils. getGitJsonMapping("e2open",githubRes.getBody());
 
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
@@ -194,7 +186,7 @@ public class FlatFileServiceImpl implements FlatFileService{
         } catch (ClassNotFoundException | IOException e) {
         	e.printStackTrace();
         }
-        LOG.info("finalList--->"+finalList);
+        LOG.info("processGrFlatFiles finalList--->"+finalList);
         
         Map<String,List<String>> pkToSuccessList = new HashMap<>();
         Map<String,List<String>> pkToErrorList = new HashMap<>();
@@ -248,7 +240,9 @@ public class FlatFileServiceImpl implements FlatFileService{
         String tempDir = System.getProperty("java.io.tmpdir");
         
         CommonUtils utils = new CommonUtils();
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getSuppMappingFileUrl());
+        ResponseEntity<String>  githubRes = git.getSuppJson();
+        //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getSuppMappingFileUrl());
+        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping("e2open",githubRes.getBody());
         
         
         ArrayList<String> files = new ArrayList<>();
@@ -297,7 +291,7 @@ public class FlatFileServiceImpl implements FlatFileService{
         } catch (ClassNotFoundException | IOException e) {
         	e.printStackTrace();
         }
-        LOG.info("finalList--->"+finalList);
+        LOG.info("processSuppFlatFiles finalList--->"+finalList);
         
         Map<String,List<String>> pkToSuccessList = new HashMap<>();
         Map<String,List<String>> pkToErrorList = new HashMap<>();
@@ -351,7 +345,9 @@ public class FlatFileServiceImpl implements FlatFileService{
         String tempDir = System.getProperty("java.io.tmpdir");
         
         CommonUtils utils = new CommonUtils();
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getItemMappingFileUrl());
+        ResponseEntity<String>  githubRes = git.getItemJson();
+        //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getItemMappingFileUrl());
+        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping("e2open",githubRes.getBody());
         
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
@@ -398,7 +394,7 @@ public class FlatFileServiceImpl implements FlatFileService{
         	e.printStackTrace();
         }
         
-        LOG.info("finalList===>"+finalList);
+        LOG.info("processItemFlatFiles finalList===>"+finalList);
         
         if(finalList!=null ){
         	Map<String,List<String>> pkToSuccessList = new HashMap<>();
@@ -527,7 +523,12 @@ public class FlatFileServiceImpl implements FlatFileService{
 		 String tempDir = System.getProperty("java.io.tmpdir");
 	        
 	        CommonUtils utils = new CommonUtils();
-	        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
+	       // TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
+	        
+	        ResponseEntity<String>  githubRes = git.getPoJson();
+	       // TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
+	        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping("e2open",githubRes.getBody());
+	        
 	        
 	        Map<String,List<String>> pkToSuccessList = new HashMap<>();
 	        Map<String,List<String>> pkToErrorList = new HashMap<>();
@@ -577,7 +578,7 @@ public class FlatFileServiceImpl implements FlatFileService{
 	        	e.printStackTrace();
 	        }
 	        
-	        LOG.info("finalList===>"+finalList);
+	        LOG.info("processErrorPosFlatFiles finalList===>"+finalList);
 	        ProcessErrorRes re = new ProcessErrorRes();
 	        
 	        if(finalList!=null ){

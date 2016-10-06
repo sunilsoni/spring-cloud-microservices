@@ -191,14 +191,14 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 				ep = map.get(key);
 				hashmap.put(key, ep.getValueAsString());
 			}
-			if(poNumToItemListMap.containsKey(row.getRowKey().split("_")[0])){
-				List<HashMap<String, Object>> list =poNumToItemListMap.get(row.getRowKey().split("_")[0]);
+			if(poNumToItemListMap.containsKey(row.getRowKey().split("-")[0])){
+				List<HashMap<String, Object>> list =poNumToItemListMap.get(row.getRowKey().split("-")[0]);
 	    		list.add(hashmap);
-	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+	    		poNumToItemListMap.put(row.getRowKey().split("-")[0], list);
 	    	}else{
 	    		List<HashMap<String, Object>> list = new  ArrayList<>();
 	    		list.add(hashmap);
-	    		poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+	    		poNumToItemListMap.put(row.getRowKey().split("-")[0], list);
 	    	}
 		}		
 		 return poNumToItemListMap;

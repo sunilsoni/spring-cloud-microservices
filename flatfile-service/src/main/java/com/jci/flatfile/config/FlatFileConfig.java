@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @RefreshScope
 public class FlatFileConfig { // NO_UCD (unused code)
 
-  	@Value("${flat.file.po.supplier.mapping.po.url}")
+  /*	@Value("${flat.file.po.supplier.mapping.po.url}")
     String poMappingFileUrl;
   	
   	@Value("${flat.file.po.supplier.mapping.gr.url}")
@@ -26,7 +26,7 @@ public class FlatFileConfig { // NO_UCD (unused code)
   	@Value("${flat.file.po.supplier.mapping.item.url}")
     String itemMappingFileUrl;
   	
-  	@Value("${flat.file.po.supplier.mapping.supp.url}")
+  	@Value("${flat.file.po.supplier.mapping.supp.url}")*/
     String suppMappingFileUrl;
     
   	@Value("${sftp.conn.hostname}")
@@ -44,8 +44,7 @@ public class FlatFileConfig { // NO_UCD (unused code)
   	
   	@Bean
 	  public FlatFile flatFile() {
-		  FlatFile ff = new FlatFile(poMappingFileUrl,  grMappingFileUrl,  itemMappingFileUrl,
-					 suppMappingFileUrl,  hostname,  port,  username,  password);
+		  FlatFile ff = new FlatFile(hostname,  port,  username,  password);
 		  return ff;
 	  }
 }

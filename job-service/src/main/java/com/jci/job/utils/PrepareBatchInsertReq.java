@@ -74,13 +74,13 @@ public class PrepareBatchInsertReq {
 			erpName = po.getErp().toUpperCase();
 			
 			String partitionKey = po.getErp().toUpperCase();
-			String orderNumber = po.getOrderNumber();
+			//String orderNumber = po.getOrderNumber();
 			
+			//String poNumFull = po.getOrderNumber();//ponumber-line id-release id
+			//String[] poNumArr = poNumFull.split("-");
+			
+			String orderNumber = po.getOrderNumber();;		
 			PoEntity poEntity = new PoEntity(partitionKey,orderNumber);
-			
-			if(poDetailsList.contains(poEntity)){
-				continue;
-			}
 			rowKeyList.add(orderNumber);
 			
 			//poEntity.setErpName(po.getErp());
@@ -91,7 +91,9 @@ public class PrepareBatchInsertReq {
 			poEntity.setSupplierDeliveryState(Constants.STATUS_IN_TRANSIT);
 			poEntity.setSuppType(po.getSupplierType());
 			
-			poDetailsList.add(poEntity);
+			if(!poDetailsList.contains(poEntity)){
+				poDetailsList.add(poEntity);
+			}
 			
 			prepareReq = new PoBody();
 			prepareReq.setErp(po.getErp());
@@ -105,7 +107,7 @@ public class PrepareBatchInsertReq {
 			PoItemsEntity itemEntity = null;
 			
 			for (PoItem item : itemList) {
-				 itemEntity = new PoItemsEntity(partitionKey,(item.getOrderNumber()+"_"+item.getLineID()+"_"+item.getRequestID()));
+				 itemEntity = new PoItemsEntity(partitionKey,orderNumber);//item.getOrderNumber()+"_"+item.getLineID()+"_"+item.getRequestID()
 				 if(poItemDetailsList.contains(itemEntity)){
 						continue;
 				 }
@@ -115,8 +117,9 @@ public class PrepareBatchInsertReq {
 				} catch (JsonProcessingException e) {
 				    LOG.error("### Exception in PrepareBatchInsertReq.preparePoReq ###"+e);
 				}
-				itemEntity.setOrderNumber(item.getOrderNumber());
+				
 				if(itemEntity!=null){
+					itemEntity.setOrderNumber(orderNumber);
 					poItemDetailsList.add(itemEntity);
 			   }
 			}
@@ -157,6 +160,7 @@ public class PrepareBatchInsertReq {
 	         
 		//	Object gr;
 			String receiptID = gr.getReceiptID();
+			String[] poNumArr = receiptID.split("-");
 			erpName = gr.getErp().toUpperCase();
 			
 			GrEntity entity = new GrEntity(partitionKey,receiptID);
@@ -167,6 +171,7 @@ public class PrepareBatchInsertReq {
 			rowKeyList.add(receiptID);
 			//entity.setErpName(gr.getErp());
 			entity.setRegion(gr.getRegion());
+			entity.setOrderNumber(poNumArr[0]);
 			entity.setPlant(gr.getPlant());
 			entity.setSupplierDeliveryState(Constants.STATUS_IN_TRANSIT);
 			entity.setSuppType(gr.getSupplierType());

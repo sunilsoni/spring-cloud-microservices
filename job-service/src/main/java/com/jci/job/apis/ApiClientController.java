@@ -9,12 +9,15 @@ package com.jci.job.apis;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jci.job.service.ApiClientService;
@@ -45,10 +48,10 @@ public class ApiClientController { // NO_UCD (unused code)
 	 * @return the po details
 	 */
 	@RequestMapping(value = "/getPoDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getPoDetails() {
+	public String getPoDetails(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
 		String response=null;
 		try {
-			response = service.getPoDetails();
+			response = service.getPoDetails(plant, erp, region);
 			LOG.info("response-->"+response);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
@@ -62,10 +65,10 @@ public class ApiClientController { // NO_UCD (unused code)
 	 * @return the gr details
 	 */
 	@RequestMapping(value = "/getGrDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getGrDetails() {
+	public String getGrDetails(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
 		String response="SUCCESS";
 		try {
-			response = service.getGrDetails();
+			response = service.getGrDetails(plant, erp, region);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
 		}
@@ -78,10 +81,10 @@ public class ApiClientController { // NO_UCD (unused code)
 	 * @return the supp details
 	 */
 	@RequestMapping(value = "/getSuppDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getSuppDetails() {
+	public String getSuppDetails(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
 		String response=null;
 		try {
-			response = service.getSuppDetails();
+			response = service.getSuppDetails(plant, erp, region);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.getSuppDetails ####",e);
 		}
@@ -94,16 +97,56 @@ public class ApiClientController { // NO_UCD (unused code)
 	 * @return the item details
 	 */
 	@RequestMapping(value = "/getItemDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
-	public String getItemDetails() {
+	public String getItemDetails(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
 		String response =null;
 		try {
-			response = service.getItemDetails();
+			response = service.getItemDetails(plant, erp, region);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
 		}
 		return response;
 	}
 	
+	@RequestMapping(value = "/getDatabyPlantName", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String getDatabyPlantName(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
+		String response="SUCCESS";
+		
+		if(StringUtils.isBlank(plant) || StringUtils.isBlank(erp)){
+			response="Plant or Erp can not be blank !";
+			return response;
+		}
+		
+		getSuppDetails(plant,erp,region);
+		getItemDetails(plant,erp,region);
+		getPoDetails(plant,erp,region);
+		getGrDetails(plant,erp,region);
+		
+		return response;
+	}
+	
+	@RequestMapping(value = "/databyPlantName", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
+	public String databyPlantName(@RequestHeader(value="plant") String plant, @RequestHeader(value="erp") String erp, @RequestHeader(value="region") String region) {
+		String response="SUCCESS";
+		
+		if(StringUtils.isBlank(plant) || StringUtils.isBlank(erp)){
+			response="Plant or Erp can not be blank !";
+			return response;
+		}
+		
+		String msg = getSuppDetails(plant,erp,region);
+		LOG.error("getSuppDetails--->"+msg);
+		
+		msg = getItemDetails(plant,erp,region);
+		LOG.error("getItemDetails--->"+msg);
+		
+		msg = getPoDetails(plant,erp,region);
+		LOG.error("getPoDetails--->"+msg);
+		
+		msg = getGrDetails(plant,erp,region);
+		LOG.error("getGrDetails--->"+msg);
+		
+		return response;
+	}
 
 	/**
 	 * Process Flat File scheduler for PO details.

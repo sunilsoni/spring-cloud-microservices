@@ -10,7 +10,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,8 +51,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	private JobRepo repo;
 	
     /** The all erps. */
-    @Value("${all.erp.names}")
-    private String allErps;
+    /*@Value("${all.erp.names}")
+    private String allErps;*/
     
     /** The config. */
     @Autowired
@@ -64,7 +63,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 * @see com.jci.job.service.ApiClientService#getPoDetails()
 	 */
 	@Override
-	public String getPoDetails()  throws InvalidKeyException, URISyntaxException, StorageException {
+	public String getPoDetails(String plant, String erp, String region)  throws InvalidKeyException, URISyntaxException, StorageException {
 		PoDetailsRes responseBody=null;
 		ResponseEntity<PoDetailsRes> apigeeResponse =null;
 		
@@ -74,20 +73,16 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		 /**
 		  * Starting apigee call
 		 */
-		String[] erpArr  = allErps.split(",");
-        for (int i=0;i<erpArr.length;i++){//Sunil: No of count issue here
-             
-           
-            apigeeResponse =  apigeeClient.getPoDetails(config.getPoKey(), erpArr[i]);
+            apigeeResponse =  apigeeClient.getPoDetails(config.getPoKey(), plant,erp,region);
             
             if(apigeeResponse==null || apigeeResponse.getBody()==null ){
-                continue;
+                return "Failure";
             }
             
             responseBody = apigeeResponse.getBody();
                
             if(responseBody.getPoList()==null || responseBody.getPoList().size()==0){
-                continue;
+            	 return "Failure";
             }
             BatchInsertReq  req = PrepareBatchInsertReq.preparePoReq(responseBody);
              
@@ -101,11 +96,9 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
             SuccessReq req1 = new SuccessReq();
             req1.setPoList(successList);
             
-          responseStatus =  apigeeClient.getPoDetailsRes(req1,config.getPoKey(), erpArr[i]);//Sunil: method body is wrong
+          responseStatus =  apigeeClient.getPoDetailsRes(req1,config.getPoKey(), plant,erp,region);//Sunil: method body is wrong
              
-        }
-        
-        processPoFlatFile() ;
+          processPoFlatFile() ;
 		return responseStatus;
 	}
 	
@@ -114,7 +107,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 * @see com.jci.job.service.ApiClientService#getGrDetails()
 	 */
 	@Override
-	public String getGrDetails() throws InvalidKeyException, URISyntaxException, StorageException {
+	public String getGrDetails(String plant, String erp, String region) throws InvalidKeyException, URISyntaxException, StorageException {
 		GrDetailsRes responseBody=null;
 		ResponseEntity<GrDetailsRes> apigeeResponse =null;
 		
@@ -124,19 +117,15 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		 /**
 		  * Starting apigee call
 		 */
-		String[] erpArr  = allErps.split(",");
-        for (int i=0;i<erpArr.length;i++){
-             
-           
-    		apigeeResponse =  apigeeClient.getGrDetails(config.getGrKey(), erpArr[i]);
+    		apigeeResponse =  apigeeClient.getGrDetails(config.getGrKey(), plant,erp,region);
     		 
     		if(apigeeResponse==null ||  apigeeResponse.getBody()==null){
-                continue;
+    			 return "Failure";
             }	
     		
     		responseBody = apigeeResponse.getBody();
     		if(responseBody.getGrList()==null || responseBody.getGrList().size()==0){
-                continue;
+    			 return "Failure";
             }
     		
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareGrReq(responseBody);
@@ -151,10 +140,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		SuccessReq req1 = new SuccessReq();
     		req1.setGrList(successList);
     		
-    		responseStatus =  apigeeClient.getGrDetailsRes(req1, config.getGrKey(), erpArr[i]);
-        }
-        
-        processGrFlatFile() ;
+    		responseStatus =  apigeeClient.getGrDetailsRes(req1, config.getGrKey(), plant,erp,region);
+    		processGrFlatFile() ;
 		return responseStatus;
 	} 
 	
@@ -163,29 +150,26 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 * @see com.jci.job.service.ApiClientService#getItemDetails()
 	 */
 	@Override
-	public String getItemDetails() throws InvalidKeyException, URISyntaxException, StorageException {
+	public String getItemDetails(String plant, String erp, String region) throws InvalidKeyException, URISyntaxException, StorageException {
 		LOG.info("### Starting in ApigeeClientServiceImpl.getItemDetails ####");
 		String responseStatus=null;
 			 
 		 /**
 		  * Starting apigee call
 		 */
-		String[] erpArr  = allErps.split(",");
-        for (int i=0;i<erpArr.length;i++){
-           
-    		ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(config.getItemKey(), erpArr[i]);
+    		ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(config.getItemKey(), plant,erp,region);
     		if(response==null || response.getBody()==null){
-                continue;
+    			 return "Failure";
             }   
     		
     		ItemDetailsRes responseBody = response.getBody();
     		if(responseBody.getItemList()==null || responseBody.getItemList().size()==0){
-                continue;
+    			return "Failure";
             }  
     		
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody);
     		if(req==null){
-    			 continue;
+    			 return "Failure";
     		}
     		
     		List<Object> successList = repo.batchInsert(req);
@@ -193,9 +177,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		SuccessReq req1 = new SuccessReq();
     		req1.setItemList(successList);
     		
-    		responseStatus =  apigeeClient.getItemsRes(req1,config.getItemKey(), erpArr[i]);//Need to change
-        }
-        processItemFlatFile() ;
+    		responseStatus =  apigeeClient.getItemsRes(req1,config.getItemKey(), plant,erp,region);//Need to change
+    		processItemFlatFile() ;
     	LOG.info("### Ending in ApigeeClientServiceImpl.getItemDetails ####");
 		return responseStatus;
 	}
@@ -204,24 +187,22 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 * @see com.jci.job.service.ApiClientService#getSuppDetails()
 	 */
 	@Override
-	public String getSuppDetails() throws InvalidKeyException, URISyntaxException, StorageException {
+	public String getSuppDetails(String plant, String erp, String region) throws InvalidKeyException, URISyntaxException, StorageException {
 		
 		String responseStatus=null;
 
 		/**
 		  * Starting Apigee call
 		 */
-		String[] erpArr  = allErps.split(",");
-        for (int i=0;i<erpArr.length;i++){
-    		ResponseEntity<SuppDetailsRes> response = apigeeClient.getSupp(config.getSuppKey(), erpArr[i]);
+    		ResponseEntity<SuppDetailsRes> response = apigeeClient.getSupp(config.getSuppKey(), plant,erp,region);
     		
     		if(response==null || response.getBody()==null){
-                continue;
+    			 return "Failure";
             } 
     		
     		SuppDetailsRes responseBody = response.getBody();
     		if(responseBody.getSupplierList()==null || responseBody.getSupplierList().size()==0){
-                continue;
+    			 return "Failure";
             } 
     		
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareSuppReq(responseBody);
@@ -235,10 +216,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		req1.setPoList(successList);
     		
     		req1.setSupplierList(successList);
-    		responseStatus =  apigeeClient.getSuppRes(req1,config.getSuppKey(), erpArr[i]);//Need to change
-        }
-        
-        processSuppFlatFile() ;
+    		responseStatus =  apigeeClient.getSuppRes(req1,config.getSuppKey(), plant,erp,region);//Need to change
+    		processSuppFlatFile() ;
 		return responseStatus;
 	}
 	

@@ -38,7 +38,7 @@ public class Constants {
 	static final String ROWKEY = "RowKey";	
 	
 	/** The Constant ORDER_NUMBER. */
-	static final String ORDER_NUMBER = "OrderNumber";
+	public static final String ORDER_NUMBER = "OrderNumber";
 	
 	/** The Constant JSON_STRING. */
 	public static final String JSON_STRING = "JsonString";

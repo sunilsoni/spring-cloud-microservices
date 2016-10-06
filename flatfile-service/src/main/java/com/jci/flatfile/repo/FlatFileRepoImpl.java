@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,35 +103,35 @@ public class FlatFileRepoImpl implements FlatFileRepo {
         TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);//Need to discuss this
         Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
         DynamicTableEntity row;
-        EntityProperty ep;
+       // EntityProperty ep;
         HashMap<String, Object> hashmap;
         ObjectMapper mapper = new ObjectMapper(); 
         Map<String,List<HashMap<String, Object>>> poNumToItemListMap = new HashMap<>();
+        TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
         
         while(rows.hasNext()) {
             row = rows.next() ;
             HashMap<String, EntityProperty> map = row.getProperties();
             hashmap = new HashMap<>();
             
-            for (String key : map.keySet()) {
-                ep = map.get(key);
-                if(Constants.JSON_STRING.equals(key)){
-                    TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
-                    try {
-                        hashmap = mapper.readValue(ep.getValueAsString(), typeRef);
-                    } catch (IOException e) {
-                        LOG.error("### Exception in   ####",e);                        
-                    } 
-                }
+            String jsonString = map.get(Constants.JSON_STRING).getValueAsString();
+            if(!StringUtils.isBlank(jsonString)){
+                try {
+                    hashmap = mapper.readValue(jsonString, typeRef);
+                } catch (IOException e) {
+                    LOG.error("### Exception in   ####",e);                        
+                } 
             }
-            if(poNumToItemListMap.containsKey(row.getRowKey().split("_")[0])){
-                List<HashMap<String, Object>> list =poNumToItemListMap.get(row.getRowKey().split("_")[0]);
+            
+            String poNum = map.get(Constants.ORDER_NUMBER).getValueAsString();
+            if(poNumToItemListMap.containsKey(poNum)){
+                List<HashMap<String, Object>> list =poNumToItemListMap.get(poNum);
                 list.add(hashmap);
-                poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+                poNumToItemListMap.put(poNum, list);
             }else{
                 List<HashMap<String, Object>> list = new  ArrayList<>();
                 list.add(hashmap);
-                poNumToItemListMap.put(row.getRowKey().split("_")[0], list);
+                poNumToItemListMap.put(poNum, list);
             }
         }       
          return poNumToItemListMap;
@@ -237,7 +238,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		            	}
 			    		batchOperation.insertOrMerge(en);
 			    	}else if(entity instanceof SuppEntity){
-			    		 LOG.info("instanceof  SuppEntity-->");
 			    		SuppEntity en = (SuppEntity) entity;
 			    		if(request.isSuccess()){
 				    		en.setSupplierDeliveryState(Constants.STATUS_SUCCESS);
@@ -302,16 +302,10 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 						continue;
 					}
 			    }
-			    LOG.info("successCount-->"+successCount);
-			    LOG.info("errorCount-->"+errorCount);
-			    
 			    if(successCount>0 || errorCount>0){
 			    	updateMiscEntity(request.getErpName(),entry.getKey(),successCount,errorCount,request.isErrorReq());
 			    }
-			    
 		 }	
-		 
-		 
 		 LOG.info("### Ending in FlatFileRepoImpl.batchUpdate ###");
 	} 
     
@@ -356,7 +350,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 			    	poFinal.add(entity);
 			    }
 			}
-			
 		    preparePoDetails(partitionKey,poList.subList(batchSize,poList.size()),tableName);
 		}else{
 			String query = QueryBuilder.processPosQuery(partitionKey,poList);
@@ -398,7 +391,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
 		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
 			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
-			
 		}
 		
 		if(miscEntity==null){
@@ -542,7 +534,6 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 	
 	public void updateStatusCountEntity(MiscDataEntity entity) throws InvalidKeyException, URISyntaxException, StorageException {
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
-		
 		TableOperation insert = TableOperation.insertOrMerge(entity);
 		cloudTable.execute(insert);
 	}

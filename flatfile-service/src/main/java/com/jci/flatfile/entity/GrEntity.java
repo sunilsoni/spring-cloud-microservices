@@ -30,7 +30,8 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	public GrEntity() {
 	}
 
-   	
+	private String orderNumber;
+	
     /** The status. */
     private int supplierDeliveryState;
 
@@ -52,6 +53,16 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	/** The global id. */
 	private String globalId;	
 	
+	
+	
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
 	/** The comment. */
 	private String comment;	
     public String getUserName() {
@@ -207,9 +218,9 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 
 	@Override
 	public String toString() {
-		return "GrEntity [supplierDeliveryState=" + supplierDeliveryState + ", suppType=" + suppType + ", region="
-				+ region + ", plant=" + plant + ", jsonString=" + jsonString + ", userName=" + userName + ", globalId="
-				+ globalId + ", comment=" + comment + "]";
+		return "GrEntity [orderNumber=" + orderNumber + ", supplierDeliveryState=" + supplierDeliveryState
+				+ ", suppType=" + suppType + ", region=" + region + ", plant=" + plant + ", jsonString=" + jsonString
+				+ ", userName=" + userName + ", globalId=" + globalId + ", comment=" + comment + "]";
 	}
     
 

@@ -30,7 +30,7 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	public GrEntity() {
 	}
 
-   	
+	private String orderNumber;
     /** The status. */
     private int supplierDeliveryState;
 
@@ -54,7 +54,17 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	
 	/** The comment. */
 	private String comment;	
-    public String getUserName() {
+	
+	
+    public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public String getUserName() {
 		return userName;
 	}
 

@@ -96,6 +96,20 @@ public class CommonUtils {
 		return mappingList ;
 	}
 	
+	public TreeMap<String,HashMap<Integer,String>> getGitJsonMapping(String destName, String jasonValue){
+		HashMap<Integer, String> map=null;
+		ObjectMapper mapper = new ObjectMapper(); 
+		TreeMap<String,HashMap<Integer,String>> mappingList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	    TypeReference<HashMap<Integer,String>> typeRef  = new TypeReference<HashMap<Integer,String>>() {};
+		try {
+			map = mapper.readValue(jasonValue, typeRef);
+			mappingList.put(destName, map);
+		} catch (IOException e) {
+			LOG.error("### Exception in   ####",e);
+		} 
+		return mappingList ;
+	}
+	
 	public static String removeTemp(String str){
 		int index=0;
 	    if(str.contains("\\")){
@@ -133,15 +147,29 @@ public class CommonUtils {
 	public  Map<String,List<String>>  prepareSuppData(String poNum, HashMap<Integer,String> mapping,List<HashMap<String, Object>> rowList,String plantName,String msgType){
 			Map<String,List<String>> fileNameToRowsMap = new HashMap<>();
 			List<String> lines = new ArrayList<>();
+			lines.add(getHeaderString(mapping));
 			int size = rowList.size();
 			for(int i=0;i<size;i++){
 				lines.add(fixedLengthString((rowList.get(i)),mapping).toString());
 			}
 		    String fileName = getFileName(poNum,plantName,msgType);
-		    
 		    fileNameToRowsMap.put(fileName, lines);
 		return fileNameToRowsMap;
 	}
+	
+	private  String getHeaderString(HashMap<Integer,String> mapping){
+		StringBuilder line = new StringBuilder();
+		for(int i=0;i<mapping.size();i++){
+		 	String str = StringUtils.capitalize(mapping.get(i));
+			str = str.substring(0, 1).toUpperCase() + str.substring(1);
+			String[] upperStr = str.split("(?<=[a-z])(?=[A-Z])");
+			String joined = "#" + String.join(" ", upperStr);
+			line.append(joined + "\t");
+		 }
+		
+		return line.toString();
+	}
+	
 	
 	private  StringBuilder fixedLengthString(HashMap<String, Object> po,HashMap<Integer,String> mapping){
 		StringBuilder line = new StringBuilder();
@@ -213,6 +241,9 @@ public class CommonUtils {
 		}else{
 			isoFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
 			name.append(timestamp);
+		}
+		if(!StringUtils.isBlank(poNum)){
+		    name.append(poNum);
 		}
 		name.append(".txt");  
 		return name.toString();

@@ -48,8 +48,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
 			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getPoDetailsFallback") 
-	ResponseEntity<PoDetailsRes> getPoDetails(String apikey,String erp) {
-		return  apigeeClient.getPoDetails(apikey,erp);
+	ResponseEntity<PoDetailsRes> getPoDetails(String apikey,String plant, String erp, String region) {
+		return  apigeeClient.getPoDetails(apikey,plant,erp,region);
 	}
 
 	
@@ -60,7 +60,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * @param erp the erp
 	 * @return the po details fallback
 	 */
-	public ResponseEntity<PoDetailsRes> getPoDetailsFallback(String apikey,String erp) {		 // NO_UCD (unused code)
+	public ResponseEntity<PoDetailsRes> getPoDetailsFallback(String apikey,String plant, String erp, String region) {		 // NO_UCD (unused code)
 		return null;
 	}
 
@@ -85,8 +85,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
 			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getPoDetailsResFallback")
-	String getPoDetailsRes(SuccessReq req,String apikey,String erp) {
-		return apigeeClient.getPoDetailsRes(req,apikey,erp);
+	String getPoDetailsRes(SuccessReq req,String apikey,String plant, String erp, String region) {
+		return apigeeClient.getPoDetailsRes(req,apikey,plant,erp,region);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * @param erp the erp
 	 * @return the po details res fallback
 	 */
-	public String getPoDetailsResFallback(SuccessReq req,String apikey,String erp) { // NO_UCD (unused code)
+	public String getPoDetailsResFallback(SuccessReq req,String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
 		return "Fallback";
 	}
 
@@ -121,8 +121,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
 			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getGrDetailsFallback") 
-	ResponseEntity<GrDetailsRes> getGrDetails(String apikey,String erp) {
-		return  apigeeClient.getGrDetails(apikey,erp);
+	ResponseEntity<GrDetailsRes> getGrDetails(String apikey,String plant, String erp, String region) {
+		return  apigeeClient.getGrDetails(apikey,plant,erp,region);
 	}
 
 	
@@ -133,7 +133,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * @param erp the erp
 	 * @return the gr details fallback
 	 */
-	public ResponseEntity<GrDetailsRes> getGrDetailsFallback(String apikey,String erp) {		 // NO_UCD (unused code)
+	public ResponseEntity<GrDetailsRes> getGrDetailsFallback(String apikey,String plant, String erp, String region) {		 // NO_UCD (unused code)
 		return null;
 	}
 	
@@ -157,8 +157,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
 			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getGrDetailsResFallback")
-	String getGrDetailsRes(SuccessReq req,String apikey,String erp) {
-		return apigeeClient.getGrDetailsRes(req,apikey,erp);
+	String getGrDetailsRes(SuccessReq req,String apikey,String plant, String erp, String region) {
+		return apigeeClient.getGrDetailsRes(req,apikey,plant,erp,region);
 	}
 	
 	/**
@@ -169,7 +169,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * @param erp the erp
 	 * @return the po details res fallback
 	 */
-	public String getGrDetailsResFallback(SuccessReq req,String apikey,String erp) { // NO_UCD (unused code)
+	public String getGrDetailsResFallback(SuccessReq req,String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
 		return "Fallback";
 	}
 	
@@ -191,8 +191,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "1000"),
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
-			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getItemsFallback") ResponseEntity<ItemDetailsRes> getItems(String apikey,String erp) {
-		return apigeeClient.getItems(apikey,erp);
+			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getItemsFallback") ResponseEntity<ItemDetailsRes> getItems(String apikey,String plant, String erp, String region) {
+		return apigeeClient.getItems(apikey,plant,erp,region);
 	}
 
 	/**
@@ -202,7 +202,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * @param erp the erp
 	 * @return the items fallback
 	 */
-	ResponseEntity<ItemDetailsRes> getItemsFallback(String apikey,String erp) { // NO_UCD (unused code)
+	ResponseEntity<ItemDetailsRes> getItemsFallback(String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
 		return null;
 	}
 	
@@ -226,8 +226,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
 			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getItemsResFallback")
-	public String getItemsRes(SuccessReq poList,String apikey,String erp) { // NO_UCD (use default)
-		return apigeeClient.getItemsRes(poList,apikey,erp);
+	public String getItemsRes(SuccessReq poList,String apikey,String plant, String erp, String region) { // NO_UCD (use default)
+		return apigeeClient.getItemsRes(poList,apikey,plant,erp,region);
 	}
 	
 	/**
@@ -238,7 +238,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * @param erp the erp
 	 * @return the items res fallback
 	 */
-	public String getItemsResFallback(SuccessReq poList,String apikey,String erp) { // NO_UCD (unused code)
+	public String getItemsResFallback(SuccessReq poList,String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
 		return "Fallback";
 	}
 
@@ -261,8 +261,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
 			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getSuppFallback") 
-		ResponseEntity<SuppDetailsRes> getSupp(String apikey,String erp) {
-			return apigeeClient.getSupp(apikey,erp);
+		ResponseEntity<SuppDetailsRes> getSupp(String apikey,String plant, String erp, String region) {
+			return apigeeClient.getSupp(apikey,plant,erp,region);
 		}
 	
 	/**
@@ -272,7 +272,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * @param erp the erp
 	 * @return the supp fallback
 	 */
-	public ResponseEntity<SuppDetailsRes> getSuppFallback(String apikey,String erp) { // NO_UCD (unused code)
+	public ResponseEntity<SuppDetailsRes> getSuppFallback(String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
 		return null;
 	}
 
@@ -296,8 +296,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10"),
 			@HystrixProperty(name = "circuitBreaker.forceOpen", value = "false"),
 			@HystrixProperty(name = "circuitBreaker.forceClosed", value = "false") }, fallbackMethod = "getSuppResFallback") 
-	String getSuppRes(SuccessReq poList,String apikey,String erp) {
-		return apigeeClient.getSuppRes(poList,apikey,erp);
+	String getSuppRes(SuccessReq poList,String apikey,String plant, String erp, String region) {
+		return apigeeClient.getSuppRes(poList,apikey,plant,erp,region);
 	}
 
 	/**
@@ -308,7 +308,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * @param erp the erp
 	 * @return the supp res fallback
 	 */
-	public String getSuppResFallback(SuccessReq poList,String apikey,String erp) { // NO_UCD (unused code)
+	public String getSuppResFallback(SuccessReq poList,String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
 		return "Fallback";
 	}
 }

@@ -17,6 +17,8 @@
         <docker.plugin.version>0.4.11</docker.plugin.version>
         <start-class>com.jci.flatfile.Application</start-class>
         <docker.image.prefix>suppliercollaboration</docker.image.prefix>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
   <licenses>
     <license>
