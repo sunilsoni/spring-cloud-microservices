@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jci.job.service.ApiClientService;
 import com.microsoft.azure.storage.StorageException;
 
-
-
 /**
  * <p>
  * <strong>Scheduler layer for fetching Purchase Orders, Suppliers and Items from Apigee APIs.</strong>

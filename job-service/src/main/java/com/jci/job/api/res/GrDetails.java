@@ -5,10 +5,12 @@
  */
 package com.jci.job.api.res;
 
-
-
 /**
- * The Class PoDetails.
+ * <p>
+ * <strong> The Goods Receipt Details Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class GrDetails {
 	

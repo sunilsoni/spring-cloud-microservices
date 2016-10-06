@@ -15,11 +15,12 @@ import com.jci.job.api.res.BatchUpdateRes;
 import com.jci.job.entity.PoEntity;
 import com.microsoft.azure.storage.StorageException;
 
-
-
-
 /**
- * The Interface JobRepo.
+ * <p>
+ * <strong> The Interface JobRepo..</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public interface JobRepo {
 	
@@ -54,17 +55,8 @@ public interface JobRepo {
 	 * @throws URISyntaxException the URI syntax exception
 	 * @throws StorageException the storage exception
 	 */
-	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
+	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException; // NO_UCD (unused code)
 	
-	/**
-	 * Batch update.
-	 *
-	 * @param request the request
-	 * @return the batch update res
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	BatchUpdateRes batchUpdate(BatchUpdateReq request) throws InvalidKeyException, URISyntaxException, StorageException;
+	BatchUpdateRes batchUpdate(BatchUpdateReq request);
 	
 }

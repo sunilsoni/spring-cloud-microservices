@@ -37,7 +37,7 @@ public class BatchUpdateReq {
 	private String comment;
 	
 	/** The is error req. */
-	boolean isErrorReq ;
+	private boolean isErrorReq ;
 	
 	/**
 	 * Checks if is error req.

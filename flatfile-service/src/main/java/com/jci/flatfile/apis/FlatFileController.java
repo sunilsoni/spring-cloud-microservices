@@ -21,10 +21,10 @@ import com.microsoft.azure.storage.StorageException;
 
 
 /**
- * The Class FlatFileController.
+ * Rest Layer for processing flat files.
  */
 @RestController
-public class FlatFileController {
+public class FlatFileController { // NO_UCD (unused code)
 
 	 /** The service. */
  	@Autowired

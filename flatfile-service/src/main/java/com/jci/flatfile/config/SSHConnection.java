@@ -24,10 +24,10 @@ public class SSHConnection
 {
 	
 	/** The password. */
-	String hostname, username, password;
+	private String hostname, username, password;
 	
 	/** The port. */
-	int port;
+	private int port;
 	
 	/**
 	 * Instantiates a new SSH connection.
@@ -97,7 +97,7 @@ public class SSHConnection
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws ClassNotFoundException the class not found exception
 	 */
-	public void sftpUpload(String filePath, String targetDir) throws IOException, ClassNotFoundException
+	public void sftpUpload(String filePath, String targetDir) throws IOException, ClassNotFoundException // NO_UCD (unused code)
 	{
 		ArrayList<String> files = new ArrayList<String>();
 		files.add(filePath);
@@ -111,7 +111,7 @@ public class SSHConnection
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws ClassNotFoundException the class not found exception
 	 */
-	public void executeRemoteCommand(String command) throws IOException, ClassNotFoundException
+	public void executeRemoteCommand(String command) throws IOException, ClassNotFoundException // NO_UCD (unused code)
 	{
 		SSHClient ssh = getSSHConnection();
         //int exitStatus; //for some odd reason it doesn't always return an exit status, 

@@ -22,7 +22,7 @@ public class PoEntity extends TableServiceEntity {
 	 * @param partitionKey the partition key
 	 * @param rowKey the row key
 	 */
-	public PoEntity(String partitionKey, String rowKey) {
+	public PoEntity(String partitionKey, String rowKey) { // NO_UCD (unused code)
 		this.partitionKey = partitionKey;
 		this.rowKey = rowKey;
 	}

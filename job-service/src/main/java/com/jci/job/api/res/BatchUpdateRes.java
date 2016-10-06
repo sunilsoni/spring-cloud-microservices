@@ -7,11 +7,12 @@ package com.jci.job.api.res;
 
 import java.util.List;
 
-
-
-
 /**
- * The Class BatchUpdateRes.
+ * <p>
+ * <strong> The Batch Update Response Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class BatchUpdateRes {
 	

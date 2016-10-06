@@ -6,9 +6,12 @@
 package com.jci.job.api.req;
 
 
-
 /**
- * The Class GrBody.
+ * <p>
+ * <strong> The Goods Receipt Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class GrBody {
 	

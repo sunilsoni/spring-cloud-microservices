@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.TreeMap;    
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ import com.microsoft.azure.storage.table.TableEntity;
  * The Class FlatFileServiceImpl.
  */
 @Service
-public class FlatFileServiceImpl implements FlatFileService{
+public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused code)
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(FlatFileServiceImpl.class);
@@ -652,7 +652,6 @@ public class FlatFileServiceImpl implements FlatFileService{
 	 */
 	@Override
 	public ProcessErrorRes processErrorGrFlatFiles(ProcessErrorReq req){
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -661,7 +660,6 @@ public class FlatFileServiceImpl implements FlatFileService{
 	 */
 	@Override
 	public ProcessErrorRes processErrorItemFlatFiles(ProcessErrorReq req){
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -670,7 +668,6 @@ public class FlatFileServiceImpl implements FlatFileService{
 	 */
 	@Override
 	public ProcessErrorRes processErrorSuppFlatFiles(ProcessErrorReq req){
-		// TODO Auto-generated method stub
 		return null;
 	}
     

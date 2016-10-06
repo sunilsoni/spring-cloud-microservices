@@ -18,10 +18,12 @@ import com.jci.job.apis.ApiClient;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-
-
 /**
- * The Class ApiClientImpl.
+ * <p>
+ * <strong> The Api Client Implementation.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Service class ApiClientImpl {
 	

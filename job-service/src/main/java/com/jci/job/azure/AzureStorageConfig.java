@@ -10,11 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
-
-
 /**
- * The Class AzureStorageConfig.
+ * <p>
+ * <strong> The Azure Storage Config Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Configuration
 public class AzureStorageConfig { // NO_UCD (unused code)

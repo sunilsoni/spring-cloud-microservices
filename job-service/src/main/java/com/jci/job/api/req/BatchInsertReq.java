@@ -11,10 +11,12 @@ import java.util.List;
 import com.microsoft.azure.storage.table.TableEntity;
 
 
-
-
 /**
- * The Class BatchInsertReq.
+ * <p>
+ * <strong> The Batch Insert Request Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class BatchInsertReq {
 	

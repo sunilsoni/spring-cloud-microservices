@@ -15,16 +15,16 @@ public class ProcessErrorReq {
 	private String erpName;
 	
 	/** The table name. */
-	String tableName;
+	private String tableName;
 	
 	/** The global id. */
-	String globalId;
+	private String globalId;
 	
 	/** The user name. */
-	String userName;
+	private String userName;
 	
 	/** The comment. */
-	String comment;
+	private String comment;
 	
 	/**
 	 * Gets the erp name.

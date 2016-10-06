@@ -7,10 +7,12 @@ package com.jci.job.api.res;
 
 import java.util.List;
 
-
-
 /**
- * The Class SuppDetailsRes.
+ * <p>
+ * <strong> The Supplier Details Response Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class SuppDetailsRes {
 

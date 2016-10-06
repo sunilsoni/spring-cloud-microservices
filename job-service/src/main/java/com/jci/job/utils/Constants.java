@@ -17,7 +17,7 @@ public class Constants {
 	public static final String TABLE_PO_DETAILS ="PODETAILS";
 	
 	/** The Constant TABLE_GR_DETAILS. */
-	public static final String TABLE_GR_DETAILS ="GRDETAILS";
+	static final String TABLE_GR_DETAILS ="GRDETAILS";
 	
 	/** The Constant TABLE_PO_ITEM_DETAILS. */
 	static final String TABLE_PO_ITEM_DETAILS ="POITEMDETAILS";

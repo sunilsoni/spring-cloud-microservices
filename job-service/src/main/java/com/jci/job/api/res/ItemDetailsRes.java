@@ -7,12 +7,12 @@ package com.jci.job.api.res;
 
 import java.util.List;
 
-
-
-
-
 /**
- * The Class ItemDetailsRes.
+ * <p>
+ * <strong> The Item Details Response Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class ItemDetailsRes {
 

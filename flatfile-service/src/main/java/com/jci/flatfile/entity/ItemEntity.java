@@ -20,7 +20,7 @@ public class ItemEntity extends TableServiceEntity {
 	 * @param partitionKey the partition key
 	 * @param rowKey the row key
 	 */
-	public ItemEntity(String partitionKey, String rowKey) {
+	public ItemEntity(String partitionKey, String rowKey) { // NO_UCD (unused code)
 		this.partitionKey = partitionKey;
 		this.rowKey = rowKey; //customerItemID_supplierID
 	}

@@ -47,7 +47,7 @@ import com.microsoft.azure.storage.table.TableQuery;
  * The Class FlatFileRepoImpl.
  */
 @Repository
-public class FlatFileRepoImpl implements FlatFileRepo {
+public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(FlatFileRepoImpl.class);

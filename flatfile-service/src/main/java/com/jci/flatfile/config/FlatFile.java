@@ -36,7 +36,7 @@ public class FlatFile {
 	 * @param username the username
 	 * @param password the password
 	 */
-	public FlatFile(String hostname, int port, String username, String password) {
+	FlatFile(String hostname, int port, String username, String password) {
 		super();
 		this.hostname = hostname;
 		this.port = port;

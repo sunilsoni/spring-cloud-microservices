@@ -51,7 +51,7 @@ public class CommonUtils {
 	 * @param dateStr the date str
 	 * @return the date
 	 */
-	static Date stringToDate(String dateStr){
+	static Date stringToDate(String dateStr){ // NO_UCD (unused code)
 		if(StringUtils.isBlank(dateStr) || "null".equals(dateStr)){
 			return null;
 		}
@@ -73,7 +73,7 @@ public class CommonUtils {
 	 * @param folderUrl the folder url
 	 * @return the dest mapping
 	 */
-	public TreeMap<String,HashMap<Integer,String>> getDestMapping(String folderUrl){
+	public TreeMap<String,HashMap<Integer,String>> getDestMapping(String folderUrl){ // NO_UCD (unused code)
 		HashMap<Integer, String> map=null;
 		ObjectMapper mapper = new ObjectMapper(); 
 		
@@ -137,22 +137,7 @@ public class CommonUtils {
 		return str;
 	}
 	
-	/**
-	 * Creates the temp directory.
-	 *
-	 * @return the file
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	public static File createTempDirectory() throws IOException{
-		    final String baseTempPath = System.getProperty("java.io.tmpdir");
-
-		    File tempDir = new File(baseTempPath + File.separator + "SCTemp" + System.nanoTime());
-		    if (tempDir.exists() == false) {
-		        tempDir.mkdir();
-		    }
-
-		    return tempDir;
-	}
+	
 	
 	/**
 	 * Delete temp files.
@@ -326,7 +311,7 @@ public class CommonUtils {
 	 * @param url the url
 	 * @return true, if successful
 	 */
-	public static boolean processFile(File toFile,String url) {
+	public static boolean processFile(File toFile,String url) { // NO_UCD (unused code)
 		boolean isSuccess=false;
 		 InputStream input =null; 
 		 try{

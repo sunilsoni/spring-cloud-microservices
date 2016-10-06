@@ -5,10 +5,12 @@
  */
 package com.jci.job.api.req;
 
-
-
 /**
- * The Class ItemBody.
+ * <p>
+ * <strong> The Item Body Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class ItemBody {
 	

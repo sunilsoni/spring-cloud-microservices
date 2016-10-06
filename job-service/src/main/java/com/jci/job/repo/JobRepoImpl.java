@@ -33,11 +33,12 @@ import com.microsoft.azure.storage.table.TableEntity;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 
-
-
-
 /**
- * The Class JobRepoImpl.
+ * <p>
+ * <strong> The Job Repoository implementation class ..</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @Repository
 public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)

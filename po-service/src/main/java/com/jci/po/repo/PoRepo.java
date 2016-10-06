@@ -73,7 +73,7 @@ public interface PoRepo {
 	 * @throws URISyntaxException the URI syntax exception
 	 * @throws StorageException the storage exception
 	 */
-	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException ;
+	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException ; // NO_UCD (unused code)
 	
 	/**
 	 * Gets the po item detail.

@@ -20,7 +20,7 @@ public class SuppEntity extends TableServiceEntity {
 	 * @param partitionKey the partition key
 	 * @param rowKey the row key
 	 */
-	public SuppEntity(String partitionKey, String rowKey) {
+	public SuppEntity(String partitionKey, String rowKey) { // NO_UCD (unused code)
 		this.partitionKey = partitionKey;
 		this.rowKey = rowKey; //supplierID
 	}

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author csonisk
  */
  
-@FeignClient(value = "github", url = "${git.repo.url}")
+@FeignClient(value = "git", url = "${git.repo.config.url}")
 public interface GitClient {
 	
 	/**
@@ -27,7 +27,7 @@ public interface GitClient {
 	 *
 	 * @return the po json
 	 */
-	@RequestMapping(value = "/po/E2Open.json", method = RequestMethod.GET)
+	@RequestMapping(value = "/po/e2open.json", method = RequestMethod.GET)
 	public ResponseEntity<String>  getPoJson();
 
 	
@@ -36,7 +36,7 @@ public interface GitClient {
 	 *
 	 * @return the gr json
 	 */
-	@RequestMapping(value = "/gr/E2Open.json", method = RequestMethod.GET)
+	@RequestMapping(value = "/gr/e2open.json", method = RequestMethod.GET)
 	public ResponseEntity<String> getGrJson();
 
 
@@ -45,7 +45,7 @@ public interface GitClient {
 	 *
 	 * @return the item json
 	 */
-	@RequestMapping(value = "/item/E2Open.json", method = RequestMethod.GET)
+	@RequestMapping(value = "/item/e2open.json", method = RequestMethod.GET)
 	public ResponseEntity<String> getItemJson();
 
 	
@@ -54,7 +54,7 @@ public interface GitClient {
 	 *
 	 * @return the supp json
 	 */
-	@RequestMapping(value = "/supplier/E2Open.json", method = RequestMethod.GET)
+	@RequestMapping(value = "/supplier/e2open.json", method = RequestMethod.GET)
 	public ResponseEntity<String> getSuppJson();
 
 	

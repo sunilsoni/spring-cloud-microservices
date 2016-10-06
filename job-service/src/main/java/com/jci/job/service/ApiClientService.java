@@ -10,10 +10,12 @@ import java.security.InvalidKeyException;
 
 import com.microsoft.azure.storage.StorageException;
 
-
-
 /**
- * The Interface ApiClientService.
+ * <p>
+ * <strong> The Api Client Service.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public interface ApiClientService {
 	

@@ -7,10 +7,12 @@ package com.jci.job.api.res;
 
 import java.util.List;
 
-
-
 /**
- * The Class PoDetailsRes.
+ * <p>
+ * <strong> The Po Details Response Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PoDetailsRes {
 	

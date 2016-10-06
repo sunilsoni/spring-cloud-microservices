@@ -7,10 +7,12 @@ package com.jci.job.api.res;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
-
 /**
- * The Class Item.
+ * <p>
+ * <strong> The Item Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {

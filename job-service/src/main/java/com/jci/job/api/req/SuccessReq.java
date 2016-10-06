@@ -7,10 +7,12 @@ package com.jci.job.api.req;
 
 import java.util.List;
 
-
-
 /**
- * The Class SuccessReq.
+ * <p>
+ * <strong> The Success Request Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class SuccessReq {
 

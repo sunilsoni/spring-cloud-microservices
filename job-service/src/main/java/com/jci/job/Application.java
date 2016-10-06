@@ -15,7 +15,11 @@ import org.springframework.context.annotation.Bean;
 
 
 /**
- * The Class Application.
+ * <p>
+ * <strong> The Flat File Application Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 @SpringBootApplication
 @EnableHystrix

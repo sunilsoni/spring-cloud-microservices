@@ -46,7 +46,7 @@ import com.microsoft.azure.storage.table.TableQuery;
  * @author csonisk
  */
 @Repository
-public class ItemRepoImpl implements ItemRepo { 
+public class ItemRepoImpl implements ItemRepo {  // NO_UCD (unused code)
  /** The Constant LOG. */
  // NO_UCD (unused code)
 	private static final Logger LOG = LoggerFactory.getLogger(ItemRepoImpl.class);

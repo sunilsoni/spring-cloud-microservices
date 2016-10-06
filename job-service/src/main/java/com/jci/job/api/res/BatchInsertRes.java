@@ -7,12 +7,14 @@ package com.jci.job.api.res;
 
 import java.util.List;
 
-
-
-
 /**
- * The Class BatchInsertRes.
+ * <p>
+ * <strong> The Batch Insert Response Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
+
 public class BatchInsertRes { // NO_UCD (unused code)
 	
 	/** The is error. */

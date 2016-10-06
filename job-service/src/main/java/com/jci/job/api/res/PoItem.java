@@ -5,10 +5,12 @@
  */
 package com.jci.job.api.res;
 
-
-
 /**
- * The Class PoItem.
+ * <p>
+ * <strong> The Po Item Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PoItem {
 	

@@ -7,10 +7,10 @@ public class ProcessErrorReq {
 	private List<String> errorsList;
 	private String erpName;
 	
-	String tableName;
-	String globalId;
-	String userName;
-	String comment;
+	private String tableName;
+	private String globalId;
+	private String userName;
+	private String comment;
 	
 	public String getErpName() {
 		return erpName;

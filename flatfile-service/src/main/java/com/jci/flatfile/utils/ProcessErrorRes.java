@@ -10,10 +10,10 @@ public class ProcessErrorRes {
 
 
 	/** The success list. */
-	List<String> successList;
+	private List<String> successList;
 	
 	/** The error list. */
-	List<String> errorList;
+	private List<String> errorList;
 	
 	/**
 	 * Gets the success list.

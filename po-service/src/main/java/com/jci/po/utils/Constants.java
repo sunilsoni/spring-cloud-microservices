@@ -38,9 +38,10 @@ public class Constants {
 	/** The Constant ORDER_NUMBER. */
 	static final String ORDER_NUMBER = "OrderNumber";
 	
-	/** PO SupplierDeliveryState type. */
-//	public static final int  STATUS_IN_TRANSIT =1;
-	public static final int  STATUS_SUCCESS =2;
+// TODO Remove unused code found by UCDetector
+// 	/** PO SupplierDeliveryState type. */
+// //	public static final int  STATUS_IN_TRANSIT =1;
+// 	public static final int  STATUS_SUCCESS =2;
 	
 	/** The Constant STATUS_ERROR. */
 	static final int  STATUS_ERROR =3;

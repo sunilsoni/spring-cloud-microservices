@@ -12,7 +12,7 @@ import java.util.Map;
 public class FlatFileRes {
 
 	/** The row list. */
-	List<HashMap<String, Object>> rowList;
+	private List<HashMap<String, Object>> rowList;
     
     /** The row key to plant map. */
     private Map<String, String> rowKeyToPlantMap;
@@ -24,10 +24,10 @@ public class FlatFileRes {
     private Map<String,List<HashMap<String, Object>>> plantToRowsMap ;
     
     /** The plant to supptype map. */
-    Map<String, String> plantToSupptypeMap;
+    private Map<String, String> plantToSupptypeMap;
     
     /** The row key to supptype map. */
-    Map<String, String> rowKeyToSupptypeMap;
+    private Map<String, String> rowKeyToSupptypeMap;
     
     /**
      * Gets the row list.

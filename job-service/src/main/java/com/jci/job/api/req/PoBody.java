@@ -5,10 +5,12 @@
  */
 package com.jci.job.api.req;
 
-
-
 /**
- * The Class PoBody.
+ * <p>
+ * <strong> The PO Body Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class PoBody {
 	

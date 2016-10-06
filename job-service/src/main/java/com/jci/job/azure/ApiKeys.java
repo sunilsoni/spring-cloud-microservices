@@ -5,10 +5,12 @@
  */
 package com.jci.job.azure;
 
-
-
 /**
- * The Class ApiKeys.
+ * <p>
+ * <strong> The ApiKeys Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class ApiKeys {
 	

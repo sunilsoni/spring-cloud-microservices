@@ -19,8 +19,6 @@ import com.jci.job.api.res.ItemDetailsRes;
 import com.jci.job.api.res.PoDetailsRes;
 import com.jci.job.api.res.SuppDetailsRes;
 
-
-
 /**
  * <p>
  * <strong>Feign Client for fetching Purchase Orders, Suppliers and Items detail data from Apigee(APIs).</strong>

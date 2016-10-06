@@ -5,10 +5,12 @@
  */
 package com.jci.job.api.req;
 
-
-
 /**
- * The Class SuppBody.
+ * <p>
+ * <strong> The Supplier Body Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class SuppBody {
 	

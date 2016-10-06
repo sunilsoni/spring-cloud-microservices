@@ -5,12 +5,13 @@
  */
 package com.jci.job.api.res;
 
-
-
 /**
- * The Class Supplier.
+ * <p>
+ * <strong> The Supplier  Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class Supplier {
 
 	/** The supplier ID. */

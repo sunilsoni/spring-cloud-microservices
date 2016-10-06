@@ -10,11 +10,12 @@ import java.util.List;
 
 import com.jci.job.entity.PoEntity;
 
-
-
-
 /**
- * The Class BatchUpdateReq.
+ * <p>
+ * <strong> The Batch Update Request Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class BatchUpdateReq {
 
