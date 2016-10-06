@@ -19,6 +19,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 
+
 /**
  * The Class ApiClientImpl.
  */
@@ -33,7 +34,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * Gets the po details.
 	 *
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the po details
 	 */
 	@HystrixCommand(commandProperties = {
@@ -57,7 +60,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * Gets the po details fallback.
 	 *
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the po details fallback
 	 */
 	public ResponseEntity<PoDetailsRes> getPoDetailsFallback(String apikey,String plant, String erp, String region) {		 // NO_UCD (unused code)
@@ -70,7 +75,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 *
 	 * @param req the req
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the po details res
 	 */
 	@HystrixCommand(commandProperties = {
@@ -94,7 +101,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 *
 	 * @param req the req
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the po details res fallback
 	 */
 	public String getPoDetailsResFallback(SuccessReq req,String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
@@ -106,7 +115,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * Gets the gr details.
 	 *
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the gr details
 	 */
 	@HystrixCommand(commandProperties = {
@@ -130,7 +141,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * Gets the gr details fallback.
 	 *
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the gr details fallback
 	 */
 	public ResponseEntity<GrDetailsRes> getGrDetailsFallback(String apikey,String plant, String erp, String region) {		 // NO_UCD (unused code)
@@ -142,7 +155,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 *
 	 * @param req the req
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the gr details res
 	 */
 	@HystrixCommand(commandProperties = {
@@ -166,7 +181,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 *
 	 * @param req the req
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the po details res fallback
 	 */
 	public String getGrDetailsResFallback(SuccessReq req,String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
@@ -177,7 +194,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * Gets the items.
 	 *
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the items
 	 */
 	@HystrixCommand(commandProperties = {
@@ -199,7 +218,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * Gets the items fallback.
 	 *
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the items fallback
 	 */
 	ResponseEntity<ItemDetailsRes> getItemsFallback(String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
@@ -211,7 +232,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 *
 	 * @param poList the po list
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the items res
 	 */
 	@HystrixCommand(commandProperties = {
@@ -235,7 +258,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 *
 	 * @param poList the po list
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the items res fallback
 	 */
 	public String getItemsResFallback(SuccessReq poList,String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
@@ -246,7 +271,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * Gets the supp.
 	 *
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the supp
 	 */
 	@HystrixCommand(commandProperties = {
@@ -269,7 +296,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 * Gets the supp fallback.
 	 *
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the supp fallback
 	 */
 	public ResponseEntity<SuppDetailsRes> getSuppFallback(String apikey,String plant, String erp, String region) { // NO_UCD (unused code)
@@ -281,7 +310,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 *
 	 * @param poList the po list
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the supp res
 	 */
 	@HystrixCommand(commandProperties = {
@@ -305,7 +336,9 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	 *
 	 * @param poList the po list
 	 * @param apikey the apikey
+	 * @param plant the plant
 	 * @param erp the erp
+	 * @param region the region
 	 * @return the supp res fallback
 	 */
 	public String getSuppResFallback(SuccessReq poList,String apikey,String plant, String erp, String region) { // NO_UCD (unused code)

@@ -15,15 +15,28 @@ import net.schmizz.sshj.sftp.SFTPClient;
 import net.schmizz.sshj.transport.verification.HostKeyVerifier;
 
 
+
 /**
  * This class manages all the SSH communication. It is implemented using the SSHJ library.
  *
  */
 public class SSHConnection
 {
+	
+	/** The password. */
 	String hostname, username, password;
+	
+	/** The port. */
 	int port;
 	
+	/**
+	 * Instantiates a new SSH connection.
+	 *
+	 * @param hostname the hostname
+	 * @param port the port
+	 * @param username the username
+	 * @param password the password
+	 */
 	public SSHConnection(String hostname, int port, String username, String password)
 	{
 		this.hostname = hostname;
@@ -32,6 +45,15 @@ public class SSHConnection
 		this.password = password;
 	}
 	
+	/**
+	 * Sftp upload.
+	 *
+	 * @param files the files
+	 * @param targetDir the target dir
+	 * @return the list
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	public List<List<String>> sftpUpload(ArrayList<String> files, String targetDir) throws IOException, ClassNotFoundException
 	{
 		SSHClient ssh = this.getSSHConnection();
@@ -67,6 +89,14 @@ public class SSHConnection
         return finalList;
 	}
 	
+	/**
+	 * Sftp upload.
+	 *
+	 * @param filePath the file path
+	 * @param targetDir the target dir
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	public void sftpUpload(String filePath, String targetDir) throws IOException, ClassNotFoundException
 	{
 		ArrayList<String> files = new ArrayList<String>();
@@ -74,6 +104,13 @@ public class SSHConnection
 		this.sftpUpload(files, targetDir);
 	}
 	
+	/**
+	 * Execute remote command.
+	 *
+	 * @param command the command
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ClassNotFoundException the class not found exception
+	 */
 	public void executeRemoteCommand(String command) throws IOException, ClassNotFoundException
 	{
 		SSHClient ssh = getSSHConnection();
@@ -91,6 +128,12 @@ public class SSHConnection
 		}
 	}
 	
+	/**
+	 * Gets the SSH connection.
+	 *
+	 * @return the SSH connection
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public SSHClient getSSHConnection() throws IOException
 	{
 		SSHClient ssh = new SSHClient();

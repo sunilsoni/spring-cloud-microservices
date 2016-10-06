@@ -8,6 +8,7 @@ package com.jci.flatfile.entity;
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
 
+
 /**
  * The Class GrEntity.
  */
@@ -30,6 +31,7 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	public GrEntity() {
 	}
 
+	/** The order number. */
 	private String orderNumber;
 	
     /** The status. */
@@ -55,36 +57,77 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	
 	
 	
+	/**
+	 * Gets the order number.
+	 *
+	 * @return the order number
+	 */
 	public String getOrderNumber() {
 		return orderNumber;
 	}
 
+	/**
+	 * Sets the order number.
+	 *
+	 * @param orderNumber the new order number
+	 */
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
 	}
 
 	/** The comment. */
 	private String comment;	
+    
+    /**
+     * Gets the user name.
+     *
+     * @return the user name
+     */
     public String getUserName() {
 		return userName;
 	}
 
+	/**
+	 * Sets the user name.
+	 *
+	 * @param userName the new user name
+	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 
+	/**
+	 * Gets the global id.
+	 *
+	 * @return the global id
+	 */
 	public String getGlobalId() {
 		return globalId;
 	}
 
+	/**
+	 * Sets the global id.
+	 *
+	 * @param globalId the new global id
+	 */
 	public void setGlobalId(String globalId) {
 		this.globalId = globalId;
 	}
 
+	/**
+	 * Gets the comment.
+	 *
+	 * @return the comment
+	 */
 	public String getComment() {
 		return comment;
 	}
 
+	/**
+	 * Sets the comment.
+	 *
+	 * @param comment the new comment
+	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
@@ -216,6 +259,9 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
         return true;
     }
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "GrEntity [orderNumber=" + orderNumber + ", supplierDeliveryState=" + supplierDeliveryState

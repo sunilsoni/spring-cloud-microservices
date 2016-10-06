@@ -12,6 +12,7 @@ import com.microsoft.azure.storage.table.TableEntity;
 
 
 
+
 /**
  * The Class BatchUpdateReq.
  */
@@ -35,12 +36,23 @@ public class BatchUpdateReq {
 	/** The comment. */
 	private String comment;
 	
+	/** The is error req. */
 	boolean isErrorReq ;
 	
+	/**
+	 * Checks if is error req.
+	 *
+	 * @return true, if is error req
+	 */
 	public boolean isErrorReq() {
 		return isErrorReq;
 	}
 
+	/**
+	 * Sets the error req.
+	 *
+	 * @param isErrorReq the new error req
+	 */
 	public void setErrorReq(boolean isErrorReq) {
 		this.isErrorReq = isErrorReq;
 	}
@@ -154,6 +166,9 @@ public class BatchUpdateReq {
 		this.comment = comment;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "BatchUpdateReq [tableNameToEntityMap=" + tableNameToEntityMap + ", erpName=" + erpName + ", isSuccess="

@@ -30,11 +30,17 @@ import com.jci.flatfile.utils.ProcessErrorRes;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.TableEntity;
 
+
+/**
+ * The Class FlatFileServiceImpl.
+ */
 @Service
 public class FlatFileServiceImpl implements FlatFileService{
 
+    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(FlatFileServiceImpl.class);
     
+    /** The repo. */
     @Autowired
     private FlatFileRepo repo;
     
@@ -42,12 +48,17 @@ public class FlatFileServiceImpl implements FlatFileService{
     @Value("${all.erp.names}")
     private String allErps;
     
+    /** The config. */
     @Autowired
     private FlatFile config;
     
+    /** The git. */
     @Autowired
     private GitClientImpl git;
     
+    /* (non-Javadoc)
+     * @see com.jci.flatfile.service.FlatFileService#processPoFlatFiles()
+     */
     @Override
     public String processPoFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
     	LOG.info("### Starting  FlatFileServiceImpl.processPoFlatFile ####");
@@ -118,7 +129,7 @@ public class FlatFileServiceImpl implements FlatFileService{
             }
             
             //Update status in PODETAILS Table
-            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,null,null,null,false); 
+            updateStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,null,null,null,false); 
         }
            
         
@@ -129,6 +140,9 @@ public class FlatFileServiceImpl implements FlatFileService{
         return "Success";
     }
 
+    /* (non-Javadoc)
+     * @see com.jci.flatfile.service.FlatFileService#processGrFlatFiles()
+     */
     @Override
     public String processGrFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
     	LOG.info("####### Starting  FlatFileServiceImpl.processGrFlatFiles #########");
@@ -223,7 +237,7 @@ public class FlatFileServiceImpl implements FlatFileService{
             }
             
           //Update status in PODETAILS Table
-            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_GR_DETAILS,null,null,null,false);
+            updateStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_GR_DETAILS,null,null,null,false);
         }
         
         //Need to delete TEMP Files.
@@ -234,6 +248,9 @@ public class FlatFileServiceImpl implements FlatFileService{
     
     }
 
+    /* (non-Javadoc)
+     * @see com.jci.flatfile.service.FlatFileService#processSuppFlatFiles()
+     */
     @Override
     public String processSuppFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
     	LOG.info("### Starting  FlatFileServiceImpl.processSuppFlatFiles ####");
@@ -328,7 +345,7 @@ public class FlatFileServiceImpl implements FlatFileService{
             }
             
           //Update status in PODETAILS Table
-            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_SUPPLIER,null,null,null,false);
+            updateStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_SUPPLIER,null,null,null,false);
         }
         
         //Need to delete TEMP Files.
@@ -339,6 +356,9 @@ public class FlatFileServiceImpl implements FlatFileService{
     
     }
 
+    /* (non-Javadoc)
+     * @see com.jci.flatfile.service.FlatFileService#processItemFlatFiles()
+     */
     @Override
     public String processItemFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
     	LOG.info("### Starting  FlatFileServiceImpl.processItemFlatFiles ####");
@@ -430,7 +450,7 @@ public class FlatFileServiceImpl implements FlatFileService{
                 pkToErrorList.put(erpArr[i], errorStatus);
             }
             //Update status in PODETAILS Table
-            updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_ITEM,null,null,null,false);
+            updateStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_ITEM,null,null,null,false);
         }
             
         //Need to delete TEMP Files.
@@ -442,9 +462,20 @@ public class FlatFileServiceImpl implements FlatFileService{
     }
     
     
+/**
+ * Update status.
+ *
+ * @param pkToSuccessList the pk to success list
+ * @param pkToErrorList the pk to error list
+ * @param tableName the table name
+ * @param globalId the global id
+ * @param userName the user name
+ * @param comment the comment
+ * @param isErrorReq the is error req
+ */
 //PO Table status update
     @SuppressWarnings("unchecked")
-	private synchronized void updatePoStatus(Map<String,List<String>> pkToSuccessList,Map<String,List<String>> pkToErrorList,String tableName,String globalId,String userName,String comment,boolean isErrorReq) {
+	private synchronized void updateStatus(Map<String,List<String>> pkToSuccessList,Map<String,List<String>> pkToErrorList,String tableName,String globalId,String userName,String comment,boolean isErrorReq) {
     	LOG.info("### Starting in FlatFileServiceImpl.updateStatus ###");
         BatchUpdateReq updateReq =null;
         for (Map.Entry<String,List<String>> entry : pkToSuccessList.entrySet()){
@@ -517,6 +548,9 @@ public class FlatFileServiceImpl implements FlatFileService{
         LOG.info("### Ending in FlatFileServiceImpl.updateStatus ###");
     }
 
+	/* (non-Javadoc)
+	 * @see com.jci.flatfile.service.FlatFileService#processErrorPosFlatFiles(com.jci.flatfile.utils.ProcessErrorReq)
+	 */
 	@Override
 	public ProcessErrorRes processErrorPosFlatFiles(ProcessErrorReq req){
 		LOG.info("### Starting  FlatFileServiceImpl.processErrorPosFlatFiles ####"+req);
@@ -604,7 +638,7 @@ public class FlatFileServiceImpl implements FlatFileService{
 	            }
 	        
 	            //Update status in PODETAILS Table
-		        updatePoStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,req.getGlobalId(),req.getUserName(),req.getComment(),true);
+		        updateStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,req.getGlobalId(),req.getUserName(),req.getComment(),true);
 	        }
 	            
 	        //Need to delete TEMP Files.
@@ -613,18 +647,27 @@ public class FlatFileServiceImpl implements FlatFileService{
 		return re;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jci.flatfile.service.FlatFileService#processErrorGrFlatFiles(com.jci.flatfile.utils.ProcessErrorReq)
+	 */
 	@Override
 	public ProcessErrorRes processErrorGrFlatFiles(ProcessErrorReq req){
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jci.flatfile.service.FlatFileService#processErrorItemFlatFiles(com.jci.flatfile.utils.ProcessErrorReq)
+	 */
 	@Override
 	public ProcessErrorRes processErrorItemFlatFiles(ProcessErrorReq req){
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jci.flatfile.service.FlatFileService#processErrorSuppFlatFiles(com.jci.flatfile.utils.ProcessErrorReq)
+	 */
 	@Override
 	public ProcessErrorRes processErrorSuppFlatFiles(ProcessErrorReq req){
 		// TODO Auto-generated method stub

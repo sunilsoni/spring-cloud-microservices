@@ -8,6 +8,7 @@ package com.jci.job.entity;
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
 
+
 /**
  * The Class SuppEntity.
  */
@@ -45,31 +46,61 @@ public class SuppEntity extends TableServiceEntity {
 	/** The comment. */
 	private String comment;	
 	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
 	public String getUserName() {
 		return userName;
 	}
 
 
+	/**
+	 * Sets the user name.
+	 *
+	 * @param userName the new user name
+	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 
 
+	/**
+	 * Gets the global id.
+	 *
+	 * @return the global id
+	 */
 	public String getGlobalId() {
 		return globalId;
 	}
 
 
+	/**
+	 * Sets the global id.
+	 *
+	 * @param globalId the new global id
+	 */
 	public void setGlobalId(String globalId) {
 		this.globalId = globalId;
 	}
 
 
+	/**
+	 * Gets the comment.
+	 *
+	 * @return the comment
+	 */
 	public String getComment() {
 		return comment;
 	}
 
 
+	/**
+	 * Sets the comment.
+	 *
+	 * @param comment the new comment
+	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
@@ -214,6 +245,9 @@ public class SuppEntity extends TableServiceEntity {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "SuppEntity [jsonString=" + jsonString + ", supplierDeliveryState=" + supplierDeliveryState

@@ -5,6 +5,7 @@
  */
 package com.jci.flatfile.utils;
 
+
 /**
  * The Class Constants.
  */
@@ -14,6 +15,7 @@ public class Constants {
 	//Azure Table names 
 	public static final String TABLE_PO_DETAILS ="PODETAILS";
 	
+	/** The Constant TABLE_GR_DETAILS. */
 	public static final String TABLE_GR_DETAILS ="GRDETAILS";
 	
 	/** The Constant TABLE_PO_ITEM_DETAILS. */
@@ -43,7 +45,10 @@ public class Constants {
 	/** The Constant JSON_STRING. */
 	public static final String JSON_STRING = "JsonString";
 	
+	/** The Constant PLANT. */
 	public static final String PLANT = "Plant";
+	
+	/** The Constant SUPP_TYPE. */
 	public static final String SUPP_TYPE = "SuppType";
 	
 	/** The Constant PARTITION_KEY_MISCDATA. */
@@ -58,18 +63,37 @@ public class Constants {
 	/** The Constant STATUS_ERROR. */
 	public static final int  STATUS_ERROR =3;
 	
+	/** The Constant MESSAGE_TYPE_PO. */
 	public static final String MESSAGE_TYPE_PO = "DiscreteOrder";
+    
+    /** The Constant MESSAGE_TYPE_GR. */
     public static final String MESSAGE_TYPE_GR = "Receipt";
+    
+    /** The Constant MESSAGE_TYPE_ITEM. */
     public static final String MESSAGE_TYPE_ITEM = "PurchasedItems";
+    
+    /** The Constant MESSAGE_TYPE_SUPP. */
     public static final String MESSAGE_TYPE_SUPP = "Supplier";
 	    
+    /** The Constant SENDER_DUNS. */
     static final String SENDER_DUNS = "006092860"; 
+    
+    /** The Constant RECEIVER_DUNS. */
     static final String RECEIVER_DUNS = "006092860";
+	
+	/** The Constant VERSION. */
 	static final String VERSION = "1.0";
+	
+	/** The Constant DATE_FORMAT. */
 	static final String DATE_FORMAT = "yyyyMMddHHmmssSSS";
+	
+	/** The Constant DATE_FORMAT_SUPP. */
 	static final String DATE_FORMAT_SUPP = "yyyyMMddHH";
+	
+	/** The Constant TIME_ZONE. */
 	static final String TIME_ZONE = "UTC";
 	
+	/** The Constant TARGET_DIR. */
 	//flat.file.name.site.id=JUA
 	public static final String TARGET_DIR = "/send";///send
 }

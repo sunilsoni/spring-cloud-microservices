@@ -15,11 +15,54 @@ import com.microsoft.azure.storage.StorageException;
 
 
 
+
+/**
+ * The Interface FlatFileRepo.
+ */
 public interface FlatFileRepo {
 	
+    /**
+     * Gets the po flat file data.
+     *
+     * @param partitionKey the partition key
+     * @param poList the po list
+     * @return the po flat file data
+     * @throws InvalidKeyException the invalid key exception
+     * @throws URISyntaxException the URI syntax exception
+     * @throws StorageException the storage exception
+     */
     FlatFileRes getPoFlatFileData(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
+    
+    /**
+     * Gets the flat file data.
+     *
+     * @param partitionKey the partition key
+     * @param tableName the table name
+     * @return the flat file data
+     * @throws InvalidKeyException the invalid key exception
+     * @throws URISyntaxException the URI syntax exception
+     * @throws StorageException the storage exception
+     */
     FlatFileRes getFlatFileData(String partitionKey,String tableName) throws InvalidKeyException, URISyntaxException, StorageException ;
+    
+    /**
+     * Batch update.
+     *
+     * @param request the request
+     */
     void batchUpdate(BatchUpdateReq request);
+    
+    /**
+     * Gets the po details.
+     *
+     * @param partitionKey the partition key
+     * @param poList the po list
+     * @param tableName the table name
+     * @return the po details
+     * @throws InvalidKeyException the invalid key exception
+     * @throws URISyntaxException the URI syntax exception
+     * @throws StorageException the storage exception
+     */
     List<Object> getPoDetails(String partitionKey, List<String> poList,String tableName) throws InvalidKeyException, URISyntaxException, StorageException ;
     
 }

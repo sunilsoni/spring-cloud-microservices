@@ -8,6 +8,7 @@ package com.jci.flatfile.entity;
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
 
+
 /**
  * The Class ItemEntity.
  */
@@ -42,7 +43,10 @@ public class ItemEntity extends TableServiceEntity {
 	/** The plant. */
 	private String plant;
 	
+	/** The customer item ID. */
 	private String customerItemID;
+	
+	/** The supp type. */
 	private String suppType;
 	
 	/** The user name. */
@@ -54,42 +58,92 @@ public class ItemEntity extends TableServiceEntity {
 	/** The comment. */
 	private String comment;	
 
+    /**
+     * Gets the user name.
+     *
+     * @return the user name
+     */
     public String getUserName() {
 		return userName;
 	}
 
+	/**
+	 * Sets the user name.
+	 *
+	 * @param userName the new user name
+	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 
+	/**
+	 * Gets the global id.
+	 *
+	 * @return the global id
+	 */
 	public String getGlobalId() {
 		return globalId;
 	}
 
+	/**
+	 * Sets the global id.
+	 *
+	 * @param globalId the new global id
+	 */
 	public void setGlobalId(String globalId) {
 		this.globalId = globalId;
 	}
 
+	/**
+	 * Gets the comment.
+	 *
+	 * @return the comment
+	 */
 	public String getComment() {
 		return comment;
 	}
 
+	/**
+	 * Sets the comment.
+	 *
+	 * @param comment the new comment
+	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
+	/**
+	 * Gets the supp type.
+	 *
+	 * @return the supp type
+	 */
 	public String getSuppType() {
         return suppType;
     }
 
+    /**
+     * Sets the supp type.
+     *
+     * @param suppType the new supp type
+     */
     public void setSuppType(String suppType) {
         this.suppType = suppType;
     }
 
+    /**
+     * Gets the customer item ID.
+     *
+     * @return the customer item ID
+     */
     public String getCustomerItemID() {
 		return customerItemID;
 	}
 
+	/**
+	 * Sets the customer item ID.
+	 *
+	 * @param customerItemID the new customer item ID
+	 */
 	public void setCustomerItemID(String customerItemID) {
 		this.customerItemID = customerItemID;
 	}
@@ -205,6 +259,9 @@ public class ItemEntity extends TableServiceEntity {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "ItemEntity [jsonString=" + jsonString + ", supplierDeliveryState=" + supplierDeliveryState + ", region="

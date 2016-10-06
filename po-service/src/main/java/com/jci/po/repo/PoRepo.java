@@ -15,8 +15,6 @@ import java.util.Map;
 import com.jci.po.azure.data.DataHelper;
 import com.jci.po.azure.data.ResultSet;
 import com.jci.po.azure.query.ScrollingParam;
-import com.jci.po.dto.req.BatchUpdateReq;
-import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.entity.PoEntity;
 import com.microsoft.azure.storage.StorageException;
 
@@ -42,14 +40,6 @@ public interface PoRepo {
 	 * @throws StorageException the storage exception
 	 */
 	ResultSet getSegmentedResultSet(ScrollingParam param, DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException;
-	
-	/**
-	 * Batch update.
-	 *
-	 * @param request the request
-	 * @return the batch update res
-	 */
-	BatchUpdateRes batchUpdate(BatchUpdateReq request);
 	
 	/**
 	 * Gets the graph data.

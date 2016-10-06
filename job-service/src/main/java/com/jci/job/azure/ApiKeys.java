@@ -6,6 +6,7 @@
 package com.jci.job.azure;
 
 
+
 /**
  * The Class ApiKeys.
  */
@@ -24,7 +25,15 @@ public class ApiKeys {
 	  /** The supp key. */
 	  private  String suppKey; 
 	  
-	  ApiKeys(String poKey,String grKey, String itemKey, String suppKey) {
+	  /**
+  	 * Instantiates a new api keys.
+  	 *
+  	 * @param poKey the po key
+  	 * @param grKey the gr key
+  	 * @param itemKey the item key
+  	 * @param suppKey the supp key
+  	 */
+  	ApiKeys(String poKey,String grKey, String itemKey, String suppKey) {
 		this.poKey  = poKey;
 		this.grKey  = grKey;
 		this.itemKey  = itemKey;

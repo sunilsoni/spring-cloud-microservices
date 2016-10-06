@@ -27,6 +27,7 @@ import com.microsoft.azure.storage.table.TableQuery;
 
 
 
+
 /**
  * The Class Common Utils.
  */
@@ -57,6 +58,15 @@ public class CommonUtils {
 	}
 	
 	   
+	/**
+	 * Gets the new rowkeys.
+	 *
+	 * @param partitionKey the partition key
+	 * @param tableName the table name
+	 * @param rowKeys the row keys
+	 * @param cloudTable the cloud table
+	 * @return the new rowkeys
+	 */
 	public static List<Map<String,Integer>> getNewRowkeys(String partitionKey,String tableName,List<String> rowKeys,CloudTable cloudTable  ){ 
         final int queryBatchSize = 100;
         List<String> temp = new ArrayList<> ();
@@ -165,6 +175,14 @@ public class CommonUtils {
         return res;
     }
 
+	/**
+	 * Gets the misc entity.
+	 *
+	 * @param miscEntity the misc entity
+	 * @param tableName the table name
+	 * @param rowKeyData the row key data
+	 * @return the misc entity
+	 */
 	public static MiscDataEntity getMiscEntity(MiscDataEntity miscEntity,String tableName,List<Map<String,Integer>> rowKeyData){
 		LOG.info("### Starting  CommonUtils.getMiscEntity ####");
 		Map<String,Integer> newRowkeyToStatusMap = rowKeyData.get(0);

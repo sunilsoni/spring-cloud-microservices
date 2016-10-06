@@ -15,7 +15,7 @@ import com.jci.flatfile.apis.GitClient;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class GitClientImpl.
  */
@@ -34,7 +34,7 @@ class GitClientImpl {
 	 *
 	 * @return the po json
 	 */
-	@HystrixCommand(fallbackMethod = "getPoJsonFall", commandProperties = {
+	@HystrixCommand(commandProperties = {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	public ResponseEntity<String>  getPoJson() {
@@ -47,7 +47,7 @@ class GitClientImpl {
 	 *
 	 * @return the gr json
 	 */
-	@HystrixCommand(fallbackMethod = "getPoJsonFall", commandProperties = {
+	@HystrixCommand(commandProperties = {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	ResponseEntity<String> getGrJson() {
@@ -59,7 +59,7 @@ class GitClientImpl {
 	 *
 	 * @return the item json
 	 */
-	@HystrixCommand(fallbackMethod = "getPoJsonFall", commandProperties = {
+	@HystrixCommand(commandProperties = {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	ResponseEntity<String> getItemJson() {
@@ -72,7 +72,7 @@ class GitClientImpl {
 	 *
 	 * @return the supp json
 	 */
-	@HystrixCommand(fallbackMethod = "getPoJsonFall", commandProperties = {
+	@HystrixCommand(commandProperties = {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	ResponseEntity<String> getSuppJson() {

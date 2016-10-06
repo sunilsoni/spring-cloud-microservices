@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
 
+
 /**
  * The Class PoItemsEntity.
  */

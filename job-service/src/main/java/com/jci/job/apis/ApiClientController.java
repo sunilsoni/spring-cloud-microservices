@@ -24,6 +24,7 @@ import com.jci.job.service.ApiClientService;
 import com.microsoft.azure.storage.StorageException;
 
 
+
 /**
  * <p>
  * <strong>Scheduler layer for fetching Purchase Orders, Suppliers and Items from Apigee APIs.</strong>
@@ -45,6 +46,9 @@ public class ApiClientController { // NO_UCD (unused code)
 	/**
 	 * Get PO Details scheduler.
 	 *
+	 * @param plant the plant
+	 * @param erp the erp
+	 * @param region the region
 	 * @return the po details
 	 */
 	@RequestMapping(value = "/getPoDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -62,6 +66,9 @@ public class ApiClientController { // NO_UCD (unused code)
 	/**
 	 * Gets the gr details.
 	 *
+	 * @param plant the plant
+	 * @param erp the erp
+	 * @param region the region
 	 * @return the gr details
 	 */
 	@RequestMapping(value = "/getGrDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -78,6 +85,9 @@ public class ApiClientController { // NO_UCD (unused code)
 	/**
 	 * Get Supplier Details scheduler.
 	 *
+	 * @param plant the plant
+	 * @param erp the erp
+	 * @param region the region
 	 * @return the supp details
 	 */
 	@RequestMapping(value = "/getSuppDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -94,6 +104,9 @@ public class ApiClientController { // NO_UCD (unused code)
 	/**
 	 * Get Item Details scheduler.
 	 *
+	 * @param plant the plant
+	 * @param erp the erp
+	 * @param region the region
 	 * @return the item details
 	 */
 	@RequestMapping(value = "/getItemDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -107,6 +120,14 @@ public class ApiClientController { // NO_UCD (unused code)
 		return response;
 	}
 	
+	/**
+	 * Gets the databy plant name.
+	 *
+	 * @param plant the plant
+	 * @param erp the erp
+	 * @param region the region
+	 * @return the databy plant name
+	 */
 	@RequestMapping(value = "/getDatabyPlantName", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String getDatabyPlantName(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
 		String response="SUCCESS";
@@ -124,6 +145,14 @@ public class ApiClientController { // NO_UCD (unused code)
 		return response;
 	}
 	
+	/**
+	 * Databy plant name.
+	 *
+	 * @param plant the plant
+	 * @param erp the erp
+	 * @param region the region
+	 * @return the string
+	 */
 	@RequestMapping(value = "/databyPlantName", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String databyPlantName(@RequestHeader(value="plant") String plant, @RequestHeader(value="erp") String erp, @RequestHeader(value="region") String region) {
 		String response="SUCCESS";

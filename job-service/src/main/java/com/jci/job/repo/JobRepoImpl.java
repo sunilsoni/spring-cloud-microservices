@@ -35,6 +35,7 @@ import com.microsoft.azure.storage.table.TableQuery;
 
 
 
+
 /**
  * The Class JobRepoImpl.
  */
@@ -68,7 +69,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	 * @see com.jci.job.repo.JobRepo#batchInsert(com.jci.job.api.req.BatchInsertReq)
 	 */
 	@Override
-	public List<Object> batchInsert(BatchInsertReq request){ 
+	public synchronized List<Object> batchInsert(BatchInsertReq request){ 
 		LOG.info("### Starting in JobRepoImpl.batchInsert ###");
 		String tableName=null;
 		
@@ -192,7 +193,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	 * @see com.jci.job.repo.JobRepo#batchUpdate(com.jci.job.api.req.BatchUpdateReq)
 	 */
 	@Override
-	public BatchUpdateRes batchUpdate(BatchUpdateReq request){		
+	public synchronized BatchUpdateRes batchUpdate(BatchUpdateReq request){		
 		int errorCount=0;
 		int successCount=0;
 		BatchUpdateRes response = new BatchUpdateRes();

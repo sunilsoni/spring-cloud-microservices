@@ -42,6 +42,10 @@ import com.microsoft.azure.storage.table.TableEntity;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 
+
+/**
+ * The Class FlatFileRepoImpl.
+ */
 @Repository
 public class FlatFileRepoImpl implements FlatFileRepo {
 
@@ -55,6 +59,9 @@ public class FlatFileRepoImpl implements FlatFileRepo {
     @Autowired
     private AzureStorage azureStorage;
     
+    /* (non-Javadoc)
+     * @see com.jci.flatfile.repo.FlatFileRepo#getPoFlatFileData(java.lang.String, java.util.List)
+     */
     @Override
     public FlatFileRes getPoFlatFileData(String partitionKey, List<String> poList)  throws InvalidKeyException, URISyntaxException, StorageException {
     	LOG.info("### Starting in FlatFileRepoImpl.getPoFlatFileData ###"+poList);
@@ -95,6 +102,16 @@ public class FlatFileRepoImpl implements FlatFileRepo {
     }
     
     
+    /**
+     * Gets the pos.
+     *
+     * @param partitionKey the partition key
+     * @param poList the po list
+     * @return the pos
+     * @throws InvalidKeyException the invalid key exception
+     * @throws URISyntaxException the URI syntax exception
+     * @throws StorageException the storage exception
+     */
     private Map<String,List<HashMap<String, Object>>> getPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
         String query = QueryBuilder.poItemQuery(partitionKey,poList);
         CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
@@ -137,6 +154,9 @@ public class FlatFileRepoImpl implements FlatFileRepo {
          return poNumToItemListMap;
     }
 
+    /* (non-Javadoc)
+     * @see com.jci.flatfile.repo.FlatFileRepo#getFlatFileData(java.lang.String, java.lang.String)
+     */
     @Override
     public FlatFileRes getFlatFileData(String partitionKey, String tableName)  throws InvalidKeyException, URISyntaxException, StorageException {
         String query = QueryBuilder.ffQuery(partitionKey);
@@ -196,6 +216,9 @@ public class FlatFileRepoImpl implements FlatFileRepo {
     }
     
     
+    /* (non-Javadoc)
+     * @see com.jci.flatfile.repo.FlatFileRepo#batchUpdate(com.jci.flatfile.utils.BatchUpdateReq)
+     */
     @Override
 	public void batchUpdate(BatchUpdateReq request){
     	LOG.info("### Starting in FlatFileRepoImpl.batchUpdate ###");
@@ -309,7 +332,12 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		 LOG.info("### Ending in FlatFileRepoImpl.batchUpdate ###");
 	} 
     
+    /** The po final. */
     List<Object> poFinal = null;
+	
+	/* (non-Javadoc)
+	 * @see com.jci.flatfile.repo.FlatFileRepo#getPoDetails(java.lang.String, java.util.List, java.lang.String)
+	 */
 	@Override
 	public List<Object> getPoDetails(String partitionKey, List<String> poList,String tableName) throws InvalidKeyException, URISyntaxException, StorageException {
 		poFinal = new ArrayList<>();
@@ -317,6 +345,16 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		return poFinal;
 	}
 	
+	/**
+	 * Prepare po details.
+	 *
+	 * @param partitionKey the partition key
+	 * @param poList the po list
+	 * @param tableName the table name
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	private void preparePoDetails(String partitionKey, List<String> poList,String tableName) throws InvalidKeyException, URISyntaxException, StorageException{
 		if(poList.size()>batchSize){
 			String query = QueryBuilder.processPosQuery(partitionKey, poList.subList(0, batchSize));
@@ -385,6 +423,15 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		}
 	}
 	
+	/**
+	 * Update misc entity.
+	 *
+	 * @param erpName the erp name
+	 * @param tableName the table name
+	 * @param successCount the success count
+	 * @param errorCount the error count
+	 * @param isErrorReq the is error req
+	 */
 	private synchronized void updateMiscEntity(String erpName,String tableName,int successCount,int errorCount,boolean isErrorReq){
 		MiscDataEntity miscEntity=null;
 		try {
@@ -532,11 +579,30 @@ public class FlatFileRepoImpl implements FlatFileRepo {
 		}
 	}
 	
+	/**
+	 * Update status count entity.
+	 *
+	 * @param entity the entity
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	public void updateStatusCountEntity(MiscDataEntity entity) throws InvalidKeyException, URISyntaxException, StorageException {
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
 		TableOperation insert = TableOperation.insertOrMerge(entity);
 		cloudTable.execute(insert);
 	}
+	
+	/**
+	 * Gets the status count entity.
+	 *
+	 * @param partitionKey the partition key
+	 * @param rowKey the row key
+	 * @return the status count entity
+	 * @throws InvalidKeyException the invalid key exception
+	 * @throws URISyntaxException the URI syntax exception
+	 * @throws StorageException the storage exception
+	 */
 	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws InvalidKeyException, URISyntaxException, StorageException {
 		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
 	    TableOperation entity =   TableOperation.retrieve(partitionKey, rowKey, MiscDataEntity.class);

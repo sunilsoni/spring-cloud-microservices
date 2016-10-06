@@ -31,8 +31,6 @@ import com.jci.po.azure.data.DataUtil;
 import com.jci.po.azure.data.ResultSet;
 import com.jci.po.azure.query.PaginationParam;
 import com.jci.po.azure.query.ScrollingParam;
-import com.jci.po.dto.req.BatchUpdateReq;
-import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.entity.MiscDataEntity;
 import com.jci.po.entity.PoEntity;
 import com.jci.po.utils.Constants;
@@ -44,8 +42,6 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.DynamicTableEntity;
 import com.microsoft.azure.storage.table.EntityProperty;
-import com.microsoft.azure.storage.table.TableBatchOperation;
-import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 
 
@@ -74,19 +70,6 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	@Autowired   
 	private AzureStorage azureStorage;
 
-	/**
-	 * Creates the table.
-	 *
-	 * @param tableName the table name
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws StorageException the storage exception
-	 * @throws URISyntaxException the URI syntax exception
-	 */
-	public void createTable(String tableName) throws InvalidKeyException, StorageException, URISyntaxException {
-	    if (azureStorage.getTable(tableName).createIfNotExists()) {
-	    	LOG.info("table is created : " + tableName);
-	    }
-	}
 	
 	/* (non-Javadoc)
 	 * @see com.jci.po.repo.PoRepo#getGraphData()
@@ -110,35 +93,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		 return graphData;
 	}
 	
-	/**
-	 * Gets the status count entity.
-	 *
-	 * @param partitionKey the partition key
-	 * @param rowKey the row key
-	 * @return the status count entity
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws InvalidKeyException, URISyntaxException, StorageException {
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
-	    TableOperation entity =   TableOperation.retrieve(partitionKey, rowKey, MiscDataEntity.class);
-		return cloudTable.execute(entity).getResultAsType();
-	}
 	
-	/**
-	 * Update status count entity.
-	 *
-	 * @param entity the entity
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	public void updateStatusCountEntity(MiscDataEntity entity) throws InvalidKeyException, URISyntaxException, StorageException {
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
-		TableOperation insert = TableOperation.insertOrMerge(entity);
-		cloudTable.execute(insert);
-	}
 
 	/**
 	 * Gets the error data.
@@ -281,109 +236,6 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		return new ResultSet(series,pagination) ;
    }
    
-	/* (non-Javadoc)
-	 * @see com.jci.po.repo.PoRepo#batchUpdate(com.jci.po.dto.req.BatchUpdateReq)
-	 */
-	public BatchUpdateRes batchUpdate(BatchUpdateReq request){
-		BatchUpdateRes response = new BatchUpdateRes();
-		String erpName = request.getErpName();
-		HashMap<String,List<PoEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
-		
-		List<String> errorList = new ArrayList<>();
-		List<String> successList = new ArrayList<>();
-		
-		 CloudTable cloudTable=null;
-		 PoEntity entity = null;
-		 int successCount=0;
-		 
-		 for (Map.Entry<String, List<PoEntity>> entry : tableNameToEntityMap.entrySet()){
-		     try {
-					cloudTable = azureStorage.getTable(entry.getKey());
-				} catch (Exception e) {
-					LOG.error("### Exception in PoRepoImpl.batchUpdate.getTable ###"+e);
-					
-					response.setError(true);
-					response.setMessage("The Application has encountered an error! Table  does not exist !");
-					continue;
-				}
-		     
-		  // Define a batch operation.
-			    TableBatchOperation batchOperation = new TableBatchOperation();
-			    List<PoEntity> value = entry.getValue();
-			    
-			    for (int i = 0; i < value.size(); i++) {
-			    	entity = value.get(i) ;
-			    	
-			    	entity.setGlobalId(request.getGlobalId());
-			    	entity.setUserName(request.getUserName());
-			    	entity.setComment(request.getComment());
-			    	
-		    		entity.setSupplierDeliveryState(Constants.STATUS_SUCCESS);
-		    		successCount = successCount+1;
-		    		successList.add(entity.getRowKey());
-			    	
-			    	batchOperation.insertOrMerge(entity);
-			    	if (i!=0 && (i % batchSize) == 0) {
-			    		try {
-							cloudTable.execute(batchOperation);
-							batchOperation.clear();
-						} catch (Exception e) {
-							response.setError(true);
-							response.setMessage("The Application has encountered an error!");
-					    	successCount = successCount-1;
-							LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
-							
-							continue;
-						}
-			    	 }
-			    }
-			    
-			    if(batchOperation.size()>0){
-			    	try {
-						cloudTable.execute(batchOperation);
-					} catch (Exception e) {
-						response.setError(true);
-						response.setMessage("The Application has encountered an error!");
-				    	successCount = successCount-1;
-						LOG.error("### Exception in PoRepoImpl.batchUpdate.execute ###"+e);
-						
-						continue;
-					}
-			    }
-		 }	
-		 response.setErrorList(errorList);
-		 response.setSuccessList(successList);
-		 
-		//Insert MIsc data: need to make sure only for podetails
-		MiscDataEntity miscEntity=null;
-		try {
-			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.error("### Exception in PoRepoImpl.batchUpdate ####",e);
-			response.setError(true);
-			response.setMessage("The Application has encountered an error!");
-			
-		}
-		
-		if(successCount>0){
-			 int sum1 = miscEntity.getProcessedCount()+successCount;
-			 miscEntity.setProcessedCount(sum1);
-			 int sum2 = miscEntity.getErrorCount()-successCount;
-			 miscEntity.setErrorCount(sum2);
-			 
-			 try {
-					updateStatusCountEntity(miscEntity);
-				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-					LOG.error("### Exception in PoRepoImpl.batchUpdate ####",e);
-					response.setError(true);
-					response.setMessage("The Application has encountered an error!");
-					
-				}
-		}
-		return response;
-		
-	}//Ending batchUpdate
-
 	/* (non-Javadoc)
 	 * @see com.jci.po.repo.PoRepo#getPoItemDetail(com.jci.po.azure.query.ScrollingParam, com.jci.po.azure.data.DataHelper)
 	 */

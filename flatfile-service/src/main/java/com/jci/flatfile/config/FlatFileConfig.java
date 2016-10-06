@@ -10,6 +10,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 /**
  * The Class FlatFileConfig.
  */
@@ -17,7 +18,8 @@ import org.springframework.context.annotation.Configuration;
 @RefreshScope
 public class FlatFileConfig { // NO_UCD (unused code)
 
-  /*	@Value("${flat.file.po.supplier.mapping.po.url}")
+  /** The supp mapping file url. */
+ /*	@Value("${flat.file.po.supplier.mapping.po.url}")
     String poMappingFileUrl;
   	
   	@Value("${flat.file.po.supplier.mapping.gr.url}")
@@ -29,20 +31,29 @@ public class FlatFileConfig { // NO_UCD (unused code)
   	@Value("${flat.file.po.supplier.mapping.supp.url}")*/
     String suppMappingFileUrl;
     
-  	@Value("${sftp.conn.hostname}")
+  	/** The hostname. */
+	  @Value("${sftp.conn.hostname}")
   	private String hostname;
   	
-  	@Value("${sftp.conn.port}")
+  	/** The port. */
+	  @Value("${sftp.conn.port}")
   	private int port;
   	
-  	@Value("${sftp.conn.username}")
+  	/** The username. */
+	  @Value("${sftp.conn.username}")
   	private String username;
   	
-  	@Value("${sftp.conn.password}")
+  	/** The password. */
+	  @Value("${sftp.conn.password}")
   	private String password;
   	
   	
-  	@Bean
+  	/**
+	   * Flat file.
+	   *
+	   * @return the flat file
+	   */
+	  @Bean
 	  public FlatFile flatFile() {
 		  FlatFile ff = new FlatFile(hostname,  port,  username,  password);
 		  return ff;

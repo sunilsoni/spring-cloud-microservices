@@ -14,6 +14,7 @@ import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.CloudTableClient;
 
 
+
 /**
  * The Class AzureStorage.
  */

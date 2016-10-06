@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
+
 /**
  * <p>
  * <strong>Feign Client for Generating Flat Files.</strong>
@@ -22,17 +23,34 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface FlatFileClient {
 
 	/**
-	 * Processing intransit flat files
+	 * Processing intransit flat files.
+	 *
+	 * @return the response entity
 	 */
 	@RequestMapping(value = "/processPoFlatFiles",method = RequestMethod.GET)
 	public ResponseEntity<String> processPoFlatFiles();
 
+	/**
+	 * Process supp flat files.
+	 *
+	 * @return the response entity
+	 */
 	@RequestMapping(value = "/processSuppFlatFiles",method = RequestMethod.GET)
 	public ResponseEntity<String> processSuppFlatFiles();
 	
+	/**
+	 * Process item flat files.
+	 *
+	 * @return the response entity
+	 */
 	@RequestMapping(value = "/processItemFlatFiles",method = RequestMethod.GET)
 	public ResponseEntity<String> processItemFlatFiles();
 
+	/**
+	 * Process gr flat files.
+	 *
+	 * @return the response entity
+	 */
 	@RequestMapping(value = "/processGrFlatFiles",method = RequestMethod.GET)
 	public ResponseEntity<String> processGrFlatFiles();
 }

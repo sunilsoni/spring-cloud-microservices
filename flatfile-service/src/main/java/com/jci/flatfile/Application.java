@@ -13,12 +13,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
+
+/**
+ * The Class Application.
+ */
 @SpringBootApplication
 @EnableWebMvc
 @EnableFeignClients
 @EnableHystrix
 @EnableEurekaClient
 public class Application  extends SpringBootServletInitializer{
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class,args);
 	}

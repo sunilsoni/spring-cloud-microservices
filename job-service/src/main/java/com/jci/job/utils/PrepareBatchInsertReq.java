@@ -36,6 +36,7 @@ import com.jci.job.entity.SuppEntity;
 import com.microsoft.azure.storage.table.TableEntity;
 
 
+
 /**
  * The Class PrepareBatchInsertReq.
  */

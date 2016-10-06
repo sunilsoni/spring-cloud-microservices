@@ -19,17 +19,27 @@ import com.jci.flatfile.utils.ProcessErrorReq;
 import com.jci.flatfile.utils.ProcessErrorRes;
 import com.microsoft.azure.storage.StorageException;
 
+
+/**
+ * The Class FlatFileController.
+ */
 @RestController
 public class FlatFileController {
 
-	 @Autowired
+	 /** The service. */
+ 	@Autowired
 	 FlatFileService service;
 	 
-	 private static final Logger LOG = LoggerFactory.getLogger(FlatFileController.class);
+	 /** The Constant LOG. */
+ 	private static final Logger LOG = LoggerFactory.getLogger(FlatFileController.class);
 	 
+	/**
+	 * Process po flat files.
+	 *
+	 * @return the string
+	 */
 	@RequestMapping(value = "/processPoFlatFiles", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public String processPoFlatFiles() {
-		LOG.info("### Starting  FlatFileController.processPoFlatFiles ####");
 			Executor executor = Executors.newSingleThreadExecutor();
 			executor.execute(new Runnable() { 
 				public void run() {
@@ -41,13 +51,16 @@ public class FlatFileController {
 					} 
 				}
 			});
-		LOG.info("### Ending  FlatFileController.processPoFlatFiles ####");
 		return "SUCCESS";
 	}
 	
+	/**
+	 * Process gr flat files.
+	 *
+	 * @return the string
+	 */
 	@RequestMapping(value = "/processGrFlatFiles",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public String processGrFlatFiles() {
-		LOG.info("### Starting  FlatFileController.processGrFlatFiles ####");
 		Executor executor = Executors.newSingleThreadExecutor();
 		executor.execute(new Runnable() { 
 			public void run() {
@@ -59,13 +72,16 @@ public class FlatFileController {
 				} 
 			}
 		});
-	LOG.info("### Ending  FlatFileController.processGrFlatFiles ####");
 	return "SUCCESS";
 }
 	
+	/**
+	 * Process supp flat files.
+	 *
+	 * @return the string
+	 */
 	@RequestMapping(value = "/processSuppFlatFiles",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public String processSuppFlatFiles() {
-		LOG.info("### Starting  FlatFileController.processSuppFlatFiles ####");
 		Executor executor = Executors.newSingleThreadExecutor();
 		executor.execute(new Runnable() { 
 			public void run() {
@@ -77,13 +93,16 @@ public class FlatFileController {
 				} 
 			}
 		});
-	LOG.info("### Ending  FlatFileController.processSuppFlatFiles ####");
 	return "SUCCESS";
    }
 	
+	/**
+	 * Process item flat files.
+	 *
+	 * @return the string
+	 */
 	@RequestMapping(value = "/processItemFlatFiles",method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	public String processItemFlatFiles() {
-		LOG.info("### Starting  FlatFileController.processItemFlatFiles ####");
 		Executor executor = Executors.newSingleThreadExecutor();
 		executor.execute(new Runnable() { 
 			public void run() {
@@ -95,26 +114,49 @@ public class FlatFileController {
 				} 
 			}
 		});
-	LOG.info("### Ending  FlatFileController.processItemFlatFiles ####");
 	return "SUCCESS";
    }
 	
+	/**
+	 * Process error pos flat files.
+	 *
+	 * @param req the req
+	 * @return the process error res
+	 */
 	@RequestMapping(value = "/processErrorPosFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ProcessErrorRes processErrorPosFlatFiles(@RequestBody ProcessErrorReq req)   {
 		LOG.info("### Starting  Ending FlatFileController.processErrorPosFlatFiles ####"+req);
 		return service.processErrorPosFlatFiles(req);
 	}
 	
+	/**
+	 * Process error gr flat files.
+	 *
+	 * @param req the req
+	 * @return the process error res
+	 */
 	@RequestMapping(value = "/processErrorGrFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ProcessErrorRes processErrorGrFlatFiles(@RequestBody ProcessErrorReq req) {
 		return service.processErrorGrFlatFiles(req);
 	}
 	
+	/**
+	 * Process error item flat files.
+	 *
+	 * @param req the req
+	 * @return the process error res
+	 */
 	@RequestMapping(value = "/processErrorItemFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ProcessErrorRes processErrorItemFlatFiles(@RequestBody ProcessErrorReq req) {
 		return service.processErrorItemFlatFiles(req);
 	}
 	
+	/**
+	 * Process error supp flat files.
+	 *
+	 * @param req the req
+	 * @return the process error res
+	 */
 	@RequestMapping(value = "/processErrorSuppFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ProcessErrorRes processErrorSuppFlatFiles(@RequestBody ProcessErrorReq req) {
 		return service.processErrorSuppFlatFiles(req);

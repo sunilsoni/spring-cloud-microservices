@@ -11,6 +11,7 @@ import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
 import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
 
+
 /**
  * The Class QueryBuilder.
  */
@@ -47,6 +48,13 @@ public class QueryBuilder {
 		return rowKeyFilter;
 	}
 	
+	/**
+	 * Po query.
+	 *
+	 * @param partitionKey the partition key
+	 * @param poList the po list
+	 * @return the string
+	 */
 	public static String poQuery(String partitionKey, List<String> poList){
 		// Create filters to limit the data
 	   String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);

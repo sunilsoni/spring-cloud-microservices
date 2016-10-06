@@ -10,6 +10,7 @@ import java.util.List;
 
 
 
+
 /**
  * The Class ItemDetailsRes.
  */

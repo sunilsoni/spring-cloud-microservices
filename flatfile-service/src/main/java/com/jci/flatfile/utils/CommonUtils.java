@@ -36,6 +36,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
+
 /**
  * The Class CommonUtils.
  */
@@ -96,6 +97,13 @@ public class CommonUtils {
 		return mappingList ;
 	}
 	
+	/**
+	 * Gets the git json mapping.
+	 *
+	 * @param destName the dest name
+	 * @param jasonValue the jason value
+	 * @return the git json mapping
+	 */
 	public TreeMap<String,HashMap<Integer,String>> getGitJsonMapping(String destName, String jasonValue){
 		HashMap<Integer, String> map=null;
 		ObjectMapper mapper = new ObjectMapper(); 
@@ -110,6 +118,12 @@ public class CommonUtils {
 		return mappingList ;
 	}
 	
+	/**
+	 * Removes the temp.
+	 *
+	 * @param str the str
+	 * @return the string
+	 */
 	public static String removeTemp(String str){
 		int index=0;
 	    if(str.contains("\\")){
@@ -123,6 +137,12 @@ public class CommonUtils {
 		return str;
 	}
 	
+	/**
+	 * Creates the temp directory.
+	 *
+	 * @return the file
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static File createTempDirectory() throws IOException{
 		    final String baseTempPath = System.getProperty("java.io.tmpdir");
 
@@ -134,6 +154,11 @@ public class CommonUtils {
 		    return tempDir;
 	}
 	
+	/**
+	 * Delete temp files.
+	 *
+	 * @param tempFiles the temp files
+	 */
 	public static void deleteTempFiles(List<File> tempFiles){
 		  for (File temp : tempFiles) {
 	            try {
@@ -144,6 +169,16 @@ public class CommonUtils {
 	        }  
 	}
 	
+	/**
+	 * Prepare supp data.
+	 *
+	 * @param poNum the po num
+	 * @param mapping the mapping
+	 * @param rowList the row list
+	 * @param plantName the plant name
+	 * @param msgType the msg type
+	 * @return the map
+	 */
 	public  Map<String,List<String>>  prepareSuppData(String poNum, HashMap<Integer,String> mapping,List<HashMap<String, Object>> rowList,String plantName,String msgType){
 			Map<String,List<String>> fileNameToRowsMap = new HashMap<>();
 			List<String> lines = new ArrayList<>();
@@ -157,6 +192,12 @@ public class CommonUtils {
 		return fileNameToRowsMap;
 	}
 	
+	/**
+	 * Gets the header string.
+	 *
+	 * @param mapping the mapping
+	 * @return the header string
+	 */
 	private  String getHeaderString(HashMap<Integer,String> mapping){
 		StringBuilder line = new StringBuilder();
 		for(int i=0;i<mapping.size();i++){
@@ -171,6 +212,13 @@ public class CommonUtils {
 	}
 	
 	
+	/**
+	 * Fixed length string.
+	 *
+	 * @param po the po
+	 * @param mapping the mapping
+	 * @return the string builder
+	 */
 	private  StringBuilder fixedLengthString(HashMap<String, Object> po,HashMap<Integer,String> mapping){
 		StringBuilder line = new StringBuilder();
 		int size = mapping.size();
@@ -211,6 +259,14 @@ public class CommonUtils {
 		return false;
 	}
 	
+	/**
+	 * Gets the file name.
+	 *
+	 * @param poNum the po num
+	 * @param siteId the site id
+	 * @param msgType the msg type
+	 * @return the file name
+	 */
 	private   String getFileName(String poNum,String siteId,String msgType) {
 		StringBuilder name = new StringBuilder();
 		
@@ -243,6 +299,7 @@ public class CommonUtils {
 			name.append(timestamp);
 		}
 		if(!StringUtils.isBlank(poNum)){
+			name.append(".");
 		    name.append(poNum);
 		}
 		name.append(".txt");  

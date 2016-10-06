@@ -10,6 +10,7 @@ import java.util.Date;
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
 
+
 /**
  * The Class PoEntity.
  */
@@ -263,6 +264,9 @@ public class PoEntity extends TableServiceEntity {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "PoEntity [orderCreationDate=" + orderCreationDate + ", supplierDeliveryState=" + supplierDeliveryState

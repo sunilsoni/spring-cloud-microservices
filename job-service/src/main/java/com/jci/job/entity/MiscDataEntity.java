@@ -8,6 +8,7 @@ package com.jci.job.entity;
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
 
+
 /**
  * The Class MiscDataEntity.
  */
@@ -321,6 +322,9 @@ public class MiscDataEntity   extends TableServiceEntity {
 	        return true;
 	    }
 
+		/* (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
 		@Override
 		public String toString() {
 			return "MiscDataEntity [poIntransitCount=" + poIntransitCount + ", poProcessedCount=" + poProcessedCount

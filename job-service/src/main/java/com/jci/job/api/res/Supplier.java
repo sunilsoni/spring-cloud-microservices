@@ -6,6 +6,7 @@
 package com.jci.job.api.res;
 
 
+
 /**
  * The Class Supplier.
  */
