@@ -35,10 +35,12 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-
 /**
- * The Class CommonUtils.
+ * <p>
+ * <strong>Define all  Common utilities methods here .</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class CommonUtils {
 	

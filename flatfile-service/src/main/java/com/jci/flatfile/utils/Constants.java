@@ -7,7 +7,11 @@ package com.jci.flatfile.utils;
 
 
 /**
- * The Class Constants.
+ * <p>
+ * <strong>Define all  Constants in this class .</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class Constants {
 	

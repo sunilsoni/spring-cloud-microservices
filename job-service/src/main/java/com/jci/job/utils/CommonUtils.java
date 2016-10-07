@@ -25,11 +25,12 @@ import com.jci.job.entity.SuppEntity;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.TableQuery;
 
-
-
-
 /**
- * The Class Common Utils.
+ * <p>
+ * <strong>Define all  Common utilities methods here .</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class CommonUtils {
 	

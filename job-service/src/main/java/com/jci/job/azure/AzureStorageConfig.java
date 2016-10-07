@@ -9,10 +9,9 @@ package com.jci.job.azure;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 /**
  * <p>
- * <strong> The Azure Storage Config Class.</strong>
+ * <strong>The Class Azure Storage Configuration.</strong>
  * <p>
  *
  * @author csonisk

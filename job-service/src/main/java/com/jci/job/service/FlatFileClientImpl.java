@@ -15,8 +15,6 @@ import com.jci.job.apis.FlatFileClient;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
-
-
 /**
  * <p>
  * <strong>Feign Client Implementation for Generating Flat Files.</strong>

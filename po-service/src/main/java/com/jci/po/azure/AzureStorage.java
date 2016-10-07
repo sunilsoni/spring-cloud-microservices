@@ -20,7 +20,6 @@ import com.microsoft.azure.storage.table.CloudTableClient;
  *
  * @author csonisk
  */
-
 public class AzureStorage {
   
   /** The Constant FORMAT. */

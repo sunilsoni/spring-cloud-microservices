@@ -5,10 +5,9 @@
  */
 package com.jci.supp.utils;
 
-
 /**
  * <p>
- * <strong> The Class QueryBuilder.</strong>
+ * <strong>The Class QueryBuilder for Azure Tables.</strong>
  * <p>
  *
  * @author csonisk

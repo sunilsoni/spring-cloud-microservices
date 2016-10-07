@@ -35,10 +35,8 @@ import com.jci.job.entity.PoItemsEntity;
 import com.jci.job.entity.SuppEntity;
 import com.microsoft.azure.storage.table.TableEntity;
 
-
-
 /**
- * The Class PrepareBatchInsertReq.
+ * The Class Prepare Batch Insert Request.
  */
 public class PrepareBatchInsertReq {
 	

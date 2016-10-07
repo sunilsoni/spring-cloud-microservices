@@ -31,7 +31,6 @@ import com.jci.po.dto.res.PoItemDetailRes;
 import com.jci.po.dto.res.ProcessErrorRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.repo.PoRepo;
-import com.jci.po.utils.AzureUtils;
 import com.jci.po.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
@@ -94,7 +93,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 				azureRequest = new DataHelper();
 				azureRequest.setErrorDataRequired(false);
 				azureRequest.setErpName(erpArr[i]);
-				azureRequest.setPartitionValue(AzureUtils.getPoPartitionKey(erpArr[i]));
+				azureRequest.setPartitionValue(erpArr[i].toUpperCase());
 				azureRequest.setTableName(Constants.TABLE_PO_DETAILS);
 				
 				resultSet = repo.getSegmentedResultSet(param, azureRequest);
@@ -178,7 +177,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 	    
 	    LOG.info("request--->"+request);
 		BatchUpdateRes res = new BatchUpdateRes();
-		String partitionKey = AzureUtils.getPoPartitionKey(request.getErpName());
+		String partitionKey = request.getErpName().toUpperCase();
 		BatchUpdateRes response =  new BatchUpdateRes();;
 		
 		if(StringUtils.isBlank(partitionKey)){
@@ -230,7 +229,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 		DataHelper azureRequest = new DataHelper();
 		azureRequest.setErpName(request.getErpName());
 		azureRequest.setPoNum(request.getPoNum());
-		azureRequest.setPartitionValue(AzureUtils.getPoItemPartitionKey(request.getErpName()));
+		azureRequest.setPartitionValue(request.getErpName().toUpperCase());
 		azureRequest.setTableName(Constants.TABLE_PO_ITEM_DETAILS);
 		ResultSet resultSet = repo.getPoItemDetail(param, azureRequest);
 		PoItemDetailRes response = new PoItemDetailRes();

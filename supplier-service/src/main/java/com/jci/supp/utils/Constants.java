@@ -8,7 +8,7 @@ package com.jci.supp.utils;
 
 /**
  * <p>
- * <strong> The Class Constants.</strong>
+ * <strong>Define all  Constants in this class .</strong>
  * <p>
  *
  * @author csonisk

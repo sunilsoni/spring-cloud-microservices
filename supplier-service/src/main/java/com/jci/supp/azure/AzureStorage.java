@@ -13,7 +13,6 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.CloudTableClient;
 
-
 /**
  * <p>
  * <strong>Azure Account Details for managing connection.</strong>

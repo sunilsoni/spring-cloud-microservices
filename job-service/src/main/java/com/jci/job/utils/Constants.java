@@ -5,10 +5,12 @@
  */
 package com.jci.job.utils;
 
-
-
 /**
- * The Class Constants.
+ * <p>
+ * <strong>Define all  Common utilities methods here .</strong>
+ * <p>
+ *
+ * @author csonisk
  */
 public class Constants {
 	
