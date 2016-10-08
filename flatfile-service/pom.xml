@@ -30,11 +30,11 @@
   <dependencies>
     
 		   <dependency>
-			   <groupId>com.jci-base</groupId>
+			  <groupId>${project.parent.groupId}</groupId>
  				 <artifactId>base-service</artifactId>
-  				<version>1.0</version> 
-			    <type>jar</type>
-			  <scope>compile</scope> 
+  				<version>0.1.0-SNAPSHOT</version> 
+			    <!-- <type>jar</type>
+			  <scope>compile</scope> --> 
 		</dependency>
 		
 	
@@ -117,11 +117,6 @@
             <artifactId>tomcat-embed-jasper</artifactId>
         </dependency>
         
-        <dependency>
-			    <groupId>org.springframework.boot</groupId>
-			    <artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		
 		<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16 -->
 		<dependency>
 		    <groupId>org.bouncycastle</groupId>

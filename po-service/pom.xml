@@ -28,7 +28,7 @@
   </licenses>
   <dependencies>
    <dependency>
-			   <groupId>com.jci-base</groupId>
+			   <groupId>${project.parent.groupId}</groupId>
  				 <artifactId>base-service</artifactId>
   				<version>1.0</version> 
 			    <type>jar</type>

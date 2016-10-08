@@ -1,4 +1,4 @@
-package com.jci.task;
+package com.jci.flatfile;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
