@@ -16,7 +16,7 @@
   
     <artifactId>base-service</artifactId>
     <packaging>jar</packaging>
-    <name>AppFuse Modular Application - Core</name>
+    <name>Common Application - Core</name>
     
   <properties>
     <!-- The main class to start by executing java -jar -->
