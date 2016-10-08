@@ -8,8 +8,8 @@ package com.jci.supp.service;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
-import com.jci.supp.dto.SegmentedDetailReq;
-import com.jci.supp.dto.SegmentedDetailRes;
+import com.jci.dto.SegmentedDetailReq;
+import com.jci.dto.SegmentedDetailRes;
 import com.microsoft.azure.storage.StorageException;
 
 /**

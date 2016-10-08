@@ -8,12 +8,12 @@ package com.jci.po.service;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
+import com.jci.dto.BatchUpdateRes;
+import com.jci.dto.SegmentedDetailReq;
+import com.jci.dto.SegmentedDetailRes;
 import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.PoItemDetailReq;
-import com.jci.po.dto.req.SegmentedDetailReq;
-import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.dto.res.PoItemDetailRes;
-import com.jci.po.dto.res.SegmentedDetailRes;
 import com.microsoft.azure.storage.StorageException;
 
 

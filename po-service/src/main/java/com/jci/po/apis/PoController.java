@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jci.dto.BatchUpdateRes;
+import com.jci.dto.SegmentedDetailReq;
+import com.jci.dto.SegmentedDetailRes;
 import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.PoItemDetailReq;
-import com.jci.po.dto.req.SegmentedDetailReq;
-import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.dto.res.PoItemDetailRes;
-import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.service.PoService;
 import com.jci.utils.Constants;
 import com.microsoft.azure.storage.StorageException;

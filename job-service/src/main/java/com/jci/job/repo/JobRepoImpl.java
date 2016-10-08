@@ -18,11 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.jci.config.AzureStorage;
+import com.jci.dto.BatchUpdateRes;
 import com.jci.entity.MiscDataEntity;
 import com.jci.entity.PoEntity;
 import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.BatchUpdateReq;
-import com.jci.job.api.res.BatchUpdateRes;
 import com.jci.utils.CommonUtils;
 import com.jci.utils.Constants;
 import com.jci.utils.QueryBuilder;

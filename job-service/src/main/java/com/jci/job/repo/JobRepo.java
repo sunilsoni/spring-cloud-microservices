@@ -9,10 +9,10 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.List;
 
+import com.jci.dto.BatchUpdateRes;
 import com.jci.entity.PoEntity;
 import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.BatchUpdateReq;
-import com.jci.job.api.res.BatchUpdateRes;
 import com.microsoft.azure.storage.StorageException;
 
 /**

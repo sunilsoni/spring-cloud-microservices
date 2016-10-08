@@ -16,8 +16,8 @@ import com.jci.azure.DataHelper;
 import com.jci.azure.PaginationParam;
 import com.jci.azure.ResultSet;
 import com.jci.azure.ScrollingParam;
-import com.jci.supp.dto.SegmentedDetailReq;
-import com.jci.supp.dto.SegmentedDetailRes;
+import com.jci.dto.SegmentedDetailReq;
+import com.jci.dto.SegmentedDetailRes;
 import com.jci.supp.repo.SuppRepo;
 import com.jci.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
@@ -67,7 +67,7 @@ public class SuppServiceImpl implements SuppService{ // NO_UCD (unused code)
 		resultSet = repo.getSegmentedResultSet(param, azureRequest);
 		
 		resultSetMap.put(request.getErpName(), resultSet);			
-		response.setSupplierData(resultSetMap);
+		response.setSuppData(resultSetMap);
 		response.setMessage(Constants.JSON_OK);
 		
 		return response;

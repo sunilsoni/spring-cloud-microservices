@@ -3,16 +3,17 @@
  * Use or Copying of all or any part of this program, except as
  * permitted by License Agreement, is prohibited.
  */
-package com.jci.item.dto;
+package com.jci.dto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.jci.azure.ResultSet;
 
+
 /**
  * <p>
- * <strong>The Class SegmentedDetailRes for managing UI Pagination.</strong>
+ * <strong> The Class SegmentedDetailRes.</strong>
  * <p>
  *
  * @author csonisk
@@ -36,6 +37,12 @@ public class SegmentedDetailRes {
 	
 	/** The item data. */
 	private HashMap<String, ResultSet>  itemData;
+	
+	/** The error data. */
+	private HashMap<String, ResultSet>  errorData;
+	
+	/** The user data. */
+	private HashMap<String, String>  userData;
 	
 	/**
 	 * Checks if is error.
@@ -108,8 +115,7 @@ public class SegmentedDetailRes {
 	public void setGraphData(HashMap<String, ArrayList<Integer>> graphData) {
 		this.graphData = graphData;
 	}
-
-
+	
 	/**
 	 * Gets the item data.
 	 *
@@ -126,6 +132,42 @@ public class SegmentedDetailRes {
 	 */
 	public void setItemData(HashMap<String, ResultSet> itemData) {
 		this.itemData = itemData;
+	}
+
+	/**
+	 * Gets the error data.
+	 *
+	 * @return the error data
+	 */
+	public HashMap<String, ResultSet> getErrorData() {
+		return errorData;
+	}
+
+	/**
+	 * Sets the error data.
+	 *
+	 * @param errorData the error data
+	 */
+	public void setErrorData(HashMap<String, ResultSet> errorData) {
+		this.errorData = errorData;
+	}
+
+	/**
+	 * Gets the user data.
+	 *
+	 * @return the user data
+	 */
+	public HashMap<String, String> getUserData() {
+		return userData;
+	}
+
+	/**
+	 * Sets the user data.
+	 *
+	 * @param userData the user data
+	 */
+	public void setUserData(HashMap<String, String> userData) {
+		this.userData = userData;
 	}
 
 	/**
@@ -152,10 +194,7 @@ public class SegmentedDetailRes {
 	@Override
 	public String toString() {
 		return "SegmentedDetailRes [isError=" + isError + ", message=" + message + ", resultSet=" + resultSet
-				+ ", graphData=" + graphData + ", suppData=" + suppData + ", itemData=" + itemData + "]";
+				+ ", graphData=" + graphData + ", suppData=" + suppData + ", itemData=" + itemData + ", errorData="
+				+ errorData + ", userData=" + userData + "]";
 	}
-
-
-	
-	
 }

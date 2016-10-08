@@ -3,10 +3,9 @@
  * Use or Copying of all or any part of this program, except as
  * permitted by License Agreement, is prohibited.
  */
-package com.jci.po.dto.req;
+package com.jci.dto;
 
 import com.jci.azure.PaginationParam;
-
 
 /**
  * <p>

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jci.item.dto.SegmentedDetailReq;
-import com.jci.item.dto.SegmentedDetailRes;
+import com.jci.dto.SegmentedDetailReq;
+import com.jci.dto.SegmentedDetailRes;
 import com.jci.item.service.ItemService;
 import com.jci.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
