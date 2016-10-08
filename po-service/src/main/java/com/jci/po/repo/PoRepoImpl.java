@@ -25,16 +25,16 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jci.po.azure.AzureStorage;
-import com.jci.po.azure.data.DataHelper;
-import com.jci.po.azure.data.DataUtil;
-import com.jci.po.azure.data.ResultSet;
-import com.jci.po.azure.query.PaginationParam;
-import com.jci.po.azure.query.ScrollingParam;
-import com.jci.po.entity.MiscDataEntity;
-import com.jci.po.entity.PoEntity;
-import com.jci.po.utils.Constants;
-import com.jci.po.utils.QueryBuilder;
+import com.jci.azure.DataHelper;
+import com.jci.azure.DataUtil;
+import com.jci.azure.PaginationParam;
+import com.jci.azure.ResultSet;
+import com.jci.azure.ScrollingParam;
+import com.jci.config.AzureStorage;
+import com.jci.entity.MiscDataEntity;
+import com.jci.entity.PoEntity;
+import com.jci.utils.Constants;
+import com.jci.utils.QueryBuilder;
 import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.ResultContinuation;
 import com.microsoft.azure.storage.ResultSegment;
@@ -85,9 +85,9 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		
 	    for (MiscDataEntity entity : cloudTable.execute(partitionQuery)) {
 	    	list = new ArrayList<>();
-	    	list.add(entity.getIntransitCount());
-	    	list.add(entity.getProcessedCount());
-	    	list.add(entity.getErrorCount());
+	    	list.add(entity.getPoIntransitCount());
+	    	list.add(entity.getPoProcessedCount());
+	    	list.add(entity.getPoErrorCount());
 	    	graphData.put(entity.getRowKey(), list);
 	   }
 		 return graphData;
@@ -116,7 +116,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	    	map.put("Status",String.valueOf(entity.getSupplierDeliveryState()));
 	    	map.put("Description",String.valueOf(entity.getDescription()));
 	    	map.put("OrderNumber",String.valueOf(entity.getRowKey()));
-	    	map.put("SourceErpName",String.valueOf(entity.getErpName()));
+	    	map.put("SourceErpName",String.valueOf(entity.getPartitionKey()));
 	    	errorData.add(map);
 	   }
 		 return errorData;
@@ -227,7 +227,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 			hashmap.put("OrderNumber", row.getRowKey());
 			for (String key : map.keySet()) {
 				ep = map.get(key);				
-				if(key.equals(Constants.STATUS)){
+				if(key.equals(Constants.STATUS_KEY)){
 					hashmap.put("Status", ep.getValueAsString());
 				}
 			}

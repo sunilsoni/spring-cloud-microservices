@@ -28,7 +28,15 @@
   </licenses>
   <dependencies>
    
-     <dependency>
+		   <dependency>
+			   <groupId>com.jci-base</groupId>
+ 				 <artifactId>base-service</artifactId>
+  				<version>1.0</version> 
+			    <type>jar</type>
+			  <scope>compile</scope> 
+		</dependency>
+
+       <dependency>
 	      <groupId>com.microsoft.azure</groupId>
 	      <artifactId>azure-storage</artifactId>
 	      <version>4.3.0</version>

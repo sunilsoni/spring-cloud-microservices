@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;    
+import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -18,15 +18,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.jci.flatfile.config.FlatFile;
-import com.jci.flatfile.config.SSHConnection;
+import com.jci.config.FlatFile;
+import com.jci.config.SSHConnection;
 import com.jci.flatfile.repo.FlatFileRepo;
 import com.jci.flatfile.utils.BatchUpdateReq;
-import com.jci.flatfile.utils.CommonUtils;
-import com.jci.flatfile.utils.Constants;
 import com.jci.flatfile.utils.FlatFileRes;
 import com.jci.flatfile.utils.ProcessErrorReq;
 import com.jci.flatfile.utils.ProcessErrorRes;
+import com.jci.utils.CommonUtils;
+import com.jci.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.table.TableEntity;
 

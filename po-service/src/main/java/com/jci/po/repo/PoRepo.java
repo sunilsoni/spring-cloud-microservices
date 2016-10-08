@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.jci.po.azure.data.DataHelper;
-import com.jci.po.azure.data.ResultSet;
-import com.jci.po.azure.query.ScrollingParam;
-import com.jci.po.entity.PoEntity;
+import com.jci.azure.DataHelper;
+import com.jci.azure.ResultSet;
+import com.jci.azure.ScrollingParam;
+import com.jci.entity.PoEntity;
 import com.microsoft.azure.storage.StorageException;
 
 

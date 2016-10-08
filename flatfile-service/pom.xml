@@ -29,11 +29,14 @@
   </licenses>
   <dependencies>
     
-	<dependency>
-	  <groupId>com.hierynomus</groupId>
-	  <artifactId>sshj</artifactId>
-	  <version>0.17.2</version>
-	</dependency>
+		   <dependency>
+			   <groupId>com.jci-base</groupId>
+ 				 <artifactId>base-service</artifactId>
+  				<version>1.0</version> 
+			    <type>jar</type>
+			  <scope>compile</scope> 
+		</dependency>
+		
 	
 	 <dependency>
             <groupId>org.springframework.boot</groupId>

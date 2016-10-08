@@ -8,7 +8,7 @@ package com.jci.supp.dto;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.jci.supp.azure.data.ResultSet;
+import com.jci.azure.ResultSet;
 
 
 /**

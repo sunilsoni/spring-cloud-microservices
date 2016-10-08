@@ -7,7 +7,7 @@
 	</configSuffixes>
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>java:com.jci.config.Application</config>
+		<config>java:com.jci.entity.Application</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

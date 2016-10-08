@@ -8,7 +8,7 @@ package com.jci.job.api.req;
 import java.util.HashMap;
 import java.util.List;
 
-import com.jci.job.entity.PoEntity;
+import com.jci.entity.PoEntity;
 
 /**
  * <p>

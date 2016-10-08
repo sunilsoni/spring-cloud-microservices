@@ -5,7 +5,7 @@
  */
 package com.jci.po.dto.res;
 
-import com.jci.po.azure.data.ResultSet;
+import com.jci.azure.ResultSet;
 
 
 /**

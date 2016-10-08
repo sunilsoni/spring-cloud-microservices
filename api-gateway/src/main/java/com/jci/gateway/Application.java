@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.jci.gateway;
 
 import org.springframework.boot.SpringApplication;

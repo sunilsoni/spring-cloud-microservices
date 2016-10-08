@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jci.supp.dto.SegmentedDetailReq;
 import com.jci.supp.dto.SegmentedDetailRes;
 import com.jci.supp.service.SuppService;
-import com.jci.supp.utils.Constants;
+import com.jci.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
 

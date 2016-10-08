@@ -5,7 +5,7 @@
  */
 package com.jci.item.dto;
 
-import com.jci.item.azure.query.PaginationParam;
+import com.jci.azure.PaginationParam;
 
 /**
  * <p>

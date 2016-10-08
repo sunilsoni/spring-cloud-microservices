@@ -8,9 +8,9 @@ package com.jci.supp.repo;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
-import com.jci.supp.azure.data.DataHelper;
-import com.jci.supp.azure.data.ResultSet;
-import com.jci.supp.azure.query.ScrollingParam;
+import com.jci.azure.DataHelper;
+import com.jci.azure.ResultSet;
+import com.jci.azure.ScrollingParam;
 import com.microsoft.azure.storage.StorageException;
 
 

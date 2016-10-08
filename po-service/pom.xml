@@ -27,11 +27,20 @@
     </license>
   </licenses>
   <dependencies>
-	      <!--  <dependency>
-	          <groupId>com.jci</groupId>
-	          <artifactId>OpenEdge</artifactId>
-	          <version>11.6</version>
-	      </dependency> -->
+   <dependency>
+			   <groupId>com.jci-base</groupId>
+ 				 <artifactId>base-service</artifactId>
+  				<version>1.0</version> 
+			    <type>jar</type>
+			  <scope>compile</scope> 
+		</dependency>
+	    <dependency>
+			   <groupId>com.jci-base</groupId>
+ 				 <artifactId>base-service</artifactId>
+  				<version>1.0</version> 
+			    <type>jar</type>
+			  <scope>compile</scope> 
+		</dependency>
 	      <dependency>
 	          <groupId>javax.inject</groupId>
 	          <artifactId>javax.inject</artifactId>

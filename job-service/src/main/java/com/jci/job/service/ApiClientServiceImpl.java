@@ -14,15 +14,15 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.jci.config.ApiKeys;
 import com.jci.job.api.req.BatchInsertReq;
+import com.jci.job.api.req.PrepareBatchInsertReq;
 import com.jci.job.api.req.SuccessReq;
 import com.jci.job.api.res.GrDetailsRes;
 import com.jci.job.api.res.ItemDetailsRes;
 import com.jci.job.api.res.PoDetailsRes;
 import com.jci.job.api.res.SuppDetailsRes;
-import com.jci.job.azure.ApiKeys;
 import com.jci.job.repo.JobRepo;
-import com.jci.job.utils.PrepareBatchInsertReq;
 import com.microsoft.azure.storage.StorageException;
 
 

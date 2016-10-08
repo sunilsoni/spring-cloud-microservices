@@ -18,10 +18,10 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.jci.po.azure.data.DataHelper;
-import com.jci.po.azure.data.ResultSet;
-import com.jci.po.azure.query.PaginationParam;
-import com.jci.po.azure.query.ScrollingParam;
+import com.jci.azure.DataHelper;
+import com.jci.azure.PaginationParam;
+import com.jci.azure.ResultSet;
+import com.jci.azure.ScrollingParam;
 import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.req.ProcessErrorReq;
@@ -31,7 +31,7 @@ import com.jci.po.dto.res.PoItemDetailRes;
 import com.jci.po.dto.res.ProcessErrorRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.repo.PoRepo;
-import com.jci.po.utils.Constants;
+import com.jci.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
 
@@ -120,7 +120,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 			resultSetMap.put(request.getErpName(), resultSet);			
 			response.setResultSet(resultSetMap);
 		}
-		response.setMessage(Constants.JSON_OK);
+		//response.setMessage(Constants.JSON_OK);
 		
 		//Remove this
 		HashMap<String,String> userData = new HashMap<>();
@@ -165,7 +165,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 		
 		resultSetMap.put(request.getErpName(), resultSet);			
 		response.setErrorData(resultSetMap);
-		response.setMessage(Constants.JSON_OK);
+		//response.setMessage(Constants.JSON_OK);
 		return response;
 	}
 
@@ -234,7 +234,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 		ResultSet resultSet = repo.getPoItemDetail(param, azureRequest);
 		PoItemDetailRes response = new PoItemDetailRes();
 		response.setResultSet(resultSet);
-		response.setMessage(Constants.JSON_OK);
+		//response.setMessage(Constants.JSON_OK);
 		return response;
 	}
 	

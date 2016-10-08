@@ -12,14 +12,14 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jci.supp.azure.data.DataHelper;
-import com.jci.supp.azure.data.ResultSet;
-import com.jci.supp.azure.query.PaginationParam;
-import com.jci.supp.azure.query.ScrollingParam;
+import com.jci.azure.DataHelper;
+import com.jci.azure.PaginationParam;
+import com.jci.azure.ResultSet;
+import com.jci.azure.ScrollingParam;
 import com.jci.supp.dto.SegmentedDetailReq;
 import com.jci.supp.dto.SegmentedDetailRes;
 import com.jci.supp.repo.SuppRepo;
-import com.jci.supp.utils.Constants;
+import com.jci.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
 

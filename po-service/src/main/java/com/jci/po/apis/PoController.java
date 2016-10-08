@@ -25,8 +25,7 @@ import com.jci.po.dto.res.BatchUpdateRes;
 import com.jci.po.dto.res.PoItemDetailRes;
 import com.jci.po.dto.res.SegmentedDetailRes;
 import com.jci.po.service.PoService;
-import com.jci.po.utils.AzureUtils;
-import com.jci.po.utils.Constants;
+import com.jci.utils.Constants;
 import com.microsoft.azure.storage.StorageException;
 
 
