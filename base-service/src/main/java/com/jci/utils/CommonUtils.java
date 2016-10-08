@@ -23,7 +23,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jci.entity.GrEntity;
 import com.jci.entity.ItemEntity;
@@ -104,18 +106,17 @@ public class CommonUtils {
 	 * @param destName the dest name
 	 * @param jasonValue the jason value
 	 * @return the git json mapping
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
 	 */
-	public TreeMap<String,HashMap<Integer,String>> getGitJsonMapping(String destName, String jasonValue){
+	public TreeMap<String,HashMap<Integer,String>> getGitJsonMapping(String destName, String jasonValue) throws JsonParseException, JsonMappingException, IOException{
 		HashMap<Integer, String> map=null;
 		ObjectMapper mapper = new ObjectMapper(); 
 		TreeMap<String,HashMap<Integer,String>> mappingList = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	    TypeReference<HashMap<Integer,String>> typeRef  = new TypeReference<HashMap<Integer,String>>() {};
-		try {
-			map = mapper.readValue(jasonValue, typeRef);
-			mappingList.put(destName, map);
-		} catch (IOException e) {
-			LOG.error("### Exception in   ####",e);
-		} 
+		map = mapper.readValue(jasonValue, typeRef);
+		mappingList.put(destName, map);
 		return mappingList ;
 	}
 	

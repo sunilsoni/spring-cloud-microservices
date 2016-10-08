@@ -38,7 +38,7 @@ class GitClientImpl {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	public ResponseEntity<String>  getPoJson() {
-		LOG.info("### Starting  GithubClientImpl.getPoJson ####");
+		LOG.info("### Starting  GitClientImpl.getPoJson ####");
 		return  githubClient.getPoJson();
 	}
 

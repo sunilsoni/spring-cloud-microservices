@@ -2,8 +2,6 @@ package com.jci.flatfile.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.jci.config.FlatFile;
 import com.jci.config.SSHConnection;
+import com.jci.exception.ErrorService;
+import com.jci.flatfile.exception.FlatFileException;
 import com.jci.flatfile.repo.FlatFileRepo;
 import com.jci.flatfile.utils.BatchUpdateReq;
 import com.jci.flatfile.utils.FlatFileRes;
@@ -27,12 +27,12 @@ import com.jci.flatfile.utils.ProcessErrorReq;
 import com.jci.flatfile.utils.ProcessErrorRes;
 import com.jci.utils.CommonUtils;
 import com.jci.utils.Constants;
-import com.microsoft.azure.storage.StorageException;
+import com.jci.utils.ErrorEnum;
 import com.microsoft.azure.storage.table.TableEntity;
 
 
 /**
- * The Class FlatFileServiceImpl.
+ * The Class Flat FileServiceImpl.
  */
 @Service
 public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused code)
@@ -41,7 +41,7 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
     private static final Logger LOG = LoggerFactory.getLogger(FlatFileServiceImpl.class);
     
     /** The repo. */
-    @Autowired
+    @Autowired(required = false)
     private FlatFileRepo repo;
     
     /** The all erps. */
@@ -49,26 +49,31 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
     private String allErps;
     
     /** The config. */
-    @Autowired
+    @Autowired(required = false)
     private FlatFile config;
     
     /** The git. */
     @Autowired
     private GitClientImpl git;
     
+    @Autowired
+    private ErrorService errorService;
+    
     /* (non-Javadoc)
      * @see com.jci.flatfile.service.FlatFileService#processPoFlatFiles()
      */
     @Override
-    public String processPoFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
+    public String processPoFlatFiles() {
     	LOG.info("### Starting  FlatFileServiceImpl.processPoFlatFile ####");
-    	
         String tempDir = System.getProperty("java.io.tmpdir");
-		ResponseEntity<String>  githubRes = git.getPoJson();
-        
         CommonUtils utils = new CommonUtils();
-       // TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+        TreeMap<String,HashMap<Integer,String>> mappingList = null;        
+    	try {
+    		ResponseEntity<String>  githubRes = git.getPoJson();
+			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+		} catch (Exception e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_PO_FILE);
+		}
         
         Map<String,List<String>> pkToSuccessList = new HashMap<>();
         Map<String,List<String>> pkToErrorList = new HashMap<>();
@@ -144,15 +149,22 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
      * @see com.jci.flatfile.service.FlatFileService#processGrFlatFiles()
      */
     @Override
-    public String processGrFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
+    public String processGrFlatFiles() {
     	LOG.info("####### Starting  FlatFileServiceImpl.processGrFlatFiles #########");
         String tempDir = System.getProperty("java.io.tmpdir");
         
-		ResponseEntity<String>  githubRes = git.getGrJson();
+		
 		
         CommonUtils utils = new CommonUtils();
         //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getGrMappingFileUrl());
-        TreeMap<String,HashMap<Integer,String>> mappingList =utils. getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+        TreeMap<String,HashMap<Integer,String>> mappingList = null;
+        
+        try {
+        	ResponseEntity<String>  githubRes = git.getGrJson();
+			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+		} catch (IOException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_GR_FILE);
+		}
 
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
@@ -252,14 +264,21 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
      * @see com.jci.flatfile.service.FlatFileService#processSuppFlatFiles()
      */
     @Override
-    public String processSuppFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
+    public String processSuppFlatFiles() {
     	LOG.info("### Starting  FlatFileServiceImpl.processSuppFlatFiles ####");
         String tempDir = System.getProperty("java.io.tmpdir");
         
         CommonUtils utils = new CommonUtils();
-        ResponseEntity<String>  githubRes = git.getSuppJson();
+        
         //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getSuppMappingFileUrl());
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+        TreeMap<String,HashMap<Integer,String>> mappingList = null;
+        
+        try {
+        	ResponseEntity<String>  githubRes = git.getSuppJson();
+			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+		} catch (IOException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_SUPP_FILE);
+		}
         
         
         ArrayList<String> files = new ArrayList<>();
@@ -360,14 +379,21 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
      * @see com.jci.flatfile.service.FlatFileService#processItemFlatFiles()
      */
     @Override
-    public String processItemFlatFiles() throws InvalidKeyException, URISyntaxException, StorageException {
+    public String processItemFlatFiles() {
     	LOG.info("### Starting  FlatFileServiceImpl.processItemFlatFiles ####");
         String tempDir = System.getProperty("java.io.tmpdir");
         
         CommonUtils utils = new CommonUtils();
-        ResponseEntity<String>  githubRes = git.getItemJson();
         //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getItemMappingFileUrl());
-        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+        TreeMap<String,HashMap<Integer,String>> mappingList = null;
+
+        try {
+        	 ResponseEntity<String>  githubRes = git.getItemJson();
+			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+		} catch (IOException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_ITEM_FILE);
+		}
+        
         
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
@@ -503,7 +529,6 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
             		updateReq.setComment(comment);
     				updateReq.setUserName(userName);
     				updateReq.setGlobalId(globalId);
-    				
             	}
             	
             	updateReq.setErrorReq(isErrorReq);
@@ -557,12 +582,14 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
 		 String tempDir = System.getProperty("java.io.tmpdir");
 	        
 	        CommonUtils utils = new CommonUtils();
-	       // TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
+	        TreeMap<String,HashMap<Integer,String>> mappingList = null;
 	        
-	        ResponseEntity<String>  githubRes = git.getPoJson();
-	       // TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getPoMappingFileUrl());
-	        TreeMap<String,HashMap<Integer,String>> mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
-	        
+	        try {
+	        	ResponseEntity<String>  githubRes = git.getPoJson();
+				mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+			} catch (IOException e) {
+				throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_PO_FILE);
+			}
 	        
 	        Map<String,List<String>> pkToSuccessList = new HashMap<>();
 	        Map<String,List<String>> pkToErrorList = new HashMap<>();
@@ -571,11 +598,7 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
 	        List<File> tempFiles = new ArrayList<>();
 	        
             FlatFileRes res=null;
-			try {
-				res = repo.getPoFlatFileData(req.getErpName().toUpperCase(),req.getErrorsList());
-			} catch (InvalidKeyException | URISyntaxException | StorageException e1) {
-				LOG.error("### Exception in   ####",e1);
-			}
+			res = repo.getPoFlatFileData(req.getErpName().toUpperCase(),req.getErrorsList());
 			
             Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
             Map<String, String> rowKeyToSupptypeMap = res.getRowKeyToSupptypeMap();

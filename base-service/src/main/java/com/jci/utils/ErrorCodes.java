@@ -1,4 +1,4 @@
-package com.jci.exception;
+package com.jci.utils;
 
 public class ErrorCodes {
 

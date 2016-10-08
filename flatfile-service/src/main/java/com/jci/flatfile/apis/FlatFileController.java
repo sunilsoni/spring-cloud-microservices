@@ -1,7 +1,5 @@
 package com.jci.flatfile.apis;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jci.flatfile.service.FlatFileService;
 import com.jci.flatfile.utils.ProcessErrorReq;
 import com.jci.flatfile.utils.ProcessErrorRes;
-import com.microsoft.azure.storage.StorageException;
 
 
 /**
@@ -44,11 +41,7 @@ public class FlatFileController { // NO_UCD (unused code)
 			executor.execute(new Runnable() { 
 				public void run() {
 					LOG.info("<==========Starting PO FlatFile New thread =========>"); 
-					try {
-						service.processPoFlatFiles();
-					} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-						LOG.error("### Exception in  FlatFileController.processPoFlatFiles ####");
-					} 
+					service.processPoFlatFiles();
 				}
 			});
 		return "SUCCESS";
@@ -65,11 +58,7 @@ public class FlatFileController { // NO_UCD (unused code)
 		executor.execute(new Runnable() { 
 			public void run() {
 				LOG.info("<==========Starting GR FlatFile New thread =========>"); 
-				try {
-					service.processGrFlatFiles();
-				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-					LOG.error("### Exception in  FlatFileController.processGrFlatFiles ####");
-				} 
+				service.processGrFlatFiles();
 			}
 		});
 	return "SUCCESS";
@@ -86,11 +75,7 @@ public class FlatFileController { // NO_UCD (unused code)
 		executor.execute(new Runnable() { 
 			public void run() {
 				LOG.info("<==========Starting SUPP FlatFile New thread =========>"); 
-				try {
-					service.processSuppFlatFiles();
-				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-					LOG.error("### Exception in  FlatFileController.processSuppFlatFiles ####");
-				} 
+				service.processSuppFlatFiles();
 			}
 		});
 	return "SUCCESS";
@@ -107,11 +92,7 @@ public class FlatFileController { // NO_UCD (unused code)
 		executor.execute(new Runnable() { 
 			public void run() {
 				LOG.info("<==========Starting ITEM FlatFile New thread =========>"); 
-				try {
-					service.processItemFlatFiles();
-				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-					LOG.error("### Exception in  FlatFileController.processItemFlatFiles ####");
-				} 
+				service.processItemFlatFiles();
 			}
 		});
 	return "SUCCESS";

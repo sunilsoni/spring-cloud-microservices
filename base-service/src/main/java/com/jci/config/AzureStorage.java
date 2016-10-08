@@ -41,7 +41,7 @@ public class AzureStorage {
    * @param accountName the account name
    * @param accountKey the account key
    */
-  AzureStorage(String protocol, String accountName, String accountKey) {
+  public AzureStorage(String protocol, String accountName, String accountKey) {
 	this.protocol  = protocol;
 	this.accountName  = accountName;
 	this.accountKey  = accountKey;

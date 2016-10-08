@@ -28,9 +28,12 @@ import com.jci.entity.ItemEntity;
 import com.jci.entity.MiscDataEntity;
 import com.jci.entity.PoEntity;
 import com.jci.entity.SuppEntity;
+import com.jci.exception.ErrorService;
+import com.jci.flatfile.exception.FlatFileException;
 import com.jci.flatfile.utils.BatchUpdateReq;
 import com.jci.flatfile.utils.FlatFileRes;
 import com.jci.utils.Constants;
+import com.jci.utils.ErrorEnum;
 import com.jci.utils.QueryBuilder;
 import com.microsoft.azure.storage.OperationContext;
 import com.microsoft.azure.storage.StorageException;
@@ -41,7 +44,6 @@ import com.microsoft.azure.storage.table.TableBatchOperation;
 import com.microsoft.azure.storage.table.TableEntity;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
-
 
 /**
  * The Class FlatFileRepoImpl.
@@ -59,11 +61,15 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
     @Autowired
     private AzureStorage azureStorage;
     
+    /** The error service. */
+    @Autowired
+    private ErrorService errorService;
+    
     /* (non-Javadoc)
      * @see com.jci.flatfile.repo.FlatFileRepo#getPoFlatFileData(java.lang.String, java.util.List)
      */
     @Override
-    public FlatFileRes getPoFlatFileData(String partitionKey, List<String> poList)  throws InvalidKeyException, URISyntaxException, StorageException {
+    public FlatFileRes getPoFlatFileData(String partitionKey, List<String> poList)  {
     	LOG.info("### Starting in FlatFileRepoImpl.getPoFlatFileData ###"+poList);
     	String query = null;
     	if(poList!=null){
@@ -74,7 +80,13 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
     	
     	TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
         Map<String,List<String>> pkToRowkeyList = new HashMap<>();
-        CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+        CloudTable cloudTable = null;
+        
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_PO_TABLE_NOT_FOUND);
+		}
         
         Map<String, String> rowKeyToPlantMap = new  HashMap<>();
         Map<String, String> rowKeyToSupptypeMap  = new  HashMap<>();
@@ -108,13 +120,16 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
      * @param partitionKey the partition key
      * @param poList the po list
      * @return the pos
-     * @throws InvalidKeyException the invalid key exception
-     * @throws URISyntaxException the URI syntax exception
-     * @throws StorageException the storage exception
      */
-    private Map<String,List<HashMap<String, Object>>> getPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+    private Map<String,List<HashMap<String, Object>>> getPos(String partitionKey, List<String> poList) {
         String query = QueryBuilder.poItemQuery(partitionKey,poList);
-        CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+        CloudTable cloudTable=null;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e1) {
+			throw errorService.createException(FlatFileException.class, e1, ErrorEnum.ERROR_POITEM_TABLE_NOT_FOUND);
+		}
+		
         OperationContext opContext = new OperationContext();
         
         TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);//Need to discuss this
@@ -158,10 +173,16 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
      * @see com.jci.flatfile.repo.FlatFileRepo#getFlatFileData(java.lang.String, java.lang.String)
      */
     @Override
-    public FlatFileRes getFlatFileData(String partitionKey, String tableName)  throws InvalidKeyException, URISyntaxException, StorageException {
+    public FlatFileRes getFlatFileData(String partitionKey, String tableName)  {
         String query = QueryBuilder.ffQuery(partitionKey);
         
-        CloudTable cloudTable = azureStorage.getTable(tableName);
+        CloudTable cloudTable;
+		try {
+			cloudTable = azureStorage.getTable(tableName);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+		}
+		
         OperationContext opContext = new OperationContext();
         
         TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);
@@ -233,8 +254,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 		     try {
 					cloudTable = azureStorage.getTable(entry.getKey());
 				} catch (Exception e) {
-					LOG.error("### Exception in FlatFileRepoImpl.batchUpdate.getTable ###"+e);
-					continue;
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,entry.getKey());
 				}
 		     
 		  // Define a batch operation.
@@ -339,7 +359,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 	 * @see com.jci.flatfile.repo.FlatFileRepo#getPoDetails(java.lang.String, java.util.List, java.lang.String)
 	 */
 	@Override
-	public List<Object> getPoDetails(String partitionKey, List<String> poList,String tableName) throws InvalidKeyException, URISyntaxException, StorageException {
+	public List<Object> getPoDetails(String partitionKey, List<String> poList,String tableName) {
 		poFinal = new ArrayList<>();
 		preparePoDetails( partitionKey,  poList,tableName); 
 		return poFinal;
@@ -351,39 +371,52 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 	 * @param partitionKey the partition key
 	 * @param poList the po list
 	 * @param tableName the table name
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
 	 */
-	private void preparePoDetails(String partitionKey, List<String> poList,String tableName) throws InvalidKeyException, URISyntaxException, StorageException{
+	private void preparePoDetails(String partitionKey, List<String> poList,String tableName){
+		CloudTable cloudTable=null;
 		if(poList.size()>batchSize){
 			String query = QueryBuilder.processPosQuery(partitionKey, poList.subList(0, batchSize));
 			
 			if(Constants.TABLE_PO_DETAILS.equals(tableName)){
 				TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 				
-				CloudTable cloudTable = azureStorage.getTable(tableName);
+				try {
+					cloudTable = azureStorage.getTable(tableName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+				}
 			    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 			    	poFinal.add(entity);
 			    }
 			}else if(Constants.TABLE_GR_DETAILS.equals(tableName)){
 				TableQuery<GrEntity> partitionQuery =  TableQuery.from(GrEntity.class).where(query);
 				
-				CloudTable cloudTable = azureStorage.getTable(tableName);
+				try {
+					cloudTable = azureStorage.getTable(tableName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+				}
 			    for (GrEntity entity : cloudTable.execute(partitionQuery)) {
 			    	poFinal.add(entity);
 			    }
 			}else if(Constants.TABLE_ITEM.equals(tableName)){
 				TableQuery<ItemEntity> partitionQuery =  TableQuery.from(ItemEntity.class).where(query);
 				
-				CloudTable cloudTable = azureStorage.getTable(tableName);
+				try {
+					cloudTable = azureStorage.getTable(tableName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+				}
 			    for (ItemEntity entity : cloudTable.execute(partitionQuery)) {
 			    	poFinal.add(entity);
 			    }
 			}else if(Constants.TABLE_SUPPLIER.equals(tableName)){
 				TableQuery<SuppEntity> partitionQuery =  TableQuery.from(SuppEntity.class).where(query);
-				
-				CloudTable cloudTable = azureStorage.getTable(tableName);
+				try {
+					cloudTable = azureStorage.getTable(tableName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+				}
 			    for (SuppEntity entity : cloudTable.execute(partitionQuery)) {
 			    	poFinal.add(entity);
 			    }
@@ -393,29 +426,41 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 			String query = QueryBuilder.processPosQuery(partitionKey,poList);
 		    if(Constants.TABLE_PO_DETAILS.equals(tableName)){
 				TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
-				
-				CloudTable cloudTable = azureStorage.getTable(tableName);
+				try {
+					cloudTable = azureStorage.getTable(tableName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+				}
 			    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 			    	poFinal.add(entity);
 			    }
 			}else if(Constants.TABLE_GR_DETAILS.equals(tableName)){
 				TableQuery<GrEntity> partitionQuery =  TableQuery.from(GrEntity.class).where(query);
-				
-				CloudTable cloudTable = azureStorage.getTable(tableName);
+				try {
+					cloudTable = azureStorage.getTable(tableName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+				}
 			    for (GrEntity entity : cloudTable.execute(partitionQuery)) {
 			    	poFinal.add(entity);
 			    }
 			}else if(Constants.TABLE_ITEM.equals(tableName)){
 				TableQuery<ItemEntity> partitionQuery =  TableQuery.from(ItemEntity.class).where(query);
-				
-				CloudTable cloudTable = azureStorage.getTable(tableName);
+				try {
+					cloudTable = azureStorage.getTable(tableName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+				}
 			    for (ItemEntity entity : cloudTable.execute(partitionQuery)) {
 			    	poFinal.add(entity);
 			    }
 			}else if(Constants.TABLE_SUPPLIER.equals(tableName)){
 				TableQuery<SuppEntity> partitionQuery =  TableQuery.from(SuppEntity.class).where(query);
-				
-				CloudTable cloudTable = azureStorage.getTable(tableName);
+				try {
+					cloudTable = azureStorage.getTable(tableName);
+				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+					throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+				}
 			    for (SuppEntity entity : cloudTable.execute(partitionQuery)) {
 			    	poFinal.add(entity);
 			    }
@@ -434,10 +479,11 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 	 */
 	private synchronized void updateMiscEntity(String erpName,String tableName,int successCount,int errorCount,boolean isErrorReq){
 		MiscDataEntity miscEntity=null;
+		
 		try {
 			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
+		} catch (StorageException e1) {
+			LOG.error("### Exception in  updateMiscEntity  ####",e1);
 		}
 		
 		if(miscEntity==null){
@@ -571,11 +617,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 		}
 		 
 		if(totalCount>0){
-			try {
-				updateStatusCountEntity(miscEntity);
-			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-				LOG.error("### Exception in JobRepoImpl.updateMiscEntity ####",e);
-			}
+		  updateStatusCountEntity(miscEntity);
 		}
 	}
 	
@@ -583,14 +625,21 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 	 * Update status count entity.
 	 *
 	 * @param entity the entity
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
 	 */
-	public void updateStatusCountEntity(MiscDataEntity entity) throws InvalidKeyException, URISyntaxException, StorageException {
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+	public void updateStatusCountEntity(MiscDataEntity entity) {
+		CloudTable cloudTable=null;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_MISCDATA_TABLE_NOT_FOUND);
+		}
+		
 		TableOperation insert = TableOperation.insertOrMerge(entity);
-		cloudTable.execute(insert);
+		try {
+			cloudTable.execute(insert);
+		} catch (StorageException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_MISCDATA_INSERT_DATA);
+		}
 	}
 	
 	/**
@@ -599,12 +648,15 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 	 * @param partitionKey the partition key
 	 * @param rowKey the row key
 	 * @return the status count entity
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
 	 * @throws StorageException the storage exception
 	 */
-	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws InvalidKeyException, URISyntaxException, StorageException {
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws StorageException {
+		CloudTable cloudTable=null;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_MISCDATA_TABLE_NOT_FOUND);
+		}
 	    TableOperation entity =   TableOperation.retrieve(partitionKey, rowKey, MiscDataEntity.class);
 		return cloudTable.execute(entity).getResultAsType();
 	}

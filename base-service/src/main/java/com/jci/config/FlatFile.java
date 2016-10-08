@@ -11,11 +11,6 @@ package com.jci.config;
  */
 public class FlatFile {
 	
-  	/*private  String poMappingFileUrl;
-  	private  String grMappingFileUrl;
-  	private  String itemMappingFileUrl;
-  	private  String suppMappingFileUrl;*/
-  	
   	/** The hostname. */
 	  private String hostname;
   	
@@ -36,7 +31,7 @@ public class FlatFile {
 	 * @param username the username
 	 * @param password the password
 	 */
-	FlatFile(String hostname, int port, String username, String password) {
+	public FlatFile(String hostname, int port, String username, String password) {
 		super();
 		this.hostname = hostname;
 		this.port = port;

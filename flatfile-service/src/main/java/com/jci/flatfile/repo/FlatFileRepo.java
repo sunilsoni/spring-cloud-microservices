@@ -5,16 +5,10 @@
  */
 package com.jci.flatfile.repo;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.List;
 
 import com.jci.flatfile.utils.BatchUpdateReq;
 import com.jci.flatfile.utils.FlatFileRes;
-import com.microsoft.azure.storage.StorageException;
-
-
-
 
 /**
  * The Interface FlatFileRepo.
@@ -27,11 +21,8 @@ public interface FlatFileRepo {
      * @param partitionKey the partition key
      * @param poList the po list
      * @return the po flat file data
-     * @throws InvalidKeyException the invalid key exception
-     * @throws URISyntaxException the URI syntax exception
-     * @throws StorageException the storage exception
      */
-    FlatFileRes getPoFlatFileData(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException;
+    FlatFileRes getPoFlatFileData(String partitionKey, List<String> poList) ;
     
     /**
      * Gets the flat file data.
@@ -39,11 +30,8 @@ public interface FlatFileRepo {
      * @param partitionKey the partition key
      * @param tableName the table name
      * @return the flat file data
-     * @throws InvalidKeyException the invalid key exception
-     * @throws URISyntaxException the URI syntax exception
-     * @throws StorageException the storage exception
      */
-    FlatFileRes getFlatFileData(String partitionKey,String tableName) throws InvalidKeyException, URISyntaxException, StorageException ;
+    FlatFileRes getFlatFileData(String partitionKey,String tableName) ;
     
     /**
      * Batch update.
@@ -59,10 +47,7 @@ public interface FlatFileRepo {
      * @param poList the po list
      * @param tableName the table name
      * @return the po details
-     * @throws InvalidKeyException the invalid key exception
-     * @throws URISyntaxException the URI syntax exception
-     * @throws StorageException the storage exception
      */
-    List<Object> getPoDetails(String partitionKey, List<String> poList,String tableName) throws InvalidKeyException, URISyntaxException, StorageException ;
+    List<Object> getPoDetails(String partitionKey, List<String> poList,String tableName) ;
     
 }

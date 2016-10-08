@@ -1,13 +1,7 @@
 package com.jci.flatfile.service;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
-
 import com.jci.flatfile.utils.ProcessErrorReq;
 import com.jci.flatfile.utils.ProcessErrorRes;
-import com.microsoft.azure.storage.StorageException;
-
-
 /**
  * The Interface FlatFileService.
  */
@@ -17,41 +11,29 @@ public interface FlatFileService {
      * Process po flat files.
      *
      * @return the string
-     * @throws InvalidKeyException the invalid key exception
-     * @throws URISyntaxException the URI syntax exception
-     * @throws StorageException the storage exception
      */
-    String processPoFlatFiles () throws InvalidKeyException, URISyntaxException, StorageException;
+    String processPoFlatFiles () ;
     
     /**
      * Process gr flat files.
      *
      * @return the string
-     * @throws InvalidKeyException the invalid key exception
-     * @throws URISyntaxException the URI syntax exception
-     * @throws StorageException the storage exception
      */
-    String processGrFlatFiles () throws InvalidKeyException, URISyntaxException, StorageException;
+    String processGrFlatFiles () ;
     
     /**
      * Process supp flat files.
      *
      * @return the string
-     * @throws InvalidKeyException the invalid key exception
-     * @throws URISyntaxException the URI syntax exception
-     * @throws StorageException the storage exception
      */
-    String processSuppFlatFiles () throws InvalidKeyException, URISyntaxException, StorageException;
+    String processSuppFlatFiles () ;
     
     /**
      * Process item flat files.
      *
      * @return the string
-     * @throws InvalidKeyException the invalid key exception
-     * @throws URISyntaxException the URI syntax exception
-     * @throws StorageException the storage exception
      */
-    String processItemFlatFiles () throws InvalidKeyException, URISyntaxException, StorageException;
+    String processItemFlatFiles () ;
     
     /**
      * Process error pos flat files.
