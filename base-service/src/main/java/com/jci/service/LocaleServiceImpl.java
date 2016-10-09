@@ -1,4 +1,4 @@
-package com.jci.locale;
+package com.jci.service;
 
 import java.util.Locale;
 
@@ -10,6 +10,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.LocaleResolver;
+
+import com.jci.locale.LocaleService;
 
 @Service
 public class LocaleServiceImpl implements LocaleService {

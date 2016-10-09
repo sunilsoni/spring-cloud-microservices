@@ -79,6 +79,14 @@
 		    <groupId>org.apache.tomcat.embed</groupId>
 		    <artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
+		
+		<!-- JavaMelody : monitoring of JavaEE applications.  -->
+		<dependency>
+		    <groupId>net.bull.javamelody</groupId>
+		    <artifactId>javamelody-core</artifactId>
+		    <version>1.62.0</version>
+		</dependency>
+		
 	    </dependencies>
 
 	    <dependencyManagement>

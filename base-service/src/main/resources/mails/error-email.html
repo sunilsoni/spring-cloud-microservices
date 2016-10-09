@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:remove="all">Template for HTML email (simple)</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <p th:text="#{greeting(${name})}">  Hello, Peter Static! </p>
+        <p th:text="${message}">	Sample Content </p>
+         Please click the below link to activate your Account.<br/>
+       	<a th:href="${url}">Click Here</a> 
+            Regards, <br />
+            &emsp; <em>The Secured App Team</em>
+    </body>
+</html>

@@ -7,9 +7,9 @@ import java.util.ResourceBundle;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.jci.enums.ErrorEnum;
+import com.jci.enums.ModuleEnum;
 import com.jci.locale.BundleUTF8Control;
-import com.jci.utils.ErrorEnum;
-import com.jci.utils.ModuleEnum;
 
 public class BaseException extends RuntimeException {
 

@@ -1,6 +1,4 @@
-package com.jci.utils;
-
-import com.jci.exception.BaseException;
+package com.jci.exception;
 
 public class SystemException extends BaseException {
 

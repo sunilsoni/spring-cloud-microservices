@@ -1,6 +1,6 @@
 package com.jci.exception;
 
-import com.jci.utils.ErrorEnum;
+import com.jci.enums.ErrorEnum;
 
 public interface ErrorService {
 

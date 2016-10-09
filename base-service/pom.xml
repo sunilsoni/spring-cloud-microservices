@@ -20,7 +20,8 @@
     
   <properties>
     <!-- The main class to start by executing java -jar -->
-    <start-class>com.jci.Application</start-class>
+    <start-class>com.jci.ConfigApplication</start-class>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 </properties>
   
   <licenses>
@@ -38,11 +39,13 @@
 	      <artifactId>azure-storage</artifactId>
 	      <version>4.3.0</version>
 	    </dependency>
+	    
 	   <dependency>
         <groupId>org.apache.commons</groupId> 
         <artifactId>commons-lang3</artifactId>
         <version>3.4</version>
         </dependency>
+        
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -54,6 +57,65 @@
 			  <version>0.17.2</version>
 			</dependency>
 			
+	 <!-- Spring Core -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+			
+			
+			 <!-- Spring MVC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        
+			   <!-- Spring AOP + AspectJ -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        
+           <!-- Java mail -->
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4.7</version>
+		</dependency>
+        
+        <!-- spring-boot-starter-mail -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-mail</artifactId>
+		    <!-- <version>1.4.1.RELEASE</version> -->
+		</dependency>
+        
+        
+        <!-- spring support for sending mails -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		   <!--  <version>4.3.3.RELEASE</version> -->
+		</dependency>
+        
+        <!-- spring-boot-starter-thymeleaf -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+        
   </dependencies>
   
   <build>

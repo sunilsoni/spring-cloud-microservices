@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.jci.config.FlatFile;
 import com.jci.config.SSHConnection;
+import com.jci.enums.ErrorEnum;
 import com.jci.exception.ErrorService;
 import com.jci.flatfile.exception.FlatFileException;
 import com.jci.flatfile.repo.FlatFileRepo;
@@ -27,7 +28,6 @@ import com.jci.flatfile.utils.ProcessErrorReq;
 import com.jci.flatfile.utils.ProcessErrorRes;
 import com.jci.utils.CommonUtils;
 import com.jci.utils.Constants;
-import com.jci.utils.ErrorEnum;
 import com.microsoft.azure.storage.table.TableEntity;
 
 

@@ -4,9 +4,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jci.enums.ErrorEnum;
 import com.jci.locale.LocaleService;
-import com.jci.utils.ErrorEnum;
-import com.jci.utils.SystemException;
 
 @Service
 public class ErrorServiceImpl implements ErrorService {

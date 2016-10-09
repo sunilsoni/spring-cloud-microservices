@@ -9,6 +9,9 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+
+import com.jci.ConfigApplication;
 
 /**
  * <p>
@@ -21,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 @EnableHystrix
 @EnableFeignClients
 @EnableEurekaClient
+@Import(ConfigApplication.class) 
 public class Application {
 	
 	/**

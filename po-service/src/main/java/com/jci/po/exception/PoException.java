@@ -1,7 +1,7 @@
 package com.jci.po.exception;
 
+import com.jci.enums.ModuleEnum;
 import com.jci.exception.BusinessException;
-import com.jci.utils.ModuleEnum;
 
 public class PoException  extends BusinessException {
 

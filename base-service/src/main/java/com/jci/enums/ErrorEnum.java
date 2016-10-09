@@ -1,4 +1,4 @@
-package com.jci.utils;
+package com.jci.enums;
 
 /**
  * Error list from:
