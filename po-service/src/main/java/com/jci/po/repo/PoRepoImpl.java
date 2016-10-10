@@ -33,6 +33,9 @@ import com.jci.azure.ScrollingParam;
 import com.jci.config.AzureStorage;
 import com.jci.entity.MiscDataEntity;
 import com.jci.entity.PoEntity;
+import com.jci.enums.ErrorEnum;
+import com.jci.exception.ErrorService;
+import com.jci.po.exception.PoException;
 import com.jci.utils.Constants;
 import com.jci.utils.QueryBuilder;
 import com.microsoft.azure.storage.OperationContext;
@@ -70,15 +73,22 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	@Autowired   
 	private AzureStorage azureStorage;
 
-	
+    @Autowired
+    private ErrorService errorService;
+    
 	/* (non-Javadoc)
 	 * @see com.jci.po.repo.PoRepo#getGraphData()
 	 */
 	@Override
-	public HashMap<String, ArrayList<Integer>> getGraphData() throws InvalidKeyException, URISyntaxException, StorageException {
+	public HashMap<String, ArrayList<Integer>> getGraphData()  {
 		String query = QueryBuilder.graphQuery(Constants.PARTITION_KEY_MISCDATA,allErps);
 		TableQuery<MiscDataEntity> partitionQuery =  TableQuery.from(MiscDataEntity.class).where(query);
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+		CloudTable cloudTable;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(PoException.class, e, ErrorEnum.ERROR_MISCDATA_TABLE_NOT_FOUND);
+		}
 		
 		HashMap<String, ArrayList<Integer>> graphData = new HashMap<>();
 		ArrayList<Integer> list = null;
@@ -104,13 +114,19 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	 * @throws URISyntaxException the URI syntax exception
 	 * @throws StorageException the storage exception
 	 */
-	public List<HashMap<String, String>> getErrorData(String partitionKey) throws InvalidKeyException, URISyntaxException, StorageException {
+	public List<HashMap<String, String>> getErrorData(String partitionKey)  {
 		List<HashMap<String, String>> errorData = new ArrayList<>();
 		String query = QueryBuilder.errorQuery(partitionKey,allErps);
 		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 		
 		//multiplePartitionWhereCondition
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+		CloudTable cloudTable;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(PoException.class, e, ErrorEnum.ERROR_PO_TABLE_NOT_FOUND);
+		}
+		
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 	    	HashMap<String, String> map = new HashMap<>();
 	    	map.put("Status",String.valueOf(entity.getSupplierDeliveryState()));
@@ -126,9 +142,14 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	 * @see com.jci.po.repo.PoRepo#getErrorPos(java.lang.String, java.util.List)
 	 */
 	@Override
-	public Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+	public Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList)  {
 		String query = QueryBuilder.getErrorPosQuery(partitionKey,poList);
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+		CloudTable cloudTable;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(PoException.class, e, ErrorEnum.ERROR_POITEM_TABLE_NOT_FOUND);
+		}
 		OperationContext opContext = new OperationContext();
 		TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);//Need to discuss this
 		
@@ -163,12 +184,17 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	 * @see com.jci.po.repo.PoRepo#getPoDetails(java.lang.String, java.util.List)
 	 */
 	@Override
-	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList)  {
 		String query = QueryBuilder.processPosQuery(partitionKey,poList);
 		List<PoEntity> errorData = new ArrayList<>();
 		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 		
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+		CloudTable cloudTable;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(PoException.class, e, ErrorEnum.ERROR_PO_TABLE_NOT_FOUND);
+		}
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 	    	errorData.add(entity);
 	    }
@@ -179,7 +205,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
     * @see com.jci.po.repo.PoRepo#getSegmentedResultSet(com.jci.po.azure.query.ScrollingParam, com.jci.po.azure.data.DataHelper)
     */
    @Override
-	public ResultSet getSegmentedResultSet(ScrollingParam param,DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException  {
+	public ResultSet getSegmentedResultSet(ScrollingParam param,DataHelper request)   {
 		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
 		PaginationParam pagination = new PaginationParam();
 		if(continuationToken != null) {
@@ -200,10 +226,20 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		 }
 		 
 		TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
-		 CloudTable table = azureStorage.getTable(request.getTableName());
+		 CloudTable table;
+		try {
+			table = azureStorage.getTable(request.getTableName());
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(PoException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,request.getTableName());
+		}
 		 
 		// segmented query
-       ResultSegment<DynamicTableEntity> response = table.executeSegmented(query, continuationToken) ;
+        ResultSegment<DynamicTableEntity> response=null;
+		try {
+			response = table.executeSegmented(query, continuationToken);
+		} catch (StorageException e) {
+			throw errorService.createException(PoException.class, e, ErrorEnum.ERROR_PO_SEGMENTED_QUERY, query);
+		}
        
 		// next continuation token
 		continuationToken = response.getContinuationToken() ;
@@ -240,7 +276,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	 * @see com.jci.po.repo.PoRepo#getPoItemDetail(com.jci.po.azure.query.ScrollingParam, com.jci.po.azure.data.DataHelper)
 	 */
 	@Override
-	public ResultSet getPoItemDetail(ScrollingParam param,DataHelper request)	throws InvalidKeyException, URISyntaxException, StorageException {
+	public ResultSet getPoItemDetail(ScrollingParam param,DataHelper request)	 {
 		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
 		PaginationParam pagination = new PaginationParam();
 		if(continuationToken != null) {
@@ -250,15 +286,26 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		 
 		// Create the query
 		String  whereCondition = QueryBuilder.poItemDetailQuery(request);
-		 if(StringUtils.isBlank(whereCondition) ){
-			 return null;
-		 }
+		if(StringUtils.isBlank(whereCondition) ){
+			return null;
+		}
 		 
-		 TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
-		  CloudTable table = azureStorage.getTable(request.getTableName());
+		TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
+		CloudTable table;
+		
+		try {
+			table = azureStorage.getTable(request.getTableName());
+		} catch (InvalidKeyException | URISyntaxException | StorageException e1) {
+			throw errorService.createException(PoException.class, e1, ErrorEnum.ERROR_TABLE_NOT_FOUND,request.getTableName());
+		}
        
 		// segmented query
-       ResultSegment<DynamicTableEntity> response = table.executeSegmented(query, continuationToken) ;
+       ResultSegment<DynamicTableEntity> response=null;
+		try {
+			response = table.executeSegmented(query, continuationToken);
+		} catch (StorageException e1) {
+			throw errorService.createException(PoException.class, e1, ErrorEnum.ERROR_POITEM_SEGMENTED_QUERY,query);
+		}
        
 		// next continuation token
 		continuationToken = response.getContinuationToken() ;
@@ -271,7 +318,6 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 		
 		List<HashMap<String, Object>> series = new ArrayList<>();
 		DynamicTableEntity row;
-		EntityProperty ep;
 		ObjectMapper mapper = new ObjectMapper(); 
 		TypeReference<HashMap<String,Object>> typeRef  = new TypeReference<HashMap<String,Object>>() {};
 		Iterator<DynamicTableEntity> rows = response.getResults().iterator() ;
@@ -280,18 +326,15 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 			row = rows.next() ;
 			HashMap<String, EntityProperty> map = row.getProperties();
 			hashmap = new HashMap<>();
-			
-			for (String key : map.keySet()) {
-				ep = map.get(key);
-				if(Constants.JSON_STRING.equals(key)){
-					try {
-						hashmap = mapper.readValue(ep.getValueAsString(), typeRef);
-						hashmap.put("id", row.getRowKey());  
-					} catch (IOException e) {
-						LOG.error("### Exception in   ####",e);
-					} 
-				}
-			}
+			String jsonString = map.get(Constants.JSON_STRING).getValueAsString();
+            if(!StringUtils.isBlank(jsonString)){
+                try {
+                    hashmap = mapper.readValue(jsonString, typeRef);
+                    hashmap.put("id", row.getRowKey());  
+                } catch (IOException e) {
+                    LOG.error("### Exception in   ####",e);                        
+                } 
+            }
 			series.add(hashmap);
 		}
 		return new ResultSet(series,pagination) ;

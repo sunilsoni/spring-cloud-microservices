@@ -5,16 +5,12 @@
  */
 package com.jci.po.service;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
-
 import com.jci.dto.BatchUpdateRes;
 import com.jci.dto.SegmentedDetailReq;
 import com.jci.dto.SegmentedDetailRes;
 import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.res.PoItemDetailRes;
-import com.microsoft.azure.storage.StorageException;
 
 
 /**
@@ -26,47 +22,11 @@ import com.microsoft.azure.storage.StorageException;
  */
 public interface PoService {
 	
-	/**
-	 * Gets the segmented result set.
-	 *
-	 * @param request the request
-	 * @return the segmented result set
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	SegmentedDetailRes getSegmentedResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException;
+	SegmentedDetailRes getSegmentedResultSet(SegmentedDetailReq request) ;
 	
-	/**
-	 * Gets the error result set.
-	 *
-	 * @param request the request
-	 * @return the error result set
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	SegmentedDetailRes getErrorResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException;
+	SegmentedDetailRes getErrorResultSet(SegmentedDetailReq request) ;
 	
-	/**
-	 * Process error pos.
-	 *
-	 * @param request the request
-	 * @return the batch update res
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	BatchUpdateRes processErrorPos(PoDetailsReq request)throws InvalidKeyException, URISyntaxException, StorageException;
+	BatchUpdateRes processErrorPos(PoDetailsReq request);
 	
-	/**
-	 * Gets the po item detail.
-	 *
-	 * @param request the request
-	 * @return the po item detail
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	PoItemDetailRes getPoItemDetail(PoItemDetailReq request)throws InvalidKeyException, URISyntaxException, StorageException;
+	PoItemDetailRes getPoItemDetail(PoItemDetailReq request);
 }

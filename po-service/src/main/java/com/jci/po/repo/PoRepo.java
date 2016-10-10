@@ -5,8 +5,6 @@
  */
 package com.jci.po.repo;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +14,6 @@ import com.jci.azure.DataHelper;
 import com.jci.azure.ResultSet;
 import com.jci.azure.ScrollingParam;
 import com.jci.entity.PoEntity;
-import com.microsoft.azure.storage.StorageException;
 
 
 
@@ -29,61 +26,13 @@ import com.microsoft.azure.storage.StorageException;
  */
 public interface PoRepo {
 	
-	/**
-	 * Gets the segmented result set.
-	 *
-	 * @param param the param
-	 * @param request the request
-	 * @return the segmented result set
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	ResultSet getSegmentedResultSet(ScrollingParam param, DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException;
+	ResultSet getSegmentedResultSet(ScrollingParam param, DataHelper request) ;
 	
-	/**
-	 * Gets the graph data.
-	 *
-	 * @return the graph data
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	HashMap<String, ArrayList<Integer>> getGraphData() throws InvalidKeyException, URISyntaxException, StorageException ;
+	HashMap<String, ArrayList<Integer>> getGraphData()  ;
 	
-	/**
-	 * Gets the error pos.
-	 *
-	 * @param partitionKey the partition key
-	 * @param poList the po list
-	 * @return the error pos
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException; // NO_UCD (unused code)
+	Map<String,List<HashMap<String, Object>>> getErrorPos(String partitionKey, List<String> poList) ; // NO_UCD (unused code)
 	
-	/**
-	 * Gets the po details.
-	 *
-	 * @param partitionKey the partition key
-	 * @param poList the po list
-	 * @return the po details
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException ; // NO_UCD (unused code)
+	List<PoEntity> getPoDetails(String partitionKey, List<String> poList)  ; // NO_UCD (unused code)
 	
-	/**
-	 * Gets the po item detail.
-	 *
-	 * @param param the param
-	 * @param request the request
-	 * @return the po item detail
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	ResultSet getPoItemDetail(ScrollingParam param,DataHelper request)throws InvalidKeyException, URISyntaxException, StorageException;
+	ResultSet getPoItemDetail(ScrollingParam param,DataHelper request);
 }

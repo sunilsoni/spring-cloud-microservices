@@ -5,8 +5,6 @@
  */
 package com.jci.po.service;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,14 +23,16 @@ import com.jci.azure.ScrollingParam;
 import com.jci.dto.BatchUpdateRes;
 import com.jci.dto.SegmentedDetailReq;
 import com.jci.dto.SegmentedDetailRes;
+import com.jci.enums.ErrorEnum;
+import com.jci.exception.ErrorService;
 import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.req.ProcessErrorReq;
 import com.jci.po.dto.res.PoItemDetailRes;
 import com.jci.po.dto.res.ProcessErrorRes;
+import com.jci.po.exception.PoException;
 import com.jci.po.repo.PoRepo;
 import com.jci.utils.Constants;
-import com.microsoft.azure.storage.StorageException;
 
 
 /**
@@ -61,11 +61,14 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 	@Autowired
     FlatFileClientImpl client;
 	
+    @Autowired
+    private ErrorService errorService;
+	
 	/* (non-Javadoc)
 	 * @see com.jci.po.service.PoService#getSegmentedResultSet(com.jci.po.dto.req.SegmentedDetailReq)
 	 */
 	@Override
-	public SegmentedDetailRes getSegmentedResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException  {
+	public SegmentedDetailRes getSegmentedResultSet(SegmentedDetailReq request)   {
 		PaginationParam paginationParam = request.getPaginationParam();
 		
 		ScrollingParam param  = new ScrollingParam();
@@ -137,7 +140,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 	 * @see com.jci.po.service.PoService#getErrorResultSet(com.jci.po.dto.req.SegmentedDetailReq)
 	 */
 	@Override
-	public SegmentedDetailRes getErrorResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException {
+	public SegmentedDetailRes getErrorResultSet(SegmentedDetailReq request)  {
 		PaginationParam paginationParam = request.getPaginationParam();
 		
 		ScrollingParam param  = new ScrollingParam();
@@ -173,7 +176,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 	 * @see com.jci.po.service.PoService#processErrorPos(com.jci.po.dto.req.PoDetailsReq)
 	 */
 	@Override
-	public BatchUpdateRes processErrorPos(PoDetailsReq request)  throws InvalidKeyException, URISyntaxException, StorageException {
+	public BatchUpdateRes processErrorPos(PoDetailsReq request)   {
 	    
 	    LOG.info("request--->"+request);
 		BatchUpdateRes res = new BatchUpdateRes();
@@ -194,9 +197,14 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 		ffres.setTableName(Constants.TABLE_PO_DETAILS);
 		ffres.setUserName(request.getUserName());
 		
-		ResponseEntity<ProcessErrorRes> ffResponse = client.processErrorPosFlatFiles(ffres);
-		LOG.info("ffResponse--->"+ffResponse);
-		ProcessErrorRes ffPos = ffResponse.getBody();
+		ResponseEntity<ProcessErrorRes> ffResponse =null;
+		ProcessErrorRes ffPos = null;
+		try{
+			ffResponse = client.processErrorPosFlatFiles(ffres);
+			 ffPos = ffResponse.getBody();
+		}catch(Exception e){
+			throw errorService.createException(PoException.class, e, ErrorEnum.ERROR_FLATFILE_PO_ERROR_SERVICE_DOWN);
+		}
 		
 		if(ffPos==null){
 		    response.setError(true);
@@ -214,7 +222,7 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
 	 * @see com.jci.po.service.PoService#getPoItemDetail(com.jci.po.dto.req.PoItemDetailReq)
 	 */
 	@Override
-	public PoItemDetailRes getPoItemDetail(PoItemDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException {
+	public PoItemDetailRes getPoItemDetail(PoItemDetailReq request)  {
 		PaginationParam paginationParam = request.getPaginationParam();
 		ScrollingParam param  = new ScrollingParam();
 		

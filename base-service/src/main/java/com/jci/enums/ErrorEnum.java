@@ -14,6 +14,16 @@ public enum ErrorEnum {
     /** The login failure. */
     LOGIN_FAILURE("err.login.failure"),
     
+
+    /** The err system create. */
+    ERR_SYSTEM_CREATE("err.system.create.exception"),
+    
+    /** The err system db. */
+    ERR_SYSTEM_DB("err.system.bd"),
+    
+    
+    /** The err system send mail. */
+    ERR_SYSTEM_SEND_MAIL("err.system.send.mail"),
     
   //Table not found in Azure 
     ERROR_TABLE_CREATION("error.table.creation"),
@@ -140,6 +150,11 @@ public enum ErrorEnum {
     ERROR_FLATFILE_ITEM_SERVICE_DOWN("error.flatfile.item.service.down"),
     ERROR_FLATFILE_SUPP_SERVICE_DOWN("error.flatfile.supp.service.down"),
     
+    ERROR_FLATFILE_PO_ERROR_SERVICE_DOWN("error.flatfile.po.error.service.down"),
+    ERROR_FLATFILE_GR_ERROR_SERVICE_DOWN("error.flatfile.gr.error.service.down"),
+    ERROR_FLATFILE_ITEM_ERROR_SERVICE_DOWN("error.flatfile.item.error.service.down"),
+    ERROR_FLATFILE_SUPP_ERROR_SERVICE_DOWN("error.flatfile.supp.error.service.down"),
+    
     
     //error in flatfile processing
     /** The error process flatfile po. */
@@ -182,33 +197,17 @@ public enum ErrorEnum {
     /** The error user pswd value is wrong. */
     ERROR_USER_PSWD_VALUE_IS_WRONG("error.user.pswd.value.is.wrong"),
     
-    /** The error user email is not correct. */
-    ERROR_USER_EMAIL_IS_NOT_CORRECT("error.user.email.is.not.correct"),
-    
     /** The error user pswd is not correct. */
     ERROR_USER_PSWD_IS_NOT_CORRECT("error.user.pswd.is.not.correct"),
     
-    /** The error user have active content. */
-    ERROR_USER_HAVE_ACTIVE_CONTENT("error.user.have.active.content"),
     
-    /** The error user reset password. */
-    ERROR_USER_RESET_PASSWORD("error.user.reset.password"),
-    
-    /** The error user check password. */
-    ERROR_USER_CHECK_PASSWORD("error.user.check.password"),
-    
-    /** The error user change password. */
-    ERROR_USER_CHANGE_PASSWORD("error.user.change.password"),
+    //Segmented query errors
+    ERROR_PO_SEGMENTED_QUERY("error.po.segmented.query"),
+    ERROR_POITEM_SEGMENTED_QUERY("error.po.item.segmented.query"),
+    ERROR_GR_SEGMENTED_QUERY("error.gr.segmented.query"),
+    ERROR_SUPP_SEGMENTED_QUERY("error.supp.segmented.query"),
+    ERROR_ITEM_SEGMENTED_QUERY("error.item.segmented.query");
 
-    /** The err system create. */
-    ERR_SYSTEM_CREATE("err.system.create.exception"),
-    
-    /** The err system db. */
-    ERR_SYSTEM_DB("err.system.bd"),
-    
-    
-    /** The err system send mail. */
-    ERR_SYSTEM_SEND_MAIL("err.system.send.mail");
 
     /** The key. */
     public String KEY;
