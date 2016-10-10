@@ -171,8 +171,6 @@ public enum ErrorEnum {
     /** The error user pswd is not correct. */
     ERROR_USER_PSWD_IS_NOT_CORRECT("error.user.pswd.is.not.correct"),
     
-    
-    
     /** The error user have active content. */
     ERROR_USER_HAVE_ACTIVE_CONTENT("error.user.have.active.content"),
     
