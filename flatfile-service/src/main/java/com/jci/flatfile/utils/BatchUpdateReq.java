@@ -13,6 +13,7 @@ import com.microsoft.azure.storage.table.TableEntity;
 
 
 
+
 /**
  * The Class BatchUpdateReq.
  */

@@ -18,22 +18,35 @@ import com.jci.enums.MailEnum;
 import com.jci.mail.MailTemplate;
 import com.jci.mail.MailTemplateStorage;
 
+
+/**
+ * The Class MailConfig.
+ */
 @Configuration 
 @RefreshScope
 public class MailConfig {
 	
+	/** The host. */
 	@Value("${email.host}")
     private String host;
 
+    /** The port. */
     @Value("${email.port}")
     private Integer port;
     
+    /** The username. */
     @Value("${email.username}")
     private String username;
     
+    /** The password. */
     @Value("${email.password}")
     private String password;
 
+    /**
+     * Java mail service.
+     *
+     * @return the java mail sender
+     */
     @Bean
     public JavaMailSender javaMailService() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
@@ -48,6 +61,11 @@ public class MailConfig {
         return javaMailSender;
     }
 
+    /**
+     * Gets the mail properties.
+     *
+     * @return the mail properties
+     */
     private Properties getMailProperties() {
         Properties properties = new Properties();
         properties.put("mail.transport.protocol", "smtp");
@@ -58,11 +76,21 @@ public class MailConfig {
         return properties;
     }
     
+    /**
+     * Task executor adapter.
+     *
+     * @return the task executor adapter
+     */
     @Bean
     public TaskExecutorAdapter taskExecutorAdapter() {
         return new TaskExecutorAdapter(Executors.newCachedThreadPool());
     }
     
+    /**
+     * Email template resolver.
+     *
+     * @return the class loader template resolver
+     */
     @Bean
     public ClassLoaderTemplateResolver emailTemplateResolver(){
         ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
@@ -75,6 +103,11 @@ public class MailConfig {
         return emailTemplateResolver;
     }
     
+    /**
+     * Gets the mail template.
+     *
+     * @return the mail template
+     */
     @Bean
     public MailTemplateStorage getMailTemplate() {    	
     	Map<MailEnum, MailTemplate> mailTemplates  = new HashMap<>();

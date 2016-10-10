@@ -7,6 +7,7 @@ package com.jci.dto;
 
 import com.jci.azure.PaginationParam;
 
+
 /**
  * <p>
  * <strong> The Class SegmentedDetailReq.</strong>

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import com.jci.azure.ResultSet;
 
 
+
 /**
  * <p>
  * <strong> The Class SegmentedDetailRes.</strong>

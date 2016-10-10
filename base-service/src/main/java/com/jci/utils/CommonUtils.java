@@ -35,6 +35,7 @@ import com.jci.entity.SuppEntity;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.TableQuery;
 
+
 /**
  * <p>
  * <strong>Define all  Common utilities methods here .</strong>
@@ -106,9 +107,9 @@ public class CommonUtils {
 	 * @param destName the dest name
 	 * @param jasonValue the jason value
 	 * @return the git json mapping
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonParseException 
+	 * @throws JsonParseException the json parse exception
+	 * @throws JsonMappingException the json mapping exception
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public TreeMap<String,HashMap<Integer,String>> getGitJsonMapping(String destName, String jasonValue) throws JsonParseException, JsonMappingException, IOException{
 		HashMap<Integer, String> map=null;

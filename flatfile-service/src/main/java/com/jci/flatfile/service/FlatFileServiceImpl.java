@@ -31,6 +31,7 @@ import com.jci.utils.Constants;
 import com.microsoft.azure.storage.table.TableEntity;
 
 
+
 /**
  * The Class Flat FileServiceImpl.
  */
@@ -56,6 +57,7 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
     @Autowired
     private GitClientImpl git;
     
+    /** The error service. */
     @Autowired
     private ErrorService errorService;
     
@@ -152,11 +154,7 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
     public String processGrFlatFiles() {
     	LOG.info("####### Starting  FlatFileServiceImpl.processGrFlatFiles #########");
         String tempDir = System.getProperty("java.io.tmpdir");
-        
-		
-		
         CommonUtils utils = new CommonUtils();
-        //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getGrMappingFileUrl());
         TreeMap<String,HashMap<Integer,String>> mappingList = null;
         
         try {
@@ -174,8 +172,6 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
             String partitionKey = erpArr[i].toUpperCase();
             
             FlatFileRes res = repo.getFlatFileData(partitionKey,Constants.TABLE_GR_DETAILS);
-            
-            //plant name to total records map
             
             Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
             Map<String,List<HashMap<String, Object>>> plantToRowsMap = res.getPlantToRowsMap();
@@ -269,8 +265,6 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         String tempDir = System.getProperty("java.io.tmpdir");
         
         CommonUtils utils = new CommonUtils();
-        
-        //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getSuppMappingFileUrl());
         TreeMap<String,HashMap<Integer,String>> mappingList = null;
         
         try {
@@ -289,9 +283,6 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
             String partitionKey = erpArr[i].toUpperCase();
             
             FlatFileRes res = repo.getFlatFileData(partitionKey,Constants.TABLE_SUPPLIER);
-            
-            //plant name to total records map
-            
             Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
             Map<String,List<HashMap<String, Object>>> plantToRowsMap = res.getPlantToRowsMap();
             Map<String, String> plantToSupptypeMap = res.getPlantToSupptypeMap();
@@ -384,7 +375,6 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         String tempDir = System.getProperty("java.io.tmpdir");
         
         CommonUtils utils = new CommonUtils();
-        //TreeMap<String,HashMap<Integer,String>> mappingList = utils.getDestMapping(config.getItemMappingFileUrl());
         TreeMap<String,HashMap<Integer,String>> mappingList = null;
 
         try {

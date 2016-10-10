@@ -9,6 +9,7 @@ import com.microsoft.azure.storage.table.TableServiceEntity;
 
 
 
+
 /**
  * The Class MiscDataEntity.
  */

@@ -10,8 +10,15 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
 
+
+/**
+ * The Class BundleUTF8Control.
+ */
 public class BundleUTF8Control extends Control {
 	
+	/* (non-Javadoc)
+	 * @see java.util.ResourceBundle.Control#newBundle(java.lang.String, java.util.Locale, java.lang.String, java.lang.ClassLoader, boolean)
+	 */
 	public ResourceBundle newBundle(String baseName, Locale locale, String format, 
 			ClassLoader loader, boolean reload)	throws IllegalAccessException,
 			InstantiationException, IOException {

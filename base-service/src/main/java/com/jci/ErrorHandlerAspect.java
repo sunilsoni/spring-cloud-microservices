@@ -28,42 +28,63 @@ import com.jci.mail.MailService;
 import com.jci.mail.MailTemplate;
 import com.jci.mail.MailTemplateStorage;
 
+
+/**
+ * The Class ErrorHandlerAspect.
+ */
 @Aspect
 @Service
 public class ErrorHandlerAspect {
 
+    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(ErrorHandlerAspect.class);
     
     
+    /** The mail templates. */
     Map<MailEnum, MailTemplate> mailTemplates;
 
+    /** The journal service. */
     @Autowired
     private JournalService journalService;
 
+    /** The mail service. */
     @Autowired
     private MailService mailService;
 
+    /** The mail template storage. */
     @Autowired
     private MailTemplateStorage mailTemplateStorage;
 
+    /** The err journalables. */
     @Value("${error.journalables:}")
     private String errJournalables;
 
+    /** The err mailables. */
     @Value("${error.mailables:}")
     private String errMailables;
 
+    /** The err emails. */
     @Value("${error.emails:}")
     private String errEmails;
 
+    /** The node name. */
     @Value("${node.name:}")
     private String nodeName;
 
+    /** The journalables. */
     private Set<String> journalables;
 
+    /** The mailables. */
     private Set<String> mailables;
 
+    /** The emails. */
     private String[] emails;
 
+    /**
+     * Inits the.
+     *
+     * @throws ClassNotFoundException the class not found exception
+     */
     @PostConstruct
     public void init() throws ClassNotFoundException {
         LOG.info("#### Starting ErrorHandlerAspect initialization #####");
@@ -113,18 +134,26 @@ public class ErrorHandlerAspect {
         LOG.info("#### Ending ErrorHandlerAspect initialization #####");
     }
 
+    /**
+     * In service layer.
+     */
     @Pointcut("execution(* com.jci..*(..))")//Sunil: Check this
     public void inServiceLayer() {
     	LOG.info("#### Starting Ending ErrorHandlerAspect inServiceLayer #####");
     }
 
+    /**
+     * Do after throwing.
+     *
+     * @param joinPoint the join point
+     * @param e the e
+     */
     @AfterThrowing(pointcut = "inServiceLayer()", throwing = "e")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
     	 LOG.info("#### Starting ErrorHandlerAspect doAfterThrowing #####");
         LOG.error("An exception " + e + " has been thrown in " + joinPoint.getSignature().getName() + "()", e);
 
         if (e instanceof Journalable || (journalables != null && journalables.contains(e.getClass().getName()))) {
-        	 LOG.info(" Journalable---");
             try {
                 journalService.addError(e);
                 LOG.debug("Add exception " + e + " to journal");
@@ -132,12 +161,8 @@ public class ErrorHandlerAspect {
                 LOG.error("Could not write exception to journal", e1);
             }
         }
-        LOG.info(" getName---"+e.getClass().getName());
-        LOG.info(" mailables---"+mailables);
-        LOG.info(" instanceof---"+(e instanceof Mailable));
         
         if (e instanceof Mailable || (mailables != null && mailables.contains(e.getClass().getName()))) {
-        	 LOG.info(" Mailable---");
             try {
                 String stackTrace = StringUtils.join(ExceptionUtils.getStackFrames(e), "<br />");
                 MailTemplate mailTemplate = mailTemplateStorage.getMailTemplate(MailEnum.ERROR);

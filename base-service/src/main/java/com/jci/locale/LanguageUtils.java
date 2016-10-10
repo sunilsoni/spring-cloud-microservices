@@ -2,10 +2,21 @@ package com.jci.locale;
 
 import java.util.Locale;
 
+
+/**
+ * The Class LanguageUtils.
+ */
 public class LanguageUtils {
 
+	/** The Constant ENGLISH. */
 	private static final Locale ENGLISH = Locale.ENGLISH;
 
+	/**
+	 * Gets the language by locale.
+	 *
+	 * @param locale the locale
+	 * @return the language by locale
+	 */
 	public static String getLanguageByLocale(Locale locale) {
 		if (locale != null && locale.getLanguage() != null) {
 			switch (locale.getLanguage()) {
@@ -40,6 +51,11 @@ public class LanguageUtils {
 		}
 	}
 
+	/**
+	 * Gets the english locale.
+	 *
+	 * @return the english locale
+	 */
 	public static Locale getEnglishLocale() {
 		return ENGLISH;
 	}

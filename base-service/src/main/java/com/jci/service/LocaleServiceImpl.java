@@ -13,24 +13,37 @@ import org.springframework.web.servlet.LocaleResolver;
 
 import com.jci.locale.LocaleService;
 
+
+/**
+ * The Class LocaleServiceImpl.
+ */
 @Service
 public class LocaleServiceImpl implements LocaleService {
 
+	/** The request. */
 	@Autowired(required = false)
 	private HttpServletRequest request;
 
+	/** The locale resolver. */
 	@Autowired(required = false)
 	private LocaleResolver localeResolver;
 
+	/** The message source. */
 	@Resource(name = "messageSource")
 	private MessageSource messageSource;
 
+	/* (non-Javadoc)
+	 * @see com.jci.locale.LocaleService#getCurrentLocale()
+	 */
 	@Override
 	public Locale getCurrentLocale() {
 		return (request != null && localeResolver != null) ? localeResolver.resolveLocale(request) : Locale
 				.getDefault();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.jci.locale.LocaleService#getMessage(java.lang.String)
+	 */
 	@Override
 	public String getMessage(String key) {
 		String result = null;

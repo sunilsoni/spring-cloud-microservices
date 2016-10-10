@@ -1,8 +1,21 @@
 package com.jci.enums;
 
+
 /**
- * List of possible mail massages
+ * List of possible mail massages.
  */
 public enum MailEnum {
-     ERROR, PO, ITEM, SUPPLIER, GR, MISCDATA
+     
+     /** The error. */
+     ERROR, 
+ /** The po. */
+ PO, 
+ /** The item. */
+ ITEM, 
+ /** The supplier. */
+ SUPPLIER, 
+ /** The gr. */
+ GR, 
+ /** The miscdata. */
+ MISCDATA
 }

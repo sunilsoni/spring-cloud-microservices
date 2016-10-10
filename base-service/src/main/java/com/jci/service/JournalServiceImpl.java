@@ -12,6 +12,10 @@ import com.jci.exception.BaseException;
 import com.jci.mail.JournalRecord;
 import com.jci.mail.JournalService;
 
+
+/**
+ * The Class JournalServiceImpl.
+ */
 @Service
 public class JournalServiceImpl implements JournalService {
 
@@ -23,6 +27,9 @@ public class JournalServiceImpl implements JournalService {
 		return journalRepository.save(record);
 	}*/
 
+	/* (non-Javadoc)
+	 * @see com.jci.mail.JournalService#addError(java.lang.Throwable)
+	 */
 	@Override
 	public JournalRecord addError(Throwable e) {
 		JournalRecord record = new JournalRecord();

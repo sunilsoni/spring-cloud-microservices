@@ -23,33 +23,49 @@ import com.jci.enums.MailSenderEnum;
 import com.jci.mail.Mail;
 import com.jci.mail.MailService;
 
+
+/**
+ * The Class MailServiceImpl.
+ */
 @Service
 public class MailServiceImpl implements MailService {
 
+	/** The Constant LOG. */
 	private static final Logger LOG = LoggerFactory.getLogger(MailServiceImpl.class);
+    
+    /** The Constant NO_DATA_WAIT_TIME. */
     private static final long NO_DATA_WAIT_TIME = 5000L;
 
 
   /*  @Autowired
     private MailRepository mailRepository;*/
 
+    /** The mail sender. */
     @Autowired
     private JavaMailSender mailSender;
 
+    /** The mail queue. */
     private ConcurrentLinkedQueue<Mail> mailQueue = new ConcurrentLinkedQueue<>();
 
+    /** The is active. */
     private AtomicBoolean isActive = new AtomicBoolean();
 
+    /** The is send mail. */
     @Value("${mail.send:true}")
     private boolean isSendMail;
 
+    /** The node name. */
     @Value("${node.name:}")
     private String nodeName;
     
 
+    /** The task executor adapter. */
     @Autowired
     private TaskExecutorAdapter taskExecutorAdapter;
 
+    /**
+     * Start.
+     */
     @PostConstruct
     private void start() {
     	LOG.info("#### Starting MailServiceImpl.start initialization ... #####");
@@ -63,6 +79,9 @@ public class MailServiceImpl implements MailService {
         LOG.info("#### Ending MailServiceImpl.start  #####");
     }
 
+    /**
+     * Stop.
+     */
     @PreDestroy
     private void stop() {
         if (isSendMail) {
@@ -70,6 +89,9 @@ public class MailServiceImpl implements MailService {
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.jci.mail.MailService#sendNoreplyMessage(java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public void sendNoreplyMessage(String to, String subject, String text) {
     	LOG.info("#### Starting MailServiceImpl.sendNoreplyMessage  #####");
@@ -81,6 +103,9 @@ public class MailServiceImpl implements MailService {
         LOG.info("#### Ending MailServiceImpl.sendNoreplyMessage  #####");
     }
 
+    /* (non-Javadoc)
+     * @see com.jci.mail.MailService#sendNoreplyMessage(java.lang.String[], java.lang.String, java.lang.String)
+     */
     @Override
     public void sendNoreplyMessage(String[] to, String subject, String text) {
     	LOG.info("#### Starting MailServiceImpl.sendNoreplyMessage  #####");
@@ -104,6 +129,12 @@ public class MailServiceImpl implements MailService {
         LOG.info("#### Ending MailServiceImpl.sendNoreplyMessage  #####");
     }
 
+    /**
+     * Send no reply mail.
+     *
+     * @param mail the mail
+     * @throws MessagingException the messaging exception
+     */
     public void sendNoReplyMail(Mail mail) throws MessagingException {
     	LOG.info("#### Starting MailServiceImpl.sendNoReplyMail  #####");
         MimeMessage message = mailSender.createMimeMessage();
@@ -116,8 +147,14 @@ public class MailServiceImpl implements MailService {
         LOG.info("#### Ending MailServiceImpl.sendNoReplyMail  #####");
     }
 
+    /**
+     * The Class MailSender.
+     */
     private class MailSender implements Runnable {
     	
+        /* (non-Javadoc)
+         * @see java.lang.Runnable#run()
+         */
         @Override
         public void run() {
             try {

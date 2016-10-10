@@ -5,6 +5,7 @@
  */
 package com.jci.utils;
 
+
 /**
  * <p>
  * <strong>Define all  Common utilities methods here .</strong>
@@ -105,6 +106,7 @@ public class Constants {
 	/** The Constant TIME_ZONE. */
     public static final String TIME_ZONE = "UTC";
 	
+	/** The Constant SUPPLIER_TYPE_E2OPEN. */
 	public static final String SUPPLIER_TYPE_E2OPEN = "e2open";
 	
 	/** The Constant JSON_OK. */
