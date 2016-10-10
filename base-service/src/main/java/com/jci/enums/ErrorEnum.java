@@ -14,9 +14,10 @@ public enum ErrorEnum {
     /** The login failure. */
     LOGIN_FAILURE("err.login.failure"),
     
+    
+  //Table not found in Azure 
     ERROR_TABLE_CREATION("error.table.creation"),
     /** The error table not found. */
-    //Table not found in Azure 
     ERROR_TABLE_NOT_FOUND("error.table.not.found"),
     
     /** The error po table not found. */
@@ -37,43 +38,44 @@ public enum ErrorEnum {
     /** The error miscdata table not found. */
     ERROR_MISCDATA_TABLE_NOT_FOUND("error.supp.table.not.found"),
     
-    /** The error po data not found. */
+    
     //Records not found in Azure storage table
-    ERROR_PO_ENTITY_NOT_FOUND("error.po.not.found"),
+    /** The error po data not found. */
+    ERROR_PO_ENTITY_NOT_FOUND("error.po.entity.not.found"),
     
     /** The error gr data not found. */
-    ERROR_GR_ENTITY_NOT_FOUND("error.gr.not.found"),
+    ERROR_GR_ENTITY_NOT_FOUND("error.gr.entity.not.found"),
     
     /** The error item data not found. */
-    ERROR_ITEM_ENTITY_NOT_FOUND("error.item.not.found"),
+    ERROR_ITEM_ENTITY_NOT_FOUND("error.item.entity.not.found"),
     
     /** The error supp data not found. */
-    ERROR_SUPP_ENTITY_NOT_FOUND("error.supp.not.found"),
+    ERROR_SUPP_ENTITY_NOT_FOUND("error.supp.entity.not.found"),
     
     /** The error flatfile data not found. */
-    ERROR_FLATFILE_ENTITY_NOT_FOUND("error.flatfile.data.not.found"),
+    ERROR_FLATFILE_ENTITY_NOT_FOUND("error.flatfile.entity.not.found"),
     
-    ERROR_MISCDATA_ENTITY_NOT_FOUND("error.flatfile.data.not.found"),
+    ERROR_MISCDATA_ENTITY_NOT_FOUND("error.miscdata.entity.not.found"),
     
 
     //Exception while inserting data in Table
     /** The error podetails insert data. */
-    ERROR_PODETAILS_INSERT_DATA("error.po.table.not.found"),
+    ERROR_PODETAILS_INSERT_DATA("error.po.table.insert.entity"),
     
     /** The error grdetails insert data. */
-    ERROR_GRDETAILS_INSERT_DATA("error.gr.table.not.found"),
+    ERROR_GRDETAILS_INSERT_DATA("error.gr.table.insert.entity"),
     
     /** The error supplier insert data. */
-    ERROR_SUPPLIER_INSERT_DATA("error.item.table.not.found"),
+    ERROR_SUPPLIER_INSERT_DATA("error.supp.table.insert.entity"),
     
     /** The error item insert data. */
-    ERROR_ITEM_INSERT_DATA("error.supp.table.not.found"),
+    ERROR_ITEM_INSERT_DATA("error.item.table.insert.entity"),
     
     /** The error miscdata insert data. */
-    ERROR_MISCDATA_INSERT_DATA("error.po.table.not.found"),
+    ERROR_MISCDATA_INSERT_DATA("error.miscdata.table.insert.entity"),
     
     
-  //Exception while updating Table data
+   //Exception while updating Table data
     /** The error podetails update data. */
     ERROR_PODETAILS_UPDATE_DATA("error.po.table.not.found"),
     
@@ -89,8 +91,9 @@ public enum ErrorEnum {
     /** The error miscdata update data. */
     ERROR_MISCDATA_UPDATE_DATA("error.po.table.not.found"),
     
-    /** The error apigee po get. */
+    
     //Apigee GET request errors
+    /** The error apigee po get. */
     ERROR_APIGEE_PO_GET("error.supp.table.not.found"),
     
     /** The error apigee gr get. */
@@ -131,7 +134,7 @@ public enum ErrorEnum {
     ERROR_GENERATE_FLATFILE_SUPP("error.supp.table.not.found"), 
     
     
-    //fLATFILE service is down
+    //FLATFILE service is down
     ERROR_FLATFILE_PO_SERVICE_DOWN("error.flatfile.po.service.down"),
     ERROR_FLATFILE_GR_SERVICE_DOWN("error.flatfile.gr.service.down"),
     ERROR_FLATFILE_ITEM_SERVICE_DOWN("error.flatfile.item.service.down"),
