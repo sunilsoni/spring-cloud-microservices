@@ -12,6 +12,7 @@ import com.jci.azure.ResultSet;
 
 
 
+
 /**
  * <p>
  * <strong> The Class SegmentedDetailRes.</strong>

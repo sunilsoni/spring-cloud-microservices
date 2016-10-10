@@ -12,6 +12,7 @@ import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
 import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
 
+
 /**
  * <p>
  * <strong>The Class QueryBuilder for Azure Tables.</strong>

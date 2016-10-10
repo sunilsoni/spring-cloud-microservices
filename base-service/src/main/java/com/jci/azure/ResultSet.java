@@ -10,6 +10,7 @@ import java.util.List;
 
 
 
+
 /**
  * <p>
  * <strong>The Class ResultSet for managing Azure Table Data.</strong>

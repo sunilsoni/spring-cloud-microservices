@@ -1,6 +1,7 @@
 package com.jci.mail;
 
 
+
 /**
  * The interface for objects that are stored in a separate collection.
  */

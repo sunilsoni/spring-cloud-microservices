@@ -4,6 +4,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 
+
 /**
  * Base object for all entities that are stored in the collection and have a
  * unique identifier.

@@ -1,6 +1,7 @@
 package com.jci.enums;
 
 
+
 /**
  * The Enum MailSenderEnum.
  */

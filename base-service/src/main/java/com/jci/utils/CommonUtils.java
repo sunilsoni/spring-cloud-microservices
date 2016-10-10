@@ -36,6 +36,7 @@ import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.TableQuery;
 
 
+
 /**
  * <p>
  * <strong>Define all  Common utilities methods here .</strong>

@@ -12,6 +12,7 @@ import com.jci.mail.JournalRecord;
 import com.jci.mail.JournalService;
 
 
+
 /**
  * The Class JournalServiceImpl.
  */

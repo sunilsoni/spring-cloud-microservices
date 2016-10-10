@@ -7,6 +7,7 @@ import com.jci.enums.ModuleEnum;
 import com.jci.enums.RecordLevelEnum;
 
 
+
 /**
  * Journal to record errors.
  */

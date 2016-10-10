@@ -1,6 +1,7 @@
 package com.jci.enums;
 
 
+
 /**
  * Error list from:
  * <p/>
@@ -25,7 +26,9 @@ public enum ErrorEnum {
     /** The err system send mail. */
     ERR_SYSTEM_SEND_MAIL("err.system.send.mail"),
     
-  //Table not found in Azure 
+    
+    //Table not found in Azure 
+  /** The error table creation. */
     ERROR_TABLE_CREATION("error.table.creation"),
     /** The error table not found. */
     ERROR_TABLE_NOT_FOUND("error.table.not.found"),
@@ -65,6 +68,7 @@ public enum ErrorEnum {
     /** The error flatfile data not found. */
     ERROR_FLATFILE_ENTITY_NOT_FOUND("error.flatfile.entity.not.found"),
     
+    /** The error miscdata entity not found. */
     ERROR_MISCDATA_ENTITY_NOT_FOUND("error.miscdata.entity.not.found"),
     
 
@@ -144,15 +148,29 @@ public enum ErrorEnum {
     ERROR_GENERATE_FLATFILE_SUPP("error.supp.table.not.found"), 
     
     
+    /** The error flatfile po service down. */
     //FLATFILE service is down
     ERROR_FLATFILE_PO_SERVICE_DOWN("error.flatfile.po.service.down"),
+    
+    /** The error flatfile gr service down. */
     ERROR_FLATFILE_GR_SERVICE_DOWN("error.flatfile.gr.service.down"),
+    
+    /** The error flatfile item service down. */
     ERROR_FLATFILE_ITEM_SERVICE_DOWN("error.flatfile.item.service.down"),
+    
+    /** The error flatfile supp service down. */
     ERROR_FLATFILE_SUPP_SERVICE_DOWN("error.flatfile.supp.service.down"),
     
+    /** The error flatfile po error service down. */
     ERROR_FLATFILE_PO_ERROR_SERVICE_DOWN("error.flatfile.po.error.service.down"),
+    
+    /** The error flatfile gr error service down. */
     ERROR_FLATFILE_GR_ERROR_SERVICE_DOWN("error.flatfile.gr.error.service.down"),
+    
+    /** The error flatfile item error service down. */
     ERROR_FLATFILE_ITEM_ERROR_SERVICE_DOWN("error.flatfile.item.error.service.down"),
+    
+    /** The error flatfile supp error service down. */
     ERROR_FLATFILE_SUPP_ERROR_SERVICE_DOWN("error.flatfile.supp.error.service.down"),
     
     
@@ -201,11 +219,20 @@ public enum ErrorEnum {
     ERROR_USER_PSWD_IS_NOT_CORRECT("error.user.pswd.is.not.correct"),
     
     
+    /** The error po segmented query. */
     //Segmented query errors
     ERROR_PO_SEGMENTED_QUERY("error.po.segmented.query"),
+    
+    /** The error poitem segmented query. */
     ERROR_POITEM_SEGMENTED_QUERY("error.po.item.segmented.query"),
+    
+    /** The error gr segmented query. */
     ERROR_GR_SEGMENTED_QUERY("error.gr.segmented.query"),
+    
+    /** The error supp segmented query. */
     ERROR_SUPP_SEGMENTED_QUERY("error.supp.segmented.query"),
+    
+    /** The error item segmented query. */
     ERROR_ITEM_SEGMENTED_QUERY("error.item.segmented.query");
 
 

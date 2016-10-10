@@ -1,6 +1,7 @@
 package com.jci.enums;
 
 
+
 /**
  * List of possible mail massages.
  */

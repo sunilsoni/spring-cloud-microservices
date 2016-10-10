@@ -1,6 +1,7 @@
 package com.jci.enums;
 
 
+
 /**
  * Enumeration of all the collections.
  */

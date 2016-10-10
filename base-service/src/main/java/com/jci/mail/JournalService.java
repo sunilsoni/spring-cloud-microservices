@@ -2,6 +2,7 @@ package com.jci.mail;
 
 
 
+
 /**
  * Service to work with system journal.
  */

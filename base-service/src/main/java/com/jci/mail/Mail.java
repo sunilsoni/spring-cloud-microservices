@@ -5,6 +5,7 @@ import org.apache.commons.lang.ArrayUtils;
 import java.util.Date;
 
 
+
 /**
  * Message queue to send.
  */

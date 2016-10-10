@@ -11,6 +11,7 @@ import java.util.List;
 
 
 
+
 /**
  * <p>
  * <strong> The Class BatchUpdateRes.</strong>
