@@ -82,33 +82,31 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
             if(apigeeResponse==null || apigeeResponse.getBody()==null ){
                 return "Failure";
             }
-		}catch(Exception e){
-			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_GET);
-		}
-           
-            
             responseBody = apigeeResponse.getBody();
-               
+            
             if(responseBody.getPoList()==null || responseBody.getPoList().size()==0){
             	 return "Failure";
             }
-            BatchInsertReq  req = PrepareBatchInsertReq.preparePoReq(responseBody);
-             
-            /**
-             * Start Storing data in Azure tables
-             */
-            List<Object> successList = repo.batchInsert(req);
-            
-             //End Storing data in Azure tables 
-            
-            SuccessReq req1 = new SuccessReq();
-            req1.setPoList(successList);
-            
-            try{
-            	responseStatus =  apigeeClient.getPoDetailsRes(req1,config.getPoKey(), plant,erp,region);
-    		}catch(Exception e){
-    			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_PUT);
-    		}
+		}catch(Exception e){
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_GET);
+		}
+        BatchInsertReq  req = PrepareBatchInsertReq.preparePoReq(responseBody);
+         
+        /**
+         * Start Storing data in Azure tables
+         */
+        List<Object> successList = repo.batchInsert(req);
+        
+         //End Storing data in Azure tables 
+        
+        SuccessReq req1 = new SuccessReq();
+        req1.setPoList(successList);
+        
+        try{
+        	responseStatus =  apigeeClient.getPoDetailsRes(req1,config.getPoKey(), plant,erp,region);
+		}catch(Exception e){
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_PUT);
+		}
              
           processPoFlatFile() ;
 		return responseStatus;
@@ -182,7 +180,6 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			}catch(Exception e){
 				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_ITEM_GET);
 			}
-    		
     		
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody);
     		if(req==null){

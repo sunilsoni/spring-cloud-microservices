@@ -60,9 +60,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
     @Autowired
     private ErrorService errorService;
 
-	/* (non-Javadoc)
-	 * @see com.jci.job.repo.JobRepo#createTable(java.lang.String)
-	 */
 	@Override
 	public boolean createTable(String tableName) {
 		boolean isSuccess=false;
@@ -77,9 +74,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	    return isSuccess;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.jci.job.repo.JobRepo#batchInsert(com.jci.job.api.req.BatchInsertReq)
-	 */
 	@Override
 	public synchronized List<Object> batchInsert(BatchInsertReq request){ 
 		LOG.info("### Starting in JobRepoImpl.batchInsert ###");
@@ -150,16 +144,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	}
 	
 	
-	/**
-	 * Gets the status count entity.
-	 *
-	 * @param partitionKey the partition key
-	 * @param rowKey the row key
-	 * @return the status count entity
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
 	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) {
 		CloudTable cloudTable;
 		MiscDataEntity misc= null;
@@ -178,14 +162,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		return misc;
 	}
 	
-	/**
-	 * Update status count entity.
-	 *
-	 * @param entity the entity
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
 	public void updateStatusCountEntity(MiscDataEntity entity) {
 		CloudTable cloudTable;
 		try {
@@ -202,9 +178,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.jci.job.repo.JobRepo#getPoDetails(java.lang.String, java.util.List)
-	 */
 	@Override
 	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList) {
 		String query = QueryBuilder.processPosQuery(partitionKey,poList);
@@ -223,9 +196,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		 return errorData;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.jci.job.repo.JobRepo#batchUpdate(com.jci.job.api.req.BatchUpdateReq)
-	 */
 	@Override
 	public synchronized BatchUpdateRes batchUpdate(BatchUpdateReq request){		
 		int errorCount=0;
@@ -318,14 +288,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		
 	}//batchUpdate
 	
-	/**
-	 * Update misc entity.
-	 *
-	 * @param erpName the erp name
-	 * @param tableName the table name
-	 * @param successCount the success count
-	 * @param errorCount the error count
-	 */
 	private void updateMiscEntity(String erpName,String tableName,int successCount,int errorCount){
 		MiscDataEntity miscEntity=null;
 		
