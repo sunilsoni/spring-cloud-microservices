@@ -15,7 +15,7 @@ public interface ErrorService {
 	 * @param clazz the clazz
 	 * @return the t
 	 */
-	<T extends BaseException> T createException(Class<? extends BaseException> clazz);
+	<T extends BaseException> T createException(Class<? extends BaseException> clazz); // NO_UCD (unused code)
 
 	/**
 	 * Creates the exception.
@@ -25,7 +25,7 @@ public interface ErrorService {
 	 * @param error the error
 	 * @return the t
 	 */
-	<T extends BaseException> T createException(Class<? extends BaseException> clazz, ErrorEnum error);
+	<T extends BaseException> T createException(Class<? extends BaseException> clazz, ErrorEnum error); // NO_UCD (unused code)
 
 	/**
 	 * Creates the exception.
@@ -36,7 +36,7 @@ public interface ErrorService {
 	 * @param arguments the arguments
 	 * @return the t
 	 */
-	<T extends BaseException> T createException(Class<? extends BaseException> clazz, ErrorEnum error,Object... arguments);
+	<T extends BaseException> T createException(Class<? extends BaseException> clazz, ErrorEnum error,Object... arguments); // NO_UCD (unused code)
 
 	/**
 	 * Creates the exception.
@@ -46,7 +46,7 @@ public interface ErrorService {
 	 * @param cause the cause
 	 * @return the t
 	 */
-	<T extends BaseException> T createException(Class<? extends BaseException> clazz, Exception cause);
+	<T extends BaseException> T createException(Class<? extends BaseException> clazz, Exception cause); // NO_UCD (unused code)
 
 	/**
 	 * Creates the exception.

@@ -16,7 +16,7 @@ import com.jci.mail.JournalService;
  * The Class JournalServiceImpl.
  */
 @Service
-public class JournalServiceImpl implements JournalService {
+public class JournalServiceImpl implements JournalService { // NO_UCD (unused code)
 
 	/*@Autowired
 	private JournalRepository journalRepository;

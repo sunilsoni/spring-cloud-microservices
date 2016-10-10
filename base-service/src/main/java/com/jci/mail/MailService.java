@@ -14,7 +14,7 @@ public interface MailService {
 	 * @param subject            message subject
 	 * @param text            message text
 	 */
-	public void sendNoreplyMessage(String to, String subject, String text);
+	public void sendNoreplyMessage(String to, String subject, String text); // NO_UCD (unused code)
 
 	/**
 	 * Send a message from address suniltct@gmail.com to multiply addresses

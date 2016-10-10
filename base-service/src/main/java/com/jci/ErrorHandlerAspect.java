@@ -34,7 +34,7 @@ import com.jci.mail.MailTemplateStorage;
  */
 @Aspect
 @Service
-public class ErrorHandlerAspect {
+public class ErrorHandlerAspect { // NO_UCD (unused code)
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(ErrorHandlerAspect.class);

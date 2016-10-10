@@ -22,7 +22,7 @@ public class BusinessException extends BaseException {
 	 * @param message the message
 	 * @param cause the cause
 	 */
-	public BusinessException(String message, Throwable cause) {
+	public BusinessException(String message, Throwable cause) { // NO_UCD (unused code)
 		super(message, cause);
 	}
 
@@ -31,7 +31,7 @@ public class BusinessException extends BaseException {
 	 *
 	 * @param message the message
 	 */
-	public BusinessException(String message) {
+	public BusinessException(String message) { // NO_UCD (unused code)
 		super(message);
 	}
 
@@ -40,7 +40,7 @@ public class BusinessException extends BaseException {
 	 *
 	 * @param cause the cause
 	 */
-	public BusinessException(Throwable cause) {
+	public BusinessException(Throwable cause) { // NO_UCD (unused code)
 		super(cause);
 	}
 

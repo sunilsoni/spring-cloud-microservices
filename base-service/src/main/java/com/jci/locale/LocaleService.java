@@ -22,6 +22,6 @@ public interface LocaleService {
 	 * @param key the key
 	 * @return the message
 	 */
-	String getMessage(String key);
+	String getMessage(String key); // NO_UCD (unused code)
 
 }

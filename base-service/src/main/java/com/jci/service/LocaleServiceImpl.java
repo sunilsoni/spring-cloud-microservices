@@ -18,7 +18,7 @@ import com.jci.locale.LocaleService;
  * The Class LocaleServiceImpl.
  */
 @Service
-public class LocaleServiceImpl implements LocaleService {
+public class LocaleServiceImpl implements LocaleService { // NO_UCD (unused code)
 
 	/** The request. */
 	@Autowired(required = false)

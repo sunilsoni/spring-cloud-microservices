@@ -1,9 +1,11 @@
 package com.jci.po.exception;
 
 import com.jci.enums.ModuleEnum;
-import com.jci.exception.BusinessException;
+import com.jci.exception.Journalable;
+import com.jci.exception.Mailable;
+import com.jci.exception.SystemException;
 
-public class PoException  extends BusinessException {
+public class PoException  extends SystemException  implements Journalable, Mailable {
 
 	private static final long serialVersionUID = 8275229972675314205L;
 

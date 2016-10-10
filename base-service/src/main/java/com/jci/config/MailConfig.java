@@ -24,7 +24,7 @@ import com.jci.mail.MailTemplateStorage;
  */
 @Configuration 
 @RefreshScope
-public class MailConfig {
+public class MailConfig { // NO_UCD (unused code)
 	
 	/** The host. */
 	@Value("${email.host}")

@@ -12,7 +12,7 @@ import com.jci.locale.LocaleService;
  * The Class ErrorServiceImpl.
  */
 @Service
-public class ErrorServiceImpl implements ErrorService {
+public class ErrorServiceImpl implements ErrorService { // NO_UCD (unused code)
 
 	/** The locale service. */
 	@Autowired

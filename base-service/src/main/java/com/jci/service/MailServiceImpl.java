@@ -28,7 +28,7 @@ import com.jci.mail.MailService;
  * The Class MailServiceImpl.
  */
 @Service
-public class MailServiceImpl implements MailService {
+public class MailServiceImpl implements MailService { // NO_UCD (unused code)
 
 	/** The Constant LOG. */
 	private static final Logger LOG = LoggerFactory.getLogger(MailServiceImpl.class);

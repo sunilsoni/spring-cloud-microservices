@@ -21,7 +21,7 @@ public class SystemException extends BaseException {
 	 *
 	 * @param cause the cause
 	 */
-	public SystemException(Throwable cause) {
+	public SystemException(Throwable cause) { // NO_UCD (use default)
 		super(cause);
 	}
 
@@ -31,7 +31,7 @@ public class SystemException extends BaseException {
 	 * @param message the message
 	 * @param cause the cause
 	 */
-	public SystemException(String message, Throwable cause) {
+	public SystemException(String message, Throwable cause) { // NO_UCD (unused code)
 		super(message, cause);
 	}
 
@@ -40,7 +40,7 @@ public class SystemException extends BaseException {
 	 *
 	 * @param message the message
 	 */
-	public SystemException(String message) {
+	public SystemException(String message) { // NO_UCD (unused code)
 		super(message);
 	}
 

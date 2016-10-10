@@ -94,33 +94,33 @@ public enum ErrorEnum {
     
     //Apigee GET request errors
     /** The error apigee po get. */
-    ERROR_APIGEE_PO_GET("error.supp.table.not.found"),
+    ERROR_APIGEE_PO_GET("error.apigee.po.get"),
     
     /** The error apigee gr get. */
-    ERROR_APIGEE_GR_GET("error.supp.table.not.found"),
+    ERROR_APIGEE_GR_GET("error.apigee.gr.get"),
     
     /** The error apigee item get. */
-    ERROR_APIGEE_ITEM_GET("error.supp.table.not.found"),
+    ERROR_APIGEE_ITEM_GET("error.apigee.item.get"),
     
     /** The error apigee supp get. */
-    ERROR_APIGEE_SUPP_GET("error.supp.table.not.found"),
+    ERROR_APIGEE_SUPP_GET("error.apigee.supp.get"),
 
     
     //Apigee PUT request errors   
     /** The error apigee po put. */
-    ERROR_APIGEE_PO_PUT("error.supp.table.not.found"),
+    ERROR_APIGEE_PO_PUT("error.apigee.po.put"),
     
     /** The error apigee gr put. */
-    ERROR_APIGEE_GR_PUT("error.supp.table.not.found"),
+    ERROR_APIGEE_GR_PUT("error.apigee.gr.put"),
     
     /** The error apigee item put. */
-    ERROR_APIGEE_ITEM_PUT("error.supp.table.not.found"),
+    ERROR_APIGEE_ITEM_PUT("error.apigee.item.put"),
     
     /** The error apigee supp put. */
-    ERROR_APIGEE_SUPP_PUT("error.supp.table.not.found"),
+    ERROR_APIGEE_SUPP_PUT("error.apigee.supp.put"),
 
     
-    //Error in flatfile prepration
+    //Error in flatfile preparation
     /** The error generate flatfile po. */
     ERROR_GENERATE_FLATFILE_PO("error.supp.table.not.found"),
     
