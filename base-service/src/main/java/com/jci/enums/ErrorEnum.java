@@ -157,8 +157,6 @@ public enum ErrorEnum {
     /** The error user not found by email. */
     ERROR_USER_NOT_FOUND_BY_EMAIL("error.user.not.found.by.email"),
     
-    /** The error user not active. */
-    ERROR_USER_NOT_ACTIVE("error.user.not.active"),
     
     /** The error user current pswd wrong. */
     ERROR_USER_CURRENT_PSWD_WRONG("error.user.current.pswd.wrong"),
@@ -173,8 +171,6 @@ public enum ErrorEnum {
     /** The error user pswd is not correct. */
     ERROR_USER_PSWD_IS_NOT_CORRECT("error.user.pswd.is.not.correct"),
     
-    /** The error more than one user have active status. */
-    ERROR_MORE_THAN_ONE_USER_HAVE_ACTIVE_STATUS("error.more.than.one.user.have.status.active"),
     
     
     /** The error user have active content. */
@@ -195,17 +191,9 @@ public enum ErrorEnum {
     /** The err system db. */
     ERR_SYSTEM_DB("err.system.bd"),
     
-    /** The err system solr. */
-    ERR_SYSTEM_SOLR("err.system.solr"),
-    
-    /** The err system redis. */
-    ERR_SYSTEM_REDIS("err.system.redis"),
     
     /** The err system send mail. */
-    ERR_SYSTEM_SEND_MAIL("err.system.send.mail"),
-
-    /** The error rating calculation. */
-    ERROR_RATING_CALCULATION("error.rating.calculation");
+    ERR_SYSTEM_SEND_MAIL("err.system.send.mail");
 
     /** The key. */
     public String KEY;
