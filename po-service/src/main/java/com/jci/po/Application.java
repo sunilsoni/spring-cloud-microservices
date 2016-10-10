@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 
 import com.jci.ConfigApplication;
 
+
 /**
  * <p>
  * <strong>The Class Application.</strong>

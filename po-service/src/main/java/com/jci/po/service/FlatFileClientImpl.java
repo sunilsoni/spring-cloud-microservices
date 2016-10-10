@@ -18,6 +18,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 
+
 /**
  * <p>
  * <strong>Feign Client Implementation for Generating Flat Files.</strong>
@@ -38,7 +39,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	/**
 	 * Process error pos flat files.
 	 *
-	 * @param errorsList the errors list
+	 * @param req the req
 	 * @return the response entity
 	 */
 	@HystrixCommand(commandProperties = {
@@ -60,7 +61,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	/**
 	 * Process error pos flat files fallback.
 	 *
-	 * @param errorsList the errors list
+	 * @param req the req
 	 * @return the response entity
 	 */
 	ResponseEntity<ProcessErrorRes> processErrorPosFlatFilesFallback(ProcessErrorReq req) { // NO_UCD (unused code)
@@ -71,7 +72,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	/**
 	 * Process error supp flat files.
 	 *
-	 * @param errorsList the errors list
+	 * @param req the req
 	 * @return the response entity
 	 */
 	@HystrixCommand(commandProperties = {
@@ -93,7 +94,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	/**
 	 * Process error supp flat files fallback.
 	 *
-	 * @param errorsList the errors list
+	 * @param req the req
 	 * @return the response entity
 	 */
 	public ResponseEntity<ProcessErrorRes> processErrorSuppFlatFilesFallback(ProcessErrorReq req) { // NO_UCD (unused code)
@@ -103,7 +104,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	/**
 	 * Process error item flat files.
 	 *
-	 * @param errorsList the errors list
+	 * @param req the req
 	 * @return the response entity
 	 */
 	@HystrixCommand(commandProperties = {
@@ -125,7 +126,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	/**
 	 * Process error item flat files fallback.
 	 *
-	 * @param errorsList the errors list
+	 * @param req the req
 	 * @return the response entity
 	 */
 	public ResponseEntity<ProcessErrorRes> processErrorItemFlatFilesFallback(ProcessErrorReq req) { // NO_UCD (unused code)
@@ -135,7 +136,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	/**
 	 * Process error gr flat files.
 	 *
-	 * @param errorsList the errors list
+	 * @param req the req
 	 * @return the response entity
 	 */
 	@HystrixCommand(commandProperties = {
@@ -157,7 +158,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 	/**
 	 * Process error gr flat files fallback.
 	 *
-	 * @param errorsList the errors list
+	 * @param req the req
 	 * @return the response entity
 	 */
 	public ResponseEntity<ProcessErrorRes> processErrorGrFlatFilesFallback(ProcessErrorReq req) { // NO_UCD (unused code)

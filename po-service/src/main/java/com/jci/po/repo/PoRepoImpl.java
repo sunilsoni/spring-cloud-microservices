@@ -48,6 +48,7 @@ import com.microsoft.azure.storage.table.EntityProperty;
 import com.microsoft.azure.storage.table.TableQuery;
 
 
+
 /**
  * <p>
  * <strong> The Class PoRepoImpl.</strong>
@@ -73,6 +74,7 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	@Autowired   
 	private AzureStorage azureStorage;
 
+    /** The error service. */
     @Autowired
     private ErrorService errorService;
     
@@ -110,9 +112,6 @@ public class PoRepoImpl implements PoRepo { // NO_UCD (unused code)
 	 *
 	 * @param partitionKey the partition key
 	 * @return the error data
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
 	 */
 	public List<HashMap<String, String>> getErrorData(String partitionKey)  {
 		List<HashMap<String, String>> errorData = new ArrayList<>();

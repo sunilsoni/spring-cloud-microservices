@@ -35,6 +35,7 @@ import com.jci.po.repo.PoRepo;
 import com.jci.utils.Constants;
 
 
+
 /**
  * <p>
  * <strong> The Class PoServiceImpl.</strong>
@@ -58,9 +59,11 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
     private String allErps;
     
 	
+	/** The client. */
 	@Autowired
     FlatFileClientImpl client;
 	
+    /** The error service. */
     @Autowired
     private ErrorService errorService;
 	

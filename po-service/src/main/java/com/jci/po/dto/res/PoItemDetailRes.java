@@ -8,6 +8,7 @@ package com.jci.po.dto.res;
 import com.jci.azure.ResultSet;
 
 
+
 /**
  * <p>
  * <strong> The Class PoItemDetailRes.</strong>

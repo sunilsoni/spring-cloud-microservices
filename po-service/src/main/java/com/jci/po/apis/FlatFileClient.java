@@ -16,6 +16,7 @@ import com.jci.po.dto.req.ProcessErrorReq;
 import com.jci.po.dto.res.ProcessErrorRes;
 
 
+
 /**
  * <p>
  * <strong>Feign Client for Generating Flat Files.</strong>
@@ -28,20 +29,41 @@ public interface FlatFileClient {
 
 	
 	/**
-	 * Processing error flat files
+	 * Processing error flat files.
+	 *
+	 * @param req the req
+	 * @return the response entity
 	 */
 	@RequestMapping(value = "/processErrorPosFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ProcessErrorRes> processErrorPosFlatFiles(@RequestBody ProcessErrorReq req);
 
 
+	/**
+	 * Process error supp flat files.
+	 *
+	 * @param req the req
+	 * @return the response entity
+	 */
 	@RequestMapping(value = "/processErrorSuppFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ProcessErrorRes> processErrorSuppFlatFiles(@RequestBody ProcessErrorReq req);
 
 	
+	/**
+	 * Process error item flat files.
+	 *
+	 * @param req the req
+	 * @return the response entity
+	 */
 	@RequestMapping(value = "/processErrorItemFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ProcessErrorRes> processErrorItemFlatFiles(@RequestBody ProcessErrorReq req);
 	
 
+	/**
+	 * Process error gr flat files.
+	 *
+	 * @param req the req
+	 * @return the response entity
+	 */
 	@RequestMapping(value = "/processErrorGrFlatFiles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<ProcessErrorRes> processErrorGrFlatFiles(@RequestBody ProcessErrorReq req);
     
