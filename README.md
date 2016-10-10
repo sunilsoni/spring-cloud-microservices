@@ -6,5 +6,7 @@ Microservices :
 * Feign Client.
 * Netflix eureka.
 * Spring AOP.
-* Exeption handling:Automatic email trigger and persisting errors in database
 * Azure table storage.
+* Exeption handling:Automatic email trigger and persisting errors in database
+* Flat file generation
+* SFTP file drop
