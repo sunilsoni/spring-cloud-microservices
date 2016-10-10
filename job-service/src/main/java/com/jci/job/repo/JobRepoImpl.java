@@ -21,8 +21,11 @@ import com.jci.config.AzureStorage;
 import com.jci.dto.BatchUpdateRes;
 import com.jci.entity.MiscDataEntity;
 import com.jci.entity.PoEntity;
+import com.jci.enums.ErrorEnum;
+import com.jci.exception.ErrorService;
 import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.BatchUpdateReq;
+import com.jci.job.exception.JobException;
 import com.jci.utils.CommonUtils;
 import com.jci.utils.Constants;
 import com.jci.utils.QueryBuilder;
@@ -52,17 +55,25 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	/** The azure storage. */
 	@Autowired
 	private AzureStorage azureStorage;
+	
+    /** The error service. */
+    @Autowired
+    private ErrorService errorService;
 
 	/* (non-Javadoc)
 	 * @see com.jci.job.repo.JobRepo#createTable(java.lang.String)
 	 */
 	@Override
-	public boolean createTable(String tableName) throws InvalidKeyException, StorageException, URISyntaxException {
+	public boolean createTable(String tableName) {
 		boolean isSuccess=false;
-	    if (azureStorage.getTable(tableName).createIfNotExists()) {
-	    	LOG.info("table is created : " + tableName);
-	    	 isSuccess=true;
-	    }
+	    try {
+			if (azureStorage.getTable(tableName).createIfNotExists()) {
+				LOG.info("table is created : " + tableName);
+				 isSuccess=true;
+			}
+		} catch (InvalidKeyException | StorageException | URISyntaxException e) {
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_TABLE_CREATION);
+		}
 	    return isSuccess;
 	}
 
@@ -123,7 +134,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			 MiscDataEntity miscEntity=null;
 				try {
 					miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				} catch (Exception e) {
 					LOG.error("### Exception in JobRepoImpl.addMiscEntity ####",e);
 				}
 				
@@ -132,11 +143,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 				}
 				
 				miscEntity = CommonUtils.getMiscEntity(miscEntity,tableName,rowKeyData);
-				try {
-					updateStatusCountEntity(miscEntity);
-				} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-					LOG.error("### Exception in JobRepoImpl.addMiscEntity ####",e);
-				}
+				updateStatusCountEntity(miscEntity);
 		 }
 		 LOG.info("### Ending in JobRepoImpl.batchInsert ###");
 		return request.getReq();
@@ -153,10 +160,22 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	 * @throws URISyntaxException the URI syntax exception
 	 * @throws StorageException the storage exception
 	 */
-	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) throws InvalidKeyException, URISyntaxException, StorageException {
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+	public MiscDataEntity getStatusCountEntity(String partitionKey, String rowKey) {
+		CloudTable cloudTable;
+		MiscDataEntity misc= null;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_MISCDATA_TABLE_NOT_FOUND);
+		}
 	    TableOperation entity =   TableOperation.retrieve(partitionKey, rowKey, MiscDataEntity.class);
-		return cloudTable.execute(entity).getResultAsType();
+		try {
+			misc =  cloudTable.execute(entity).getResultAsType();
+		} catch (StorageException e) {
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_MISCDATA_ENTITY_NOT_FOUND);
+		}
+		
+		return misc;
 	}
 	
 	/**
@@ -167,23 +186,37 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 	 * @throws URISyntaxException the URI syntax exception
 	 * @throws StorageException the storage exception
 	 */
-	public void updateStatusCountEntity(MiscDataEntity entity) throws InvalidKeyException, URISyntaxException, StorageException {
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+	public void updateStatusCountEntity(MiscDataEntity entity) {
+		CloudTable cloudTable;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_MISC);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_MISCDATA_TABLE_NOT_FOUND);
+		}
 		
 		TableOperation insert = TableOperation.insertOrMerge(entity);
-		cloudTable.execute(insert);
+		try {
+			cloudTable.execute(insert);
+		} catch (StorageException e) {
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_MISCDATA_INSERT_DATA);
+		}
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.jci.job.repo.JobRepo#getPoDetails(java.lang.String, java.util.List)
 	 */
 	@Override
-	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList) throws InvalidKeyException, URISyntaxException, StorageException {
+	public List<PoEntity> getPoDetails(String partitionKey, List<String> poList) {
 		String query = QueryBuilder.processPosQuery(partitionKey,poList);
 		List<PoEntity> errorData = new ArrayList<>();
 		TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);
 		
-		CloudTable cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+		CloudTable cloudTable;
+		try {
+			cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_PO_TABLE_NOT_FOUND);
+		}
 	    for (PoEntity entity : cloudTable.execute(partitionQuery)) {
 	    	errorData.add(entity);
 	    }
@@ -215,10 +248,9 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 					tableName=entry.getKey();
 				} catch (Exception e) {
 					LOG.error("### Exception in JobRepoImpl.batchUpdate.getTable ###"+e);
-					
 					response.setError(true);
 					response.setMessage("The Application has encountered an error! Table  does not exist !");
-					continue;
+					throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,entry.getKey());
 				}
 		     
 		  // Define a batch operation.
@@ -299,9 +331,8 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		
 		try {
 			miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);
-			
+		} catch (Exception e) {
+			LOG.error("### Exception in JobRepoImpl.batchInsert ####",e);			
 		}
 		
 		if(miscEntity==null){
@@ -358,11 +389,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		}
 		 
 		if(totalCount>0){
-			try {
-				updateStatusCountEntity(miscEntity);
-			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-				LOG.error("### Exception in JobRepoImpl.updateMiscEntity ####",e);
-			}
+			updateStatusCountEntity(miscEntity);
 		}
 	}
 }

@@ -6,9 +6,6 @@
  */ 
 package com.jci.job.apis;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jci.job.service.ApiClientService;
-import com.microsoft.azure.storage.StorageException;
 
 /**
  * <p>
@@ -51,13 +47,8 @@ public class ApiClientController { // NO_UCD (unused code)
 	 */
 	@RequestMapping(value = "/getPoDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String getPoDetails(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
-		String response=null;
-		try {
-			response = service.getPoDetails(plant, erp, region);
-			LOG.info("response-->"+response);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
-		}
+		String	response = service.getPoDetails(plant, erp, region);
+		LOG.info("response-->"+response);
 		return response;
 	}
 	
@@ -71,12 +62,7 @@ public class ApiClientController { // NO_UCD (unused code)
 	 */
 	@RequestMapping(value = "/getGrDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String getGrDetails(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
-		String response="SUCCESS";
-		try {
-			response = service.getGrDetails(plant, erp, region);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
-		}
+		String	response = service.getGrDetails(plant, erp, region);
 		return response;
 	}
 		
@@ -90,12 +76,7 @@ public class ApiClientController { // NO_UCD (unused code)
 	 */
 	@RequestMapping(value = "/getSuppDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String getSuppDetails(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
-		String response=null;
-		try {
-			response = service.getSuppDetails(plant, erp, region);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.error("### Exception in ApigeeClientController.getSuppDetails ####",e);
-		}
+		String	response = service.getSuppDetails(plant, erp, region);
 		return response;
 	}
 	
@@ -109,12 +90,7 @@ public class ApiClientController { // NO_UCD (unused code)
 	 */
 	@RequestMapping(value = "/getItemDetails", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String getItemDetails(@RequestParam("plant") String plant, @RequestParam("erp") String erp, @RequestParam("region") String region) {
-		String response =null;
-		try {
-			response = service.getItemDetails(plant, erp, region);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			LOG.error("### Exception in ApigeeClientController.getPoDetails ####",e);
-		}
+		String	response = service.getItemDetails(plant, erp, region);
 		return response;
 	}
 	

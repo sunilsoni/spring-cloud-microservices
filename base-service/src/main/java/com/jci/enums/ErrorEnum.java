@@ -14,6 +14,7 @@ public enum ErrorEnum {
     /** The login failure. */
     LOGIN_FAILURE("err.login.failure"),
     
+    ERROR_TABLE_CREATION("error.table.creation"),
     /** The error table not found. */
     //Table not found in Azure 
     ERROR_TABLE_NOT_FOUND("error.table.not.found"),
@@ -38,22 +39,25 @@ public enum ErrorEnum {
     
     /** The error po data not found. */
     //Records not found in Azure storage table
-    ERROR_PO_DATA_NOT_FOUND("error.po.not.found"),
+    ERROR_PO_ENTITY_NOT_FOUND("error.po.not.found"),
     
     /** The error gr data not found. */
-    ERROR_GR_DATA_NOT_FOUND("error.gr.not.found"),
+    ERROR_GR_ENTITY_NOT_FOUND("error.gr.not.found"),
     
     /** The error item data not found. */
-    ERROR_ITEM_DATA_NOT_FOUND("error.item.not.found"),
+    ERROR_ITEM_ENTITY_NOT_FOUND("error.item.not.found"),
     
     /** The error supp data not found. */
-    ERROR_SUPP_DATA_NOT_FOUND("error.supp.not.found"),
+    ERROR_SUPP_ENTITY_NOT_FOUND("error.supp.not.found"),
     
     /** The error flatfile data not found. */
-    ERROR_FLATFILE_DATA_NOT_FOUND("error.flatfile.data.not.found"),
+    ERROR_FLATFILE_ENTITY_NOT_FOUND("error.flatfile.data.not.found"),
     
-    /** The error podetails insert data. */
+    ERROR_MISCDATA_ENTITY_NOT_FOUND("error.flatfile.data.not.found"),
+    
+
     //Exception while inserting data in Table
+    /** The error podetails insert data. */
     ERROR_PODETAILS_INSERT_DATA("error.po.table.not.found"),
     
     /** The error grdetails insert data. */
@@ -68,8 +72,9 @@ public enum ErrorEnum {
     /** The error miscdata insert data. */
     ERROR_MISCDATA_INSERT_DATA("error.po.table.not.found"),
     
+    
+  //Exception while updating Table data
     /** The error podetails update data. */
-    //Exception while updating Table data
     ERROR_PODETAILS_UPDATE_DATA("error.po.table.not.found"),
     
     /** The error grdetails update data. */
@@ -97,8 +102,9 @@ public enum ErrorEnum {
     /** The error apigee supp get. */
     ERROR_APIGEE_SUPP_GET("error.supp.table.not.found"),
 
+    
+    //Apigee PUT request errors   
     /** The error apigee po put. */
-    //Apigee PUT request errors    
     ERROR_APIGEE_PO_PUT("error.supp.table.not.found"),
     
     /** The error apigee gr put. */
@@ -110,8 +116,9 @@ public enum ErrorEnum {
     /** The error apigee supp put. */
     ERROR_APIGEE_SUPP_PUT("error.supp.table.not.found"),
 
-    /** The error generate flatfile po. */
+    
     //Error in flatfile prepration
+    /** The error generate flatfile po. */
     ERROR_GENERATE_FLATFILE_PO("error.supp.table.not.found"),
     
     /** The error generate flatfile gr. */
@@ -123,8 +130,16 @@ public enum ErrorEnum {
     /** The error generate flatfile supp. */
     ERROR_GENERATE_FLATFILE_SUPP("error.supp.table.not.found"), 
     
-    /** The error process flatfile po. */
+    
+    //fLATFILE service is down
+    ERROR_FLATFILE_PO_SERVICE_DOWN("error.flatfile.po.service.down"),
+    ERROR_FLATFILE_GR_SERVICE_DOWN("error.flatfile.gr.service.down"),
+    ERROR_FLATFILE_ITEM_SERVICE_DOWN("error.flatfile.item.service.down"),
+    ERROR_FLATFILE_SUPP_SERVICE_DOWN("error.flatfile.supp.service.down"),
+    
+    
     //error in flatfile processing
+    /** The error process flatfile po. */
     ERROR_PROCESS_FLATFILE_PO("error.supp.table.not.found"),
     
     /** The error process flatfile gr. */
@@ -136,8 +151,8 @@ public enum ErrorEnum {
     /** The error process flatfile supp. */
     ERROR_PROCESS_FLATFILE_SUPP("error.supp.table.not.found"), 
     
-    /** The error reading config po file. */
     //error in flatfile processing
+    /** The error reading config po file. */
     ERROR_READING_CONFIG_PO_FILE("error.reading.config.po.file"),
     
     /** The error reading config gr file. */
@@ -149,9 +164,8 @@ public enum ErrorEnum {
     /** The error reading config supp file. */
     ERROR_READING_CONFIG_SUPP_FILE("error.reading.config.supplier.file"),
     
-    
+  //UI  errors
     /** The error user not found. */
-    //UI  errors
     ERROR_USER_NOT_FOUND("error.user.not.found"),
     
     /** The error user not found by email. */

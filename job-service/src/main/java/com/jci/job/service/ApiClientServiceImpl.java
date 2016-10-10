@@ -3,8 +3,6 @@
  */
 package com.jci.job.service;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.jci.config.ApiKeys;
+import com.jci.enums.ErrorEnum;
+import com.jci.exception.ErrorService;
 import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.PrepareBatchInsertReq;
 import com.jci.job.api.req.SuccessReq;
@@ -22,8 +22,8 @@ import com.jci.job.api.res.GrDetailsRes;
 import com.jci.job.api.res.ItemDetailsRes;
 import com.jci.job.api.res.PoDetailsRes;
 import com.jci.job.api.res.SuppDetailsRes;
+import com.jci.job.exception.JobException;
 import com.jci.job.repo.JobRepo;
-import com.microsoft.azure.storage.StorageException;
 
 
 
@@ -37,7 +37,7 @@ import com.microsoft.azure.storage.StorageException;
 public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unused code)
 
 	/** The Constant LOG. */
- private static final Logger LOG = LoggerFactory.getLogger(ApiClientServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ApiClientServiceImpl.class);
 	
 	/** The apigee client. */
 	@Autowired
@@ -58,13 +58,16 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     /** The config. */
     @Autowired
     private ApiKeys config;	
+    
+    @Autowired
+    private ErrorService errorService;
 	
 	
 	/* (non-Javadoc)
 	 * @see com.jci.job.service.ApiClientService#getPoDetails()
 	 */
 	@Override
-	public String getPoDetails(String plant, String erp, String region)  throws InvalidKeyException, URISyntaxException, StorageException {
+	public String getPoDetails(String plant, String erp, String region) {
 		PoDetailsRes responseBody=null;
 		ResponseEntity<PoDetailsRes> apigeeResponse =null;
 		
@@ -74,11 +77,15 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		 /**
 		  * Starting apigee call
 		 */
-            apigeeResponse =  apigeeClient.getPoDetails(config.getPoKey(), plant,erp,region);
-            
+		try{
+		 	apigeeResponse =  apigeeClient.getPoDetails(config.getPoKey(), plant,erp,region);
             if(apigeeResponse==null || apigeeResponse.getBody()==null ){
                 return "Failure";
             }
+		}catch(Exception e){
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_GET);
+		}
+           
             
             responseBody = apigeeResponse.getBody();
                
@@ -97,7 +104,11 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
             SuccessReq req1 = new SuccessReq();
             req1.setPoList(successList);
             
-          responseStatus =  apigeeClient.getPoDetailsRes(req1,config.getPoKey(), plant,erp,region);//Sunil: method body is wrong
+            try{
+            	responseStatus =  apigeeClient.getPoDetailsRes(req1,config.getPoKey(), plant,erp,region);
+    		}catch(Exception e){
+    			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_PUT);
+    		}
              
           processPoFlatFile() ;
 		return responseStatus;
@@ -108,7 +119,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 * @see com.jci.job.service.ApiClientService#getGrDetails()
 	 */
 	@Override
-	public String getGrDetails(String plant, String erp, String region) throws InvalidKeyException, URISyntaxException, StorageException {
+	public String getGrDetails(String plant, String erp, String region)  {
 		GrDetailsRes responseBody=null;
 		ResponseEntity<GrDetailsRes> apigeeResponse =null;
 		
@@ -118,17 +129,15 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		 /**
 		  * Starting apigee call
 		 */
-    		apigeeResponse =  apigeeClient.getGrDetails(config.getGrKey(), plant,erp,region);
-    		 
-    		if(apigeeResponse==null ||  apigeeResponse.getBody()==null){
-    			 return "Failure";
-            }	
-    		
-    		responseBody = apigeeResponse.getBody();
-    		if(responseBody.getGrList()==null || responseBody.getGrList().size()==0){
-    			 return "Failure";
-            }
-    		
+			try{
+				apigeeResponse =  apigeeClient.getGrDetails(config.getGrKey(), plant,erp,region);
+				responseBody = apigeeResponse.getBody();
+				if(apigeeResponse==null ||  apigeeResponse.getBody()==null || responseBody.getGrList()==null || responseBody.getGrList().size()==0){
+		   			 return "Failure";
+		         }	
+			}catch(Exception e){
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_GR_GET);
+			}
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareGrReq(responseBody);
     		 
     		/**
@@ -141,7 +150,12 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		SuccessReq req1 = new SuccessReq();
     		req1.setGrList(successList);
     		
-    		responseStatus =  apigeeClient.getGrDetailsRes(req1, config.getGrKey(), plant,erp,region);
+    		try{
+    			responseStatus =  apigeeClient.getGrDetailsRes(req1, config.getGrKey(), plant,erp,region);
+			}catch(Exception e){
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_GR_PUT);
+			}
+    		
     		processGrFlatFile() ;
 		return responseStatus;
 	} 
@@ -151,22 +165,24 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 * @see com.jci.job.service.ApiClientService#getItemDetails()
 	 */
 	@Override
-	public String getItemDetails(String plant, String erp, String region) throws InvalidKeyException, URISyntaxException, StorageException {
+	public String getItemDetails(String plant, String erp, String region)  {
 		LOG.info("### Starting in ApigeeClientServiceImpl.getItemDetails ####");
 		String responseStatus=null;
 			 
 		 /**
 		  * Starting apigee call
 		 */
-    		ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(config.getItemKey(), plant,erp,region);
-    		if(response==null || response.getBody()==null){
-    			 return "Failure";
-            }   
+		ItemDetailsRes responseBody =null;
+    		try{
+    			ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(config.getItemKey(), plant,erp,region);
+    			responseBody = response.getBody();
+    			if(response==null || response.getBody()==null ||responseBody.getItemList()==null || responseBody.getItemList().size()==0){
+        			 return "Failure";
+                }   
+			}catch(Exception e){
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_ITEM_GET);
+			}
     		
-    		ItemDetailsRes responseBody = response.getBody();
-    		if(responseBody.getItemList()==null || responseBody.getItemList().size()==0){
-    			return "Failure";
-            }  
     		
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody);
     		if(req==null){
@@ -178,7 +194,13 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		SuccessReq req1 = new SuccessReq();
     		req1.setItemList(successList);
     		
-    		responseStatus =  apigeeClient.getItemsRes(req1,config.getItemKey(), plant,erp,region);//Need to change
+    		
+    		try{
+    			responseStatus =  apigeeClient.getItemsRes(req1,config.getItemKey(), plant,erp,region);
+			}catch(Exception e){
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_ITEM_PUT);
+			}
+    		
     		processItemFlatFile() ;
     	LOG.info("### Ending in ApigeeClientServiceImpl.getItemDetails ####");
 		return responseStatus;
@@ -188,23 +210,26 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	 * @see com.jci.job.service.ApiClientService#getSuppDetails()
 	 */
 	@Override
-	public String getSuppDetails(String plant, String erp, String region) throws InvalidKeyException, URISyntaxException, StorageException {
+	public String getSuppDetails(String plant, String erp, String region)  {
 		
 		String responseStatus=null;
-
+		SuppDetailsRes responseBody =null;
 		/**
 		  * Starting Apigee call
 		 */
-    		ResponseEntity<SuppDetailsRes> response = apigeeClient.getSupp(config.getSuppKey(), plant,erp,region);
-    		
-    		if(response==null || response.getBody()==null){
-    			 return "Failure";
-            } 
-    		
-    		SuppDetailsRes responseBody = response.getBody();
-    		if(responseBody.getSupplierList()==null || responseBody.getSupplierList().size()==0){
-    			 return "Failure";
-            } 
+			try{
+				ResponseEntity<SuppDetailsRes> response = apigeeClient.getSupp(config.getSuppKey(), plant,erp,region);
+	    		if(response==null || response.getBody()==null){
+	    			 return "Failure";
+	            } 
+	    		
+	    		responseBody = response.getBody();
+	    		if(responseBody.getSupplierList()==null || responseBody.getSupplierList().size()==0){
+	    			 return "Failure";
+	            }   
+			}catch(Exception e){
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_SUPP_GET);
+			}
     		
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareSuppReq(responseBody);
     		if(req==null){
@@ -217,7 +242,12 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		req1.setPoList(successList);
     		
     		req1.setSupplierList(successList);
-    		responseStatus =  apigeeClient.getSuppRes(req1,config.getSuppKey(), plant,erp,region);//Need to change
+    		try{
+    			responseStatus =  apigeeClient.getSuppRes(req1,config.getSuppKey(), plant,erp,region); 
+			}catch(Exception e){
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_SUPP_PUT);
+			}
+    		
     		processSuppFlatFile() ;
 		return responseStatus;
 	}
@@ -228,7 +258,14 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	@Override
 	public void processPoFlatFile()  {
 		LOG.info("### Starting in ApigeeClientServiceImpl.processPoFlatFile ####");
-	    ResponseEntity<String> ffResponse =  flatfileClient.processPoFlatFiles();
+	    
+		ResponseEntity<String> ffResponse = null;
+	    try{
+	    	ffResponse =  flatfileClient.processPoFlatFiles();
+		}catch(Exception e){
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_FLATFILE_PO_SERVICE_DOWN);
+		}
+	    
 	    String ffPos = null;
 	    if(ffResponse!=null && ffResponse.getBody()!=null){
 	    	ffPos = ffResponse.getBody();
@@ -244,7 +281,14 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	@Override
 	public void processSuppFlatFile(){
 		LOG.info("### Starting in ApigeeClientServiceImpl.processSuppFlatFile ####");
-	    ResponseEntity<String> ffResponse =  flatfileClient.processSuppFlatFiles();
+		
+		ResponseEntity<String> ffResponse = null;
+	    try{
+	    	ffResponse =  flatfileClient.processSuppFlatFiles();
+		}catch(Exception e){
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_FLATFILE_SUPP_SERVICE_DOWN);
+		}
+	    
 	    String ffPos = ffResponse.getBody();
 	    if(ffResponse!=null && ffResponse.getBody()!=null){
 	    	ffPos = ffResponse.getBody();
@@ -259,7 +303,12 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	@Override
 	public void processItemFlatFile(){
 		LOG.info("### Starting in ApigeeClientServiceImpl.processItemFlatFile ####");
-	    ResponseEntity<String> ffResponse =  flatfileClient.processItemFlatFiles();
+		ResponseEntity<String> ffResponse = null;
+	    try{
+	    	ffResponse =  flatfileClient.processItemFlatFiles();
+		}catch(Exception e){
+			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_FLATFILE_ITEM_SERVICE_DOWN);
+		}
 	    String ffPos = ffResponse.getBody();
 	    if(ffResponse!=null && ffResponse.getBody()!=null){
 	    	ffPos = ffResponse.getBody();
@@ -274,7 +323,12 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	@Override
     public void processGrFlatFile() {
     	LOG.info("### Starting in ApigeeClientServiceImpl.processGrFlatFile ####");
-        ResponseEntity<String> ffResponse =  flatfileClient.processGrFlatFiles();
+    	ResponseEntity<String> ffResponse =null;
+    	 try{
+ 	    	ffResponse =  flatfileClient.processGrFlatFiles();
+ 		}catch(Exception e){
+ 			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_FLATFILE_GR_SERVICE_DOWN);
+ 		}
         String ffPos = ffResponse.getBody();
         if(ffResponse!=null && ffResponse.getBody()!=null){
 	    	ffPos = ffResponse.getBody();
