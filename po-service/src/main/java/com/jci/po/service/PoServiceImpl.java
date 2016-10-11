@@ -58,7 +58,6 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
     @Value("${all.erp.names}")
     private String allErps;
     
-	
 	/** The client. */
 	@Autowired
     FlatFileClientImpl client;
@@ -66,6 +65,8 @@ public class PoServiceImpl implements PoService{ // NO_UCD (unused code)
     /** The error service. */
     @Autowired
     private ErrorService errorService;
+    
+    
 	
 	/* (non-Javadoc)
 	 * @see com.jci.po.service.PoService#getSegmentedResultSet(com.jci.po.dto.req.SegmentedDetailReq)

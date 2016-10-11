@@ -5,11 +5,6 @@
  */
 package com.jci.item.apis;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +16,6 @@ import com.jci.dto.SegmentedDetailReq;
 import com.jci.dto.SegmentedDetailRes;
 import com.jci.item.service.ItemService;
 import com.jci.utils.Constants;
-import com.microsoft.azure.storage.StorageException;
 
 
 /**
@@ -36,7 +30,7 @@ import com.microsoft.azure.storage.StorageException;
 public class ItemController {// NO_UCD (unused code)
 	
 	/** The Constant LOG. */
-private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
+	//private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 	
 	/** The po service. */
 	@Autowired
@@ -53,15 +47,7 @@ private static final Logger LOG = LoggerFactory.getLogger(ItemController.class);
 		request.setTableName(Constants.TABLE_ITEM);
 		request.setPartition(request.getErpName().toUpperCase());
 		request.setFirstRequest(false);
-		SegmentedDetailRes response = new SegmentedDetailRes();
-		try {
-			response = poService.getItemResultSet(request);
-		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
-			response.setError(true);
-			response.setMessage(e.getMessage());
-			LOG.error("### Exception in PoController.getSegmentedItemDetails ###",e);
-		}
-		return response;
+		return  poService.getItemResultSet(request);
 	}
 	
 }

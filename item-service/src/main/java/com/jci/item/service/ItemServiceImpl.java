@@ -5,8 +5,6 @@
  */
 package com.jci.item.service;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import com.jci.dto.SegmentedDetailReq;
 import com.jci.dto.SegmentedDetailRes;
 import com.jci.item.repo.ItemRepo;
 import com.jci.utils.Constants;
-import com.microsoft.azure.storage.StorageException;
 
 /**
  * <p>
@@ -34,15 +31,14 @@ public class ItemServiceImpl implements ItemService{ // NO_UCD (unused code)
 
 	
 	/** The repo. */
- @Autowired
+	@Autowired
 	private ItemRepo repo;
-	
 	
 	/* (non-Javadoc)
 	 * @see com.jci.item.service.ItemService#getItemResultSet(com.jci.item.dto.SegmentedDetailReq)
 	 */
 	@Override
-	public SegmentedDetailRes getItemResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException  {
+	public SegmentedDetailRes getItemResultSet(SegmentedDetailReq request){
 		PaginationParam paginationParam = request.getPaginationParam();
 		
 		ScrollingParam param  = new ScrollingParam();

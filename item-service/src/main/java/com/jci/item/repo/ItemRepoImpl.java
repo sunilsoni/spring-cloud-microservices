@@ -28,6 +28,9 @@ import com.jci.azure.PaginationParam;
 import com.jci.azure.ResultSet;
 import com.jci.azure.ScrollingParam;
 import com.jci.config.AzureStorage;
+import com.jci.enums.ErrorEnum;
+import com.jci.exception.ErrorService;
+import com.jci.item.exception.ItemException;
 import com.jci.utils.Constants;
 import com.jci.utils.QueryBuilder;
 import com.microsoft.azure.storage.ResultContinuation;
@@ -61,11 +64,14 @@ public class ItemRepoImpl implements ItemRepo {  // NO_UCD (unused code)
 	@Autowired
 	private AzureStorage azureStorage;
 
+    @Autowired
+    private ErrorService errorService;
+    
    /* (non-Javadoc)
     * @see com.jci.item.repo.ItemRepo#getSegmentedResultSet(com.jci.item.azure.query.ScrollingParam, com.jci.item.azure.data.DataHelper)
     */
    @Override
-	public ResultSet getSegmentedResultSet(ScrollingParam param,DataHelper request) throws InvalidKeyException, URISyntaxException, StorageException  {
+	public ResultSet getSegmentedResultSet(ScrollingParam param,DataHelper request) {
 		ResultContinuation continuationToken = DataUtil.getContinuationToken(param);
 		PaginationParam pagination = new PaginationParam();
 		if(continuationToken != null) {
@@ -81,10 +87,20 @@ public class ItemRepoImpl implements ItemRepo {  // NO_UCD (unused code)
 		 }
 		
 		 TableQuery<DynamicTableEntity> query = TableQuery.from(DynamicTableEntity.class).where(whereCondition).take(param.getSize());
-		 CloudTable table = azureStorage.getTable(request.getTableName());
+		 CloudTable table;
+			try {
+				table = azureStorage.getTable(request.getTableName());
+			} catch (InvalidKeyException | URISyntaxException | StorageException e1) {
+				throw errorService.createException(ItemException.class, e1, ErrorEnum.ERROR_ITEM_TABLE_NOT_FOUND);
+			}
 		 
 		// segmented query
-       ResultSegment<DynamicTableEntity> response = table.executeSegmented(query, continuationToken) ;
+       ResultSegment<DynamicTableEntity> response=null;
+		try {
+			response = table.executeSegmented(query, continuationToken);
+		} catch (StorageException e1) {
+			throw errorService.createException(ItemException.class, e1, ErrorEnum.ERROR_ITEM_SEGMENTED_QUERY, query);
+		}
        
 		// next continuation token
 		continuationToken = response.getContinuationToken() ;

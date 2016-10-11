@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.jci.ConfigApplication;
 /**
  * <p>
- * <strong> The Flat File Application Class.</strong>
+ * <strong> The Scheduler Application Class.</strong>
  * <p>
  *
  * @author csonisk

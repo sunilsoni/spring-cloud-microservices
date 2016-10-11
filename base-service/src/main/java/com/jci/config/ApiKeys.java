@@ -4,9 +4,6 @@
  * permitted by License Agreement, is prohibited.
  */
 package com.jci.config;
-
-
-
 /**
  * <p>
  * <strong> The ApiKeys Class.</strong>
@@ -27,96 +24,47 @@ public class ApiKeys {
 	  private  String itemKey; 
   	
 	  /** The supp key. */
-	  private  String suppKey; 
+	  private  String suppKey;
+
+	public ApiKeys(String poKey, String grKey, String itemKey, String suppKey) {
+		super();
+		this.poKey = poKey;
+		this.grKey = grKey;
+		this.itemKey = itemKey;
+		this.suppKey = suppKey;
+	}
+
+	public String getPoKey() {
+		return poKey;
+	}
+
+	public void setPoKey(String poKey) {
+		this.poKey = poKey;
+	}
+
+	public String getGrKey() {
+		return grKey;
+	}
+
+	public void setGrKey(String grKey) {
+		this.grKey = grKey;
+	}
+
+	public String getItemKey() {
+		return itemKey;
+	}
+
+	public void setItemKey(String itemKey) {
+		this.itemKey = itemKey;
+	}
+
+	public String getSuppKey() {
+		return suppKey;
+	}
+
+	public void setSuppKey(String suppKey) {
+		this.suppKey = suppKey;
+	} 
 	  
-	  /**
-  	 * Instantiates a new api keys.
-  	 *
-  	 * @param poKey the po key
-  	 * @param grKey the gr key
-  	 * @param itemKey the item key
-  	 * @param suppKey the supp key
-  	 */
-	  public ApiKeys(String poKey,String grKey, String itemKey, String suppKey) {
-		this.poKey  = poKey;
-		this.grKey  = grKey;
-		this.itemKey  = itemKey;
-		this.suppKey  = suppKey;
-	  }
-
-
-    /**
-     * Gets the po key.
-     *
-     * @return the po key
-     */
-    public String getPoKey() {
-        return poKey;
-    }
-
-    /**
-     * Sets the po key.
-     *
-     * @param poKey the new po key
-     */
-    public void setPoKey(String poKey) {
-        this.poKey = poKey;
-    }
-
-    /**
-     * Gets the gr key.
-     *
-     * @return the gr key
-     */
-    public String getGrKey() {
-        return grKey;
-    }
-
-    /**
-     * Sets the gr key.
-     *
-     * @param grKey the new gr key
-     */
-    public void setGrKey(String grKey) {
-        this.grKey = grKey;
-    }
-
-    /**
-     * Gets the item key.
-     *
-     * @return the item key
-     */
-    public String getItemKey() {
-        return itemKey;
-    }
-
-    /**
-     * Sets the item key.
-     *
-     * @param itemKey the new item key
-     */
-    public void setItemKey(String itemKey) {
-        this.itemKey = itemKey;
-    }
-
-    /**
-     * Gets the supp key.
-     *
-     * @return the supp key
-     */
-    public String getSuppKey() {
-        return suppKey;
-    }
-
-    /**
-     * Sets the supp key.
-     *
-     * @param suppKey the new supp key
-     */
-    public void setSuppKey(String suppKey) {
-        this.suppKey = suppKey;
-    }
-
 	  
-		  
 }

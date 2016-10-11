@@ -34,13 +34,6 @@
 			    <!-- <type>jar</type>
 			  <scope>compile</scope> --> 
 		</dependency>
-	    <dependency>
-			   <groupId>com.jci-base</groupId>
- 				 <artifactId>base-service</artifactId>
-  				<version>1.0</version> 
-			    <type>jar</type>
-			  <scope>compile</scope> 
-		</dependency>
 	      <dependency>
 	          <groupId>javax.inject</groupId>
 	          <artifactId>javax.inject</artifactId>
@@ -125,7 +118,7 @@
   
    <build>
         <plugins>
-           <!--  <plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
@@ -135,12 +128,12 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin> -->
-           <plugin>
+            </plugin>  
+           <!-- <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!-- tag::plugin[] -->
+            tag::plugin[]
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
@@ -156,7 +149,7 @@
                         </resource>
                     </resources>
                 </configuration>
-            </plugin>
+            </plugin> -->
             <!-- end::plugin[] -->
         </plugins>
     </build>

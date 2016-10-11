@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jci.flatfile.service.FlatFileService;
 import com.jci.flatfile.utils.ProcessErrorReq;
 import com.jci.flatfile.utils.ProcessErrorRes;
-
-
-
 /**
  * Rest Layer for processing flat files.
  */

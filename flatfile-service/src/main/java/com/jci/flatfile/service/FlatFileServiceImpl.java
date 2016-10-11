@@ -29,9 +29,6 @@ import com.jci.flatfile.utils.ProcessErrorRes;
 import com.jci.utils.CommonUtils;
 import com.jci.utils.Constants;
 import com.microsoft.azure.storage.table.TableEntity;
-
-
-
 /**
  * The Class Flat FileServiceImpl.
  */

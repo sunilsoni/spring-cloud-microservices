@@ -43,7 +43,7 @@ public class ApiKeysConfig { // NO_UCD (unused code)
    * @return the api keys
    */
   @Bean
-  public ApiKeys flatFile() {
+  public ApiKeys apiKeys() {
 	  ApiKeys ff = new ApiKeys(poKey,grKey,itemKey,suppKey);
 	  return ff;
   }

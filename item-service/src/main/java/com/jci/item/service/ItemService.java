@@ -5,12 +5,8 @@
  */
 package com.jci.item.service;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
-
 import com.jci.dto.SegmentedDetailReq;
 import com.jci.dto.SegmentedDetailRes;
-import com.microsoft.azure.storage.StorageException;
 
 
 /**
@@ -22,14 +18,5 @@ import com.microsoft.azure.storage.StorageException;
  */
 public interface ItemService {
 	
-	/**
-	 * Gets the item result set.
-	 *
-	 * @param request the request
-	 * @return the item result set
-	 * @throws InvalidKeyException the invalid key exception
-	 * @throws URISyntaxException the URI syntax exception
-	 * @throws StorageException the storage exception
-	 */
-	SegmentedDetailRes getItemResultSet(SegmentedDetailReq request) throws InvalidKeyException, URISyntaxException, StorageException;
+	SegmentedDetailRes getItemResultSet(SegmentedDetailReq request);
 }

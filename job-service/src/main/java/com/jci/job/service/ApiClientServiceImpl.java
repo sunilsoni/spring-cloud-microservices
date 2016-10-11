@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.jci.config.ApiKeys;
+import com.jci.config.FlatFile;
 import com.jci.enums.ErrorEnum;
 import com.jci.exception.ErrorService;
 import com.jci.job.api.req.BatchInsertReq;
@@ -33,7 +34,6 @@ import com.jci.job.repo.JobRepo;
  * @author cdevdat
  */
 @Service
-@RefreshScope
 public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unused code)
 
 	/** The Constant LOG. */
@@ -51,10 +51,6 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	@Autowired
 	private JobRepo repo;
 	
-    /** The all erps. */
-    /*@Value("${all.erp.names}")
-    private String allErps;*/
-
     @Autowired
     private ErrorService errorService;
 	
@@ -130,12 +126,16 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			try{
 				apigeeResponse =  apigeeClient.getGrDetails(config.getGrKey(), plant,erp,region);
 				responseBody = apigeeResponse.getBody();
-				if(apigeeResponse==null ||  apigeeResponse.getBody()==null || responseBody.getGrList()==null || responseBody.getGrList().size()==0){
+				if(apigeeResponse==null ||  apigeeResponse.getBody()==null){
 		   			 return "Failure";
 		         }	
 			}catch(Exception e){
 				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_GR_GET);
 			}
+			
+			if(responseBody.getGrList()==null || responseBody.getGrList().size()==0){
+	   			 return "Failure";
+	         }	
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareGrReq(responseBody);
     		 
     		/**
@@ -174,13 +174,15 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     		try{
     			ResponseEntity<ItemDetailsRes> response = apigeeClient.getItems(config.getItemKey(), plant,erp,region);
     			responseBody = response.getBody();
-    			if(response==null || response.getBody()==null ||responseBody.getItemList()==null || responseBody.getItemList().size()==0){
+    			if(response==null || response.getBody()==null ){
         			 return "Failure";
                 }   
 			}catch(Exception e){
 				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_ITEM_GET);
 			}
-    		
+    		if(responseBody.getItemList()==null || responseBody.getItemList().size()==0){
+   			 return "Failure";
+           } 
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody);
     		if(req==null){
     			 return "Failure";
@@ -211,6 +213,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		
 		String responseStatus=null;
 		SuppDetailsRes responseBody =null;
+		
 		/**
 		  * Starting Apigee call
 		 */
@@ -219,15 +222,15 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	    		if(response==null || response.getBody()==null){
 	    			 return "Failure";
 	            } 
-	    		
 	    		responseBody = response.getBody();
-	    		if(responseBody.getSupplierList()==null || responseBody.getSupplierList().size()==0){
-	    			 return "Failure";
-	            }   
 			}catch(Exception e){
 				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_SUPP_GET);
 			}
+
     		
+    		if(responseBody.getSupplierList()==null || responseBody.getSupplierList().size()==0){
+    			 return "Failure";
+            }
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareSuppReq(responseBody);
     		if(req==null){
     			return null;
