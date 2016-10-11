@@ -42,7 +42,7 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
     private static final Logger LOG = LoggerFactory.getLogger(FlatFileServiceImpl.class);
     
     /** The repo. */
-    @Autowired(required = false)
+    @Autowired
     private FlatFileRepo repo;
     
     /** The all erps. */
@@ -50,7 +50,7 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
     private String allErps;
     
     /** The config. */
-    @Autowired(required = false)
+    @Autowired
     private FlatFile config;
     
     /** The git. */

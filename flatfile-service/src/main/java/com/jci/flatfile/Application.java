@@ -14,10 +14,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.jci.ConfigApplication;
-
-
-
-
 /**
  * The Class Application.
  */

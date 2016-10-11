@@ -3,7 +3,7 @@
  * Use or Copying of all or any part of this program, except as
  * permitted by License Agreement, is prohibited.
  */
-package com.jci.user;
+package com.jci.job;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

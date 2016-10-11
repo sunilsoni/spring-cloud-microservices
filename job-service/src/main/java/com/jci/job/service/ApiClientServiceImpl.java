@@ -54,14 +54,14 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
     /** The all erps. */
     /*@Value("${all.erp.names}")
     private String allErps;*/
-    
+
+    @Autowired
+    private ErrorService errorService;
+	
     /** The config. */
     @Autowired
     private ApiKeys config;	
     
-    @Autowired
-    private ErrorService errorService;
-	
 	
 	/* (non-Javadoc)
 	 * @see com.jci.job.service.ApiClientService#getPoDetails()

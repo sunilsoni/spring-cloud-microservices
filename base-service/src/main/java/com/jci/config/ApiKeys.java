@@ -37,7 +37,7 @@ public class ApiKeys {
   	 * @param itemKey the item key
   	 * @param suppKey the supp key
   	 */
-  	ApiKeys(String poKey,String grKey, String itemKey, String suppKey) {
+	  public ApiKeys(String poKey,String grKey, String itemKey, String suppKey) {
 		this.poKey  = poKey;
 		this.grKey  = grKey;
 		this.itemKey  = itemKey;

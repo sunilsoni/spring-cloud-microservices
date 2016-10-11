@@ -8,15 +8,15 @@ package com.jci.job;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.jci.ConfigApplication;
-
-
 /**
  * <p>
  * <strong> The Flat File Application Class.</strong>
@@ -25,11 +25,12 @@ import com.jci.ConfigApplication;
  * @author csonisk
  */
 @SpringBootApplication
-@EnableHystrix
+@EnableWebMvc
 @EnableFeignClients
+@EnableHystrix
 @EnableEurekaClient
 @Import(ConfigApplication.class) 
-public class Application {
+public class Application  extends SpringBootServletInitializer{
 	
 	/**
 	 * The main method.
