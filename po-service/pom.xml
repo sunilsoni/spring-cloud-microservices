@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.jci-po</groupId>
   <artifactId>po-service</artifactId>
-	<!-- <version>0.1.0-SNAPSHOT</version> -->
+	<!-- <version>1.0-SNAPSHOT</version> -->
    <inceptionYear>2016</inceptionYear>
     <parent>
   	<groupId>com.jci</groupId>
-  	<version>0.1.0-SNAPSHOT</version>
+  	<version>1.0-SNAPSHOT</version>
   	<artifactId>supplier-collaboration</artifactId>
   </parent>
   
@@ -30,7 +30,7 @@
 		   <dependency>
 			  <groupId>${project.parent.groupId}</groupId>
  				 <artifactId>base-service</artifactId>
-  				<version>0.1.0-SNAPSHOT</version> 
+  				<version>1.0-SNAPSHOT</version> 
 			    <!-- <type>jar</type>
 			  <scope>compile</scope> --> 
 		</dependency>

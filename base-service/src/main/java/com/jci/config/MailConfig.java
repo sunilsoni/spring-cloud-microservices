@@ -42,6 +42,10 @@ public class MailConfig { // NO_UCD (unused code)
     /** The password. */
     @Value("${email.password}")
     private String password;
+    
+    /** The node name. */
+    @Value("${node.name:}")
+    private String nodeName;
 
     /**
      * Java mail service.

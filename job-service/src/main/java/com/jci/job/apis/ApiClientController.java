@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jci.job.service.ApiClientService;
 
+import net.bull.javamelody.MonitoredWithSpring;
+
 /**
  * <p>
  * <strong>Scheduler layer for fetching Purchase Orders, Suppliers and Items from Apigee APIs.</strong>
@@ -28,6 +30,7 @@ import com.jci.job.service.ApiClientService;
  */
 
 @RestController
+@MonitoredWithSpring
 public class ApiClientController { // NO_UCD (unused code)
 
 	/** The service. */

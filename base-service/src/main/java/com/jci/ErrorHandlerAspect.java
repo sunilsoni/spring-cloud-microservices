@@ -27,9 +27,6 @@ import com.jci.mail.JournalService;
 import com.jci.mail.MailService;
 import com.jci.mail.MailTemplate;
 import com.jci.mail.MailTemplateStorage;
-
-
-
 /**
  * The Class ErrorHandlerAspect.
  */
@@ -170,7 +167,6 @@ public class ErrorHandlerAspect { // NO_UCD (unused code)
                 //LOG.info(" mailTemplate---"+mailTemplate);
                 String subject = String.format(mailTemplate.getSubject(LanguageUtils.getEnglishLocale()), nodeName);
                 String text = String.format(mailTemplate.getText(LanguageUtils.getEnglishLocale()), nodeName, stackTrace);
-                mailService.sendNoreplyMessage(emails, subject, text);
                 mailService.sendNoreplyMessage(emails, subject, text);
                 LOG.debug("Send exception " + e + " by email");
             } catch (Exception e1) {

@@ -7,10 +7,6 @@ package com.jci.entity;
 
 import com.microsoft.azure.storage.table.TableServiceEntity;
 
-
-
-
-
 /**
  * The Class GrEntity.
  */

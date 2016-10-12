@@ -11,3 +11,4 @@ Microservices :
 * Exeption handling:Automatic email trigger and persisting errors in database.
 * Flat file generation.
 * SFTP file drop.
+* Statistics of JavaMelody monitoring: http://<host>/<context>/monitoring

@@ -5,10 +5,6 @@
  */
 package com.jci.azure;
 
-
-
-
-
 /**
  * <p>
  * <strong>The Class PaginationParam for managing UI Pagination.</strong>

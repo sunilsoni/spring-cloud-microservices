@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.jci-flatfile</groupId>
   <artifactId>flatfile-service</artifactId>
-  <!-- <version>0.1.0-SNAPSHOT</version> -->
+  <!-- <version>1.0-SNAPSHOT</version> -->
   <inceptionYear>2016</inceptionYear>
   
    <parent>
   	<groupId>com.jci</groupId>
-  	<version>0.1.0-SNAPSHOT</version>
+  	<version>1.0-SNAPSHOT</version>
   	<artifactId>supplier-collaboration</artifactId>
   </parent>
   
@@ -32,7 +32,7 @@
 		   <dependency>
 			  <groupId>${project.parent.groupId}</groupId>
  				 <artifactId>base-service</artifactId>
-  				<version>0.1.0-SNAPSHOT</version> 
+  				<version>1.0-SNAPSHOT</version> 
 			    <!-- <type>jar</type>
 			  <scope>compile</scope> --> 
 		</dependency>
@@ -124,7 +124,11 @@
 		    <version>1.46</version>
 		</dependency>
 		
-					
+		<dependency>
+		    <groupId>net.bull.javamelody</groupId>
+		    <artifactId>javamelody-core</artifactId>
+		    <version>1.62.0</version>
+		</dependency>		
   </dependencies>
    <build>
         <plugins>

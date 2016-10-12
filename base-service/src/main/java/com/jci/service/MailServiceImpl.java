@@ -52,7 +52,10 @@ public class MailServiceImpl implements MailService { // NO_UCD (unused code)
     private AtomicBoolean isActive = new AtomicBoolean();
 
     /** The is send mail. */
-    @Value("${mail.send:true}")
+/*    @Value("${mail.send:true}")
+    private boolean isSendMail;*/
+    
+    @Value("${mail.send:}")
     private boolean isSendMail;
 
     /** The node name. */
