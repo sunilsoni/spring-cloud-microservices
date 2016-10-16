@@ -8,6 +8,7 @@ package com.jci.utils;
 import java.util.List;
 
 import com.jci.azure.DataHelper;
+import com.jci.dto.GrDetails;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
 import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
@@ -269,4 +270,26 @@ public class QueryBuilder {
 	 return combinedFilter;
 	}
 	
+	public static String getGrQtyQuery(List<GrDetails> grList){
+	      
+	   String combinedFilter = null;
+	   String rowKeyFilter = null;
+	   
+	   StringBuilder builder =  new StringBuilder();
+	   for(int i=0;i<grList.size();i++){  
+		   GrDetails obj =    grList.get(i);
+		   
+		 String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, obj.getErp().toUpperCase());
+		 builder.append(" ( ");
+		 rowKeyFilter = TableQuery.generateFilterCondition(Constants.ROWKEY, QueryComparisons.EQUAL, obj.getReceiptID()); 
+	     combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter); 
+	     builder.append(combinedFilter);
+	     builder.append(" ) ");
+	     
+	     if(i!=(grList.size()-1)){
+			   builder.append(" or ");
+		  }
+	   }
+		return builder.toString();
+	}
 }

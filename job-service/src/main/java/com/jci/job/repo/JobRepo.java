@@ -6,8 +6,10 @@
 package com.jci.job.repo;
 
 import java.util.List;
+import java.util.Map;
 
 import com.jci.dto.BatchUpdateRes;
+import com.jci.dto.GrDetails;
 import com.jci.entity.PoEntity;
 import com.jci.job.api.req.BatchInsertReq;
 import com.jci.job.api.req.BatchUpdateReq;
@@ -28,5 +30,7 @@ public interface JobRepo {
 	List<PoEntity> getPoDetails(String partitionKey, List<String> poList) ; 
 	
 	BatchUpdateRes batchUpdate(BatchUpdateReq request);
+	
+	List<Map> getGrQtyMap(List<GrDetails> grList);
 	
 }

@@ -23,6 +23,8 @@ public class Constants {
 	/** The Constant TABLE_GR_DETAILS. */
 	public static final String TABLE_GR_DETAILS ="GRDETAILS";
 	
+	public static final String TABLE_GR_ITEM_DETAILS ="GRITEMDETAILS";
+	
 	/** The Constant TABLE_PO_ITEM_DETAILS. */
 	public static final String TABLE_PO_ITEM_DETAILS ="POITEMDETAILS";
 	

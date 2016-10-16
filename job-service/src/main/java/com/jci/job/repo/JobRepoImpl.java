@@ -19,6 +19,8 @@ import org.springframework.stereotype.Repository;
 
 import com.jci.config.AzureStorage;
 import com.jci.dto.BatchUpdateRes;
+import com.jci.dto.GrDetails;
+import com.jci.entity.GrItemsEntity;
 import com.jci.entity.MiscDataEntity;
 import com.jci.entity.PoEntity;
 import com.jci.enums.ErrorEnum;
@@ -81,7 +83,6 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		
 		String erpName = request.getErpName();
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = request.getTableNameToEntityMap();
-	
 		CloudTable cloudTable=null;
 		  
 		String partitionKey = erpName.toUpperCase();
@@ -91,9 +92,8 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		     try {
 					cloudTable = azureStorage.getTable(entry.getKey());
 					tableName=entry.getKey();
+					LOG.info("tableName-->"+tableName);
 					rowKeyData = CommonUtils.getNewRowkeys(partitionKey,tableName, rowKeys,cloudTable);
-					//LOG.info("rowKeyData 1-->"+rowKeyData);
-					
 				} catch (Exception e) {
 					LOG.error("### Exception in JobRepoImpl.batchInsert.getTable ###"+e);
 					continue;
@@ -122,23 +122,25 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 						continue;
 					}
 			    }
+			    
+			  //Insert MIsc data
+				 if(rowKeyData!=null){
+					 MiscDataEntity miscEntity=null;
+						try {
+							miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
+						} catch (Exception e) {
+							LOG.error("### Exception in JobRepoImpl.addMiscEntity ####",e);
+						}
+						
+						if(miscEntity==null){
+							miscEntity = new MiscDataEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
+						}
+						
+						miscEntity = CommonUtils.getMiscEntity(miscEntity,tableName,rowKeyData);
+						updateStatusCountEntity(miscEntity);
+				 }
 		 }	
-		//Insert MIsc data
-		 if(rowKeyData!=null){
-			 MiscDataEntity miscEntity=null;
-				try {
-					miscEntity = getStatusCountEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-				} catch (Exception e) {
-					LOG.error("### Exception in JobRepoImpl.addMiscEntity ####",e);
-				}
-				
-				if(miscEntity==null){
-					miscEntity = new MiscDataEntity(Constants.PARTITION_KEY_MISCDATA,erpName);
-				}
-				
-				miscEntity = CommonUtils.getMiscEntity(miscEntity,tableName,rowKeyData);
-				updateStatusCountEntity(miscEntity);
-		 }
+		
 		 LOG.info("### Ending in JobRepoImpl.batchInsert ###");
 		return request.getReq();
 	}
@@ -354,4 +356,78 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 			updateStatusCountEntity(miscEntity);
 		}
 	}
+	
+	Map<String,Double> grMap=null;
+	Map<String,Integer> poMap=null;
+	@Override
+	public List<Map> getGrQtyMap(List<GrDetails> grList) {
+		prepareGrQtyDetails(grList); 
+		List<Map> mapList = new ArrayList<>();
+		mapList.add(grMap);
+		mapList.add(poMap);
+		return mapList;
+	}
+	
+	private void prepareGrQtyDetails(List<GrDetails> grList){
+		CloudTable cloudTable = null;
+		
+		if(grList.size()>batchSize){
+			
+			String query = QueryBuilder.getGrQtyQuery(grList.subList(0, batchSize));
+			
+			//Gr exist
+			TableQuery<GrItemsEntity> partitionQuery =  TableQuery.from(GrItemsEntity.class).where(query);
+			
+			try {
+				cloudTable = azureStorage.getTable(Constants.TABLE_GR_ITEM_DETAILS);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_GR_ITEM_TABLE_NOT_FOUND);
+			}
+			
+		    for (GrItemsEntity entity : cloudTable.execute(partitionQuery)) {
+		    	grMap.put(entity.getRowKey(),entity.getReceiptQuantity());
+		    }
+			
+		    //PO exist?
+		    TableQuery<PoEntity> poQuery =  TableQuery.from(PoEntity.class).where(query);
+		    try {
+				cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_PO_TABLE_NOT_FOUND);
+			}
+		    
+		    for (PoEntity entity : cloudTable.execute(poQuery)) {
+		    	poMap.put(entity.getRowKey(),entity.getSupplierDeliveryState());
+		    }
+		    
+		    
+		    prepareGrQtyDetails(grList.subList(batchSize,grList.size()));
+		}else{
+			String query = QueryBuilder.getGrQtyQuery(grList);
+			TableQuery<GrItemsEntity> partitionQuery =  TableQuery.from(GrItemsEntity.class).where(query);
+			
+			try {
+				cloudTable = azureStorage.getTable(Constants.TABLE_GR_ITEM_DETAILS);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_GR_ITEM_TABLE_NOT_FOUND);
+			}
+			
+		    for (GrItemsEntity entity : cloudTable.execute(partitionQuery)) {
+		    	grMap.put(entity.getRowKey(),entity.getReceiptQuantity());
+		    }
+		    
+		  //PO exist?
+		    TableQuery<PoEntity> poQuery =  TableQuery.from(PoEntity.class).where(query);
+		    try {
+				cloudTable = azureStorage.getTable(Constants.TABLE_PO_DETAILS);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_PO_TABLE_NOT_FOUND);
+			}
+		    
+		    for (PoEntity entity : cloudTable.execute(poQuery)) {
+		    	poMap.put(entity.getRowKey(),entity.getSupplierDeliveryState());
+		    }
+		}
+	}
+	
 }

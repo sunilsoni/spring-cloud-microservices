@@ -4,6 +4,7 @@
 package com.jci.job.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +81,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 		}catch(Exception e){
 			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_GET);
 		}
+		
+		
         BatchInsertReq  req = PrepareBatchInsertReq.preparePoReq(responseBody);
          
         /**
@@ -98,7 +101,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_PUT);
 		}
              
-          processPoFlatFile() ;
+        /*Sunil    processPoFlatFile() ;*/
 		return responseStatus;
 	}
 	
@@ -130,7 +133,10 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			if(responseBody.getGrList()==null || responseBody.getGrList().size()==0){
 	   			 return "Failure";
 	         }	
-    		BatchInsertReq  req = PrepareBatchInsertReq.prepareGrReq(responseBody);
+			
+			
+			List<Map> map =  repo.getGrQtyMap(responseBody.getGrList());
+    		BatchInsertReq  req = PrepareBatchInsertReq.prepareGrReq(responseBody,map);
     		 
     		/**
     		 * Start Storing data in Azure tables

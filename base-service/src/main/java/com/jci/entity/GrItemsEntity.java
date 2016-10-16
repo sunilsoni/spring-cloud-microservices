@@ -11,7 +11,7 @@ import com.microsoft.azure.storage.table.TableServiceEntity;
  * The Class PoItemsEntity.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PoItemsEntity extends TableServiceEntity {
+public class GrItemsEntity extends TableServiceEntity {
 
 	/**
 	 * Instantiates a new po items entity.
@@ -19,40 +19,21 @@ public class PoItemsEntity extends TableServiceEntity {
 	 * @param partitionKey the partition key
 	 * @param rowKey the row key
 	 */
-	public PoItemsEntity(String partitionKey, String rowKey) {
+	public GrItemsEntity(String partitionKey, String rowKey) {
 		this.partitionKey = partitionKey;
-		this.rowKey = rowKey;//orderNumber_lineID"_"requestID
+		this.rowKey = rowKey;//receiptID
 	}
 
 	/**
 	 * Instantiates a new po items entity.
 	 */
-	public PoItemsEntity() {
+	public GrItemsEntity() {
 	}
 
-	/** The order number. */
-	private String orderNumber;
-	
+	private double  receiptQuantity;
+
 	/** The json string. */
 	private String jsonString;
-	
-	/**
-	 * Gets the order number.
-	 *
-	 * @return the order number
-	 */
-	public String getOrderNumber() {
-		return orderNumber;
-	}
-
-	/**
-	 * Sets the order number.
-	 *
-	 * @param orderNumber the new order number
-	 */
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
-	}
 
 	/**
 	 * Gets the json string.
@@ -72,15 +53,9 @@ public class PoItemsEntity extends TableServiceEntity {
 		this.jsonString = jsonString;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "PoItemsEntity [orderNumber=" + orderNumber + ", jsonString=" + jsonString + "]";
-	}
 
 	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -91,6 +66,11 @@ public class PoItemsEntity extends TableServiceEntity {
 		result = prime * result + ((partitionKey == null) ? 0 : partitionKey.hashCode());
 		result = prime * result + ((rowKey == null) ? 0 : rowKey.hashCode());
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "GrItemsEntity [receiptQuantity=" + receiptQuantity + ", jsonString=" + jsonString + "]";
 	}
 
 	/* (non-Javadoc)
@@ -104,7 +84,7 @@ public class PoItemsEntity extends TableServiceEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PoItemsEntity other = (PoItemsEntity) obj;
+		GrItemsEntity other = (GrItemsEntity) obj;
 		if (partitionKey == null) {
 			if (other.partitionKey != null)
 				return false;
@@ -116,6 +96,14 @@ public class PoItemsEntity extends TableServiceEntity {
 		} else if (!rowKey.equals(other.rowKey))
 			return false;
 		return true;
+	}
+
+	public double getReceiptQuantity() {
+		return receiptQuantity;
+	}
+
+	public void setReceiptQuantity(double receiptQuantity) {
+		this.receiptQuantity = receiptQuantity;
 	}
 	
 	

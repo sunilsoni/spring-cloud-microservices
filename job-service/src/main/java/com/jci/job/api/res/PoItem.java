@@ -24,7 +24,7 @@ public class PoItem {
 	private Integer requestID;
 	
 	/** The item. */
-	private Object item;
+	private Object itemList;
 	
 	/**
 	 * Gets the order number.
@@ -79,33 +79,21 @@ public class PoItem {
 	public void setRequestID(Integer requestID) {
 		this.requestID = requestID;
 	}
-	
-	/**
-	 * Gets the item.
-	 *
-	 * @return the item
-	 */
-	public Object getItem() {
-		return item;
+
+	public Object getItemList() {
+		return itemList;
 	}
-	
-	/**
-	 * Sets the item.
-	 *
-	 * @param item the new item
-	 */
-	public void setItem(Object item) {
-		this.item = item;
+
+	public void setItemList(Object itemList) {
+		this.itemList = itemList;
 	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
 	@Override
 	public String toString() {
-		return "PoItem [orderNumber=" + orderNumber + ", lineID=" + lineID + ", requestID=" + requestID + ", item="
-				+ item + "]";
+		return "PoItem [orderNumber=" + orderNumber + ", lineID=" + lineID + ", requestID=" + requestID + ", itemList="
+				+ itemList + "]";
 	}
+	
 	
 	
 }

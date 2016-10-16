@@ -7,6 +7,8 @@ package com.jci.job.api.res;
 
 import java.util.List;
 
+import com.jci.dto.GrDetails;
+
 /**
  * <p>
  * <strong> The Goods Receipt Details Response Class.</strong>

@@ -42,6 +42,8 @@ public enum ErrorEnum {
     /** The error gr table not found. */
     ERROR_GR_TABLE_NOT_FOUND("error.gr.table.not.found"),
     
+    ERROR_GR_ITEM_TABLE_NOT_FOUND("error.gr.item.table.not.found"),
+    
     /** The error item table not found. */
     ERROR_ITEM_TABLE_NOT_FOUND("error.item.table.not.found"),
     

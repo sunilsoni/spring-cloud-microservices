@@ -3,57 +3,35 @@
  * Use or Copying of all or any part of this program, except as
  * permitted by License Agreement, is prohibited.
  */
-package com.jci.entity;
+package com.jci.dto;
 
-import com.microsoft.azure.storage.table.TableServiceEntity;
+import java.util.List;
 
 /**
- * The Class GrEntity.
+ * <p>
+ * <strong> The Goods Receipt Details Class.</strong>
+ * <p>
+ *
+ * @author csonisk
  */
-public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
-
-	/**
-  * Instantiates a new gr entity.
-  *
-  * @param partitionKey the partition key
-  * @param rowKey the row key
-  */
- public GrEntity(String partitionKey, String rowKey) {
-		this.partitionKey = partitionKey;
-		this.rowKey = rowKey;//receiptID
-	}
-
-	/**
-	 * Instantiates a new gr entity.
-	 */
-	public GrEntity() {
-	}
-
-    /** The status. */
-    private int supplierDeliveryState;
-
-	/** The supp type. */
-	private String suppType;
+public class GrDetails {
 	
-	/** The region. */
-	private String region;
+	
+	/** The receipt ID. */
+	private String receiptID;
+	
+	/** The erp. */
+	private String erp;
 	
 	/** The plant. */
 	private String plant;
 	
-	/** The user name. */
-	private String userName;
+	/** The region. */
+	private String region;
 	
-	/** The global id. */
-	private String globalId;	
-	
-	/** The comment. */
-	private String comment;	
-	
-	
-	//new 
-	private String receiptID;
+	/** The supplier type. */
 	private String supplierType;
+	
 	private String customerID;
 	private String customerDescription;
 	private String customerDUNS;
@@ -68,6 +46,7 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	private String receiptStatus;
 	private String receiptDateHdr;
 	private String receivingSite;
+	private String receiptQuantity;
 	private String shipToAddressDescriptor;
 	private String shipToAddress1;
 	private String shipToAddress2;
@@ -104,185 +83,98 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 	private String flexDateReceiptHeader4;
 	private String flexDateReceiptHeader5;
 	
+	private List<Object> grItemList;
+	
 	/**
-	 * Gets the user name.
+	 * Gets the receipt ID.
 	 *
-	 * @return the user name
+	 * @return the receipt ID
 	 */
-	public String getUserName() {
-		return userName;
-	}
-
-	/**
-	 * Sets the user name.
-	 *
-	 * @param userName the new user name
-	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	/**
-	 * Gets the global id.
-	 *
-	 * @return the global id
-	 */
-	public String getGlobalId() {
-		return globalId;
-	}
-
-	/**
-	 * Sets the global id.
-	 *
-	 * @param globalId the new global id
-	 */
-	public void setGlobalId(String globalId) {
-		this.globalId = globalId;
-	}
-
-	/**
-	 * Gets the comment.
-	 *
-	 * @return the comment
-	 */
-	public String getComment() {
-		return comment;
-	}
-
-	/**
-	 * Sets the comment.
-	 *
-	 * @param comment the new comment
-	 */
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
-	/**
-     * Gets the supplier delivery state.
-     *
-     * @return the supplier delivery state
-     */
-    public int getSupplierDeliveryState() {
-        return supplierDeliveryState;
-    }
-
-    /**
-     * Sets the supplier delivery state.
-     *
-     * @param supplierDeliveryState the new supplier delivery state
-     */
-    public void setSupplierDeliveryState(int supplierDeliveryState) {
-        this.supplierDeliveryState = supplierDeliveryState;
-    }
-
-    /**
-     * Gets the supp type.
-     *
-     * @return the supp type
-     */
-    public String getSuppType() {
-        return suppType;
-    }
-
-    /**
-     * Sets the supp type.
-     *
-     * @param suppType the new supp type
-     */
-    public void setSuppType(String suppType) {
-        this.suppType = suppType;
-    }
-
-    /**
-     * Gets the region.
-     *
-     * @return the region
-     */
-    public String getRegion() {
-        return region;
-    }
-
-    /**
-     * Sets the region.
-     *
-     * @param region the new region
-     */
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    /**
-     * Gets the plant.
-     *
-     * @return the plant
-     */
-    public String getPlant() {
-        return plant;
-    }
-
-    /**
-     * Sets the plant.
-     *
-     * @param plant the new plant
-     */
-    public void setPlant(String plant) {
-        this.plant = plant;
-    }
-
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((partitionKey == null) ? 0 : partitionKey.hashCode());
-        result = prime * result + ((rowKey == null) ? 0 : rowKey.hashCode());
-        return result;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GrEntity other = (GrEntity) obj;
-        if (partitionKey == null) {
-            if (other.partitionKey != null)
-                return false;
-        } else if (!partitionKey.equals(other.partitionKey))
-            return false;
-        if (rowKey == null) {
-            if (other.rowKey != null)
-                return false;
-        } else if (!rowKey.equals(other.rowKey))
-            return false;
-        return true;
-    }
-
 	public String getReceiptID() {
 		return receiptID;
 	}
-
+	
+	/**
+	 * Sets the receipt ID.
+	 *
+	 * @param receiptID the new receipt ID
+	 */
 	public void setReceiptID(String receiptID) {
 		this.receiptID = receiptID;
 	}
-
+	
+	/**
+	 * Gets the erp.
+	 *
+	 * @return the erp
+	 */
+	public String getErp() {
+		return erp;
+	}
+	
+	/**
+	 * Sets the erp.
+	 *
+	 * @param erp the new erp
+	 */
+	public void setErp(String erp) {
+		this.erp = erp;
+	}
+	
+	/**
+	 * Gets the plant.
+	 *
+	 * @return the plant
+	 */
+	public String getPlant() {
+		return plant;
+	}
+	
+	/**
+	 * Sets the plant.
+	 *
+	 * @param plant the new plant
+	 */
+	public void setPlant(String plant) {
+		this.plant = plant;
+	}
+	
+	/**
+	 * Gets the region.
+	 *
+	 * @return the region
+	 */
+	public String getRegion() {
+		return region;
+	}
+	
+	/**
+	 * Sets the region.
+	 *
+	 * @param region the new region
+	 */
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	
+	/**
+	 * Gets the supplier type.
+	 *
+	 * @return the supplier type
+	 */
 	public String getSupplierType() {
 		return supplierType;
 	}
-
+	
+	/**
+	 * Sets the supplier type.
+	 *
+	 * @param supplierType the new supplier type
+	 */
 	public void setSupplierType(String supplierType) {
 		this.supplierType = supplierType;
 	}
+	
 
 	public String getCustomerID() {
 		return customerID;
@@ -396,6 +288,13 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 		this.receivingSite = receivingSite;
 	}
 
+	public String getReceiptQuantity() {
+		return receiptQuantity;
+	}
+
+	public void setReceiptQuantity(String receiptQuantity) {
+		this.receiptQuantity = receiptQuantity;
+	}
 
 	public String getShipToAddressDescriptor() {
 		return shipToAddressDescriptor;
@@ -677,37 +576,45 @@ public class GrEntity extends TableServiceEntity { // NO_UCD (unused code)
 		this.flexDateReceiptHeader5 = flexDateReceiptHeader5;
 	}
 
-	@Override
-	public String toString() {
-		return "GrEntity [supplierDeliveryState=" + supplierDeliveryState + ", suppType=" + suppType + ", region="
-				+ region + ", plant=" + plant + ", userName=" + userName + ", globalId=" + globalId + ", comment="
-				+ comment + ", receiptID=" + receiptID + ", supplierType=" + supplierType + ", customerID=" + customerID
-				+ ", customerDescription=" + customerDescription + ", customerDUNS=" + customerDUNS + ", customerDUNS4="
-				+ customerDUNS4 + ", supplierID=" + supplierID + ", supplierDescription=" + supplierDescription
-				+ ", supplierDUNS=" + supplierDUNS + ", supplierDUNS4=" + supplierDUNS4 + ", receiptCreationDate="
-				+ receiptCreationDate + ", buyerCode=" + buyerCode + ", receivedAtHubOrSite=" + receivedAtHubOrSite
-				+ ", receiptStatus=" + receiptStatus + ", receiptDateHdr=" + receiptDateHdr + ", receivingSite="
-				+ receivingSite + " , shipToAddressDescriptor="
-				+ shipToAddressDescriptor + ", shipToAddress1=" + shipToAddress1 + ", shipToAddress2=" + shipToAddress2
-				+ ", shipToAddress3=" + shipToAddress3 + ", shipToAddress4=" + shipToAddress4 + ", shipToAddress5="
-				+ shipToAddress5 + ", shipToCity=" + shipToCity + ", shipToCounty=" + shipToCounty + ", shipToState="
-				+ shipToState + ", shipToCountry=" + shipToCountry + ", shipToZip=" + shipToZip
-				+ ", flexStringReceiptHeader1=" + flexStringReceiptHeader1 + ", flexStringReceiptHeader2="
-				+ flexStringReceiptHeader2 + ", flexStringReceiptHeader3=" + flexStringReceiptHeader3
-				+ ", flexStringReceiptHeader4=" + flexStringReceiptHeader4 + ", flexStringReceiptHeader5="
-				+ flexStringReceiptHeader5 + ", flexStringReceiptHeader6=" + flexStringReceiptHeader6
-				+ ", flexStringReceiptHeader7=" + flexStringReceiptHeader7 + ", flexStringReceiptHeader8="
-				+ flexStringReceiptHeader8 + ", flexStringReceiptHeader9=" + flexStringReceiptHeader9
-				+ ", flexIntReceiptHeader1=" + flexIntReceiptHeader1 + ", flexIntReceiptHeader2="
-				+ flexIntReceiptHeader2 + ", flexIntReceiptHeader3=" + flexIntReceiptHeader3
-				+ ", flexIntReceiptHeader4=" + flexIntReceiptHeader4 + ", flexIntReceiptHeader5="
-				+ flexIntReceiptHeader5 + ", flexFloatReceiptHeader1=" + flexFloatReceiptHeader1
-				+ ", flexFloatReceiptHeader2=" + flexFloatReceiptHeader2 + ", flexFloatReceiptHeader3="
-				+ flexFloatReceiptHeader3 + ", flexFloatReceiptHeader4=" + flexFloatReceiptHeader4
-				+ ", flexFloatReceiptHeader5=" + flexFloatReceiptHeader5 + ", flexDateReceiptHeader1="
-				+ flexDateReceiptHeader1 + ", flexDateReceiptHeader2=" + flexDateReceiptHeader2
-				+ ", flexDateReceiptHeader3=" + flexDateReceiptHeader3 + ", flexDateReceiptHeader4="
-				+ flexDateReceiptHeader4 + ", flexDateReceiptHeader5=" + flexDateReceiptHeader5 + "]";
+	public List<Object> getGrItemList() {
+		return grItemList;
 	}
 
+	public void setGrItemList(List<Object> grItemList) {
+		this.grItemList = grItemList;
+	}
+
+	@Override
+	public String toString() {
+		return "GrDetails [receiptID=" + receiptID + ", erp=" + erp + ", plant=" + plant + ", region=" + region
+				+ ", supplierType=" + supplierType + ", customerID=" + customerID + ", customerDescription="
+				+ customerDescription + ", customerDUNS=" + customerDUNS + ", customerDUNS4=" + customerDUNS4
+				+ ", supplierID=" + supplierID + ", supplierDescription=" + supplierDescription + ", supplierDUNS="
+				+ supplierDUNS + ", supplierDUNS4=" + supplierDUNS4 + ", receiptCreationDate=" + receiptCreationDate
+				+ ", buyerCode=" + buyerCode + ", receivedAtHubOrSite=" + receivedAtHubOrSite + ", receiptStatus="
+				+ receiptStatus + ", receiptDateHdr=" + receiptDateHdr + ", receivingSite=" + receivingSite
+				+ ", receiptQuantity=" + receiptQuantity + ", shipToAddressDescriptor=" + shipToAddressDescriptor
+				+ ", shipToAddress1=" + shipToAddress1 + ", shipToAddress2=" + shipToAddress2 + ", shipToAddress3="
+				+ shipToAddress3 + ", shipToAddress4=" + shipToAddress4 + ", shipToAddress5=" + shipToAddress5
+				+ ", shipToCity=" + shipToCity + ", shipToCounty=" + shipToCounty + ", shipToState=" + shipToState
+				+ ", shipToCountry=" + shipToCountry + ", shipToZip=" + shipToZip + ", flexStringReceiptHeader1="
+				+ flexStringReceiptHeader1 + ", flexStringReceiptHeader2=" + flexStringReceiptHeader2
+				+ ", flexStringReceiptHeader3=" + flexStringReceiptHeader3 + ", flexStringReceiptHeader4="
+				+ flexStringReceiptHeader4 + ", flexStringReceiptHeader5=" + flexStringReceiptHeader5
+				+ ", flexStringReceiptHeader6=" + flexStringReceiptHeader6 + ", flexStringReceiptHeader7="
+				+ flexStringReceiptHeader7 + ", flexStringReceiptHeader8=" + flexStringReceiptHeader8
+				+ ", flexStringReceiptHeader9=" + flexStringReceiptHeader9 + ", flexIntReceiptHeader1="
+				+ flexIntReceiptHeader1 + ", flexIntReceiptHeader2=" + flexIntReceiptHeader2
+				+ ", flexIntReceiptHeader3=" + flexIntReceiptHeader3 + ", flexIntReceiptHeader4="
+				+ flexIntReceiptHeader4 + ", flexIntReceiptHeader5=" + flexIntReceiptHeader5
+				+ ", flexFloatReceiptHeader1=" + flexFloatReceiptHeader1 + ", flexFloatReceiptHeader2="
+				+ flexFloatReceiptHeader2 + ", flexFloatReceiptHeader3=" + flexFloatReceiptHeader3
+				+ ", flexFloatReceiptHeader4=" + flexFloatReceiptHeader4 + ", flexFloatReceiptHeader5="
+				+ flexFloatReceiptHeader5 + ", flexDateReceiptHeader1=" + flexDateReceiptHeader1
+				+ ", flexDateReceiptHeader2=" + flexDateReceiptHeader2 + ", flexDateReceiptHeader3="
+				+ flexDateReceiptHeader3 + ", flexDateReceiptHeader4=" + flexDateReceiptHeader4
+				+ ", flexDateReceiptHeader5=" + flexDateReceiptHeader5 +  ", grItemList=" + grItemList
+				+ "]";
+	}
+	
 }
