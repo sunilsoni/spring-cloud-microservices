@@ -7,6 +7,7 @@ package com.jci.job.api.req;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.microsoft.azure.storage.table.TableEntity;
 
@@ -23,6 +24,8 @@ public class BatchInsertReq {
 	/** The erp name. */
 	private String erpName;
 	
+	private boolean isDummyGrData;
+	
 	/** The table name to entity map. */
 	private HashMap<String,List<TableEntity>> tableNameToEntityMap;
 	
@@ -30,27 +33,9 @@ public class BatchInsertReq {
 	/** The req. */
 	private List<Object> req;
 	
-	/** The row key list. */
-	private List<String> rowKeyList;
 	
+	Map<String,List<String>> tableNameToRowkeyListMap;
 
-	/**
-	 * Gets the row key list.
-	 *
-	 * @return the row key list
-	 */
-	public List<String> getRowKeyList() {
-        return rowKeyList;
-    }
-
-    /**
-     * Sets the row key list.
-     *
-     * @param rowKeyList the new row key list
-     */
-    public void setRowKeyList(List<String> rowKeyList) {
-        this.rowKeyList = rowKeyList;
-    }
 
     /**
      * Gets the req.
@@ -106,15 +91,28 @@ public class BatchInsertReq {
 		this.tableNameToEntityMap = tableNameToEntityMap;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	
+	public boolean isDummyGrData() {
+		return isDummyGrData;
+	}
+
+	public void setDummyGrData(boolean isDummyGrData) {
+		this.isDummyGrData = isDummyGrData;
+	}
+
+	public Map<String, List<String>> getTableNameToRowkeyListMap() {
+		return tableNameToRowkeyListMap;
+	}
+
+	public void setTableNameToRowkeyListMap(Map<String, List<String>> tableNameToRowkeyListMap) {
+		this.tableNameToRowkeyListMap = tableNameToRowkeyListMap;
+	}
+
 	@Override
-    public String toString() {
-        return "BatchInsertReq [erpName=" + erpName + ", tableNameToEntityMap=" + tableNameToEntityMap + ", req=" + req
-                + ", rowKeyList=" + rowKeyList + "]";
-    }
-
-
+	public String toString() {
+		return "BatchInsertReq [erpName=" + erpName + ", isDummyGrData=" + isDummyGrData + ", tableNameToEntityMap="
+				+ tableNameToEntityMap + ", req=" + req  + ", tableNameToRowkeyListMap="
+				+ tableNameToRowkeyListMap + "]";
+	}
 
 }

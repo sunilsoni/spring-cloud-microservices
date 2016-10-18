@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jci.dto.GrDetails;
 import com.jci.entity.GrEntity;
@@ -77,120 +76,9 @@ public class PrepareBatchInsertReq {
 			String partitionKey = po.getErp().toUpperCase();
 			//String orderNumber = po.getOrderNumber();
 			
-			//String poNumFull = po.getOrderNumber();//ponumber-line id-release id
-			//String[] poNumArr = poNumFull.split("-");
-			
 			String orderNumber = po.getOrderNumber();;		
 			PoEntity poEntity = new PoEntity(partitionKey,orderNumber);
 			rowKeyList.add(orderNumber);
-			
-			
-			if(!poDetailsList.contains(poEntity)){
-				poEntity.setRegion(po.getRegion());
-				poEntity.setPlant(po.getPlant());
-				 
-				poEntity.setOrderCreationDate(CommonUtils.stringToDate(po.getOrderCreationDate()));
-				poEntity.setSupplierDeliveryState(Constants.STATUS_IN_TRANSIT);
-				poEntity.setSuppType(po.getSupplierType());
-				
-				//start
-			    poEntity.setOrderStatus(po.getOrderStatus());
-				poEntity.setOrderPriority(po.getOrderPriority());
-				poEntity.setCustomerID(po.getCustomerID());
-				
-				poEntity.setCustomerDescription(po.getCustomerDescription());
-				poEntity.setCustomerDUNS(po.getCustomerDUNS());
-				poEntity.setCustomerDUNS4(po.getCustomerDUNS4());
-				poEntity.setCustomerTaxNumber(po.getCustomerTaxNumber());
-				poEntity.setCustomerAddressDescriptor(po.getCustomerAddressDescriptor());
-				poEntity.setCustomerAddress1(po.getCustomerAddress1());
-				poEntity.setCustomerAddress2(po.getCustomerAddress2());
-				poEntity.setCustomerAddress3(po.getCustomerAddress3());
-				poEntity.setCustomerAddress4(po.getCustomerAddress4());
-				poEntity.setCustomerAddress5(po.getCustomerAddress5());
-				poEntity.setCustomerCity(po.getCustomerCity());
-				poEntity.setCustomerCounty(po.getCustomerCounty());
-				poEntity.setCustomerState(po.getCustomerState());
-				poEntity.setCustomerCountry(po.getCustomerCountry());
-				poEntity.setCustomerZip(po.getCustomerZip());
-				poEntity.setSupplierID(po.getSupplierID());
-				poEntity.setSupplierDescription(po.getSupplierDescription());
-				poEntity.setSupplierDUNS(po.getSupplierDUNS());
-				poEntity.setSupplierDUNS4(po.getSupplierDUNS4());
-				poEntity.setSupplierAddressDescriptor(po.getSupplierAddressDescriptor());
-				poEntity.setSupplierAddress1(po.getSupplierAddress1());
-				poEntity.setSupplierAddress2(po.getSupplierAddress2());
-				poEntity.setSupplierAddress3(po.getSupplierAddress3());
-				poEntity.setSupplierAddress4(po.getSupplierAddress4());
-				poEntity.setSupplierAddress5(po.getSupplierAddress5());
-				poEntity.setSupplierCity(po.getSupplierCity());
-				poEntity.setSupplierCounty(po.getSupplierCounty());
-				poEntity.setSupplierState(po.getSupplierState());
-				poEntity.setSupplierCountry(po.getSupplierCountry());
-				poEntity.setSupplierZip(po.getSupplierZip());
-				poEntity.setBuyerCode(po.getBuyerCode());
-				poEntity.setBuyerContact(po.getBuyerContact());
-				poEntity.setBuyerName(po.getBuyerName());
-				poEntity.setBuyerEmail(po.getBuyerEmail());
-				poEntity.setSupplierEmail(po.getSupplierEmail());
-				poEntity.setDeliveryTerm(po.getDeliveryTerm());
-				poEntity.setPaymentTerms(po.getPaymentTerms());
-				poEntity.setTotalOrderAmount(po.getTotalOrderAmount());
-				poEntity.setInCoTerms(po.getInCoTerms());
-				poEntity.setCustomerOrderNotes(po.getCustomerOrderNotes());
-				poEntity.setSupplierOrderNotes(po.getSupplierOrderNotes());
-				poEntity.setBillTo(po.getBillTo());
-				poEntity.setBillToAddressDescriptor(po.getBillToAddressDescriptor());
-				poEntity.setBillToAddress1(po.getBillToAddress1());
-				poEntity.setBillToAddress2(po.getBillToAddress2());
-				poEntity.setBillToAddress3(po.getBillToAddress3());
-				poEntity.setBillToAddress4(po.getBillToAddress4());
-				poEntity.setBillToAddress5(po.getBillToAddress5());
-				poEntity.setBillToCity(po.getBillToCity());
-				poEntity.setBillToCounty(po.getBillToCounty());
-				poEntity.setBillToState(po.getBillToState());
-				poEntity.setBillToCountry(po.getBillToCountry());
-				poEntity.setBillToZip(po.getBillToZip());
-				poEntity.setRemitToAddressDescriptor(po.getRemitToAddressDescriptor());
-				poEntity.setRemitToAddress1(po.getRemitToAddress1());
-				poEntity.setRemitToAddress2(po.getRemitToAddress2());
-				poEntity.setRemitToAddress3(po.getRemitToAddress3());
-				poEntity.setRemitToAddress4(po.getRemitToAddress4());
-				poEntity.setRemitToAddress5(po.getRemitToAddress5());
-				poEntity.setRemitToCity(po.getRemitToCity());
-				poEntity.setRemitToCounty(po.getRemitToCounty());
-				poEntity.setRemitToState(po.getRemitToState());
-				poEntity.setRemitToCountry(po.getRemitToCountry());
-				poEntity.setRemitToZip(po.getRemitToZip());
-				poEntity.setBuyerContactPhone(po.getBuyerContactPhone());
-				poEntity.setBuyerContactFax(po.getBuyerContactFax());
-				poEntity.setOrderType(po.getOrderType());
-				poEntity.setFlexStringPOHeader4(po.getFlexStringPOHeader4());
-				poEntity.setFlexStringPOHeader5(po.getFlexStringPOHeader5());
-				poEntity.setFlexStringPOHeader6(po.getFlexStringPOHeader6());
-				poEntity.setFlexStringPOHeader7(po.getFlexStringPOHeader7());
-				poEntity.setFlexStringPOHeader8(po.getFlexStringPOHeader8());
-				poEntity.setFlexStringPOHeader9(po.getFlexStringPOHeader9());
-				poEntity.setFlexIntPOHeader1(po.getFlexIntPOHeader1());
-				poEntity.setFlexIntPOHeader2(po.getFlexIntPOHeader2());
-				poEntity.setFlexIntPOHeader3(po.getFlexIntPOHeader3());
-				poEntity.setFlexIntPOHeader4(po.getFlexIntPOHeader4());
-				poEntity.setFlexIntPOHeader5(po.getFlexIntPOHeader5());
-				poEntity.setFlexFloatPOHeader1(po.getFlexFloatPOHeader1());
-				poEntity.setFlexFloatPOHeader2(po.getFlexFloatPOHeader2());
-				poEntity.setFlexFloatPOHeader3(po.getFlexFloatPOHeader3());
-				poEntity.setFlexFloatPOHeader4(po.getFlexFloatPOHeader4());
-				poEntity.setFlexFloatPOHeader5(po.getFlexFloatPOHeader5());
-				poEntity.setFlexDatePOHeader1(po.getFlexDatePOHeader1());
-				poEntity.setFlexDatePOHeader2(po.getFlexDatePOHeader2());
-				poEntity.setFlexDatePOHeader3(po.getFlexDatePOHeader3());
-				poEntity.setFlexDatePOHeader4(po.getFlexDatePOHeader4());
-				poEntity.setFlexDatePOHeader5(po.getFlexDatePOHeader5());
-				
-				poDetailsList.add(poEntity);
-			}
-			
-			 
 			prepareReq = new PoBody();
 			prepareReq.setErp(po.getErp());
 			prepareReq.setOrderNumber(orderNumber);
@@ -199,8 +87,6 @@ public class PrepareBatchInsertReq {
 			req.add(prepareReq);
 			
 			List<Object> itemList = po.getItemList();
-			LOG.info("itemList size--->"+itemList.size());
-			
 			PoItemsEntity itemEntity = null;
 			
 			for (Object item : itemList) {
@@ -220,17 +106,36 @@ public class PrepareBatchInsertReq {
 					poItemDetailsList.add(itemEntity);
 			   }
 			}
+
+			if(!poDetailsList.contains(poEntity)){
+				poEntity.setRegion(po.getRegion());
+				poEntity.setPlant(po.getPlant());
+				 
+				poEntity.setOrderCreationDate(CommonUtils.stringToDate(po.getOrderCreationDate()));
+				poEntity.setSupplierDeliveryState(Constants.STATUS_IN_TRANSIT);
+				poEntity.setSuppType(po.getSupplierType());
+				
+				po.setItemList(null);
+				try {
+					poEntity.setJsonString(mapper.writeValueAsString(po));
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
+				poDetailsList.add(poEntity);
+			}
 		}
 		
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = new HashMap<>();
 		tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, poDetailsList);
 		tableNameToEntityMap.put(Constants.TABLE_PO_ITEM_DETAILS, poItemDetailsList);
 		
+		Map<String,List<String>> tableNameToRowkeyListMap = new HashMap<>();
+		tableNameToRowkeyListMap.put(Constants.TABLE_PO_DETAILS, rowKeyList);
 		res = new BatchInsertReq();
 		res.setErpName(erpName);
 		res.setTableNameToEntityMap(tableNameToEntityMap);
 		res.setReq(req);
-		res.setRowKeyList(rowKeyList);
+		res.setTableNameToRowkeyListMap(tableNameToRowkeyListMap);
 		return res;
 	}
 	
@@ -240,12 +145,8 @@ public class PrepareBatchInsertReq {
 	 * @param responseBody the response body
 	 * @return the batch insert req
 	 */
-	public static BatchInsertReq prepareGrReq(GrDetailsRes responseBody,List<Map> map) {
-		
-		
-		Map<String,Double> grMap = map.get(0);
-		Map<String,Integer> poMap = map.get(1);
-		
+	public static BatchInsertReq prepareGrReq(GrDetailsRes responseBody,Map<String,Integer> poMap) {
+		LOG.info("poMap-->"+poMap);
 		List<GrDetails> grList = responseBody.getGrList();
 		ObjectMapper mapper = new ObjectMapper();
 		List<TableEntity> grDetailsList = new ArrayList<>();
@@ -256,107 +157,41 @@ public class PrepareBatchInsertReq {
 		
 		GrBody prepareReq = null;
 		List<Object> req =  new ArrayList<>();
-		List<String> rowKeyList = new ArrayList<>();
+		List<String> poRowKeyList = new ArrayList<>();
+		List<String> grRowKeyList = new ArrayList<>();
 		
 		BatchInsertReq res = null;
 		String erpName = "";
 		GrItemsEntity itemEntity = null;
-		TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
+		Map<String,List<String>> tableNameToRowkeyListMap = new HashMap<>();
+		 
+		//TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
 		for (GrDetails gr : grList) {
 			
-			 String partitionKey =gr.getErp().toUpperCase();
+			String partitionKey =gr.getErp().toUpperCase();
 	         
 			String receiptID = gr.getReceiptID();
-			//String[] poNumArr = receiptID.split("-");
 			erpName = gr.getErp().toUpperCase();
 			
-			GrEntity entity = new GrEntity(partitionKey,receiptID);
 			
-			if(!grDetailsList.contains(entity)){
-				entity.setRegion(gr.getRegion());
-				//entity.setOrderNumber(poNumArr[0]);
-				entity.setPlant(gr.getPlant());
-				entity.setSupplierDeliveryState(Constants.STATUS_IN_TRANSIT);
-				entity.setSuppType(gr.getSupplierType());
-				
-				//new
-				entity.setReceiptID(gr.getReceiptID());
-				entity.setPlant(gr.getPlant());
-				entity.setSupplierType(gr.getSupplierType());
-				entity.setCustomerID(gr.getCustomerID());
-				entity.setCustomerDescription(gr.getCustomerDescription());
-				entity.setCustomerDUNS(gr.getCustomerDUNS());
-				entity.setCustomerDUNS4(gr.getCustomerDUNS4());
-				entity.setSupplierID(gr.getSupplierID());
-				entity.setSupplierDescription(gr.getSupplierDescription());
-				entity.setSupplierDUNS(gr.getSupplierDUNS());
-				entity.setSupplierDUNS4(gr.getSupplierDUNS4());
-				entity.setReceiptCreationDate(gr.getReceiptCreationDate());
-				entity.setBuyerCode(gr.getBuyerCode());
-				entity.setReceivedAtHubOrSite(gr.getReceivedAtHubOrSite());
-				entity.setReceiptStatus(gr.getReceiptStatus());
-				entity.setReceiptDateHdr(gr.getReceiptDateHdr());
-				entity.setReceivingSite(gr.getReceivingSite());
-				//entity.setReceiptQuantity(gr.getReceiptQuantity());
-				entity.setShipToAddressDescriptor(gr.getShipToAddressDescriptor());
-				entity.setShipToAddress1(gr.getShipToAddress1());
-				entity.setShipToAddress2(gr.getShipToAddress2());
-				entity.setShipToAddress3(gr.getShipToAddress3());
-				entity.setShipToAddress4(gr.getShipToAddress4());
-				entity.setShipToAddress5(gr.getShipToAddress5());
-				entity.setShipToCity(gr.getShipToCity());
-				entity.setShipToCounty(gr.getShipToCounty());
-				entity.setShipToState(gr.getShipToState());
-				entity.setShipToCountry(gr.getShipToCountry());
-				entity.setShipToZip(gr.getShipToZip());
-				entity.setFlexStringReceiptHeader1(gr.getFlexStringReceiptHeader1());
-				entity.setFlexStringReceiptHeader2(gr.getFlexStringReceiptHeader2());
-				entity.setFlexStringReceiptHeader3(gr.getFlexStringReceiptHeader3());
-				entity.setFlexStringReceiptHeader4(gr.getFlexStringReceiptHeader4());
-				entity.setFlexStringReceiptHeader5(gr.getFlexStringReceiptHeader5());
-				entity.setFlexStringReceiptHeader6(gr.getFlexStringReceiptHeader6());
-				entity.setFlexStringReceiptHeader7(gr.getFlexStringReceiptHeader7());
-				entity.setFlexStringReceiptHeader8(gr.getFlexStringReceiptHeader8());
-				entity.setFlexStringReceiptHeader9(gr.getFlexStringReceiptHeader9());
-				entity.setFlexIntReceiptHeader1(gr.getFlexIntReceiptHeader1());
-				entity.setFlexIntReceiptHeader2(gr.getFlexIntReceiptHeader2());
-				entity.setFlexIntReceiptHeader3(gr.getFlexIntReceiptHeader3());
-				entity.setFlexIntReceiptHeader4(gr.getFlexIntReceiptHeader4());
-				entity.setFlexIntReceiptHeader5(gr.getFlexIntReceiptHeader5());
-				entity.setFlexFloatReceiptHeader1(gr.getFlexFloatReceiptHeader1());
-				entity.setFlexFloatReceiptHeader2(gr.getFlexFloatReceiptHeader2());
-				entity.setFlexFloatReceiptHeader3(gr.getFlexFloatReceiptHeader3());
-				entity.setFlexFloatReceiptHeader4(gr.getFlexFloatReceiptHeader4());
-				entity.setFlexFloatReceiptHeader5(gr.getFlexFloatReceiptHeader5());
-				entity.setFlexDateReceiptHeader1(gr.getFlexDateReceiptHeader1());
-				entity.setFlexDateReceiptHeader2(gr.getFlexDateReceiptHeader2());
-				entity.setFlexDateReceiptHeader3(gr.getFlexDateReceiptHeader3());
-				entity.setFlexDateReceiptHeader4(gr.getFlexDateReceiptHeader4());
-				entity.setFlexDateReceiptHeader5(gr.getFlexDateReceiptHeader5());
-				grDetailsList.add(entity);	
-			}
+			String rowKey = String.valueOf(CommonUtils.uniqueCurrentTimeMS());
 			
+			GrEntity entity = new GrEntity(partitionKey,rowKey);
+			entity.setReceiptId(receiptID);
 			
+			String jsonString=null;
+			String itemJsonString=null;
 			List<Object> itemList = gr.getGrItemList();
-			
 			for (Object item : itemList) {
-				 itemEntity = new GrItemsEntity(partitionKey,receiptID);
+				
+				 itemEntity = new GrItemsEntity(partitionKey,rowKey);
 				 if(grItemDetailsList.contains(itemEntity)){
 						continue;
 				 }
 				 String str =null;
 				 try {
-					str = mapper.writeValueAsString(item);
-					itemEntity.setJsonString(str);
-					HashMap<String, Object> hashmap = mapper.readValue(str, typeRef);
-					LOG.info("receiptQuantity--->"+hashmap.get("receiptQuantity"));
-					if(hashmap.get("receiptQuantity")!=null){
-						double newQty=Double.parseDouble(String.valueOf(hashmap.get("receiptQuantity")));
-						if(grMap.containsKey(receiptID)){
-							newQty   = newQty+grMap.get(receiptID);
-						}
-						itemEntity.setReceiptQuantity(newQty);
-					}
+					 itemJsonString = mapper.writeValueAsString(item);
+					itemEntity.setJsonString(itemJsonString);
 				} catch (IOException e) {
 				    LOG.error("### Exception in PrepareBatchInsertReq.preparePoReq ###"+e);
 				}
@@ -365,46 +200,54 @@ public class PrepareBatchInsertReq {
 					grItemDetailsList.add(itemEntity);
 			    }
 				
+				gr.setGrItemList(null);
+				try {
+					jsonString = mapper.writeValueAsString(gr);
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
 				//PO & PO Item Table
 				if(!poMap.containsKey(receiptID)){			 
-					
 					PoEntity poEntity = new PoEntity(partitionKey,receiptID);
-					if(poDetailsList.contains(poEntity)){
-						continue;
+					if(!poDetailsList.contains(poEntity)){
+						poEntity.setRegion(gr.getRegion());
+						poEntity.setPlant(gr.getPlant());
+						//poEntity.setOrderCreationDate(CommonUtils.stringToDate(gr.getOrderCreationDate()));
+						poEntity.setSupplierDeliveryState(Constants.STATUS_SUCCESS);
+						poEntity.setSuppType(gr.getSupplierType());
+						
+						//start
+						//gr.setGrItemList(null);
+						poEntity.setJsonString(jsonString);
+						poDetailsList.add(poEntity);
+						poRowKeyList.add(receiptID);
+						 
+						PoItemsEntity poItemsEntity = new PoItemsEntity(partitionKey,receiptID);
+						poItemsEntity.setJsonString(str);
+						poItemsEntity.setOrderNumber(receiptID);
+						if(itemJsonString!=null){
+							poItemsEntity.setJsonString(itemJsonString);
+							//poItemsEntity.setJsonString("{}");
+						}
+						poItemsDetailsList.add(poItemsEntity) ;
 				    }
-					poEntity.setRegion(gr.getRegion());
-					poEntity.setPlant(gr.getPlant());
-					 
-					//poEntity.setOrderCreationDate(CommonUtils.stringToDate(gr.getOrderCreationDate()));
-					poEntity.setSupplierDeliveryState(Constants.STATUS_SUCCESS);
-					poEntity.setSuppType(gr.getSupplierType());
-					
-					//start
-				    poEntity.setOrderStatus(gr.getReceiptStatus());
-					//poEntity.setOrderPriority(gr.getOrderPriority());
-					poEntity.setCustomerID(gr.getCustomerID());
-					
-					poEntity.setCustomerDescription(gr.getCustomerDescription());
-					poEntity.setCustomerDUNS(gr.getCustomerDUNS());
-					poEntity.setCustomerDUNS4(gr.getCustomerDUNS4());
-					poEntity.setSupplierID(gr.getSupplierID());
-					poEntity.setSupplierDescription(gr.getSupplierDescription());
-					poEntity.setSupplierDUNS(gr.getSupplierDUNS());
-					poEntity.setSupplierDUNS4(gr.getSupplierDUNS4());
-					
-					poDetailsList.add(poEntity);
-					
-					PoItemsEntity poItemsEntity = new PoItemsEntity(partitionKey,receiptID);
-					if(poItemsDetailsList.contains(poItemsEntity)){
-						continue;
-					}
-					poItemsEntity.setJsonString(str);
-					poItemsEntity.setOrderNumber(receiptID);
-					
-					poItemsDetailsList.add(poItemsEntity) ;
 				}
 			}
-			rowKeyList.add(receiptID);
+			
+			if(!grDetailsList.contains(entity)){
+				entity.setRegion(gr.getRegion());
+				//entity.setOrderNumber(poNumArr[0]);
+				entity.setPlant(gr.getPlant());
+				entity.setSupplierDeliveryState(Constants.STATUS_IN_TRANSIT);
+				entity.setSuppType(gr.getSupplierType());
+				if(jsonString!=null){
+					entity.setJsonString(jsonString);
+					//entity.setJsonString("{}");
+				}
+				grDetailsList.add(entity);	
+				grRowKeyList.add(rowKey);
+			}
+			
 			
 			prepareReq = new GrBody();
 			prepareReq.setReceiptID(receiptID);
@@ -414,20 +257,23 @@ public class PrepareBatchInsertReq {
 			req.add(prepareReq);
 		}
 		
+		tableNameToRowkeyListMap.put(Constants.TABLE_GR_DETAILS, grRowKeyList);
+		tableNameToRowkeyListMap.put(Constants.TABLE_PO_DETAILS, poRowKeyList);
+		
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = new HashMap<>();
 		tableNameToEntityMap.put(Constants.TABLE_GR_DETAILS, grDetailsList);
 		tableNameToEntityMap.put(Constants.TABLE_GR_ITEM_DETAILS, grItemDetailsList);
 		
+		res = new BatchInsertReq();
 		if(poDetailsList.size()>0){
 			tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, poDetailsList);
 			tableNameToEntityMap.put(Constants.TABLE_PO_ITEM_DETAILS, poItemsDetailsList);
+			res.setDummyGrData(true);
 		}
-		
-		res = new BatchInsertReq();
 		res.setErpName(erpName);
 		res.setTableNameToEntityMap(tableNameToEntityMap);
 		res.setReq(req);
-		res.setRowKeyList(rowKeyList);
+		res.setTableNameToRowkeyListMap(tableNameToRowkeyListMap);
 		return res;
 	}
 	
@@ -480,11 +326,16 @@ public class PrepareBatchInsertReq {
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = new HashMap<>();
 		tableNameToEntityMap.put(Constants.TABLE_SUPPLIER, suppDetailsList);
 		
+
+		Map<String,List<String>> tableNameToRowkeyListMap = new HashMap<>();
+		tableNameToRowkeyListMap.put(Constants.TABLE_SUPPLIER, rowKeyList);
+		
+		
 		BatchInsertReq res = new BatchInsertReq();
 		res.setErpName(erpName);
 		res.setTableNameToEntityMap(tableNameToEntityMap);
 		res.setReq(req);
-		res.setRowKeyList(rowKeyList);
+		res.setTableNameToRowkeyListMap(tableNameToRowkeyListMap);
 		return res;
 	}
 	
@@ -542,10 +393,13 @@ public class PrepareBatchInsertReq {
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = new HashMap<>();
 		tableNameToEntityMap.put(Constants.TABLE_ITEM, list);
 		
+		Map<String,List<String>> tableNameToRowkeyListMap = new HashMap<>();
+		tableNameToRowkeyListMap.put(Constants.TABLE_ITEM, rowKeyList);
+		
 		BatchInsertReq res = new BatchInsertReq();
 		res.setErpName(erpName.toUpperCase());
 		res.setTableNameToEntityMap(tableNameToEntityMap);
-		res.setRowKeyList(rowKeyList);
+		res.setTableNameToRowkeyListMap(tableNameToRowkeyListMap);
 		res.setReq(req);
 		
 		return res;

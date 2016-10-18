@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FilenameUtils;
@@ -320,13 +321,14 @@ public class CommonUtils {
 	 * @return the new rowkeys
 	 */
 	public static List<Map<String,Integer>> getNewRowkeys(String partitionKey,String tableName,List<String> rowKeys,CloudTable cloudTable  ){ 
-        final int queryBatchSize = 100;
+        final int queryBatchSize = 50;
         List<String> temp = new ArrayList<> ();
         
         Map<String,Integer> oldRowkeyToStatusMap = new HashMap<>();
+        int rowKeysSize = rowKeys==null ? 0 : rowKeys.size();
         
         if(Constants.TABLE_PO_DETAILS.equals(tableName)){
-            for (int i = 0; i < rowKeys.size(); i++) {
+            for (int i = 0; i < rowKeysSize; i++) {
                 temp.add(rowKeys.get(i));
                 if (i!=0 && i % queryBatchSize == 0) {
                     String query = QueryBuilder.processPosQuery(partitionKey,temp);
@@ -347,7 +349,7 @@ public class CommonUtils {
                 temp.clear();
             }
         }else if (Constants.TABLE_SUPPLIER.equals(tableName)){
-            for (int i = 0; i < rowKeys.size(); i++) {
+            for (int i = 0; i < rowKeysSize; i++) {
                 temp.add(rowKeys.get(i));
                 if (i!=0 && i % queryBatchSize == 0) {
                     
@@ -369,7 +371,7 @@ public class CommonUtils {
                 temp.clear();
             }
         }else if(Constants.TABLE_ITEM.equals(tableName)){
-            for (int i = 0; i < rowKeys.size(); i++) {
+            for (int i = 0; i <rowKeysSize; i++) {
                 temp.add(rowKeys.get(i));
                 if (i!=0 && i % queryBatchSize == 0) {
                     
@@ -391,7 +393,7 @@ public class CommonUtils {
                 temp.clear();
             }
         }else if(Constants.TABLE_GR_DETAILS.equals(tableName)){
-            for (int i = 0; i < rowKeys.size(); i++) {
+            for (int i = 0; i < rowKeysSize; i++) {
                 temp.add(rowKeys.get(i));
                 if (i!=0 && i % queryBatchSize == 0) {
                     
@@ -415,9 +417,9 @@ public class CommonUtils {
         }
         
         Map<String,Integer> newRowkeyToStatusMap = new HashMap<>();
-        for (int i = 0; i < rowKeys.size(); i++) {
+        for (int i = 0; i < rowKeysSize; i++) {
         	if(!oldRowkeyToStatusMap.containsKey(rowKeys.get(i))){
-        		newRowkeyToStatusMap.put(rowKeys.get(i), 1);
+        		newRowkeyToStatusMap.put(rowKeys.get(i), Constants.STATUS_IN_TRANSIT);
         	}
         }
         
@@ -435,13 +437,30 @@ public class CommonUtils {
 	 * @param rowKeyData the row key data
 	 * @return the misc entity
 	 */
+	public static MiscDataEntity getMiscEntity(MiscDataEntity miscEntity, int valueSize){
+		LOG.info("### Starting  CommonUtils.getMiscEntity ####"+valueSize);
+	    int successCount=0;
+	    if(miscEntity.getPoProcessedCount() == null){
+	        miscEntity.setPoProcessedCount(valueSize);
+	    }else{
+	    	successCount = miscEntity.getPoProcessedCount();
+		    if(valueSize>0){
+		    	successCount = successCount+valueSize;
+		    }
+		    miscEntity.setPoProcessedCount(successCount);  
+	    }
+		LOG.info("### Ending  CommonUtils.getMiscEntity ####"+miscEntity);
+	 return miscEntity;
+	}
+	
 	public static MiscDataEntity getMiscEntity(MiscDataEntity miscEntity,String tableName,List<Map<String,Integer>> rowKeyData){
-		LOG.info("### Starting  CommonUtils.getMiscEntity ####");
+		LOG.info("### Starting  CommonUtils.getMiscEntity ####"+tableName);
 		Map<String,Integer> newRowkeyToStatusMap = rowKeyData.get(0);
 		Map<String,Integer> oldRowkeyToStatusMap = rowKeyData.get(1);
 		
 		int newRowkeyToStatusMapSize = newRowkeyToStatusMap==null ? 0 : newRowkeyToStatusMap.size();
 		int oldRowkeyToStatusMapSize = oldRowkeyToStatusMap==null ? 0 : oldRowkeyToStatusMap.size();
+		
 		int errorCount=0;
 	    int successCount=0;
 	    int inTransitCount=0;
@@ -534,8 +553,6 @@ public class CommonUtils {
 			    	successCount = miscEntity.getItemProcessedCount()-successCount;
 			    	miscEntity.setItemProcessedCount(successCount);
 			    }
-			    LOG.info("newRowkeyToStatusMapSize--->"+newRowkeyToStatusMapSize);
-				LOG.info("inTransitCount--->"+inTransitCount);
 			    miscEntity.setItemIntransitCount(inTransitCount);  
 		    }
 			 
@@ -569,9 +586,23 @@ public class CommonUtils {
 			    }
 			    miscEntity.setGrIntransitCount(inTransitCount);  
 		    }
+       } else{
+    	   return null;
        }
 		LOG.info("### Ending  CommonUtils.getMiscEntity ####"+miscEntity);
 	 return miscEntity;
 	}
-
+	
+	
+	private static final AtomicLong LAST_TIME_MS = new AtomicLong();
+	public static long uniqueCurrentTimeMS() {
+	    long now = System.currentTimeMillis();
+	    while(true) {
+	        long lastTime = LAST_TIME_MS.get();
+	        if (lastTime >= now)
+	            now = lastTime+1;
+	        if (LAST_TIME_MS.compareAndSet(lastTime, now))
+	            return now;
+	    }
+	}
 }

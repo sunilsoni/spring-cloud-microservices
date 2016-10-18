@@ -30,8 +30,6 @@ public class GrItemsEntity extends TableServiceEntity {
 	public GrItemsEntity() {
 	}
 
-	private double  receiptQuantity;
-
 	/** The json string. */
 	private String jsonString;
 
@@ -68,10 +66,6 @@ public class GrItemsEntity extends TableServiceEntity {
 		return result;
 	}
 
-	@Override
-	public String toString() {
-		return "GrItemsEntity [receiptQuantity=" + receiptQuantity + ", jsonString=" + jsonString + "]";
-	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -98,13 +92,10 @@ public class GrItemsEntity extends TableServiceEntity {
 		return true;
 	}
 
-	public double getReceiptQuantity() {
-		return receiptQuantity;
+	@Override
+	public String toString() {
+		return "GrItemsEntity [jsonString=" + jsonString + "]";
 	}
 
-	public void setReceiptQuantity(double receiptQuantity) {
-		this.receiptQuantity = receiptQuantity;
-	}
-	
 	
 }

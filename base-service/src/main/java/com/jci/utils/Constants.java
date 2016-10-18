@@ -4,9 +4,6 @@
  * permitted by License Agreement, is prohibited.
  */
 package com.jci.utils;
-
-
-
 /**
  * <p>
  * <strong>Define all  Common utilities methods here .</strong>

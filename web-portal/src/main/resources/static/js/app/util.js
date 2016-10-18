@@ -101,6 +101,16 @@ var commonUtil = (function($){
         }
 		];
     }
+    
+    function supplierJsonFormatter(row, cell, value, columnDef, dataContext){
+		 var data = "application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataContext, null, "\t"));
+		 return '<a href="data:' + data + '" download="'+dataContext.supplierID+'.json">'+dataContext.supplierID+'</a>';
+    }
+    
+    function itemJsonFormatter(row, cell, value, columnDef, dataContext){
+		 var data = "application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataContext, null, "\t"));
+		 return '<a href="data:' + data + '" download="'+dataContext.customerItemID+'.json">'+dataContext.customerItemID+'</a>';
+   }
 	
 	function getSupplierGridColumns(){
         return [
@@ -186,6 +196,14 @@ var commonUtil = (function($){
 		            field: "supplierStatus",//initially it was statusVal
 		            sortable : false,
 		            width: 180
+		        },{
+		            id : "supplierJsonDownload",
+		            name : "Download JSON",
+		            field : "jsonDownload",
+		            sortable : false,
+		            width : 150,
+		            formatter : supplierJsonFormatter,
+		            cssClass : "alignColumnCenter"
 		        }];
     }
 	
@@ -293,6 +311,14 @@ var commonUtil = (function($){
 		            field: "materialType",//initially it was statusVal
 		            sortable : false,
 		            width: 140
+		        },{
+		            id : "itemJsonDownload",
+		            name : "Download JSON",
+		            field : "jsonDownload",
+		            sortable : false,
+		            width : 150,
+		            formatter : itemJsonFormatter,
+		            cssClass : "alignColumnCenter"
 		        }];
     }
     
@@ -426,6 +452,49 @@ var commonUtil = (function($){
 		}
 		];
 	}
+	
+	 function jsonFormatter(row, cell, value, columnDef, dataContext) {
+		 var data = "application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataContext, null, "\t"));
+		 var fileNameToSaveAs = dataContext.orderNumber+'.json';
+		 var textToWrite = JSON.stringify(dataContext, null, "\t");
+		 
+			  var ie = navigator.userAgent.match(/MSIE\s([\d.]+)/),
+			      ie11 = navigator.userAgent.match(/Trident\/7.0/) && navigator.userAgent.match(/rv:11/),
+			      ieEDGE = navigator.userAgent.match(/Edge/g),
+			      ieVer=(ie ? ie[1] : (ie11 ? 11 : (ieEDGE ? 12 : -1)));
+
+			  if (ie && ieVer<10) {
+			    console.log("No blobs on IE ver<10");
+			    return;
+			  }
+
+			  var textFileAsBlob = new Blob([textToWrite], {
+			    type: 'application/json'
+			  });
+
+			  //var isFlagEnabled = false;
+			  //if (ieVer<-1) {
+					  //window.navigator.msSaveBlob(textFileAsBlob, fileNameToSaveAs);
+				 //return '<div onclick="ieDownload('+textFileAsBlob+','+fileNameToSaveAs+')">'+dataContext.orderNumber+'</div>';
+				return '<a href="data:' + data + '" download="'+fileNameToSaveAs+'" class="poLink" onclick="ieDownload('+textFileAsBlob+','+fileNameToSaveAs+')">'+dataContext.orderNumber+'</a>'
+			//}
+			/*   else {
+				return '<a href="data:' + data + '" download="'+fileNameToSaveAs+'" class="poLink" onclick="">'+dataContext.orderNumber+'</a>'
+			    /*var downloadLink = document.createElement("a");
+			    downloadLink.download = fileNameToSaveAs;
+			    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+			    downloadLink.onclick = function(e) { document.body.removeChild(e.target); };
+			    downloadLink.style.display = "none";
+			    document.body.appendChild(downloadLink);
+			    downloadLink.click();
+			    return '<a href="data:' + data + '" download="'+fileNameToSaveAs+'" class="poLink">'+dataContext.orderNumber+'</a>';
+			  }*/
+		 //saveTextAsFile(dataContext.orderNumber+'.json', encodeURIComponent(JSON.stringify(dataContext, null, "\t")));*/ 
+	    }
+	 
+	 function ieDownload(textFileAsBlob, fileNameToSaveAs){
+		 window.navigator.msSaveBlob(textFileAsBlob, fileNameToSaveAs);
+	 }
 	
 	function getPOItemDetailsColumns(){
 		return [
@@ -574,8 +643,19 @@ var commonUtil = (function($){
 			id:"promisedShipDate",
 			name:"Promised Ship Date",
 			field:"promisedShipDate",
-			minWidth:180
-		}]
+			minWidth:160
+		},{
+            id : "poJsonDownload",
+            name : "Download JSON",
+            field : "jsonDownload",
+            sortable : false,
+            width : 150,
+            formatter : jsonFormatter,
+            cssClass : "alignColumnCenter",
+            onClick : function(attr1){
+            	console.log(attr1);
+            }
+        }]
 	}
 	
 	

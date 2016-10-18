@@ -121,6 +121,48 @@ BuildGrid.prototype.createGrid = function(){
           this.prepareData();
       }
       
+      
+      grid.onClick.subscribe(function (e, e1) {
+          var cell = grid.getCellFromEvent(e);
+          
+          // Applicable only for IE 10, 11  browser. 
+
+          var selectedRowObject = e1.grid.getDataItem(e1.row);
+         
+          var ie = navigator.userAgent.match(/MSIE\s([\d.]+)/),
+	      ie11 = navigator.userAgent.match(/Trident\/7.0/) && navigator.userAgent.match(/rv:11/),
+	      ieEDGE = navigator.userAgent.match(/Edge/g),
+	      ieVer=(ie ? ie[1] : (ie11 ? 11 : (ieEDGE ? 12 : -1)));
+          
+          var textToWrite = "";
+          var fileNameToSaveAs = "";
+          
+          if (grid.getColumns()[cell.cell].id == "poJsonDownload") {
+        	  textToWrite = JSON.stringify(selectedRowObject, null, "\t");
+              fileNameToSaveAs = selectedRowObject.orderNumber+".json";
+          }else if(grid.getColumns()[cell.cell].id == "supplierJsonDownload"){
+        	  textToWrite = JSON.stringify(selectedRowObject, null, "\t");
+              fileNameToSaveAs = selectedRowObject.supplierID+".json";
+          }else if(grid.getColumns()[cell.cell].id == "itemJsonDownload"){
+        	  textToWrite = JSON.stringify(selectedRowObject, null, "\t");
+              fileNameToSaveAs = selectedRowObject.customerItemID+".json";
+          }
+          
+		  if (ie && ieVer<10) {
+		    console.log("No blobs on IE ver<10");
+		    return;
+		  }
+
+		  var textFileAsBlob = new Blob([textToWrite], {
+		    type: 'text/plain'
+		  });
+		  
+		  if (ieVer>-1) {
+			  window.navigator.msSaveBlob(textFileAsBlob, fileNameToSaveAs);
+		  }
+		  
+        });
+      
 	  //grid.registerPlugin( new Slick.AutoColumnSize());   //for columns auto size
 	  
 	  //dataView.beginUpdate();
@@ -173,7 +215,6 @@ BuildGrid.prototype.createGrid = function(){
 		// Filter the data (using userscore's _.contains)
 		function filter(item) {
 			var columns = grid.getColumns();
-			console.log(columns);
 			var value = true;
 
 			for (var i = 0; i < columns.length; i++) {
@@ -193,7 +234,6 @@ BuildGrid.prototype.createGrid = function(){
 BuildGrid.prototype.prepareData = function(){
     
     var gridData = this.gridData;
-    console.log("gridData val is====="+gridData);
     
     var errorCount = 0,inTransitCount = 0, processedCount = 0;
 	
@@ -232,6 +272,8 @@ BuildGrid.prototype.prepareData = function(){
     this.inTransitCount = inTransitCount;
     
 };
+
+
 
 BuildGrid.prototype.updateRecords = function(obj){
     var dataView = this.dataView, dataItems = dataView.getItems();

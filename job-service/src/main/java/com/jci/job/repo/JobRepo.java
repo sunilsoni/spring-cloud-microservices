@@ -31,6 +31,6 @@ public interface JobRepo {
 	
 	BatchUpdateRes batchUpdate(BatchUpdateReq request);
 	
-	List<Map> getGrQtyMap(List<GrDetails> grList);
+	Map<String,Integer>  getGrQtyMap(List<GrDetails> grList);
 	
 }

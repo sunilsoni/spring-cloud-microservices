@@ -101,7 +101,7 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_PO_PUT);
 		}
              
-        /*Sunil    processPoFlatFile() ;*/
+         processPoFlatFile() ; 
 		return responseStatus;
 	}
 	
@@ -134,9 +134,8 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 	   			 return "Failure";
 	         }	
 			
-			
-			List<Map> map =  repo.getGrQtyMap(responseBody.getGrList());
-    		BatchInsertReq  req = PrepareBatchInsertReq.prepareGrReq(responseBody,map);
+			Map<String,Integer> poMap =  repo.getGrQtyMap(responseBody.getGrList());
+    		BatchInsertReq  req = PrepareBatchInsertReq.prepareGrReq(responseBody,poMap);
     		 
     		/**
     		 * Start Storing data in Azure tables
