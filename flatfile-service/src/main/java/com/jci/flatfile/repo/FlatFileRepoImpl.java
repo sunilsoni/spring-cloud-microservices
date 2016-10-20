@@ -28,6 +28,7 @@ import com.jci.entity.GrItemsEntity;
 import com.jci.entity.ItemEntity;
 import com.jci.entity.MiscDataEntity;
 import com.jci.entity.PoEntity;
+import com.jci.entity.PoItemsEntity;
 import com.jci.entity.SuppEntity;
 import com.jci.enums.ErrorEnum;
 import com.jci.exception.ErrorService;
@@ -302,11 +303,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
         Map<String,List<HashMap<String, Object>>> plantToRowsMapFinal  = new  HashMap<>();
         Map<String,HashMap<String, Object>> rowKeyToDetailsMap = null;
         
-        if(Constants.TABLE_GR_DETAILS.equals(tableName)){
-        	rowKeyToDetailsMap = prepareGrData(rowKeyToPkMap);
-        }else  if(Constants.TABLE_PO_DETAILS.equals(tableName)){
-        	//TO-DO
-        }
+        rowKeyToDetailsMap = prepareData(rowKeyToPkMap,tableName);
         
         for (Map.Entry<String,List<Map<String,HashMap<String, Object>>>> rowKeyToItemsMapList1 : plantToRowsMap.entrySet()){	
         	String plant = rowKeyToItemsMapList1.getKey();
@@ -758,9 +755,14 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 	}
 	
 	Map<String,HashMap<String, Object>> rowKeyToDetailsMap = null;
-	private Map<String,HashMap<String, Object>> prepareGrData(Map<String, String> rowKeyToPkMap) {
+	private Map<String,HashMap<String, Object>> prepareData(Map<String, String> rowKeyToPkMap,String tableName) {
 		rowKeyToDetailsMap = new HashMap<>();
-		prepareGrDetails(rowKeyToPkMap); 
+		if(Constants.TABLE_PO_DETAILS.equals(tableName)){
+			preparePoDetails(rowKeyToPkMap); 
+		}else if(Constants.TABLE_GR_DETAILS.equals(tableName)){
+			prepareGrDetails(rowKeyToPkMap); 
+		}
+		
 		return rowKeyToDetailsMap;
 	}
 	
@@ -804,6 +806,52 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 					rowKeyToDetailsMap.put(entity.getRowKey(), newHashmap);
 				} catch (IOException e) {
 					LOG.error("### Exception in FlatFileRepoImpl.prepareGrDetails ###"+e);
+				}
+		    	
+		    }
+		}
+	}
+	
+	private void preparePoDetails(Map<String, String> rowKeyToPkMap){
+		CloudTable cloudTable = null;
+		ObjectMapper mapper = new ObjectMapper(); 
+		HashMap<String, Object> newHashmap;
+		TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
+		 
+		if(rowKeyToPkMap.size()>batchSize){
+			String query = QueryBuilder.getCombinedDataQuery(rowKeyToPkMap);
+			
+		    TableQuery<PoItemsEntity> poQuery =  TableQuery.from(PoItemsEntity.class).where(query);
+		    try {
+				cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_POITEM_TABLE_NOT_FOUND);
+			}
+		    
+		    for (PoItemsEntity entity : cloudTable.execute(poQuery)) {
+		    	try {
+					newHashmap = mapper.readValue(entity.getJsonString(), typeRef);
+					rowKeyToDetailsMap.put(entity.getRowKey(), newHashmap);
+				} catch (IOException e) {
+					LOG.error("### Exception in FlatFileRepoImpl.preparePoDetails ###"+e);
+				}
+		    }
+		    preparePoDetails(rowKeyToPkMap);
+		}else{
+			String query = QueryBuilder.getCombinedDataQuery(rowKeyToPkMap);
+		    TableQuery<PoItemsEntity> poQuery =  TableQuery.from(PoItemsEntity.class).where(query);
+		    try {
+				cloudTable = azureStorage.getTable(Constants.TABLE_PO_ITEM_DETAILS);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_POITEM_TABLE_NOT_FOUND);
+			}
+		    
+		    for (PoItemsEntity entity : cloudTable.execute(poQuery)) {
+		    	try {
+					newHashmap = mapper.readValue(entity.getJsonString(), typeRef);
+					rowKeyToDetailsMap.put(entity.getRowKey(), newHashmap);
+				} catch (IOException e) {
+					LOG.error("### Exception in FlatFileRepoImpl.preparePoDetails ###"+e);
 				}
 		    	
 		    }

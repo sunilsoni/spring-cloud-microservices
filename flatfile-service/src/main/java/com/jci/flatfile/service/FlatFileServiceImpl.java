@@ -68,14 +68,11 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         CommonUtils utils = new CommonUtils();
         TreeMap<String,HashMap<Integer,String>> mappingList = null;        
     	try {
-    		ResponseEntity<String>  githubRes = git.getPoJson();
-			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+    		ResponseEntity<String>  gitRes = git.getPoJson();
+			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,gitRes.getBody());
 		} catch (Exception e) {
 			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_PO_FILE);
 		}
-        
-        Map<String,List<String>> pkToSuccessList = new HashMap<>();
-        Map<String,List<String>> pkToErrorList = new HashMap<>();
         
         ArrayList<String> files = new ArrayList<>();
         String[] erpArr  = allErps.split(",");
@@ -83,35 +80,36 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         List<File> tempFiles = new ArrayList<>();
         for (int i=0;i<erpArr.length;i++){
             String partitionKey = erpArr[i].toUpperCase();
-            FlatFileRes res = repo.getPoFlatFileData(partitionKey,null);
+         //old   FlatFileRes res = repo.getPoFlatFileData(partitionKey,null);
+            FlatFileRes res = repo.getCombinedData(partitionKey,Constants.TABLE_PO_DETAILS);
             Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
-            Map<String, String> rowKeyToSupptypeMap = res.getRowKeyToSupptypeMap();
+           // Map<String, String> rowKeyToSupptypeMap = res.getRowKeyToSupptypeMap();
+            Map<String, String> plantToSupptypeMap = res.getPlantToSupptypeMap();
             
-            ArrayList<Map<String,List<HashMap<String, Object>>>> poList = res.getPoList();
-            for (Map<String,List<HashMap<String, Object>>> poNumToItemListMap : poList) {
-                
-                for (Map.Entry<String,List<HashMap<String, Object>>> entry : poNumToItemListMap.entrySet()){
-                    
-                    String suppType = rowKeyToSupptypeMap.get(entry.getKey());
-                    if(mappingList.containsKey(suppType)){
-                        Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(entry.getKey(), mappingList.get(suppType),entry.getValue(),rowKeyToPlantMap.get(entry.getKey()),Constants.MESSAGE_TYPE_PO);
-                        
+            Map<String,List<HashMap<String, Object>>> plantToRowsMap = res.getPlantToRowsMap();
+            for (Map.Entry<String,List<HashMap<String, Object>>> entry : plantToRowsMap.entrySet()){
+            	String suppType = plantToSupptypeMap.get(entry.getKey());
+            	
+            	if(mappingList.containsKey(suppType) && entry.getValue().size()>0){
+            		List<HashMap<String, Object>> contentList = entry.getValue();
+            		for (HashMap<String, Object> items : contentList){
+            			Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(null, mappingList.get(suppType),items,entry.getKey(),Constants.MESSAGE_TYPE_PO);
                         for (Map.Entry<String,List<String>> entry1 : fileNameToRowsMap.entrySet()){
                             File toFile = new File(tempDir+entry1.getKey());
                              try {
-                                    FileUtils.writeLines(toFile,"UTF-8", entry1.getValue(),false);
-                                    files.add(toFile.getAbsolutePath());
-                                    tempFiles.add(toFile);
-                                } catch (IOException e) {
-                                    LOG.error("### Exception in FlatFileServiceImpl.processPoFlatFile  ####",e);
-                                }
+                                   FileUtils.writeLines(toFile,"UTF-8", entry1.getValue(),false);
+                                   files.add(toFile.getAbsolutePath());
+                                   tempFiles.add(toFile);
+                              }catch (IOException e) {
+                                    LOG.error("### Exception in   ####",e);
+                              }
                         }
-                    }
+            		}
                 }
             }
             
         if(files.size()==0){
-        	return "No files !";
+        	return "No Po files !";
         }
         SSHConnection conn =  new SSHConnection(config.getHostname(),config.getPort(),config.getUsername(), config.getPassword());
         List<List<String>> finalList = new ArrayList<>();  
@@ -122,20 +120,44 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         	e.printStackTrace();
         }
         
-        LOG.info("processPoFlatFiles finalList===>"+finalList);
+        Map<String,List<String>> pkToSuccessList = new HashMap<>();
+        Map<String,List<String>> pkToErrorList = new HashMap<>();
         
         if(finalList!=null ){
+        	List<String> successStatus = new ArrayList<>();  
             if(finalList.get(0).size()>0){
-                pkToSuccessList.put(erpArr[i], finalList.get(0));
+            	List<String> list1 = finalList.get(0);
+            	for (String val : list1) {
+            		String[] splitVal = val.split("_");
+            		String plantName = splitVal[4]; //Sunil: Need to verify this.
+            		for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
+            			if(entry.getValue().equalsIgnoreCase(plantName)){
+            				successStatus.add(entry.getKey());
+            			}
+            		}
+            	}
+            	
+                pkToSuccessList.put(erpArr[i], successStatus);
             }
             if(finalList.get(1).size()>0){
-                pkToErrorList.put(erpArr[i], finalList.get(1));
+            	List<String> errorStatus = new ArrayList<>();
+            	List<String> list1 = finalList.get(0);
+            	for (String val : list1) {
+            		String[] splitVal = val.split("_");
+            		String plantName = splitVal[4]; //Sunil: Need to verify this.
+            		for (Map.Entry<String, String> entry : rowKeyToPlantMap.entrySet()) {
+            			if(entry.getValue().equalsIgnoreCase(plantName)){
+            				successStatus.add(entry.getKey());
+            			}
+            		}
+            	}
+                pkToErrorList.put(erpArr[i], errorStatus);
             }
             
-            //Update status in PODETAILS Table
-            updateStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,null,null,null,false); 
+          //Update status in PODETAILS Table
+            updateStatus(pkToSuccessList,pkToErrorList,Constants.TABLE_PO_DETAILS,null,null,null,false);
         }
-           
+        
         
         //Need to delete TEMP Files.
         CommonUtils.deleteTempFiles(tempFiles);
@@ -155,8 +177,8 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         TreeMap<String,HashMap<Integer,String>> mappingList = null;
         
         try {
-        	ResponseEntity<String>  githubRes = git.getGrJson();
-			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+        	ResponseEntity<String>  gitRes = git.getGrJson();
+			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,gitRes.getBody());
 		} catch (IOException e) {
 			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_GR_FILE);
 		}
@@ -168,33 +190,34 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         for (int i=0;i<erpArr.length;i++){
             String partitionKey = erpArr[i].toUpperCase();
             
-            FlatFileRes res = repo.getFlatFileData(partitionKey,Constants.TABLE_GR_DETAILS);
+            FlatFileRes res = repo.getCombinedData(partitionKey,Constants.TABLE_GR_DETAILS);
             
             Map<String, String> rowKeyToPlantMap = res.getRowKeyToPlantMap();
-            Map<String,List<HashMap<String, Object>>> plantToRowsMap = res.getPlantToRowsMap();
             Map<String, String> plantToSupptypeMap = res.getPlantToSupptypeMap();
             
+            Map<String,List<HashMap<String, Object>>> plantToRowsMap = res.getPlantToRowsMap();
             for (Map.Entry<String,List<HashMap<String, Object>>> entry : plantToRowsMap.entrySet()){
             	String suppType = plantToSupptypeMap.get(entry.getKey());
             	
             	if(mappingList.containsKey(suppType) && entry.getValue().size()>0){
-                    Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(null, mappingList.get(suppType),entry.getValue(),entry.getKey(),Constants.MESSAGE_TYPE_GR);
-                    
-                    for (Map.Entry<String,List<String>> entry1 : fileNameToRowsMap.entrySet()){
-                        File toFile = new File(tempDir+entry1.getKey());
-                         try {
-                                FileUtils.writeLines(toFile,"UTF-8", entry1.getValue(),false);
-                                files.add(toFile.getAbsolutePath());
-                                tempFiles.add(toFile);
-                            } catch (IOException e) {
-                                LOG.error("### Exception in   ####",e);
-                            }
-                    }
+            		List<HashMap<String, Object>> contentList = entry.getValue();
+            		for (HashMap<String, Object> items : contentList){
+            			Map<String,List<String>> fileNameToRowsMap = utils.prepareSuppData(null, mappingList.get(suppType),items,entry.getKey(),Constants.MESSAGE_TYPE_GR);
+                        for (Map.Entry<String,List<String>> entry1 : fileNameToRowsMap.entrySet()){
+                            File toFile = new File(tempDir+entry1.getKey());
+                             try {
+                                   FileUtils.writeLines(toFile,"UTF-8", entry1.getValue(),false);
+                                   files.add(toFile.getAbsolutePath());
+                                   tempFiles.add(toFile);
+                              }catch (IOException e) {
+                                    LOG.error("### Exception in   ####",e);
+                              }
+                        }
+            		}
                 }
             }
-            
         if(files.size()==0){
-        	return "No files !";
+        	return "No GR files !";
         }
             
         SSHConnection conn =  new SSHConnection(config.getHostname(),config.getPort(),config.getUsername(), config.getPassword());
@@ -203,8 +226,9 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         try {
             finalList = conn.sftpUpload(files, Constants.TARGET_DIR);
         } catch (ClassNotFoundException | IOException e) {
-        	e.printStackTrace();
+        	 LOG.error("### Exception in FlatFile SFTP Upload   ####",e);
         }
+        
         LOG.info("processGrFlatFiles finalList--->"+finalList);
         
         Map<String,List<String>> pkToSuccessList = new HashMap<>();
@@ -265,8 +289,8 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         TreeMap<String,HashMap<Integer,String>> mappingList = null;
         
         try {
-        	ResponseEntity<String>  githubRes = git.getSuppJson();
-			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+        	ResponseEntity<String>  gitRes = git.getSuppJson();
+			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,gitRes.getBody());
 		} catch (IOException e) {
 			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_SUPP_FILE);
 		}
@@ -375,8 +399,8 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
         TreeMap<String,HashMap<Integer,String>> mappingList = null;
 
         try {
-        	 ResponseEntity<String>  githubRes = git.getItemJson();
-			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+        	 ResponseEntity<String>  gitRes = git.getItemJson();
+			mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,gitRes.getBody());
 		} catch (IOException e) {
 			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_ITEM_FILE);
 		}
@@ -486,7 +510,7 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
  * @param comment the comment
  * @param isErrorReq the is error req
  */
-//PO Table status update
+//Table status update
     @SuppressWarnings("unchecked")
 	private synchronized void updateStatus(Map<String,List<String>> pkToSuccessList,Map<String,List<String>> pkToErrorList,String tableName,String globalId,String userName,String comment,boolean isErrorReq) {
     	LOG.info("### Starting in FlatFileServiceImpl.updateStatus ###");
@@ -572,8 +596,8 @@ public class FlatFileServiceImpl implements FlatFileService{ // NO_UCD (unused c
 	        TreeMap<String,HashMap<Integer,String>> mappingList = null;
 	        
 	        try {
-	        	ResponseEntity<String>  githubRes = git.getPoJson();
-				mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,githubRes.getBody());
+	        	ResponseEntity<String>  gitRes = git.getPoJson();
+				mappingList = utils.getGitJsonMapping(Constants.SUPPLIER_TYPE_E2OPEN,gitRes.getBody());
 			} catch (IOException e) {
 				throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_READING_CONFIG_PO_FILE);
 			}

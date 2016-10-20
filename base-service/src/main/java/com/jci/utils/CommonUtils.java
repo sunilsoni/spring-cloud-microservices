@@ -269,7 +269,7 @@ public class CommonUtils {
 			name.append(timestamp);
 		}
 		if(!StringUtils.isBlank(poNum)){
-			name.append(".");
+			//name.append(".");
 		    name.append(poNum);
 		}
 		name.append(".txt");  
@@ -311,6 +311,17 @@ public class CommonUtils {
 		    fileNameToRowsMap.put(fileName, lines);
 		return fileNameToRowsMap;
 	}
+	
+	public  Map<String,List<String>>  prepareSuppData(String poNum, HashMap<Integer,String> mapping,HashMap<String, Object> rowMap,String plantName,String msgType){
+		Map<String,List<String>> fileNameToRowsMap = new HashMap<>();
+		List<String> lines = new ArrayList<>();
+		lines.add(getHeaderString(mapping));
+		lines.add(fixedLengthString((rowMap),mapping).toString());
+	    String fileName = getFileName(poNum,plantName,msgType);
+	    fileNameToRowsMap.put(fileName, lines);
+	return fileNameToRowsMap;
+}
+	
 	/**
 	 * Gets the new rowkeys.
 	 *
