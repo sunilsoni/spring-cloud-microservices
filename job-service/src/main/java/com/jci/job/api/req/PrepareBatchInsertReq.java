@@ -247,8 +247,6 @@ public class PrepareBatchInsertReq {
 				grDetailsList.add(entity);	
 				grRowKeyList.add(rowKey);
 			}
-			
-			
 			prepareReq = new GrBody();
 			prepareReq.setReceiptID(receiptID);
 			prepareReq.setErp(gr.getErp());
@@ -256,9 +254,7 @@ public class PrepareBatchInsertReq {
 			prepareReq.setRegion(gr.getRegion());
 			req.add(prepareReq);
 		}
-		
 		tableNameToRowkeyListMap.put(Constants.TABLE_GR_DETAILS, grRowKeyList);
-		tableNameToRowkeyListMap.put(Constants.TABLE_PO_DETAILS, poRowKeyList);
 		
 		HashMap<String,List<TableEntity>> tableNameToEntityMap = new HashMap<>();
 		tableNameToEntityMap.put(Constants.TABLE_GR_DETAILS, grDetailsList);
@@ -269,6 +265,7 @@ public class PrepareBatchInsertReq {
 			tableNameToEntityMap.put(Constants.TABLE_PO_DETAILS, poDetailsList);
 			tableNameToEntityMap.put(Constants.TABLE_PO_ITEM_DETAILS, poItemsDetailsList);
 			res.setDummyGrData(true);
+			tableNameToRowkeyListMap.put(Constants.TABLE_PO_DETAILS, poRowKeyList);
 		}
 		res.setErpName(erpName);
 		res.setTableNameToEntityMap(tableNameToEntityMap);

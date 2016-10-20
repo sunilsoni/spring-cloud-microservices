@@ -5,10 +5,13 @@
  */
 package com.jci.utils;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.jci.azure.DataHelper;
 import com.jci.dto.GrDetails;
+import com.microsoft.azure.storage.table.TableEntity;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.azure.storage.table.TableQuery.Operators;
 import com.microsoft.azure.storage.table.TableQuery.QueryComparisons;
@@ -290,6 +293,37 @@ public class QueryBuilder {
 			   builder.append(" or ");
 		  }
 	   }
+		return builder.toString();
+	}
+	
+	
+	public static String getCombinedDataQuery(Map<String, String> rowKeyToPkMap){
+	      
+	   String combinedFilter = null;
+	   String rowKeyFilter = null;
+	   int size = rowKeyToPkMap==null ? 0 : rowKeyToPkMap.size();
+	   
+	   StringBuilder builder =  new StringBuilder();
+	   int count=0;
+	   
+	   Iterator<Map.Entry<String, String>> iter = rowKeyToPkMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			 count++;  
+			 Map.Entry<String, String> entry = iter.next();
+			 
+			 String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, entry.getValue());
+			 builder.append(" ( ");
+			 rowKeyFilter = TableQuery.generateFilterCondition(Constants.ROWKEY, QueryComparisons.EQUAL, entry.getKey()); 
+		     combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter); 
+		     builder.append(combinedFilter);
+		     builder.append(" ) ");
+		     
+		     if(count!=(size-1)){
+				   builder.append(" or ");
+			  }
+		     iter.remove();
+		}
+	   
 		return builder.toString();
 	}
 }

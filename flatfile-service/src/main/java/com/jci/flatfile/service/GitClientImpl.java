@@ -25,7 +25,7 @@ class GitClientImpl {
 
 	/** The github client. */
 	@Autowired
-	private GitClient githubClient;
+	private GitClient gitClient;
 	
 	/** The Constant LOG. */
 	private static final Logger LOG = LoggerFactory.getLogger(GitClientImpl.class);
@@ -40,7 +40,7 @@ class GitClientImpl {
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	public ResponseEntity<String>  getPoJson() {
 		LOG.info("### Starting  GitClientImpl.getPoJson ####");
-		return  githubClient.getPoJson();
+		return  gitClient.getPoJson();
 	}
 
 	/**
@@ -52,7 +52,7 @@ class GitClientImpl {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	ResponseEntity<String> getGrJson() {
-		return githubClient.getGrJson();
+		return gitClient.getGrJson();
 	}
 
 	/**
@@ -64,7 +64,7 @@ class GitClientImpl {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	ResponseEntity<String> getItemJson() {
-		return githubClient.getItemJson();
+		return gitClient.getItemJson();
 	}
 
 
@@ -77,7 +77,7 @@ class GitClientImpl {
 			@HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "900000") })
 	ResponseEntity<String> getSuppJson() {
-		return githubClient.getSuppJson();
+		return gitClient.getSuppJson();
 	}
 
 }

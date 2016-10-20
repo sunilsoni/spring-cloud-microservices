@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jci.config.AzureStorage;
 import com.jci.entity.GrEntity;
+import com.jci.entity.GrItemsEntity;
 import com.jci.entity.ItemEntity;
 import com.jci.entity.MiscDataEntity;
 import com.jci.entity.PoEntity;
@@ -195,7 +196,6 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
         List<HashMap<String, Object>> list  = new ArrayList<>();
         Map<String, String> rowKeyToPlantMap = new  HashMap<>();
         
-       
         Map<String,List<HashMap<String, Object>>> plantToRowsMap  = new  HashMap<>();
         TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
         Map<String, String> plantToSupptypeMap = new HashMap<>();
@@ -234,6 +234,101 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
         res.setRowKeyToPlantMap(rowKeyToPlantMap);
         res.setPlantToRowsMap(plantToRowsMap);
         res.setPlantToSupptypeMap(plantToSupptypeMap);
+        return res;
+    }
+    
+    @Override
+    public FlatFileRes  getCombinedData(String partitionKey,String tableName)  {
+    	String query = QueryBuilder.ffQuery(partitionKey);
+        
+        CloudTable cloudTable;
+		try {
+			cloudTable = azureStorage.getTable(tableName);
+		} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+			throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_TABLE_NOT_FOUND,tableName);
+		}
+		
+        OperationContext opContext = new OperationContext();
+        
+        TableQuery<DynamicTableEntity> myQuery = TableQuery.from(DynamicTableEntity.class).where(query).take(1000);
+        Iterator<DynamicTableEntity> rows = cloudTable.execute(myQuery, null, opContext).iterator();
+        DynamicTableEntity row;
+        HashMap<String, Object> newHashmap;
+        ObjectMapper mapper = new ObjectMapper(); 
+        
+        List<Map<String,HashMap<String, Object>>> rowKeyToItemsMapList  = new ArrayList<>();
+        
+        Map<String,List<Map<String,HashMap<String, Object>>>> plantToRowsMap  = new  HashMap<>();
+        TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
+        Map<String, String> plantToSupptypeMap = new HashMap<>();
+        
+        Map<String, String> rowKeyToPkMap = new HashMap<>();
+        
+        while(rows.hasNext()) {
+            row = rows.next() ;
+            
+            HashMap<String, EntityProperty> map = row.getProperties();
+            newHashmap = new HashMap<>();
+            Map<String,HashMap<String, Object>> rowKeyToItemsMap = new HashMap<>();
+            
+            String plant = map.get(Constants.PLANT).getValueAsString();
+            rowKeyToPkMap.put(row.getRowKey(),row.getPartitionKey());
+            
+            if(plantToRowsMap.containsKey(plant)){
+            	rowKeyToItemsMapList = plantToRowsMap.get(plant);
+            	try {
+            		newHashmap = mapper.readValue(map.get(Constants.JSON_STRING).getValueAsString(), typeRef);
+            		rowKeyToItemsMap.put(row.getRowKey(), newHashmap);
+            		
+            		rowKeyToItemsMapList.add(rowKeyToItemsMap);
+                } catch (IOException e) {
+                    LOG.error("### Exception in FlatFileRepoImpl.getCombinedData  ####",e);
+                }
+            	plantToRowsMap.put(plant, rowKeyToItemsMapList);
+            }else{
+            	rowKeyToItemsMapList  = new ArrayList<>();
+            	  try {
+            		  newHashmap = mapper.readValue(map.get(Constants.JSON_STRING).getValueAsString(), typeRef);
+            		  rowKeyToItemsMap.put(row.getRowKey(), newHashmap);
+            		  rowKeyToItemsMapList.add(rowKeyToItemsMap);
+                  } catch (IOException e) {
+                      LOG.error("### Exception in FlatFileRepoImpl.getCombinedData  ####",e);
+                  }
+            	  plantToRowsMap.put(plant, rowKeyToItemsMapList);
+            	  plantToSupptypeMap.put(plant, map.get(Constants.SUPP_TYPE).getValueAsString());
+            }            
+        }   
+        
+        Map<String,List<HashMap<String, Object>>> plantToRowsMapFinal  = new  HashMap<>();
+        Map<String,HashMap<String, Object>> rowKeyToDetailsMap = null;
+        
+        if(Constants.TABLE_GR_DETAILS.equals(tableName)){
+        	rowKeyToDetailsMap = prepareGrData(rowKeyToPkMap);
+        }else  if(Constants.TABLE_PO_DETAILS.equals(tableName)){
+        	//TO-DO
+        }
+        
+        for (Map.Entry<String,List<Map<String,HashMap<String, Object>>>> rowKeyToItemsMapList1 : plantToRowsMap.entrySet()){	
+        	String plant = rowKeyToItemsMapList1.getKey();
+        	List<HashMap<String, Object>> finalList  = new ArrayList<>();
+        	for (Map<String,HashMap<String, Object>> rowKeyToItemsMap1 : rowKeyToItemsMapList1.getValue()){
+        		for (Map.Entry<String,HashMap<String, Object>> items : rowKeyToItemsMap1.entrySet()){
+        			//String rowKey = items.getKey();
+        			HashMap<String, Object> oldMap =  items.getValue();
+        			oldMap.putAll(rowKeyToDetailsMap.get(items.getKey()));
+        			finalList.add(oldMap);
+        		}
+        	}
+        	plantToRowsMapFinal.put(plant, finalList);
+    	}
+        
+        FlatFileRes res = new  FlatFileRes();
+       // res.setRowKeyToPlantMap(rowKeyToPlantMap);
+        res.setPlantToRowsMap(plantToRowsMapFinal);
+        res.setPlantToSupptypeMap(plantToSupptypeMap);
+        if(rowKeyToDetailsMap!=null){
+        	rowKeyToDetailsMap.clear();
+        }
         return res;
     }
     
@@ -660,5 +755,58 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 		}
 	    TableOperation entity =   TableOperation.retrieve(partitionKey, rowKey, MiscDataEntity.class);
 		return cloudTable.execute(entity).getResultAsType();
+	}
+	
+	Map<String,HashMap<String, Object>> rowKeyToDetailsMap = null;
+	private Map<String,HashMap<String, Object>> prepareGrData(Map<String, String> rowKeyToPkMap) {
+		rowKeyToDetailsMap = new HashMap<>();
+		prepareGrDetails(rowKeyToPkMap); 
+		return rowKeyToDetailsMap;
+	}
+	
+	private void prepareGrDetails(Map<String, String> rowKeyToPkMap){
+		CloudTable cloudTable = null;
+		ObjectMapper mapper = new ObjectMapper(); 
+		HashMap<String, Object> newHashmap;
+		TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
+		 
+		if(rowKeyToPkMap.size()>batchSize){
+			String query = QueryBuilder.getCombinedDataQuery(rowKeyToPkMap);
+			
+		    TableQuery<GrItemsEntity> poQuery =  TableQuery.from(GrItemsEntity.class).where(query);
+		    try {
+				cloudTable = azureStorage.getTable(Constants.TABLE_GR_ITEM_DETAILS);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_GR_ITEM_TABLE_NOT_FOUND);
+			}
+		    
+		    for (GrItemsEntity entity : cloudTable.execute(poQuery)) {
+		    	try {
+					newHashmap = mapper.readValue(entity.getJsonString(), typeRef);
+					rowKeyToDetailsMap.put(entity.getRowKey(), newHashmap);
+				} catch (IOException e) {
+					LOG.error("### Exception in FlatFileRepoImpl.prepareGrDetails ###"+e);
+				}
+		    }
+		    prepareGrDetails(rowKeyToPkMap);
+		}else{
+			String query = QueryBuilder.getCombinedDataQuery(rowKeyToPkMap);
+		    TableQuery<GrItemsEntity> poQuery =  TableQuery.from(GrItemsEntity.class).where(query);
+		    try {
+				cloudTable = azureStorage.getTable(Constants.TABLE_GR_ITEM_DETAILS);
+			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
+				throw errorService.createException(FlatFileException.class, e, ErrorEnum.ERROR_GR_ITEM_TABLE_NOT_FOUND);
+			}
+		    
+		    for (GrItemsEntity entity : cloudTable.execute(poQuery)) {
+		    	try {
+					newHashmap = mapper.readValue(entity.getJsonString(), typeRef);
+					rowKeyToDetailsMap.put(entity.getRowKey(), newHashmap);
+				} catch (IOException e) {
+					LOG.error("### Exception in FlatFileRepoImpl.prepareGrDetails ###"+e);
+				}
+		    	
+		    }
+		}
 	}
 }

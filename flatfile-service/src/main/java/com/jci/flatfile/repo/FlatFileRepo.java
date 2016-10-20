@@ -51,4 +51,6 @@ public interface FlatFileRepo {
      */
     List<Object> getPoDetails(String partitionKey, List<String> poList,String tableName) ;
     
+    FlatFileRes  getCombinedData(String partitionKey,String tableName);
+    
 }
