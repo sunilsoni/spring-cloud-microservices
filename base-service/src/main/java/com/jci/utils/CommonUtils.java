@@ -35,12 +35,9 @@ import com.jci.entity.PoEntity;
 import com.jci.entity.SuppEntity;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.TableQuery;
-
-
-
 /**
  * <p>
- * <strong>Define all  Common utilities methods here .</strong>
+ * <strong>Define all  Common utility methods here .</strong>
  * <p>
  *
  * @author csonisk
@@ -237,7 +234,7 @@ public class CommonUtils {
 	 * @param msgType the msg type
 	 * @return the file name
 	 */
-	public    String getFileName(String poNum,String siteId,String msgType) {
+	private    String getFileName(String poNum,String siteId,String msgType) {
 		StringBuilder name = new StringBuilder();
 		
 		if(!StringUtils.isBlank(poNum)){
@@ -260,14 +257,16 @@ public class CommonUtils {
 		isoFormat.setTimeZone(TimeZone.getTimeZone(Constants.TIME_ZONE));
 		String timestamp =isoFormat.format(new Date());
 		
-		if(Constants.MESSAGE_TYPE_SUPP.equals(msgType) || Constants.MESSAGE_TYPE_ITEM.equals(msgType)){
+		/*if(Constants.MESSAGE_TYPE_SUPP.equals(msgType) || Constants.MESSAGE_TYPE_ITEM.equals(msgType)){
 			 isoFormat = new SimpleDateFormat(Constants.DATE_FORMAT_SUPP); 
 			 name.append(timestamp);
 			 name.append("0000000");
 		}else{
 			isoFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
 			name.append(timestamp);
-		}
+		}*/
+		
+		name.append(timestamp);
 		if(!StringUtils.isBlank(poNum)){
 			//name.append(".");
 		    name.append(poNum);
@@ -281,7 +280,7 @@ public class CommonUtils {
 	 * @param value the value
 	 * @return the string
 	 */
-	public   static String appendTab(Object value) {
+	private   static String appendTab(Object value) {
 		if(value==null || "".equals(value) || "null".equals(value)){
 			return "\t";
 		}else{
@@ -471,6 +470,8 @@ public class CommonUtils {
 		
 		int newRowkeyToStatusMapSize = newRowkeyToStatusMap==null ? 0 : newRowkeyToStatusMap.size();
 		int oldRowkeyToStatusMapSize = oldRowkeyToStatusMap==null ? 0 : oldRowkeyToStatusMap.size();
+		LOG.error("oldRowkeyToStatusMapSize-->"+oldRowkeyToStatusMapSize);
+		LOG.error("newRowkeyToStatusMapSize-->"+newRowkeyToStatusMapSize);
 		
 		int errorCount=0;
 	    int successCount=0;
@@ -522,6 +523,9 @@ public class CommonUtils {
 			    		}
 				    }
 			    }
+			    LOG.error("successCount-->"+successCount);
+			    LOG.error("inTransitCount-->"+inTransitCount);
+			    LOG.error("errorCount-->"+errorCount);
 			    if(newRowkeyToStatusMapSize>0){
 			    	inTransitCount = inTransitCount+newRowkeyToStatusMapSize;
 			    }
@@ -616,4 +620,5 @@ public class CommonUtils {
 	            return now;
 	    }
 	}
+	
 }

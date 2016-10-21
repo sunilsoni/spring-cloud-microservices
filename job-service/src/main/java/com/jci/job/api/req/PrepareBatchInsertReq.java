@@ -86,6 +86,10 @@ public class PrepareBatchInsertReq {
 			prepareReq.setRegion(po.getRegion());
 			req.add(prepareReq);
 			
+			
+			if(CommonUtils.isBlank(orderNumber) || CommonUtils.isBlank(po.getPlant()) || CommonUtils.isBlank(po.getRegion()) || CommonUtils.isBlank(po.getErp())){
+				continue;
+			}
 			List<Object> itemList = po.getItemList();
 			PoItemsEntity itemEntity = null;
 			
@@ -172,12 +176,13 @@ public class PrepareBatchInsertReq {
 	         
 			String receiptID = gr.getReceiptID();
 			erpName = gr.getErp().toUpperCase();
-			
-			
 			String rowKey = String.valueOf(CommonUtils.uniqueCurrentTimeMS());
-			
 			GrEntity entity = new GrEntity(partitionKey,rowKey);
 			entity.setReceiptId(receiptID);
+			
+			if(CommonUtils.isBlank(receiptID) || CommonUtils.isBlank(gr.getPlant()) || CommonUtils.isBlank(gr.getRegion()) || CommonUtils.isBlank(gr.getErp())){
+				continue;
+			}
 			
 			String jsonString=null;
 			String itemJsonString=null;
@@ -300,6 +305,11 @@ public class PrepareBatchInsertReq {
 				continue;
 			}
 			
+			if(CommonUtils.isBlank(suppVal.getSupplierID()) || CommonUtils.isBlank(suppVal.getPlant()) || CommonUtils.isBlank(suppVal.getRegion()) || CommonUtils.isBlank(suppVal.getErp())){
+				continue;
+			}
+			
+			
 			try {
 				entity.setJsonString(mapper.writeValueAsString(suppVal.getSupplier()));
 			} catch (JsonProcessingException e) {
@@ -361,6 +371,10 @@ public class PrepareBatchInsertReq {
 			ItemEntity entity = new ItemEntity(erpName,(itemVal.getCustomerItemID()+"_"+itemVal.getSupplierID()));
 			
 			if(list.contains(entity)){
+				continue;
+			}
+			
+			if(CommonUtils.isBlank(itemVal.getSupplierID()) || CommonUtils.isBlank(itemVal.getPlant()) || CommonUtils.isBlank(itemVal.getRegion()) || CommonUtils.isBlank(itemVal.getErp())){
 				continue;
 			}
 			

@@ -64,21 +64,21 @@ public class QueryBuilder {
 	 * @param poList the po list
 	 * @return the string
 	 */
-	public static String poQuery(String partitionKey, List<String> poList){
+	public static String poQuery(String partitionKey, List<String> rowKeyList){
 		// Create filters to limit the data
 	   String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, partitionKey);
 	   String combinedFilter = null;
 	   String rowKeyFilter = null;
 	   
 	   StringBuilder builder =  new StringBuilder();
-	   for(int i=0;i<poList.size();i++){  
+	   for(int i=0;i<rowKeyList.size();i++){  
 		 builder.append(" ( ");
-		 rowKeyFilter = TableQuery.generateFilterCondition(Constants.ROWKEY, QueryComparisons.EQUAL, poList.get(i));//Wrong code correct this
+		 rowKeyFilter = TableQuery.generateFilterCondition(Constants.ROWKEY, QueryComparisons.EQUAL, rowKeyList.get(i));//Wrong code correct this
 	     combinedFilter = TableQuery.combineFilters(partitionFilter, Operators.AND, rowKeyFilter); 
 	     builder.append(combinedFilter);
 	     builder.append(" ) ");
 	     
-	     if(i!=(poList.size()-1)){
+	     if(i!=(rowKeyList.size()-1)){
 			   builder.append(" or ");
 		  }
 	   }
@@ -308,7 +308,7 @@ public class QueryBuilder {
 	   
 	   Iterator<Map.Entry<String, String>> iter = rowKeyToPkMap.entrySet().iterator();
 		while (iter.hasNext()) {
-			 count++;  
+			 count=count+1;
 			 Map.Entry<String, String> entry = iter.next();
 			 
 			 String partitionFilter = TableQuery.generateFilterCondition(Constants.PARTITION_KEY, QueryComparisons.EQUAL, entry.getValue());
@@ -318,7 +318,7 @@ public class QueryBuilder {
 		     builder.append(combinedFilter);
 		     builder.append(" ) ");
 		     
-		     if(count!=(size-1)){
+		     if(count!=size){
 				   builder.append(" or ");
 			  }
 		     iter.remove();

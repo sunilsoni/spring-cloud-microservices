@@ -179,9 +179,11 @@ public class ApiClientServiceImpl implements ApiClientService { // NO_UCD (unuse
 			}catch(Exception e){
 				throw errorService.createException(JobException.class, e, ErrorEnum.ERROR_APIGEE_ITEM_GET);
 			}
+    		
     		if(responseBody.getItemList()==null || responseBody.getItemList().size()==0){
    			 return "Failure";
-           } 
+            } 
+    		
     		BatchInsertReq  req = PrepareBatchInsertReq.prepareItemReq(responseBody);
     		if(req==null){
     			 return "Failure";

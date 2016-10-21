@@ -239,8 +239,14 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
     }
     
     @Override
-    public FlatFileRes  getCombinedData(String partitionKey,String tableName)  {
-    	String query = QueryBuilder.ffQuery(partitionKey);
+    public FlatFileRes  getCombinedData(String partitionKey,String tableName, List<String> rowKeyList)  {
+    	String query = null;
+    	if(rowKeyList!=null){
+    		query = QueryBuilder.poQuery(partitionKey,rowKeyList); 
+    	}else{
+    		query = QueryBuilder.ffQuery(partitionKey);
+    	}
+    	
         
         CloudTable cloudTable;
 		try {
@@ -264,7 +270,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
         Map<String, String> plantToSupptypeMap = new HashMap<>();
         
         Map<String, String> rowKeyToPkMap = new HashMap<>();
-        
+        Map<String, String> rowKeyToPlantMap = new  HashMap<>();
         while(rows.hasNext()) {
             row = rows.next() ;
             
@@ -297,7 +303,8 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
                   }
             	  plantToRowsMap.put(plant, rowKeyToItemsMapList);
             	  plantToSupptypeMap.put(plant, map.get(Constants.SUPP_TYPE).getValueAsString());
-            }            
+            }   
+            rowKeyToPlantMap.put(row.getRowKey(), plant);
         }   
         
         Map<String,List<HashMap<String, Object>>> plantToRowsMapFinal  = new  HashMap<>();
@@ -320,7 +327,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
     	}
         
         FlatFileRes res = new  FlatFileRes();
-       // res.setRowKeyToPlantMap(rowKeyToPlantMap);
+        res.setRowKeyToPlantMap(rowKeyToPlantMap);
         res.setPlantToRowsMap(plantToRowsMapFinal);
         res.setPlantToSupptypeMap(plantToSupptypeMap);
         if(rowKeyToDetailsMap!=null){
@@ -771,11 +778,14 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 		ObjectMapper mapper = new ObjectMapper(); 
 		HashMap<String, Object> newHashmap;
 		TypeReference<HashMap<String,String>> typeRef  = new TypeReference<HashMap<String,String>>() {};
+		 LOG.error("rowKeyToPkMap-->"+rowKeyToPkMap);
+		 LOG.error("size-->"+rowKeyToPkMap.size());
 		 
 		if(rowKeyToPkMap.size()>batchSize){
 			String query = QueryBuilder.getCombinedDataQuery(rowKeyToPkMap);
-			
+			 LOG.error("query-->"+query);
 		    TableQuery<GrItemsEntity> poQuery =  TableQuery.from(GrItemsEntity.class).where(query);
+		    LOG.error("poQuery-->"+poQuery.getFilterString());
 		    try {
 				cloudTable = azureStorage.getTable(Constants.TABLE_GR_ITEM_DETAILS);
 			} catch (InvalidKeyException | URISyntaxException | StorageException e) {
@@ -791,7 +801,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 				}
 		    }
 		    prepareGrDetails(rowKeyToPkMap);
-		}else{
+		}else if(rowKeyToPkMap.size()>0){
 			String query = QueryBuilder.getCombinedDataQuery(rowKeyToPkMap);
 		    TableQuery<GrItemsEntity> poQuery =  TableQuery.from(GrItemsEntity.class).where(query);
 		    try {
@@ -837,7 +847,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 				}
 		    }
 		    preparePoDetails(rowKeyToPkMap);
-		}else{
+		}else if(rowKeyToPkMap.size()>0){
 			String query = QueryBuilder.getCombinedDataQuery(rowKeyToPkMap);
 		    TableQuery<PoItemsEntity> poQuery =  TableQuery.from(PoItemsEntity.class).where(query);
 		    try {
