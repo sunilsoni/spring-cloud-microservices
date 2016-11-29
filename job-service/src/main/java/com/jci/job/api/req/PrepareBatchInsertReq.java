@@ -179,7 +179,7 @@ public class PrepareBatchInsertReq {
 			String rowKey = String.valueOf(CommonUtils.uniqueCurrentTimeMS());
 			GrEntity entity = new GrEntity(partitionKey,rowKey);
 			entity.setReceiptId(receiptID);
-			
+			  
 			if(CommonUtils.isBlank(receiptID) || CommonUtils.isBlank(gr.getPlant()) || CommonUtils.isBlank(gr.getRegion()) || CommonUtils.isBlank(gr.getErp())){
 				continue;
 			}

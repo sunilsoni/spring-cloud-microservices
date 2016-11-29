@@ -19,3 +19,5 @@ target
 .DS_Store
 .classpath
 $tf
+.vagrant
+Vagrantfile

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import com.jci.config.AzureStorage;
 import com.jci.dto.BatchUpdateRes;
 import com.jci.dto.GrDetails;
-import com.jci.entity.GrItemsEntity;
 import com.jci.entity.MiscDataEntity;
 import com.jci.entity.PoEntity;
 import com.jci.enums.ErrorEnum;
@@ -402,7 +401,7 @@ public class JobRepoImpl implements JobRepo { // NO_UCD (unused code)
 		    	poMap.put(entity.getRowKey(),entity.getSupplierDeliveryState());
 		    }
 		    prepareGrQtyDetails(grList.subList(batchSize,grList.size()));
-		}else{
+		}else if(grList.size()>0){
 			String query = QueryBuilder.getGrQtyQuery(grList);
 		  //PO exist?
 		    TableQuery<PoEntity> poQuery =  TableQuery.from(PoEntity.class).where(query);

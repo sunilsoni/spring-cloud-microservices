@@ -5,6 +5,9 @@
  */
 package com.jci.azure;
 
+import lombok.Builder;
+import lombok.Data;
+
 /**
  * <p>
  * <strong>The Class PaginationParam for managing UI Pagination.</strong>
@@ -12,6 +15,8 @@ package com.jci.azure;
  *
  * @author csonisk
  */
+@Data
+@Builder
 public class PaginationParam {
 	
 	/** The last partition. */
@@ -25,86 +30,5 @@ public class PaginationParam {
 	
 	/** The next row. */
 	private String nextRow ;
-	
-	/**
-	 * Gets the last partition.
-	 *
-	 * @return the last partition
-	 */
-	public String getLastPartition() {
-		return lastPartition;
-	}
-	
-	/**
-	 * Sets the last partition.
-	 *
-	 * @param lastPartition the new last partition
-	 */
-	public void setLastPartition(String lastPartition) {
-		this.lastPartition = lastPartition;
-	}
-	
-	/**
-	 * Gets the last row.
-	 *
-	 * @return the last row
-	 */
-	public String getLastRow() {
-		return lastRow;
-	}
-	
-	/**
-	 * Sets the last row.
-	 *
-	 * @param lastRow the new last row
-	 */
-	public void setLastRow(String lastRow) {
-		this.lastRow = lastRow;
-	}
-	
-	/**
-	 * Gets the next partition.
-	 *
-	 * @return the next partition
-	 */
-	public String getNextPartition() {
-		return nextPartition;
-	}
-	
-	/**
-	 * Sets the next partition.
-	 *
-	 * @param nextPartition the new next partition
-	 */
-	public void setNextPartition(String nextPartition) {
-		this.nextPartition = nextPartition;
-	}
-	
-	/**
-	 * Gets the next row.
-	 *
-	 * @return the next row
-	 */
-	public String getNextRow() {
-		return nextRow;
-	}
-	
-	/**
-	 * Sets the next row.
-	 *
-	 * @param nextRow the new next row
-	 */
-	public void setNextRow(String nextRow) {
-		this.nextRow = nextRow;
-	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "PaginationParam [lastPartition=" + lastPartition + ", lastRow=" + lastRow + ", nextPartition="
-				+ nextPartition + ", nextRow=" + nextRow + "]";
-	}
-	
 }

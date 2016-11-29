@@ -8,6 +8,9 @@ package com.jci.azure;
 import java.util.HashMap;
 import java.util.List;
 
+import lombok.Builder;
+import lombok.Data;
+
 
 
 
@@ -18,6 +21,7 @@ import java.util.List;
  *
  * @author csonisk
  */
+@Data
 public class ResultSet {
 	
 	/** The series. */
@@ -43,52 +47,5 @@ public class ResultSet {
 		this.series = series1 ;
 		this.pagination = pagination1 ;
 	}
-	
-	/**
-	 * Gets the series.
-	 *
-	 * @return the series
-	 */
-	public List<HashMap<String, Object>> getSeries() {
-		return series;
-	}
 
-	/**
-	 * Sets the series.
-	 *
-	 * @param series the series
-	 */
-	public void setSeries(List<HashMap<String, Object>> series) {
-		this.series = series;
-	}
-
-	/**
-	 * Gets the pagination.
-	 *
-	 * @return the pagination
-	 */
-	public PaginationParam getPagination() {
-		return pagination;
-	}
-
-	/**
-	 * Sets the pagination.
-	 *
-	 * @param pagination the new pagination
-	 */
-	public void setPagination(PaginationParam pagination) {
-		this.pagination = pagination;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "ResultSet [series=" + series + ", pagination=" + pagination + "]";
-	}
-
-
-
-	
 }

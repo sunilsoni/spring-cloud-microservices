@@ -5,12 +5,16 @@
  */
 package com.jci.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.microsoft.azure.storage.table.TableServiceEntity;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.Tolerate;
 /**
  * The Class PoItemsEntity.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@Builder
 public class GrItemsEntity extends TableServiceEntity {
 
 	/**
@@ -19,52 +23,17 @@ public class GrItemsEntity extends TableServiceEntity {
 	 * @param partitionKey the partition key
 	 * @param rowKey the row key
 	 */
+	@Tolerate
 	public GrItemsEntity(String partitionKey, String rowKey) {
 		this.partitionKey = partitionKey;
 		this.rowKey = rowKey;//receiptID
 	}
 
-	/**
-	 * Instantiates a new po items entity.
-	 */
-	public GrItemsEntity() {
-	}
 
 	/** The json string. */
 	private String jsonString;
 
-	/**
-	 * Gets the json string.
-	 *
-	 * @return the json string
-	 */
-	public String getJsonString() {
-		return jsonString;
-	}
 
-	/**
-	 * Sets the json string.
-	 *
-	 * @param jsonString the new json string
-	 */
-	public void setJsonString(String jsonString) {
-		this.jsonString = jsonString;
-	}
-
-
-	
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((partitionKey == null) ? 0 : partitionKey.hashCode());
-		result = prime * result + ((rowKey == null) ? 0 : rowKey.hashCode());
-		return result;
-	}
 
 
 	/* (non-Javadoc)
@@ -92,10 +61,5 @@ public class GrItemsEntity extends TableServiceEntity {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "GrItemsEntity [jsonString=" + jsonString + "]";
-	}
 
-	
 }

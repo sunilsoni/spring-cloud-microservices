@@ -5,12 +5,16 @@
  */
 package com.jci.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.microsoft.azure.storage.table.TableServiceEntity;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.Tolerate;
 /**
  * The Class PoItemsEntity.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+//@Builder
 public class PoItemsEntity extends TableServiceEntity {
 
 	/**
@@ -19,16 +23,12 @@ public class PoItemsEntity extends TableServiceEntity {
 	 * @param partitionKey the partition key
 	 * @param rowKey the row key
 	 */
+	@Tolerate
 	public PoItemsEntity(String partitionKey, String rowKey) {
 		this.partitionKey = partitionKey;
 		this.rowKey = rowKey;//orderNumber_lineID"_"requestID
 	}
 
-	/**
-	 * Instantiates a new po items entity.
-	 */
-	public PoItemsEntity() {
-	}
 
 	/** The order number. */
 	private String orderNumber;
@@ -36,63 +36,6 @@ public class PoItemsEntity extends TableServiceEntity {
 	/** The json string. */
 	private String jsonString;
 	
-	/**
-	 * Gets the order number.
-	 *
-	 * @return the order number
-	 */
-	public String getOrderNumber() {
-		return orderNumber;
-	}
-
-	/**
-	 * Sets the order number.
-	 *
-	 * @param orderNumber the new order number
-	 */
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
-	}
-
-	/**
-	 * Gets the json string.
-	 *
-	 * @return the json string
-	 */
-	public String getJsonString() {
-		return jsonString;
-	}
-
-	/**
-	 * Sets the json string.
-	 *
-	 * @param jsonString the new json string
-	 */
-	public void setJsonString(String jsonString) {
-		this.jsonString = jsonString;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "PoItemsEntity [orderNumber=" + orderNumber + ", jsonString=" + jsonString + "]";
-	}
-
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((partitionKey == null) ? 0 : partitionKey.hashCode());
-		result = prime * result + ((rowKey == null) ? 0 : rowKey.hashCode());
-		return result;
-	}
-
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */

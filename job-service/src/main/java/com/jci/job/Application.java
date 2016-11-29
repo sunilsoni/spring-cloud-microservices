@@ -38,7 +38,10 @@ public class Application  extends SpringBootServletInitializer{
 	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
-
+		System.getProperties().put("http.proxyHost", "10.10.5.18");
+    	System.getProperties().put("http.proxyPort", "8080");
+    	System.getProperties().put("http.proxyUser", "cdubeyar");
+    	System.getProperties().put("http.proxyPassword", "Arun123"); 
 		SpringApplication.run(Application.class, args);
 
 	}

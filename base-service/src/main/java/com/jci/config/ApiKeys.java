@@ -4,6 +4,10 @@
  * permitted by License Agreement, is prohibited.
  */
 package com.jci.config;
+
+import lombok.Builder;
+import lombok.Data;
+
 /**
  * <p>
  * <strong> The ApiKeys Class.</strong>
@@ -11,6 +15,7 @@ package com.jci.config;
  *
  * @author csonisk
  */
+@Data
 public class ApiKeys {
 	
 	  
@@ -34,37 +39,5 @@ public class ApiKeys {
 		this.suppKey = suppKey;
 	}
 
-	public String getPoKey() {
-		return poKey;
-	}
 
-	public void setPoKey(String poKey) {
-		this.poKey = poKey;
-	}
-
-	public String getGrKey() {
-		return grKey;
-	}
-
-	public void setGrKey(String grKey) {
-		this.grKey = grKey;
-	}
-
-	public String getItemKey() {
-		return itemKey;
-	}
-
-	public void setItemKey(String itemKey) {
-		this.itemKey = itemKey;
-	}
-
-	public String getSuppKey() {
-		return suppKey;
-	}
-
-	public void setSuppKey(String suppKey) {
-		this.suppKey = suppKey;
-	} 
-	  
-	  
 }

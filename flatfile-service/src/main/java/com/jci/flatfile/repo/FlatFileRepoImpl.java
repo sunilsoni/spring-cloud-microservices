@@ -522,7 +522,7 @@ public class FlatFileRepoImpl implements FlatFileRepo { // NO_UCD (unused code)
 			    }
 			}
 		    preparePoDetails(partitionKey,poList.subList(batchSize,poList.size()),tableName);
-		}else{
+		}else if(poList.size()>0){
 			String query = QueryBuilder.processPosQuery(partitionKey,poList);
 		    if(Constants.TABLE_PO_DETAILS.equals(tableName)){
 				TableQuery<PoEntity> partitionQuery =  TableQuery.from(PoEntity.class).where(query);

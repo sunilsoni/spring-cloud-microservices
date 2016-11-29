@@ -13,8 +13,7 @@ package com.jci.utils;
  */
 public class Constants {
 	
-	/** The Constant TABLE_PO_DETAILS. */
-	//Azure Table names 
+	/** Azure Table name */
 	public static final String TABLE_PO_DETAILS ="PODETAILS";
 	
 	/** The Constant TABLE_GR_DETAILS. */
