@@ -7,6 +7,7 @@ package com.jci.azure;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
 /**
  * <p>
@@ -33,6 +34,11 @@ public class DataHelper {
     
     /** The is error data required. */
     private boolean isErrorDataRequired;
+
+    @Tolerate
+	public DataHelper() {
+		super();
+	}
     
   
 }

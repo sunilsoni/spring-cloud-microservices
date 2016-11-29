@@ -12,6 +12,7 @@ import com.jci.azure.ResultSet;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
 
 
@@ -50,4 +51,11 @@ public class SegmentedDetailRes {
 	
 	/** The user data. */
 	private HashMap<String, String>  userData;
+
+	@Tolerate
+	public SegmentedDetailRes() {
+		super();
+	}
+	
+	
 }

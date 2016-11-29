@@ -9,6 +9,7 @@ import com.jci.azure.PaginationParam;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
 
 
@@ -41,4 +42,10 @@ public class SegmentedDetailReq {
 	/** The size. */
 	private int size;
 
+	@Tolerate
+	public SegmentedDetailReq() {
+		super();
+	}
+
+	
 }

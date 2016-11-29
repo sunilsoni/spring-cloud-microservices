@@ -7,6 +7,7 @@ package com.jci.azure;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
 /**
  * <p>
@@ -31,4 +32,10 @@ public class PaginationParam {
 	/** The next row. */
 	private String nextRow ;
 
+	@Tolerate
+	public PaginationParam() {
+		super();
+	}
+
+	
 }

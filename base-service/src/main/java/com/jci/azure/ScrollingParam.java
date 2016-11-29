@@ -7,6 +7,7 @@ package com.jci.azure;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
 /**
  * <p>
@@ -33,4 +34,11 @@ public class ScrollingParam {
 	
 	/** The size. */
 	private int size ;
+
+	@Tolerate
+	public ScrollingParam() {
+		super();
+	}
+	
+	
 }
