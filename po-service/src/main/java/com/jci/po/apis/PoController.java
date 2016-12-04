@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jci.dto.BatchUpdateRes;
 import com.jci.dto.SegmentedDetailReq;
 import com.jci.dto.SegmentedDetailRes;
+import com.jci.exception.BaseController;
 import com.jci.po.dto.req.PoDetailsReq;
 import com.jci.po.dto.req.PoItemDetailReq;
 import com.jci.po.dto.res.PoItemDetailRes;
@@ -34,7 +35,7 @@ import com.jci.utils.Constants;
 
 @RestController  
 @RefreshScope
-public class PoController { // NO_UCD (unused code)
+public class PoController extends BaseController { // NO_UCD (unused code)
 	
 	/** The Constant LOG. */
  //private static final Logger LOG = LoggerFactory.getLogger(PoController.class);
@@ -50,7 +51,7 @@ public class PoController { // NO_UCD (unused code)
 	 * @return the segmented po details
 	 */
 	@RequestMapping(value = "/getSegmentedPoDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public  SegmentedDetailRes getSegmentedPoDetails(@RequestBody SegmentedDetailReq request){
+	public  SegmentedDetailRes getSegmentedPoDetails(@RequestBody SegmentedDetailReq request)  throws Exception {
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		request.setPartition(request.getErpName().toUpperCase());
 		request.setTableName(Constants.TABLE_PO_DETAILS);
@@ -65,7 +66,7 @@ public class PoController { // NO_UCD (unused code)
 	 * @return the error details
 	 */
 	@RequestMapping(value = "/getSegmentedErrorDetails", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public  SegmentedDetailRes getErrorDetails(@RequestBody SegmentedDetailReq request){
+	public  SegmentedDetailRes getErrorDetails(@RequestBody SegmentedDetailReq request)  throws Exception {
 		SegmentedDetailRes response = new SegmentedDetailRes();
 		request.setPartition(request.getErpName().toUpperCase());
 		request.setTableName(Constants.TABLE_PO_DETAILS);
@@ -81,7 +82,7 @@ public class PoController { // NO_UCD (unused code)
 	 * @return the batch update res
 	 */
 	@RequestMapping(value = "/processErrorPos", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public  BatchUpdateRes processErrorPos(@RequestBody final PoDetailsReq request){
+	public  BatchUpdateRes processErrorPos(@RequestBody final PoDetailsReq request)  throws Exception {
 		return poService.processErrorPos(request);
 	}	
 	
@@ -92,7 +93,7 @@ public class PoController { // NO_UCD (unused code)
 	 * @return the po item detail
 	 */
 	@RequestMapping(value = "/getPoItemDetail", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public  PoItemDetailRes getPoItemDetail(@RequestBody PoItemDetailReq request){
+	public  PoItemDetailRes getPoItemDetail(@RequestBody PoItemDetailReq request)  throws Exception {
 		return   poService.getPoItemDetail(request);
 	}
 }
